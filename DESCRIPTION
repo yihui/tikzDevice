@@ -37,3 +37,4 @@ Collate:
     'tikzAnnotate.R'
     'tikzInternal.R'
     'zzz.R'
+    'tikzDevice-package.R'
