@@ -369,7 +369,7 @@ test_graphs <- list(
         sink()
         testPlot <- qplot(log10(`Grain Diameter`), `Percent Finer`, data = soilSample) +
           scale_x_continuous(labels = math_format(10^.x)) +
-          scale_y_continuous(trans = 'probit') +
+          scale_y_continuous(trans = 'probit', breaks = seq(0.2, 0.8, 0.2)) +
           theme_bw()
       }
 
