@@ -1,0 +1,14 @@
+language: c
+# To build on OSX, switch the previous line to
+# language: objective-c
+script: ./travis-tool.sh run_tests
+before_install:
+  - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
+  - chmod 755 ./travis-tool.sh
+  - ./travis-tool.sh bootstrap
+install:
+  - ./travis-tool.sh install_deps
+  - sudo apt-get install --no-install-recommends qpdf texinfo texlive-latex-recommended texlive-latex-extra lmodern texlive-fonts-recommended texlive-fonts-extra
+after_failure:
+  - cat tikzDevice.Rcheck/00install.out
+  - cat tikzDevice.Rcheck/00check.log

@@ -11,3 +11,4 @@ tests/test_output
 ^.*\.Rproj$
 ^\.Rproj\.user$
 GNUmakefile
+^\.travis\.yml$
