@@ -265,13 +265,10 @@ static Rboolean TikZ_Setup(
      * Hopefully 10 extra digits will be enough for storing incrementing file
      * numbers.
      */
-    tikzInfo->outFileName = (char*) calloc(strlen(fileName) + 11, sizeof(char));
-    tikzInfo->originalFileName = (char*) calloc(strlen(fileName) + 1, sizeof(char));
-
-    strcpy(tikzInfo->originalFileName, fileName);
+    tikzInfo->outFileName = calloc_x_strlen(fileName, 10);
+    tikzInfo->originalFileName = calloc_strcpy(fileName);
   } else {
-    tikzInfo->outFileName = (char*) calloc(strlen(fileName) + 1, sizeof(char));
-    strcpy(tikzInfo->outFileName, fileName);
+    tikzInfo->outFileName = calloc_strcpy(fileName);
   }
   tikzInfo->engine = engine;
   tikzInfo->rasterFileCount = 1;
@@ -282,12 +279,9 @@ static Rboolean TikZ_Setup(
   tikzInfo->oldDrawColor = 0;
   tikzInfo->stringWidthCalls = 0;
 
-  tikzInfo->documentDeclaration = (char*) calloc(strlen(documentDeclaration) + 1, sizeof(char));
-  strcpy(tikzInfo->documentDeclaration, documentDeclaration);
-  tikzInfo->packages = (char*) calloc(strlen(packages) + 1, sizeof(char));
-  strcpy(tikzInfo->packages, packages);
-  tikzInfo->footer = (char*) calloc(strlen(footer) + 1, sizeof(char));
-  strcpy(tikzInfo->footer, footer);
+  tikzInfo->documentDeclaration = calloc_strcpy(documentDeclaration);
+  tikzInfo->packages = calloc_strcpy(packages);
+  tikzInfo->footer = calloc_strcpy(footer);
 
   tikzInfo->console = console;
   tikzInfo->sanitize = sanitize;
@@ -576,9 +570,9 @@ static void TikZ_Close( pDevDesc deviceInfo){
   if ( !tikzInfo->onefile )
     free(tikzInfo->originalFileName);
 
-  free(tikzInfo->documentDeclaration);
-  free(tikzInfo->packages);
-  free(tikzInfo->footer);
+  const_free(tikzInfo->documentDeclaration);
+  const_free(tikzInfo->packages);
+  const_free(tikzInfo->footer);
 
   free(tikzInfo);
 }
@@ -1006,7 +1000,7 @@ static void TikZ_Text( double x, double y, const char *str,
   double tol = 0.01;
   
   // Append font face commands depending on which font R is using.
-  char *tikzString = (char *) calloc( strlen(str) + 21, sizeof(char) );
+  char *tikzString = calloc_x_strlen(str, 20);
 
   switch( plotParams->fontface ){
   
@@ -1988,9 +1982,7 @@ static char *Sanitize(const char *str){
    * is called, this object may be eaten by the R garbage collector.  Therefore,
    * we need to copy the data we care about into a new string.
   */
-  char *cleanStringCP = (char *) calloc( strlen(cleanString) + 1, sizeof(char) );
-  
-  strcat(cleanStringCP, cleanString);
+  char *cleanStringCP = calloc_strcpy(cleanString);
 
   // Since we called PROTECT twice, we must call UNPROTECT
   // and pass the number 2.
@@ -2120,4 +2112,24 @@ static void TikZ_CheckState(pDevDesc deviceInfo)
     tikzInfo->clipState = TIKZ_FINISH_CLIP;
   } /* End if clipState == TIKZ_START_CLIP */
 
+}
+
+static char *calloc_strcpy(const char *str){
+  return calloc_x_strcpy(str, 0);
+}
+
+static char *calloc_x_strcpy(const char *str, size_t extra){
+  char *ret;
+
+  ret = calloc_x_strlen(str, extra);
+  strcpy(ret, str);
+  return ret;
+}
+
+static char *calloc_x_strlen(const char *str, size_t extra){
+  return (char*) calloc(strlen(str) + 1 + extra, sizeof(char));
+}
+
+static void const_free(const void *ptr){
+  return free((void*)ptr);
 }

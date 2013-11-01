@@ -188,5 +188,9 @@ static char *Sanitize(const char *str);
 static Rboolean contains_multibyte_chars(const char *str);
 static double dim2dev( double length );
 static void TikZ_CheckState(pDevDesc deviceInfo);
+static char *calloc_strcpy(const char *str);
+static char *calloc_x_strcpy(const char *str, size_t extra);
+static char *calloc_x_strlen(const char *str, size_t extra);
+static void const_free(const void *ptr);
 
 #endif // End of Once Only header
