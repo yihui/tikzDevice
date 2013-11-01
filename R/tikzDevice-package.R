@@ -1,5 +1,3 @@
-
-
 #' Support for native LaTeX output of R graphics
 #' 
 #' 
@@ -9,7 +7,7 @@
 #' for seamless integration between these graphics and documents that are also
 #' being typeset by LaTeX. Using LaTeX to generate graph text also means that
 #' \strong{LaTeX mathematics can be typeset directly into labels and
-#' annotations}
+#' annotations}.
 #' 
 #' \tabular{ll}{
 #'   Package: \tab tikzDevice\cr
@@ -28,7 +26,7 @@
 #' scripts, from the console or in a \code{.Rprofile} file. All of the options
 #' can be set by using \code{options(<option> = <value>)}.  These options allow
 #' for the use of custom \code{documentclass} declarations, LaTeX packages, and
-#' typesetting engines (e.g. XeLaTeX or LuaLaTeX). The defaults , if are any
+#' typesetting engines (e.g. XeLaTeX or LuaLaTeX). The defaults, if are any
 #' for a given option, are shown below the description. The global options are:
 #' 
 #' \describe{
@@ -127,12 +125,11 @@
 #' 
 #' Charlie Sharpsteen: \email{source@@sharpsteen.net}
 #' 
-#' Submit bug reports to: \email{tikzdevice-bugs@@lists.r-forge.r-project.org}
+#' Yihui Xie: \email{xie@@yihui.name}
+#' 
+#' Submit bug reports to: \url{https://github.com/yihui/tikzDevice/issues}
 #' @seealso \code{\link{tikz}}
 #' @references The TikZ and PGF Packages: Manual for version 2.00\cr
 #' \url{http://sourceforge.net/projects/pgf}\cr Till Tanatu, February 20, 2008
 #' @keywords package
 NULL
-
-
-
