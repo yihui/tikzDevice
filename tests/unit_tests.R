@@ -1,5 +1,6 @@
 #!/usr/bin/env Rscript
 if (nchar(Sys.getenv('R_TESTS')) == 0){
+  library(methods)
   # Protects against R CMD check
   library(tikzDevice)
   library(testthat)
@@ -27,7 +28,7 @@ if (nchar(Sys.getenv('R_TESTS')) == 0){
 
   expand_test_path <- function(path) {
     call_args = list(path = path)
-    if( version$minor >= '13.0' ) {
+    if( version$major > 2 || version$minor >= '13.0' ) {
       # After R 2.13.0, normalizePath bitches and moans if the path does not
       # exist. Squelch this warning.
       #
