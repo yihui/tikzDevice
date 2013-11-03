@@ -1,7 +1,15 @@
 language: c
 # To build on OSX, switch the previous line to
 # language: objective-c
-script: ./travis-tool.sh run_tests
+env:
+  matrix:
+    - TYPE=cran
+    - TYPE=tests
+
+script:
+  - if [ $TYPE == cran ]; then ./travis-tool.sh run_tests; fi
+  - if [ $TYPE == tests ]; then ./tests/unit_tests.R; fi
+
 before_install:
   - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
   - chmod 755 ./travis-tool.sh
