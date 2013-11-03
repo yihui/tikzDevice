@@ -499,13 +499,11 @@ test_graphs <- list(
     tags = c('base', 'xetex', 'utf8'),
     engine = 'xetex',
     graph_code =  quote({
-      n <- 10
-      chars <- matrix(intToUtf8(seq(161,,1,10*n),multiple=T),n)
+      n <- 8
+      chars <- intToUtf8(seq(187,,1,n*n),multiple=T)
 
       plot(1:n,type='n',xlab='',ylab='',axes=FALSE, main="UTF-8 Characters")
-        for(i in 1:n)
-          for(j in 1:n)
-            text(i,j,chars[i,j])
+      text(rep(1:n, n), rep(1:n, rep(n, n)), chars)
     })
   ),
 
