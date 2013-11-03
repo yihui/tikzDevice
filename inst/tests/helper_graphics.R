@@ -137,6 +137,7 @@ compare_graph <- function(graph_name, tags){
     "2>&1 | awk '{metric=$NF};END{print metric}'"
   )
 
+  testthat:::test_reporter()$set_cmp_command(command_line)
   result <- as.double(system(paste(
     # Force the command to be executed through bash
     'bash -c ', shQuote(command_line)),
