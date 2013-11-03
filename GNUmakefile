@@ -77,15 +77,7 @@ docs:
 		rm GNUmakefile
 
 news:
-	rm -f NEWS.pdf
-	./md2news.hs NEWS.md
-	# Use this instead of Rd2txt. Rd2txt *does not* produce plaintext. The output
-	# has a bunch of formatting junk for underlines and such.
-	"$(RBIN)/R" --vanilla --slave -e "require(tools);Rd2txt('NEWS.Rd', 'NEWS', options=list(underline_titles=FALSE))"
-	R CMD Rd2pdf --no-preview NEWS.Rd
-	# Move news into the inst directory so that it will be available to users
-	# after installing the package.
-	mv NEWS.Rd inst
+	sed -e 's/^-/  -/' -e 's/^## *//' -e 's/^#/\t\t/' <NEWS.md | fmt -80 > NEWS
 
 vignette:
 	cd inst/doc;\
