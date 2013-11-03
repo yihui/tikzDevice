@@ -1,5 +1,7 @@
-.Rproj.user
-.Rhistory
-src/*.o
-src/*.so
-src/*.dll
+/.Rproj.user
+/.Rhistory
+/src/*.o
+/src/*.so
+/src/*.dll
+/tests/test_output
+/tests/test_work
