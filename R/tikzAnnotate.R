@@ -385,7 +385,7 @@ drawDetails.tikz_annotation <- function(x, recording) {
 
 
 #' @importFrom grid drawDetails
-#' @S3method drawDetails tikz_coord
+#' @S3method drawDetails tikz_node
 drawDetails.tikz_node <- function(x, recording) {
 
   if ( is.null(x$x) && is.null(x$y) ) {

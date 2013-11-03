@@ -1,5 +1,6 @@
 S3method(drawDetails,tikz_annotation)
 S3method(drawDetails,tikz_coord)
+S3method(drawDetails,tikz_node)
 S3method(format,ENV_VAR)
 S3method(format,OPTION)
 S3method(format,PATH)
