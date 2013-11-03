@@ -1,5 +1,41 @@
 ---
 
+# Changes in version 0.6.3 (20XX-XX-XX)
+
+---
+
+## New Features
+
+- Handle text opacity; check text colors for transparency
+
+- `onefile` option for output to multiple files (#40).
+
+## Bug Fixes
+
+- Properly copy strings containing LaTeX info, avoiding use of freed memory.
+
+## Behind the scenes
+
+- Twaddle some magic numbers in `tikzDevice.c`. (#49).
+
+- Define an enumeration to describe drawing operations.
+
+- Replace old StyleDef code by `TikZ_DefineColors`, `TikZ_WriteDrawOptions`
+  and `TikZ_WriteLineStyle`, which are easier to use and maintain (#46).
+
+- Reduce number of calls to TikZ_GetDrawOps
+
+- Only start clipping scopes after a draw operation, this can reduce the size of TikZ
+  output by ~3/4 (#45).
+
+- Defer starting new tikzpicture environments (#12).
+
+- Replace library.dynam with useDynLib (#50).
+
+- Reduce verbosity of start-up message
+
+---
+
 # Changes in version 0.6.2 (2011-11-13)
 
 ---
