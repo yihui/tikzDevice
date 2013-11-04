@@ -1,5 +1,19 @@
 ---
 
+# Changes in version 0.6.4 (2013-XX-XX)
+
+---
+
+## Bug Fixes
+
+- No C warnings when installing (#68).
+
+## Behind the scenes
+
+- Enable continuous integration via craigcitro/r-travis
+
+---
+
 # Changes in version 0.6.3 (2013-10-31)
 
 ---
