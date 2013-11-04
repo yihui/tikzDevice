@@ -11,5 +11,5 @@ install:
   - ./travis-tool.sh install_deps
   - sudo apt-get install --no-install-recommends texinfo texlive-latex-recommended texlive-latex-extra lmodern texlive-fonts-recommended texlive-fonts-extra pgf
 after_failure:
-  - cat tikzDevice.Rcheck/00install.out
-  - cat tikzDevice.Rcheck/00check.log
+  - cat tikzDevice.Rcheck/00install.out || true
+  - cat tikzDevice.Rcheck/00check.log || true
