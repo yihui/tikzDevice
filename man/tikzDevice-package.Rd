@@ -12,7 +12,7 @@
   documents that are also being typeset by LaTeX. Using
   LaTeX to generate graph text also means that
   \strong{LaTeX mathematics can be typeset directly into
-  labels and annotations}
+  labels and annotations}.
 }
 \details{
   \tabular{ll}{ Package: \tab tikzDevice\cr Type: \tab
@@ -28,7 +28,7 @@
   <value>)}.  These options allow for the use of custom
   \code{documentclass} declarations, LaTeX packages, and
   typesetting engines (e.g. XeLaTeX or LuaLaTeX). The
-  defaults , if are any for a given option, are shown below
+  defaults, if are any for a given option, are shown below
   the description. The global options are:
 
   \describe{
@@ -150,8 +150,10 @@
 
   Charlie Sharpsteen: \email{source@sharpsteen.net}
 
+  Yihui Xie: \email{xie@yihui.name}
+
   Submit bug reports to:
-  \email{tikzdevice-bugs@lists.r-forge.r-project.org}
+  \url{https://github.com/yihui/tikzDevice/issues}
 }
 \references{
   The TikZ and PGF Packages: Manual for version 2.00\cr
