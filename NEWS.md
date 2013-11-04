@@ -1,6 +1,6 @@
 ---
 
-# Changes in version 0.6.3 (20XX-XX-XX)
+# Changes in version 0.6.3 (2013-10-31)
 
 ---
 
@@ -10,9 +10,22 @@
 
 - `onefile` option for output to multiple files (#40).
 
+- New function `tikzCompilerInfo`, reports information concerning the compilers
+  used by the tikzDevice
+
+- Add support for LuaLaTeX (#28).
+
 ## Bug Fixes
 
 - Properly copy strings containing LaTeX info, avoiding use of freed memory.
+
+- Print footer when closing standAlone plots (#52).
+
+- getDocumentPointsize: fix regexp to match only digits followed by "pt"
+
+## Depreciation Notices
+
+- Versions of R < 2.12.0 are no longer supported.
 
 ## Behind the scenes
 
@@ -23,7 +36,7 @@
 - Replace old StyleDef code by `TikZ_DefineColors`, `TikZ_WriteDrawOptions`
   and `TikZ_WriteLineStyle`, which are easier to use and maintain (#46).
 
-- Reduce number of calls to TikZ_GetDrawOps
+- Reduce number of calls to TikZ_GetDrawOps.
 
 - Only start clipping scopes after a draw operation, this can reduce the size of TikZ
   output by ~3/4 (#45).
@@ -32,7 +45,16 @@
 
 - Replace library.dynam with useDynLib (#50).
 
-- Reduce verbosity of start-up message
+- Reduce verbosity of start-up message.
+
+- Allow TikZ_Raster to handle negative width or height, will cause the raster to
+  be flipped (#53).
+
+- Don't reset par after creating raster output (#54).
+
+- Support testthat 0.6 (#56) and ggplot 0.9.0.
+
+- Protect calls to Filehash from user interrupts.
 
 ---
 
