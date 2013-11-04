@@ -8,6 +8,9 @@
 
 - No C warnings when installing (#68).
 
+- Function `grid.tikzNode` works again, had no effect due to a missing S3
+  export.
+
 ## Behind the scenes
 
 - Enable continuous integration via craigcitro/r-travis
