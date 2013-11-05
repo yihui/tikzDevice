@@ -452,7 +452,7 @@ test_graphs <- list(
     # a while to compute.  Could be a good candidate for optimization.
     #
     # FIXME: Remove once we drop support for 2.12.x
-    skip_if = function(){version$major <= 2 && version$minor < "13.0"},
+    skip_if = function() { getRversion() < "2.13.0" },
     graph_code = quote({
 
       par(mfrow = c(2,2))
