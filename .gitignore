@@ -5,3 +5,4 @@
 /src/*.dll
 /tests/test_output
 /tests/test_work
+.Rproj.user
