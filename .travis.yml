@@ -1,7 +1,15 @@
 language: c
 # To build on OSX, switch the previous line to
 # language: objective-c
-script: ./travis-tool.sh run_tests
+env:
+  matrix:
+    - TYPE=cran
+    - TYPE=tests
+
+script:
+  - if [ $TYPE == cran ]; then ./travis-tool.sh run_tests; fi
+  - if [ $TYPE == tests ]; then ./tests/unit_tests.R; fi
+
 before_install:
   - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
   - chmod 755 ./travis-tool.sh
@@ -10,6 +18,7 @@ install:
   - ./travis-tool.sh r_binary_install colorspace zoo RColorBrewer dichromat munsell labeling Formula sp mvtnorm TH.data sandwich gtable reshape2 scales proto quantreg Hmisc mapproj hexbin maptools multcomp
   - ./travis-tool.sh install_deps
   - sudo apt-get install --no-install-recommends texinfo texlive-latex-recommended texlive-latex-extra lmodern texlive-fonts-recommended texlive-fonts-extra pgf
+  - if [ $TYPE == tests ]; then ./travis-tool.sh install_devtools; Rscript -e "library(methods); devtools::install('.')"; fi
 after_failure:
   - cat tikzDevice.Rcheck/00install.out || true
   - cat tikzDevice.Rcheck/00check.log || true

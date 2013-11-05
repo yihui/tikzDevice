@@ -110,6 +110,7 @@ DetailedReporter <- setRefClass('DetailedReporter', contains = 'Reporter',
 # results of graphics tests.
 GraphicsReporter <- setRefClass('GraphicsReporter', contains = 'DetailedReporter',
   fields = list(
+    'cmp_command' = 'character',
     'ran_vis_diff' = 'logical',
     'pixel_error' = 'ANY',
     'n_ctx_failed' = 'integer'
@@ -141,6 +142,10 @@ GraphicsReporter <- setRefClass('GraphicsReporter', contains = 'DetailedReporter
       start_time <<- Sys.time()
     },
 
+    set_cmp_command = function(the_cmp_command) {
+      cmp_command <<- the_cmp_command
+    },
+
     vis_result = function(the_error) {
       ran_vis_diff <<- TRUE
       pixel_error <<- the_error
@@ -148,7 +153,11 @@ GraphicsReporter <- setRefClass('GraphicsReporter', contains = 'DetailedReporter
 
     add_result = function(result) {
       if ( ran_vis_diff ) {
-        if ( pixel_error == 'SKIP' ) {
+        if ( is.na(pixel_error) ) {
+          spacer <- paste(rep(' ', width - nchar(test) - 19),
+            collapse = '')
+          cat(spacer, colourise("UNKNOWN", fg = "yellow"), "\n")
+        } else if ( pixel_error == 'SKIP' ) {
           spacer <- paste(rep(' ', width - nchar(test) - 19),
             collapse = '')
           cat(spacer, colourise("SKIP", fg = "yellow"), "\n")
@@ -159,6 +168,8 @@ GraphicsReporter <- setRefClass('GraphicsReporter', contains = 'DetailedReporter
             colourise(sprintf("%8.2g pixels", pixel_error), fg = "yellow"),
             "\n"
           )
+          if (pixel_error > 0)
+            cat('   Command for comparison:', "\n", cmp_command, "\n")
         }
       } else {
         spacer <- paste(rep(' ', width - nchar(test) - 19),

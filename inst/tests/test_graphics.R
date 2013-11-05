@@ -369,7 +369,7 @@ test_graphs <- list(
         sink()
         testPlot <- qplot(log10(`Grain Diameter`), `Percent Finer`, data = soilSample) +
           scale_x_continuous(labels = math_format(10^.x)) +
-          scale_y_continuous(trans = 'probit') +
+          scale_y_continuous(trans = 'probit', breaks = seq(0.2, 0.8, 0.2)) +
           theme_bw()
       }
 
@@ -452,7 +452,7 @@ test_graphs <- list(
     # a while to compute.  Could be a good candidate for optimization.
     #
     # FIXME: Remove once we drop support for 2.12.x
-    skip_if = function(){version$minor < "13.0"},
+    skip_if = function() { getRversion() < "2.13.0" },
     graph_code = quote({
 
       par(mfrow = c(2,2))
@@ -499,13 +499,11 @@ test_graphs <- list(
     tags = c('base', 'xetex', 'utf8'),
     engine = 'xetex',
     graph_code =  quote({
-      n <- 10
-      chars <- matrix(intToUtf8(seq(161,,1,10*n),multiple=T),n)
+      n <- 8
+      chars <- intToUtf8(seq(187,,1,n*n),multiple=T)
 
       plot(1:n,type='n',xlab='',ylab='',axes=FALSE, main="UTF-8 Characters")
-        for(i in 1:n)
-          for(j in 1:n)
-            text(i,j,chars[i,j])
+      text(rep(1:n, n), rep(1:n, rep(n, n)), chars)
     })
   ),
 
