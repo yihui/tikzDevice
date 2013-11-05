@@ -6,9 +6,9 @@ runs_cleanly <- function ()
 # should not throw any errors or generate any warnings.
 {
     function(expr) {
-        oldwarn = as.numeric(options(warn = 2))
+        oldwarn = options(warn = 2)
         res = try(eval(substitute(expr), parent.frame()), silent = TRUE)
-        options(warn = oldwarn)
+        options(oldwarn)
         testthat:::expectation( (!inherits(res, 'try-error')),
                                 "warnings or errors occurred")
     }
