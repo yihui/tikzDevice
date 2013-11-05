@@ -18,7 +18,7 @@ install:
   - ./travis-tool.sh r_binary_install colorspace zoo RColorBrewer dichromat munsell labeling Formula sp mvtnorm TH.data sandwich gtable reshape2 scales proto quantreg Hmisc mapproj hexbin maptools multcomp
   - ./travis-tool.sh install_deps
   - sudo apt-get install --no-install-recommends texinfo texlive-latex-recommended texlive-latex-extra lmodern texlive-fonts-recommended texlive-fonts-extra pgf
-  - if [ $TYPE == tests ]; then ./travis-tool.sh install_devtools; Rscript -e "library(devtools, methods); devtools:::install('.')"; fi
+  - if [ $TYPE == tests ]; then ./travis-tool.sh install_devtools; Rscript -e "library(methods); devtools::install('.')"; fi
 after_failure:
   - cat tikzDevice.Rcheck/00install.out || true
   - cat tikzDevice.Rcheck/00check.log || true
