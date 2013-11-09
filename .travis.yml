@@ -5,6 +5,7 @@ env:
   matrix:
     - TYPE=cran
     - TYPE=tests
+    - TYPE=tests RELEASE=devel
 
 script:
   - if [ $TYPE == cran ]; then ./travis-tool.sh run_tests; fi
@@ -15,6 +16,13 @@ before_install:
   - chmod 755 ./travis-tool.sh
   - ./travis-tool.sh bootstrap
 install:
+  - if [ "${RELEASE}" == devel ]; then
+      sudo add-apt-repository -y ppa:marutter/rdev;
+      sudo apt-get update
+        -o Dir::Etc::sourcelist="sources.list.d/marutter-rdev-precise.list"
+        -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0";
+      sudo apt-get dist-upgrade;
+    fi
   - ./travis-tool.sh r_binary_install colorspace zoo RColorBrewer dichromat munsell labeling Formula sp mvtnorm TH.data sandwich gtable reshape2 scales proto quantreg Hmisc mapproj hexbin maptools multcomp
   - ./travis-tool.sh install_deps
   - sudo apt-get install --no-install-recommends texinfo texlive-latex-recommended texlive-latex-extra lmodern texlive-fonts-recommended texlive-fonts-extra pgf
