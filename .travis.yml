@@ -4,7 +4,7 @@ language: c
 env:
   matrix:
     - TYPE=cran
-    - TYPE=tests
+    - TYPE=cran RELEASE=devel
     - TYPE=tests RELEASE=devel
 
 script:
@@ -14,9 +14,7 @@ script:
 before_install:
   - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
   - chmod 755 ./travis-tool.sh
-  - if [ "${RELEASE}" == devel ]; then
-      sudo add-apt-repository -y ppa:marutter/rdev;
-    fi
+  - if [ "${RELEASE}" == devel ]; then sudo add-apt-repository -y ppa:marutter/rdev; fi
   - ./travis-tool.sh bootstrap
 install:
   - ./travis-tool.sh r_binary_install colorspace zoo RColorBrewer dichromat munsell labeling Formula sp mvtnorm TH.data sandwich gtable reshape2 scales proto quantreg Hmisc mapproj hexbin maptools multcomp
