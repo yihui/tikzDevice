@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 if (nchar(Sys.getenv('R_TESTS')) == 0){
-  library(methods)
   # Protects against R CMD check
+  library(methods)
   library(tikzDevice)
   library(testthat)
   require(stringr)
