@@ -1,6 +1,6 @@
 # This file contains custom test reporters.
 
-DetailedReporter <- setRefClass('DetailedReporter', contains = 'Reporter',
+DetailedReporter <- setRefClass('DetailedReporter', where = .GlobalEnv, contains = 'Reporter',
   fields = list(
     'width' = 'integer',
     'n_tests' = 'integer',
@@ -108,7 +108,7 @@ DetailedReporter <- setRefClass('DetailedReporter', contains = 'Reporter',
 # This reporter is used by the graphics tests. It is very similar to the
 # DetailedReporter, but contains specialized functionality for displaying the
 # results of graphics tests.
-GraphicsReporter <- setRefClass('GraphicsReporter', contains = 'DetailedReporter',
+GraphicsReporter <- setRefClass('GraphicsReporter', where = .GlobalEnv, contains = 'DetailedReporter',
   fields = list(
     'cmp_command' = 'character',
     'ran_vis_diff' = 'logical',
