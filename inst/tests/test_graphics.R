@@ -578,14 +578,15 @@ test_graphs <- list(
     description = 'Test of UTF8 characters w/ LuaTeX',
     tags = c('base', 'luatex', 'utf8'),
     engine = 'luatex',
+    # Travis CI runs Ubuntu Precise with a fontspec package that doesn't accept
+    # LuaLaTeX yet
+    skip_if = function(){ Sys.getenv("TRAVIS") != "" },
     graph_code =  quote({
-      n <- 10
-      chars <- matrix(intToUtf8(seq(161,,1,10*n),multiple=T),n)
-
-      plot(1:n,type='n',xlab='',ylab='',axes=FALSE, main="UTF-8 Characters with LuaLaTeX")
-        for(i in 1:n)
-          for(j in 1:n)
-            text(i,j,chars[i,j])
+      n <- 8
+      chars <- intToUtf8(seq(187,,1,n*n),multiple=T)
+      
+      plot(1:n,type='n',xlab='',ylab='',axes=FALSE, main="UTF-8 Characters")
+      text(rep(1:n, n), rep(1:n, rep(n, n)), chars)
     })
   )
 

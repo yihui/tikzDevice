@@ -9,7 +9,10 @@ runs_cleanly <- function ()
         oldwarn = options(warn = 2)
         res = try(eval(substitute(expr), parent.frame()), silent = TRUE)
         options(oldwarn)
-        testthat:::expectation( (!inherits(res, 'try-error')),
-                                "warnings or errors occurred")
+        
+        is_try_error = inherits(res, 'try-error')
+        testthat:::expectation(!is_try_error,
+                               sprintf("warnings or errors occurred:\n%s",
+                               as.character(res)))
     }
 }
