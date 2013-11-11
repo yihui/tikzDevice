@@ -18,6 +18,7 @@ before_install:
   - ./travis-tool.sh bootstrap
   - IsDevel() { [[ "${RELEASE}" == devel ]]; }
   - if [ $TYPE == tests ]; then APT_EXTRA="texlive-xetex imagemagick"; export DISPLAY=:99.0; fi
+  - if IsDevel; then export FORCE_SOURCE_INSTALL=1; fi
 install:
   - sudo apt-get install --no-install-recommends texinfo texlive-latex-recommended texlive-latex-extra lmodern texlive-fonts-recommended texlive-fonts-extra pgf $APT_EXTRA
   - if IsDevel; then
@@ -30,12 +31,7 @@ install:
       sudo make install &&
       popd;
     fi
-  - if ! IsDevel; then
-      ./travis-tool.sh r_binary_install colorspace zoo RColorBrewer dichromat munsell labeling Formula sp mvtnorm TH.data sandwich gtable reshape2 scales proto quantreg Hmisc mapproj hexbin maptools multcomp;
-    else
-      ./travis-tool.sh r_install devtools;
-      ./travis-tool.sh github_package devtools;
-    fi
+  - ./travis-tool.sh r_binary_install colorspace zoo RColorBrewer dichromat munsell labeling Formula sp mvtnorm TH.data sandwich gtable reshape2 scales proto quantreg Hmisc mapproj hexbin maptools multcomp
   - ./travis-tool.sh install_deps
   - if [ $TYPE == tests ]; then ./travis-tool.sh install_devtools; Rscript -e "library(methods); devtools::install('.')"; fi
   - sh -e /etc/init.d/xvfb start
