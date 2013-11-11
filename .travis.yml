@@ -4,9 +4,9 @@ language: c
 env:
   matrix:
     - TYPE=cran
-    - TYPE=cran RELEASE=devel
+    - TYPE=cran RELEASE=trunk
     - TYPE=tests
-    - TYPE=tests RELEASE=devel
+    - TYPE=tests RELEASE=trunk
 
 script:
   - if [ $TYPE == cran ]; then ./travis-tool.sh run_tests; fi
@@ -16,14 +16,14 @@ before_install:
   - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
   - chmod 755 ./travis-tool.sh
   - ./travis-tool.sh bootstrap
-  - IsDevel() { [[ "${RELEASE}" == devel ]]; }
+  - IsSourceInstall() { [[ -n "${RELEASE}" ]]; }
   - if [ $TYPE == tests ]; then APT_EXTRA="texlive-xetex imagemagick"; export DISPLAY=:99.0; fi
-  - if IsDevel; then export FORCE_SOURCE_INSTALL=1; fi
+  - if IsSourceInstall; then export FORCE_SOURCE_INSTALL=1; fi
 install:
   - sudo apt-get install --no-install-recommends texinfo texlive-latex-recommended texlive-latex-extra lmodern texlive-fonts-recommended texlive-fonts-extra pgf $APT_EXTRA
-  - if IsDevel; then
+  - if IsSourceInstall; then
       pushd ~ &&
-      svn co -q https://svn.r-project.org/R/trunk/ r-source &&
+      svn co -q https://svn.r-project.org/R/${RELEASE}/ r-source &&
       cd r-source &&
       tools/rsync-recommended &&
       ./configure --enable-R-shlib &&
