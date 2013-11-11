@@ -1,6 +1,10 @@
 # This file contains functions that help set up and run the tikzDevice through
 # test graphs.
 
+# Workaround until testthat 0.7.2 is on CRAN; see also hadley/testthat#102
+get_reporter <- if (exists("get_reporter", envir = asNamespace("testthat")))
+  testthat:::get_reporter else testthat:::test_reporter
+
 do_graphics_test <- function(short_name, description, graph_code,
   engine = 'pdftex', graph_options = NULL, skip_if = NULL, tags = NULL, ...) {
 
@@ -109,7 +113,7 @@ compile_graph <- function(graph_file, engine){
 compare_graph <- function(graph_name, tags){
 
   if ( is.null(compare_cmd) ) {
-    testthat:::test_reporter()$vis_result('SKIP')
+    get_reporter()$vis_result('SKIP')
     return(TRUE)
   }
 
@@ -124,7 +128,7 @@ compare_graph <- function(graph_name, tags){
   }
 
   if ( !file.exists(test_output) || !file.exists(standard_graph) ) {
-    testthat:::test_reporter()$vis_result('SKIP')
+    get_reporter()$vis_result('SKIP')
     return(TRUE)
   }
 
@@ -137,13 +141,13 @@ compare_graph <- function(graph_name, tags){
     "2>&1 | awk '{metric=$NF};END{print metric}'"
   )
 
-  testthat:::test_reporter()$set_cmp_command(command_line)
+  get_reporter()$set_cmp_command(command_line)
   result <- as.double(system(paste(
     # Force the command to be executed through bash
     'bash -c ', shQuote(command_line)),
     intern = TRUE, ignore.stderr = TRUE))
 
-  testthat:::test_reporter()$vis_result(result)
+  get_reporter()$vis_result(result)
 
   return(TRUE)
 
