@@ -4,9 +4,7 @@ language: c
 env:
   matrix:
     - TYPE=cran
-    - TYPE=cran RELEASE=trunk
     - TYPE=tests
-    - TYPE=tests RELEASE=trunk
 
 script:
   - if [ $TYPE == cran ]; then ./travis-tool.sh run_tests; fi
