@@ -4,7 +4,18 @@ language: c
 env:
   matrix:
     - TYPE=cran
+    - TYPE=cran RELEASE=trunk
     - TYPE=tests
+    - TYPE=tests RELEASE=trunk
+    - TYPE=tests RELEASE=tags/R-3-0-1
+    - TYPE=tests RELEASE=tags/R-3-0-0
+    - TYPE=tests RELEASE=tags/R-2-15-3
+    - TYPE=tests RELEASE=tags/R-2-15-2
+    - TYPE=tests RELEASE=tags/R-2-15-1
+    - TYPE=tests RELEASE=tags/R-2-15-0
+    - TYPE=tests RELEASE=tags/R-2-14-2
+    - TYPE=tests RELEASE=tags/R-2-14-1
+    - TYPE=tests RELEASE=tags/R-2-14-0
 
 script:
   - if [ $TYPE == cran ]; then ( cd ..; R CMD check tikzDevice*.*.tar.gz --as-cran --no-build-vignettes --no-manual ); fi
@@ -27,7 +38,10 @@ install:
       tools/rsync-recommended &&
       ./configure --enable-R-shlib &&
       make -j2 &&
-      sudo make install
+      sudo make install &&
+      if [[ "${RELEASE}" == tags/R-2-14-0 ]]; then
+          sudo chmod 2777 /usr/local/lib64/R/library;
+      fi
     ); fi
   - ./travis-tool.sh r_binary_install colorspace zoo RColorBrewer dichromat munsell labeling Formula sp mvtnorm TH.data sandwich gtable reshape2 scales proto quantreg Hmisc mapproj hexbin maptools multcomp filehash ggplot2 testthat
   - ( cd ..; R CMD build tikzDevice --no-build-vignettes --no-manual; R CMD INSTALL tikzDevice*.*.tar.gz )
