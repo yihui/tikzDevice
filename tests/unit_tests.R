@@ -9,6 +9,11 @@ if (nchar(Sys.getenv('R_TESTS')) == 0){
   require(tools)
   require(evaluate)
 
+  test.failed <- FALSE
+  report.failure <- function() {
+    test.failed <<- TRUE
+  }
+
   # Process command arguments
   test_args <- commandArgs(TRUE)
   torture_mem <- any(str_detect(test_args, '^--use-gctorture'))
@@ -74,6 +79,8 @@ if (nchar(Sys.getenv('R_TESTS')) == 0){
 
 
   test_package('tikzDevice')
+
+  stopifnot(!test.failed)
 
 }
 
