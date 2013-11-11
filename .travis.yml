@@ -35,6 +35,8 @@ install:
   - ./travis-tool.sh install_deps
   - if [ $TYPE == tests ]; then ./travis-tool.sh install_devtools; Rscript -e "library(methods); devtools::install('.')"; fi
   - sh -e /etc/init.d/xvfb start
+before_script:
+  - ./travis-tool.sh dump_sysinfo
 after_failure:
   - cat tikzDevice.Rcheck/00install.out || true
   - cat tikzDevice.Rcheck/00check.log || true
