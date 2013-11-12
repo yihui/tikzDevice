@@ -55,7 +55,17 @@ That will print out a list of tasks available, including installation.
 Reporting Bugs and Getting Help
 -------------------------------
 
-The tikzDevice has a dedicated mailing list courtesy of R-Forge.  The
+Primary development takes place on GitHub.  The preferred way to communicate
+bugs and feature requests is to open an issue at the primary repository:
+
+  https://github.com/yihui/tikzDevice/issues
+
+(Unfortunately, the original repository by Charlie Sharpsteen,
+https://github.com/Sharpie/RTikZDevice, has not been updated for over a year,
+and the package was not even installable anymore with current versions of R.
+This was the reason to continue development in a fork.)
+
+The tikzDevice has also a dedicated mailing list courtesy of R-Forge.  The
 mailing list is the easiest way to get answers for questions related
 to usage:
 
@@ -64,12 +74,6 @@ to usage:
 The mailing list may also be accessed through Google Groups:
 
   https://groups.google.com/forum/#!forum/tikzdevice
-
-
-Primary development takes place on GitHub.  Bugs and feature requests
-may be made by opening issues at the primary repository:
-
-  https://github.com/Sharpie/RTikZDevice/issues
 
 Adventurous users are encouraged to fork the repository and contribute
 to the development of the package!
