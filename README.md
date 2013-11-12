@@ -26,29 +26,6 @@ The tikzDevice supports three main modes of output:
     character vector for further manipulation.
 
 
-Beta Notice
------------
-
-The tikzDevice is currently flagged as a beta work.  The package is reasonably
-stable and has been used by the authors to produce graphics for academic
-publications for over a two years. The reason for beta status is that there are
-several open design issues- two of which are:
-
-  - Providing support for UTF8 text.
-
-  - Supporting TeX variants other than LaTeX.
-
-Resolving these issues may require changes to the tikzDevice that break
-backwards compatibility with previous versions.  The beta flag is a reminder
-that such changes may occur- although we will strive to avoid them if possible.
-
-The beta flag will be removed upon release of version 1.0. At this time the
-tikzDevice will switch to [semantic versioning][1] and changes that
-break backwards compatibility will happen rarely and will incur a major release.
-
-  [1]: http://www.semver.org
-
-
 Obtaining the Package
 ---------------------
 
