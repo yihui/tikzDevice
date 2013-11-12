@@ -33,14 +33,13 @@ Stable versions of the tikzDevice may be installed from CRAN:
 
     install.packages( 'tikzDevice' )
 
-Development builds may be installed from R-Forge:
+Development builds may be installed from RForge:
 
-    install.packages( 'tikzDevice',
-      repos='http://r-forge.r-project.org' )
+    install.packages( 'tikzDevice', repos='http://rforge.net' )
 
 Bleeding-edge source code is available from GitHub:
 
-    git clone git://github.com/Sharpie/RTikZDevice.git
+    git clone git://github.com/yihui/tikzDevice.git
 
 Source code checked out from GitHub cannot be installed directly by
 `R CMD INSTALL`. There are some tasks that need to be executed to prepare the
