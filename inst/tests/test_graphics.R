@@ -443,16 +443,6 @@ test_graphs <- list(
     short_name = 'raster_reflection',
     description = 'Test raster handling in graphics with reflected axes',
     tags = c('base', 'raster'),
-    # R 2.12.0 does not support the `useRaster` argumet to `image`.
-    #
-    # NOTE:
-    # Interestingly, calling this test with `useRaster=FALSE` appears to create
-    # a graph that causes pdfTeX to exceed its memory capacity. LuaLaTeX
-    # handles it like a champ and doesn't even allocate 100 MB of memory. Takes
-    # a while to compute.  Could be a good candidate for optimization.
-    #
-    # FIXME: Remove once we drop support for 2.12.x
-    skip_if = function() { getRversion() < "2.13.0" },
     graph_code = quote({
 
       par(mfrow = c(2,2))

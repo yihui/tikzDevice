@@ -32,16 +32,7 @@ if (nchar(Sys.getenv('R_TESTS')) == 0){
   options(tikzMetricsDictionary = NULL)
 
   expand_test_path <- function(path) {
-    call_args = list(path = path)
-    if( getRversion() >= '2.13.0' ) {
-      # After R 2.13.0, normalizePath bitches and moans if the path does not
-      # exist. Squelch this warning.
-      #
-      # FIXME: Remove this once we drop support for R 2.12.x
-      call_args[['mustWork']] = FALSE
-    }
-
-    do.call(normalizePath, call_args)
+    normalizePath(path, mustWork = FALSE)
   }
 
   # Set up directories for test output.
