@@ -7,7 +7,7 @@ env:
     - TYPE=tests
 
 script:
-  - if [ $TYPE == cran ]; then ./travis-tool.sh run_tests; fi
+  - if [ $TYPE == cran ]; then ( cd ..; R CMD check tikzDevice*.*.tar.gz --as-cran --no-build-vignettes --no-manual ); fi
   - if [ $TYPE == tests ]; then ( cd tests; ./unit_tests.R ); fi
 
 before_install:
@@ -19,21 +19,18 @@ before_install:
   - if IsSourceInstall; then export FORCE_SOURCE_INSTALL=1; fi
 install:
   - sudo apt-get install --no-install-recommends texinfo texlive-latex-recommended texlive-latex-extra lmodern texlive-fonts-recommended texlive-fonts-extra pgf $APT_EXTRA
-  - if IsSourceInstall; then
-      pushd ~ &&
+  - sh -e /etc/init.d/xvfb start
+  - if IsSourceInstall; then (
+      cd ~ &&
       svn co -q https://svn.r-project.org/R/${RELEASE}/ r-source &&
       cd r-source &&
       tools/rsync-recommended &&
       ./configure --enable-R-shlib &&
       make -j2 &&
-      sudo make install &&
-      popd;
-    fi
-  - ./travis-tool.sh r_binary_install colorspace zoo RColorBrewer dichromat munsell labeling Formula sp mvtnorm TH.data sandwich gtable reshape2 scales proto quantreg Hmisc mapproj hexbin maptools multcomp
-  - ./travis-tool.sh install_deps
-  - if [ $TYPE == tests ]; then ./travis-tool.sh install_devtools; Rscript -e "library(methods); devtools::install('.')"; fi
-  - sh -e /etc/init.d/xvfb start
-before_script:
+      sudo make install
+    ); fi
+  - ./travis-tool.sh r_binary_install colorspace zoo RColorBrewer dichromat munsell labeling Formula sp mvtnorm TH.data sandwich gtable reshape2 scales proto quantreg Hmisc mapproj hexbin maptools multcomp filehash ggplot2 testthat
+  - ( cd ..; R CMD build tikzDevice --no-build-vignettes --no-manual; R CMD INSTALL tikzDevice*.*.tar.gz )
   - ./travis-tool.sh dump_sysinfo
 after_failure:
   - cat tikzDevice.Rcheck/00install.out || true
