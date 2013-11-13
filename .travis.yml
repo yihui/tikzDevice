@@ -18,7 +18,7 @@ env:
     - TYPE=tests RELEASE=tags/R-2-14-0
 
 script:
-  - if [ $TYPE == cran ]; then ( cd ..; R CMD check tikzDevice*.*.tar.gz --as-cran --no-build-vignettes --no-manual ); fi
+  - if [ $TYPE == cran ]; then ( cd ..; R CMD check tikzDevice*.*.tar.gz --as-cran ); fi
   - if [ $TYPE == tests ]; then ( cd tests; ./unit_tests.R ); fi
 
 before_install:
