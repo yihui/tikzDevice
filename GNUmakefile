@@ -69,12 +69,7 @@ deps:
 
 
 docs:
-	cd ..;\
-		"$(RBIN)/R" --vanilla --slave -e "library(roxygen2); roxygenize('$(PKGSRC)', '$(PKGSRC).build', overwrite=TRUE, unlink.target=TRUE)"
-	# Cripple the new folder so you don't get confused and start doing
-	# development in there.
-	cd ../$(PKGSRC).build;\
-		rm GNUmakefile
+	"$(RBIN)/R" --vanilla --slave -e "library(roxygen2); roxygenize(overwrite=TRUE, unlink.target=TRUE)"
 
 news:
 	sed -e 's/^-/  -/' -e 's/^## *//' -e 's/^#/\t\t/' <NEWS.md | fmt -80 > NEWS
