@@ -1,9 +1,6 @@
 \name{sanitizeTexString}
 \alias{sanitizeTexString}
-\title{Replace LaTeX Special Characters in a String
-This function is used by tikzDevice when \code{sanitize=TRUE} to replace
-special LaTeX characters (such as the comment character %) in plotting text
-where the user does not have direct control over the generated text.}
+\title{Replace LaTeX Special Characters in a String}
 \usage{
 sanitizeTexString(string, strip = getOption("tikzSanitizeCharacters"),
   replacement = getOption("tikzReplacementCharacters"))
@@ -22,14 +19,18 @@ sanitizeTexString(string, strip = getOption("tikzSanitizeCharacters"),
   special characters replaced.}
 }
 \description{
+This function is used by tikzDevice when \code{sanitize=TRUE} to replace
+special LaTeX characters (such as the comment character %) in plotting text
+where the user does not have direct control over the generated text.
+}
+\details{
 \code{sanitizeTexString} searches character by character through a string
 replacing each occurrence of a special character contained in
 \code{strip[i]} with the corresponding replacement value in
 \code{replacement[i]}.  tikzDevice calls back this function for every piece
 of text when the sanitize option is TRUE. See \code{\link{tikz}} for more
 information on the default special characters and replacement values.
-}
-\details{
+
 By default, `tikzSanitizeCharacters` replaces the following characters:
 
 \itemize{

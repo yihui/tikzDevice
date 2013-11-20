@@ -1,9 +1,6 @@
 \name{tikz}
 \alias{tikz}
-\title{TikZ Graphics Device
-\code{tikz} is used to open a R graphics device which supports output in the
-TikZ graphics language. TikZ code may be included inside a LaTeX document by
-specifying \code{\\usepackage{tikz}} in the document header.}
+\title{TikZ Graphics Device}
 \usage{
 tikz(file = ifelse(onefile, "./Rplots.tex", "./Rplot\%03d.tex"), width = 7,
   height = 7, onefile = TRUE, bg = "transparent", fg = "black",
@@ -84,14 +81,18 @@ tikz(file = ifelse(onefile, "./Rplots.tex", "./Rplot\%03d.tex"), width = 7,
 \code{tikz()} returns no values.
 }
 \description{
+\code{tikz} is used to open a R graphics device which supports output in the
+TikZ graphics language. TikZ code may be included inside a LaTeX document by
+specifying \code{\\usepackage{tikz}} in the document header.
+}
+\details{
 The TikZ device enables LaTeX-ready output from graphics functions. This is
 done by encoding graphics commands using TikZ markup.  All text in a graphic
 output with \code{tikz} will be typeset by LaTeX and therefore will match
 whatever fonts are currently used in the document. This also means that
 \strong{LaTeX mathematics can be typeset directly into labels and
 annotations}.
-}
-\details{
+
 The TikZ device currently supports three modes of output depending on the
 value of the parameter \code{standAlone} and \code{bareBones}.  If
 \code{standAlone} and \code{bareBones} are set to the default value of
