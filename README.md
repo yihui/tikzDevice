@@ -35,9 +35,13 @@ Stable versions of the tikzDevice may be installed from CRAN:
 
 Development builds may be installed from RForge:
 
-    install.packages( 'tikzDevice', repos='http://rforge.net' )
+    install.packages( 'tikzDevice', repos = 'http://rforge.net', type = 'source' )
 
-Bleeding-edge source code is available from GitHub:
+Alternatively, install directly from GitHub:
+
+    devtools::install_github( 'yihui/tikzDevice' )
+
+Bleeding-edge source code is available from GitHub, too:
 
     git clone git://github.com/yihui/tikzDevice.git
 
