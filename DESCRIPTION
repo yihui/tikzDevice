@@ -29,6 +29,7 @@ Suggests:
     maps
 SystemRequirements: pgf (>= 2.00)
 LazyLoad: yes
+Roxygen: list(wrap = FALSE)
 Collate:
     'cacheMetrics.R'
     'deviceUtils.R'
