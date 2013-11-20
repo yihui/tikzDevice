@@ -2,7 +2,7 @@
 \alias{gridToDevice}
 \title{Convert grid coordinates to device coordinates}
 \usage{
-  gridToDevice(x = 0, y = 0, units = "native")
+gridToDevice(x = 0, y = 0, units = "native")
 }
 \arguments{
   \item{x}{x coordinate.}
@@ -16,21 +16,22 @@
   function for acceptable unit types.}
 }
 \value{
-  A tuple of coordinates in device units.
+A tuple of coordinates in device units.
 }
 \description{
-  This function converts a coordinate pair specifying a
-  location in a grid \code{\link{viewport}} in grid units
-  to a coordinate pair specifying a location in device
-  units relative to the lower left corner of the plotting
-  canvas.
+This function converts a coordinate pair specifying a location in a
+grid \code{\link{viewport}} in grid units to a coordinate pair specifying a
+location in device units relative to the lower left corner of the plotting
+canvas.
 }
 \author{
-  Charlie Sharpsteen \email{source@sharpsteen.net}
+Charlie Sharpsteen \email{source@sharpsteen.net}
 }
 \seealso{
-  \code{\link{unit}} \code{\link{viewport}}
-  \code{\link{convertX}} \code{\link{convertY}}
+\code{\link{unit}}
+  \code{\link{viewport}}
+  \code{\link{convertX}}
+  \code{\link{convertY}}
   \code{\link{current.transform}}
 }
 \keyword{conversion}

@@ -30,13 +30,3 @@ Suggests:
 SystemRequirements: pgf (>= 2.00)
 LazyLoad: yes
 Roxygen: list(wrap = FALSE)
-Collate:
-    'cacheMetrics.R'
-    'deviceUtils.R'
-    'latexStrWidth.R'
-    'sanitizeTexString.R'
-    'tikz.R'
-    'tikzAnnotate.R'
-    'tikzInternal.R'
-    'zzz.R'
-    'tikzDevice-package.R'

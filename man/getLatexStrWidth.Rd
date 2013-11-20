@@ -3,15 +3,13 @@
 \alias{getLatexStrWidth}
 \title{Obtain Font Metrics from LaTeX}
 \usage{
-  getLatexStrWidth(texString, cex = 1, face = 1,
-    engine = getOption("tikzDefaultEngine"),
-    documentDeclaration = getOption("tikzDocumentDeclaration"),
-    packages)
+getLatexStrWidth(texString, cex = 1, face = 1,
+  engine = getOption("tikzDefaultEngine"),
+  documentDeclaration = getOption("tikzDocumentDeclaration"), packages)
 
-  getLatexCharMetrics(charCode, cex = 1, face = 1,
-    engine = getOption("tikzDefaultEngine"),
-    documentDeclaration = getOption("tikzDocumentDeclaration"),
-    packages)
+getLatexCharMetrics(charCode, cex = 1, face = 1,
+  engine = getOption("tikzDefaultEngine"),
+  documentDeclaration = getOption("tikzDocumentDeclaration"), packages)
 }
 \arguments{
   \item{texString}{An arbitrary string for which the width
@@ -43,28 +41,25 @@
   accepted.}
 }
 \value{
-  \item{getLatexStrWidth}{The width of \code{texString} in
-  points.} \item{getLatexCharMetrics}{A numeric vector
-  holding ascent, descent and width. Values should all be
-  nonnegative.}
+\item{getLatexStrWidth}{The width of \code{texString} in points.}
+  \item{getLatexCharMetrics}{A numeric vector holding ascent, descent
+    and width. Values should all be nonnegative.}
 }
 \description{
-  These functions calculate the width of a character or
-  string as it would appear after being compiled by LaTeX.
+These functions calculate the width of a character or string as it would
+appear after being compiled by LaTeX.
 }
 \details{
-  These functions are used internally by the \code{tikz}
-  device for proper string placement in graphics.  Both
-  functions check to see if metrics exist in a global or
-  temporary dictionary (as defined in
-  \code{options('tikzMetricsDictionary')}) and if so will
-  pull the metrics from there. If the dictionary does not
-  exist, then a temporary one is created for the current R
-  session. Metrics are calculated via \code{system} calls
-  to LaTeX compilers. Querying compilers to calculate
-  metrics is expensive and so we strongly recommend setting
-  \code{options('tikzMetricsDictionary') <-
-  /path/to/dictionary} to create a global dictionary.
+These functions are used internally by the \code{tikz} device for proper
+string placement in graphics.  Both functions check to see if metrics exist
+in a global or temporary dictionary (as defined in
+\code{options('tikzMetricsDictionary')}) and if so will pull the metrics
+from there. If the dictionary does not exist, then a temporary one is
+created for the current R session. Metrics are calculated via \code{system}
+calls to LaTeX compilers. Querying compilers to calculate metrics is
+expensive and so we strongly recommend setting
+\code{options('tikzMetricsDictionary') <- /path/to/dictionary} to create a
+global dictionary.
 }
 \examples{
 getLatexStrWidth('{\\\\\\\\tiny Hello \\\\\\\\LaTeX!}')
@@ -72,11 +67,11 @@ getLatexStrWidth('{\\\\\\\\tiny Hello \\\\\\\\LaTeX!}')
   getLatexCharMetrics(65)
 }
 \author{
-  Charlie Sharpsteen \email{source@sharpsteen.net} and
-  Cameron Bracken \email{cameron.bracken@gmail.com}
+Charlie Sharpsteen \email{source@sharpsteen.net} and Cameron
+  Bracken \email{cameron.bracken@gmail.com}
 }
 \references{
-  PGF Manual
+PGF Manual
 }
 \keyword{character}
 \keyword{metrics}

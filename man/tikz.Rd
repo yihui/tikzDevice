@@ -5,14 +5,13 @@
 TikZ graphics language. TikZ code may be included inside a LaTeX document by
 specifying \code{\\usepackage{tikz}} in the document header.}
 \usage{
-  tikz(file = ifelse(onefile, "./Rplots.tex", "./Rplot\%03d.tex"),
-    width = 7, height = 7, onefile = TRUE,
-    bg = "transparent", fg = "black", pointsize = 10,
-    standAlone = FALSE, bareBones = FALSE, console = FALSE,
-    sanitize = FALSE,
-    engine = getOption("tikzDefaultEngine"),
-    documentDeclaration = getOption("tikzDocumentDeclaration"),
-    packages, footer = getOption("tikzFooter"))
+tikz(file = ifelse(onefile, "./Rplots.tex", "./Rplot\%03d.tex"), width = 7,
+  height = 7, onefile = TRUE, bg = "transparent", fg = "black",
+  pointsize = 10, standAlone = FALSE, bareBones = FALSE,
+  console = FALSE, sanitize = FALSE,
+  engine = getOption("tikzDefaultEngine"),
+  documentDeclaration = getOption("tikzDocumentDeclaration"), packages,
+  footer = getOption("tikzFooter"))
 }
 \arguments{
   \item{file}{A character string indicating the desired
@@ -82,62 +81,60 @@ specifying \code{\\usepackage{tikz}} in the document header.}
   Package Behavior'' of \link{tikzDevice-package}.}
 }
 \value{
-  \code{tikz()} returns no values.
+\code{tikz()} returns no values.
 }
 \description{
-  The TikZ device enables LaTeX-ready output from graphics
-  functions. This is done by encoding graphics commands
-  using TikZ markup.  All text in a graphic output with
-  \code{tikz} will be typeset by LaTeX and therefore will
-  match whatever fonts are currently used in the document.
-  This also means that \strong{LaTeX mathematics can be
-  typeset directly into labels and annotations}.
+The TikZ device enables LaTeX-ready output from graphics functions. This is
+done by encoding graphics commands using TikZ markup.  All text in a graphic
+output with \code{tikz} will be typeset by LaTeX and therefore will match
+whatever fonts are currently used in the document. This also means that
+\strong{LaTeX mathematics can be typeset directly into labels and
+annotations}.
 }
 \details{
-  The TikZ device currently supports three modes of output
-  depending on the value of the parameter \code{standAlone}
-  and \code{bareBones}.  If \code{standAlone} and
-  \code{bareBones} are set to the default value of
-  \code{FALSE}, the resulting file will only contain
-  graphics output wrapped in a LaTeX \code{tikzpicture}
-  environment.  Since this file is not a complete LaTeX
-  document, it will need to be included in another LaTeX
-  document using the \code{\\input} command. For example:
-  \preformatted{ \\documentclass{article}
-  \\usepackage{tikz} \\begin{document} \\begin{figure}
-  \\centering \\input{Rplots.tex} \\caption{} \\end{figure}
-  \\end{document} }
+The TikZ device currently supports three modes of output depending on the
+value of the parameter \code{standAlone} and \code{bareBones}.  If
+\code{standAlone} and \code{bareBones} are set to the default value of
+\code{FALSE}, the resulting file will only contain graphics output wrapped
+in a LaTeX \code{tikzpicture} environment.  Since this file is not a
+complete LaTeX document, it will need to be included in another LaTeX
+document using the \code{\\input} command. For example:
+\preformatted{
+  \\documentclass{article}
+  \\usepackage{tikz}
+  \\begin{document}
+  \\begin{figure}
+    \\centering
+    \\input{Rplots.tex}
+    \\caption{}
+  \\end{figure}
+  \\end{document}
+}
 
-  When \code{standAlone} is set to \code{TRUE}, the device
-  wraps the \code{tikzpicture} environment in a complete
-  LaTeX document suitable for direct compilation. In this
-  mode the \code{preview} package is used to crop the
-  resulting output to the bounding box of the graphic.
+When \code{standAlone} is set to \code{TRUE}, the device wraps the
+\code{tikzpicture} environment in a complete LaTeX document suitable for
+direct compilation. In this mode the \code{preview} package is used to crop
+the resulting output to the bounding box of the graphic.
 
-  When \code{bareBones} is set to \code{TRUE}, the output
-  is not wrapped in a document or a \code{tikzpicture}
-  environment.  This is useful for embedding an generated
-  graphic within an existing TikZ picture.
+When \code{bareBones} is set to \code{TRUE}, the output is not wrapped in a
+document or a \code{tikzpicture} environment.  This is useful for embedding
+an generated graphic within an existing TikZ picture.
 
-  In cases where both \code{standAlone} and
-  \code{bareBones} have been set to \code{TRUE}, the
-  \code{standAlone} option will take precedence.
+In cases where both \code{standAlone} and \code{bareBones} have been set to
+\code{TRUE}, the \code{standAlone} option will take precedence.
 }
 \note{
-  To compile the output of \code{tikz} a working
-  installation of LaTeX and PGF is needed.  Current
-  releases of the TikZ package are available from
-  \url{http://www.ctan.org}. The package may also be
-  installed through the MikTeX package manager on Windows
-  or using the TeX Live package manager, \code{tlmgr}, on
-  Unix/Linux/OS X. The TeX Live package manager will only
-  be installed by default for TeX Live distributions dated
-  2008 and later. Both bleeding-edge and release versions
-  of TikZ may be obtained from the project website hosted
-  at \url{http://sourceforge.net/projects/pgf/}.
+To compile the output of \code{tikz} a working installation of LaTeX
+  and PGF is needed.  Current releases of the TikZ package are available
+  from \url{http://www.ctan.org}. The package may also be installed through
+  the MikTeX package manager on Windows or using the TeX Live package
+  manager, \code{tlmgr}, on Unix/Linux/OS X. The TeX Live package manager
+  will only be installed by default for TeX Live distributions dated 2008
+  and later. Both bleeding-edge and release versions of TikZ may be obtained
+  from the project website hosted at
+  \url{http://sourceforge.net/projects/pgf/}.
 
-  Multiple plots will be placed as separate environments in
-  the output file.
+Multiple plots will be placed as separate environments in the output file.
 }
 \examples{
 \dontrun{
@@ -210,20 +207,18 @@ setwd(oldwd)
 }
 }
 \author{
-  Charlie Sharpsteen \email{source@sharpsteen.net} and
-  Cameron Bracken \email{cameron.bracken@gmail.com}
+Charlie Sharpsteen \email{source@sharpsteen.net} and Cameron
+  Bracken \email{cameron.bracken@gmail.com}
 }
 \references{
-  The TikZ and PGF Packages: Manual for version 2.00\cr
-  \url{http://sourceforge.net/projects/pgf}\cr Till Tantau,
-  February 20, 2008
+The TikZ and PGF Packages: Manual for version 2.00\cr
+  \url{http://sourceforge.net/projects/pgf}\cr Till Tantau, February 20,
+  2008
 }
 \seealso{
-  \code{\link{pictex}}, \code{\link{getLatexCharMetrics}},
-  \code{\link{getLatexStrWidth}},
-  \code{\link{setTikzDefaults}},
-  \code{\link{tikzAnnotate}},
-  \code{\link{sanitizeTexString}}
+\code{\link{pictex}}, \code{\link{getLatexCharMetrics}},
+  \code{\link{getLatexStrWidth}}, \code{\link{setTikzDefaults}},
+  \code{\link{tikzAnnotate}}, \code{\link{sanitizeTexString}}
 }
 \keyword{device}
 
