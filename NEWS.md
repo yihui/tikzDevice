@@ -376,8 +376,10 @@ The following people contributed to this release of the tikzDevice:
 ---
 
 - Initial Beta Release
+
 - Support for all essential graphical parameters: colors, line types, 
   line weights, semi-transparency, line endings and line joining.
+
 - String width and character metrics are calculated by direct calls to a LaTeX
   compiler. This is an inefficient but robust method. Some of the inefficiency 
   of this method is compensated for by storing calculated string widths in a 
