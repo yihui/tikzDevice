@@ -201,6 +201,7 @@ evalWithoutInterrupts <- function(expr, envir = parent.frame())
 
 
 #' Check If a String Contains Multibyte UTF-8 characters
+#'
 #' This function is used by tikzDevice to check if an incoming string contains
 #' multibyte UTF-8 characters
 #'

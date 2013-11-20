@@ -1,4 +1,5 @@
 #' Replace LaTeX Special Characters in a String
+#'
 #' This function is used by tikzDevice when \code{sanitize=TRUE} to replace
 #' special LaTeX characters (such as the comment character %) in plotting text
 #' where the user does not have direct control over the generated text.
