@@ -31,6 +31,7 @@
 This release has been prepared by Yihui Xie and Kirill Müller, both plan to
 further maintain this package.
 
+
 ---
 
 # Changes in version 0.6.3 (2013-04-04, not officially released)
@@ -120,6 +121,8 @@ Thanks to the following people who contributed to this release of the tikzDevice
 
 - corecode for fixing the getDocumentPointsize routines for corner cases
 
+
+---
 
 # Changes in version 0.6.2 (2011-11-13)
 
