@@ -1,6 +1,6 @@
 ---
 
-# Changes in version 0.6.4 (2013-11-XX)
+# Changes in version 0.6.4 (2013-11-20)
 
 ---
 
@@ -12,6 +12,8 @@
 
 - Function `grid.tikzNode` works again, had no effect due to a missing S3
   export.
+
+- Fixed formatting of documentation.
 
 ## Behind the scenes
 
