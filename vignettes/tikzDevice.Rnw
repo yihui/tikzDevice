@@ -815,11 +815,6 @@ a few important caveats:
 
 
 \section{Examples}
-<<pathStepIn,results=hide>>=
-  # Shift into the `figs` directory so that examples do not have to include
-  # `figs` in the output file path.
-	setwd('figs')
-@
 
 \subsection{Default Mode}
 
@@ -830,7 +825,7 @@ following example in \lang{R} will produce a very simple graphic using the
 
 <<simpleEx,echo=TRUE,results=hide>>=
 require(tikzDevice)
-tikz('simpleEx.tex',width=3.5,height=3.5)
+tikz('figs/simpleEx.tex',width=3.5,height=3.5)
 plot(1,main='Hello World!')
 dev.off()
 @
@@ -890,7 +885,7 @@ appear in the output for \LaTeX. The next example demonstrates how to use
 	\begin{minipage}{0.5\textwidth}
 <<latexEx,echo=TRUE,results=hide,keep.source=TRUE>>=
 require(tikzDevice)
-tikz('latexEx.tex',
+tikz('figs/latexEx.tex',
   width=3.5,height=3.5)
 
 x <- rnorm(10)
@@ -936,7 +931,7 @@ embedded inside another \code{tikzpicture} of the users own construction.
 require(tikzDevice)
 require(maps)
 
-tikz('westCoast.tex', bareBones=TRUE)
+tikz('figs/westCoast.tex', bareBones=TRUE)
 
 map('state', regions=c('california', 'oregon', 'washington'),
     lwd=4, col='grey40')
@@ -1194,7 +1189,7 @@ that can be drawn with \TikZ. Check out the results in
 require(tikzDevice)
 
 # Load some additional TikZ libraries
-tikz("annotation.tex",width=4,height=4,
+tikz("figs/annotation.tex",width=4,height=4,
   packages = c(getOption('tikzLatexPackages'),
     "\\usetikzlibrary{decorations.pathreplacing}",
     "\\usetikzlibrary{positioning}",
