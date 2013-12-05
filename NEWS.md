@@ -1,3 +1,5 @@
+- Updated vignette (yihui/tikzDevice#36).
+
 ---
 
 # Changes in version 0.6.4 (2013-11-20)
