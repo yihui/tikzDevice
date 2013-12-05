@@ -1,0 +1,12 @@
+/figs
+/*.tmp
+/*.aux
+/*.bbl
+/*.blg
+/*.log
+/*.lst
+/*.lstin
+/*.out
+/*.pdf
+/*.tex
+/*.toc
