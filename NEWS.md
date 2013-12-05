@@ -1,6 +1,6 @@
 ---
 
-# Changes in version 0.7.0 (2013-11-21, CRAN release)
+# Changes in version 0.7.0 (2013-12-05, CRAN release)
 
 ---
 
