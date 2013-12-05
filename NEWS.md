@@ -16,6 +16,17 @@ Package maintainers: Kirill Müller and Yihui Xie.
 
 ---
 
+# Changes in version 0.6.5 (2013-12-05)
+
+---
+
+## Bug Fixes
+
+- Point size of main font in document is now inferred correctly, again fixed
+  regexp in getDocumentPointsize (yihui/tikzDevice#34).
+
+---
+
 # Changes in version 0.6.4 (2013-11-20)
 
 ---
