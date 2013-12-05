@@ -1,380 +1,530 @@
 % !TEX TS-program = Sweave
 
-\documentclass{article}
-
 % \VignetteIndexEntry{The tikzDevice Package}
 % \VignetteDepends{tikzDevice}
-% \usepackage{Sweave}
-\usepackage[T1]{fontenc}
-\usepackage{lmodern}
-\usepackage[scaled=.85]{inconsolata}
-\usepackage[colorlinks]{hyperref}
+% This comment prevents R from adding its own "\usepackage{Sweave}". I
+% seriously hate overly helpful computer systems.
 
-% Extra text effects (strikethrough)
-\usepackage{ulem}
-
-% Various TeX logos---included in the Oberdiek bundle which contains hyperref,
-% so there is a good chance it will be installed.
-\usepackage{hologo}
-
-% Sexyness
-\usepackage{tikz}
-\usetikzlibrary{calc,positioning}
-\usetikzlibrary{shapes.multipart,shapes.geometric,shapes.symbols,shapes.arrows}
-\usetikzlibrary{decorations.shapes,decorations.text,decorations.pathreplacing}
-
-% Page layout
-\usepackage[parfill]{parskip}
-\usepackage[letterpaper,margin=1in]{geometry}
-\usepackage{epigraph}
-\usepackage{multicol}
-\usepackage{pdflscape}
-
-% Graphics control.
-\usepackage{graphicx}
-\usepackage{float}
-
-% Bibliography
-\usepackage{natbib}
-\bibliographystyle{agufull04}
-
-\usepackage[nogin,noae]{Sweave}
-% Extra pretty pretty printing.
-\usepackage{tikzCodeBlock}
-\usepackage{sweavetolst}
-% Macros created for this document. Make sure tikzCodeBlock is loaded first.
-% For now.
-\input{tikzDeviceMacros}
+\documentclass[10pt,oneside,letterpaper,article]{memoir}
+\usepackage{tikzDeviceVignette}
 
 
-<<setup,echo=F,results=hide>>=
-
-	if( !file.exists( 'figs' ) ) dir.create( 'figs' )
+<<setup,echo=FALSE,results=hide>>=
 	require(tikzDevice)
+  if( !file.exists('figs') ){dir.create( 'figs' )}
 
+  # So that prompts and continuation prompts don't show up in the output.
   options(prompt = ' ', continue = ' ')
-
 @
-
-
-\title{The \pkg{tikzDevice} Package\\
-	{\large\url{http://r-forge.r-project.org/projects/tikzdevice}}
-}
-\author{Charlie Sharpsteen and Cameron Bracken}
-\date{Version
-\Sexpr{tikzDevice:::getTikzDeviceVersion()}-{\bfseries\color{red}Beta}\qquad November, 2011}
-
-\begin{document}
-	
 \SweaveOpts{echo=F,prefix.string=figs/fig}
 
 
-%----------------------------  Cover Page -----------------------------------------------------------
+\title{TikZDevice: LaTeX Graphics for R}
+\author{Charlie Sharpsteen and Cameron Bracken}
+\date{\Sexpr{strftime(read.dcf(system.file('DESCRIPTION', package = 'tikzDevice'), fields = 'Date'), format = '%B %d, %Y')}}
+\gdef\packageURL{\url{http://r-forge.r-project.org/projects/tikzdevice}}
+\gdef\packageVersion{\Sexpr{tikzDevice:::getTikzDeviceVersion()}}
 
-\thispagestyle{empty}
-
-% A more complex title page
-
-% HAH! God bless the pgf manual- I've been trying to solve this for
-% ever- \vfill has no effect unless you bracket your contents in empty
-% \vboxes.
-\vbox{}
-\vspace{0.5\textheight}
-\begin{tikzpicture}[remember picture,overlay]
-
-	\node[anchor=west,scale=2, inner sep=0pt, outer sep=0pt] (title) at (-1cm,0) 
-		{\LARGE\bfseries{\color{red}\TikZ}\thinspace\Huge Device};
-	
-	\draw[line width=5pt] ([yshift=-5pt]title.base west) -- ([yshift=-5pt]title.base east);	
-
-
-	\coordinate (titleOut) at ($(title.north east) + (24pt,0pt)$);
-	\coordinate (titleIn) at ($(title.base west) - (6pt,24pt)$);
-		
-	\node[color=black!80,below=24pt of title.base east,anchor=east] (sub)
-		{\bfseries\itshape\Large \LaTeX{} Graphics for R};
-
-\end{tikzpicture}
-\vfill	
-\vbox{}
-
-\begin{tikzpicture}[remember picture,overlay,>=stealth]
-
-	\node (R) at ($(current page.south west) + (18cm,2cm)$)
-		{\scalebox{0.85}{\includegraphics[width=0.8\textwidth]{img/Rlogo}}};
-
-	\tikzset{
-		bigger/.style={decoration={shape start size=.125cm, shape end size=.5cm}},
-		decoration={shape backgrounds,
-			shape sep={.25cm, between borders},shape scaled,shape=circle}
-	}
-			
-	\fill[decorate,bigger, blue!25] (R) to[out=190,in=240] (titleIn);	
-	
-\end{tikzpicture}
-
-\begin{tikzpicture}[overlay,remember picture]
-
-	% Low-level PGF voodoo
-	% Something is seriously borked with current page.north east,
-	% it's not where you would expect it to be :P
-	\newdimen\overlayXoff
-	\newdimen\overlayYoff
-	\pgfextracty{\overlayXoff}{\pgfpointanchor{current page}{north east}}
-	\pgfextracty{\overlayYoff}{\pgfpointanchor{current page}{north east}}
-	
-	\pgfmathparse{\overlayYoff - 4.5in}
-	\overlayYoff = \pgfmathresult pt
-	
-	\pgfmathparse{\overlayXoff - 7in}
-	\overlayXoff = \pgfmathresult pt
-	
-	
-	\begin{scope}[x=1pt,y=1pt,yshift=\overlayYoff,xshift=\overlayXoff]
-
-<<tikzTitlePlot,results=hide>>=
-
-	tikz('figs/titlePlot.tex',bareBones=T,width=4,height=4)
-
-	x <- seq(-4.5,4.5,length.out=100)
-	y <- dnorm(x)
-
-	xi <- seq(-2,2,length.out=30)
-	yi <- dnorm(xi)
-
-	plot(x,y,type='l',col='blue',ylab='$p(x)$',xlab='$x$')
-	lines(xi,yi,type='s')
-	lines(range(xi),c(0,0))
-	lines(xi,yi,type='h')
-	title(main="$p(x)=\\frac{1}{\\sqrt{2\\pi}}e^{-\\frac{x^2}{2}}$")
-	int <- integrate(dnorm,min(xi),max(xi),subdivisions=length(xi))
-	text(2.8,0.3,paste("\\small$\\displaystyle\\int_{",min(xi),"}^{",max(xi),"}p(x)dx\\approx",round(int[['value']],3),'$',sep=''))
-
-
-	dev.off()
-@
-
-		\input{figs/titlePlot.tex}
-		
-		\coordinate (plotIn) at (2in,0.5in);
-
-
-	\end{scope}
-
-	\tikzset{
-		bigger/.style={decoration={shape start size=.125cm, shape end size=.5cm}},
-		decoration={shape backgrounds,
-			shape sep={.25cm, between borders},shape scaled,shape=dart}
-	}
-
-	\fill[decorate,thick,bigger,color=black!25]
-		(titleOut) to[out=20,in=260] (plotIn);
-
-\end{tikzpicture}
-
-\newpage
-
-%----------------------------  Table of Contents -----------------------------------------------------------
-
-\pagenumbering{roman}
-
-\maketitle
-\tableofcontents
-
-\newpage
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% Documentation starts here.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\pagenumbering{arabic}
-
-% A friendly reminder that this package is currently unstable.
-\tikzDocDisclaim{Caveat Utilitor}
-{
-This is a friendly reminder that the \pkg{tikzDevice} package is currently considered by its designers to be a {\bfseries beta work}. The package will remain in Beta until the 1.0 release to allow the authors to consider design decisions underlying the package.  {\bfseries This means the authors are currently reserving the right to alter the package interface in ways that may break existing code that uses the package.}  Two open issues that may necessitate such a change are:
-
-\vskip\baselineskip
-
-\begin{itemize}
-
-  \item{Handling of characters encoded using UTF8}
-  
-  \item{Compatibility with multiple \TeX\ dialects such as Con\TeX t or plain \TeX .}
-
-\end{itemize}
-  
-\vskip\baselineskip
-
-The stability of the package interface is a priority to us but currently we are allowing other concerns to outrank it.  When we commit to maintaining a given package structure, the beta flag will be removed and consistency of interface will become a top priority. \\[1em]
-
-Thanks for giving our package a try!\\
-\quad{\itshape --The tikzDevice Team}
+% Use the hyperref package to fill in PDF metadata.
+\hypersetup{
+  pdftitle=\thetitle,
+  pdfauthor=\theauthor,
+  pdfsubject={Manual for Version: \packageVersion, \thedate}
 }
 
 
-\section{Introduction}
+\begin{document}
+% -----------------------------------------------------------------------------
+%                                 Cover Page
+% -----------------------------------------------------------------------------
+<<tikzTitlePlot,results=hide>>=
+  tikz('figs/titlePlot.tex',width=4,height=4)
 
-The \pkg{tikzDevice} package allows for R graphics output in a native \LaTeX{} format. That is, the \code{tikz()} function produces plain-text files that can be interpreted using \TikZ, a package for \LaTeX. These files can be directly included in \LaTeX{} documents by way of the \verb'\input{}' statement. Allowing \LaTeX{} to handle both typesetting and figure composition bestows the resulting document with a clean, unified look as there are no discontinuities in the size and selection of fonts used in the text and those used in the figures.
+  x <- seq(-4.5,4.5,length.out=100)
+  y <- dnorm(x)
 
-This document is divided into three parts. The first part describes the functions that the package makes available to the \lang{R} user and provides examples of their capabilities. Besides the \lang{R} environment, use of the \TikZ{} device device requires the user to have a working \LaTeX{} compiler along with an installed version of the \TikZ{} package-- version 2.00 or greater. The second part of this documentation offers suggestions on how to get these tools working properly.
+  xi <- seq(-2,2,length.out=30)
+  yi <- dnorm(xi)
 
-The third part of the documentation is intended for those who are curious as to the details of how this package has been implemented. It attempts to explain how the \TikZ{} package does the things that it does and why it chooses to do them that way. The authors have attempted to write this part of the documentation in a way that is accessible to users as well as developers. This has been done in the hope that this project may serve as a case study in creating an \lang{R} graphics device. This part of the documentation may also help those considering undertaking the transition from casual package-building to full-on hacking of the \lang{R} internals.
+  plot(x,y,type='l',col='blue',ylab='$p(x)$',xlab='$x$')
+  lines(xi,yi,type='s')
+  lines(range(xi),c(0,0))
+  lines(xi,yi,type='h')
+  title(main="$p(x)=\\frac{1}{\\sqrt{2\\pi}}e^{-\\frac{x^2}{2}}$")
+  int <- integrate(dnorm,min(xi),max(xi),subdivisions=length(xi))
+  text(2.8,0.3,paste(
+    "\\small$\\displaystyle\\int_{",min(xi),"}^{",max(xi),"}p(x)dx",
+    "\\approx",round(int[['value']],3),'$',sep=''))
+
+  dev.off()
+@
+
+\begin{titlingpage}
+  % NOTE:
+  % Most dimensions and positions in this cover page were optimized for US
+  % Letter stock size and so are given in inches. It may be useful to revise
+  % this one day so that the layout is a bit more scalable.
+  %
+  % Use remember picture and overlay so that `current page` coordinates can be
+  % accessed.
+  \begin{tikzpicture}[remember picture, overlay]
+    % Title and Info
+    % --------------
+    {\fontsize{60}{36}
+    \node[below right = 0.5em of current page.north west,
+      anchor = north east,
+      rotate = 90,
+      outer sep = 0pt,
+      inner sep = 0pt
+    ]
+      (title)
+      {\bfseries{\fontsize{36}{36}\selectfont\color{red}\TikZ}Device};
+    }
+
+    \draw[line width = 5pt] ([xshift = 7.5pt]title.base west) -- ([xshift = 7.5pt]title.base east);
+
+    % Have to split subtitle, authors, etc. into several nodes because
+    % apparently TikZ can't deal with font change commands and line breaks
+    % existing in the same node. A bit of a pain because the value of
+    % \baselineskip has to be twaddled by wrapping some \nodes in font
+    % size descriptors.
+    \node[right = 12.5pt of title.base east,
+      anchor = north west,
+      align = left,
+      font = {\Huge\bfseries}
+    ]
+      (subtitle)
+      {\LaTeX\ Graphics for R};
+
+    {\huge
+    \node[below = \baselineskip of subtitle.base west,
+      anchor = north west,
+      align = left,
+      font = {\LARGE}
+    ]
+      (authors)
+      {%
+        Charlie Sharpsteen\\
+        Cameron Bracken%
+      };
+    }
+
+    \node[right = 12.5pt of title.base west,
+      anchor = base west,
+      align = left
+    ]
+      (packageInfo)
+      {%
+        \thedate\\
+        \packageURL%
+      };
+
+    {\LARGE
+    \node[above = \baselineskip of packageInfo.north west,
+      anchor = base west,
+      align = left,
+      font = {\LARGE\bfseries}
+    ]
+      (version)
+      {Version: \packageVersion};
+    }
+
+
+    % Logo and Plot
+    % -------------
+
+    % Scaling the R logo to a width of 4.75 in was determed through trial and
+    % error. The center of the image is shifted relative to the bottom right
+    % corner of the page such that the point where the right leg of the "R"
+    % glyph intersects the inside of the halo is sitting over the corner of the
+    % page.
+    \node[inner sep = 0pt,
+      above left = 0.78in and 1.48in of current page.south east,
+      anchor = center
+    ]
+      (Rlogo)
+      {\includegraphics[width=4.75in]{img/Rlogo}};
+
+    % This node contains an embedded `tikzpicture` environment produced by the
+    % tikzTitlePlot code block.
+    \node[anchor = north east,
+      inner sep = 0pt
+    ]
+      (titlePlot) at (current page.north east)
+      {\input{figs/titlePlot.tex}};
+
+
+    % Connect Logo and Plot
+    % ---------------------
+    \node[below left = 0.325\stockheight and 0.325\stockwidth of current page.center]
+      (midPointA) {};
+
+    \node[below right = 0.125\stockheight and 0.125\stockwidth of current page.center]
+      (midPointB) {};
+
+    \tikzset{
+      grow bigger/.style={decoration = {
+        shape backgrounds,
+        shape = dart,
+        shape scaled,
+        shape start size = 0.125cm,
+        shape end size = 0.5cm,
+        shape sep = {.25cm, between borders}
+      }}
+    }
+
+    \path[decorate, grow bigger, fill = black!25]
+      plot[smooth, tension = 1]
+        coordinates{(Rlogo.190) (midPointA) (midPointB) (titlePlot.south)};
+
+  \end{tikzpicture}
+\end{titlingpage}
+
+
+% -----------------------------------------------------------------------------
+%                              Table of Contents
+% -----------------------------------------------------------------------------
+\frontmatter
+  \tableofcontents*
+
+
+\mainmatter
+
+
+% -----------------------------------------------------------------------------
+%                           Chapter 1: Introduction
+% -----------------------------------------------------------------------------
+\chapter{Introduction}
+
+The \pkg{tikzDevice} package provides a graphics output device for \pkg{R} that
+records plots in a \LaTeX -friendly format. The device transforms plotting
+commands issued by R functions into \LaTeX\ code blocks. When included in a
+paper typeset by \LaTeX , these blocks are interpreted with the help of
+TikZ---a graphics package for \TeX\ and friends written by Till Tantau. By
+allowing \LaTeX\ to handle typesetting of text in \pkg{R} plots along with the
+rest of the text in the paper the full power of \TeX\ is available to the
+\pkg{R} user. There are also no discontinuities in font selection and
+typesetting as demonstrated by a comparison between \autoref{fig:pdf-example}
+and \autoref{fig:tikz-example}.
+
+
+% FIXME:
+% This example is biased. It would be best to choose a TeX font for which AFM
+% metrics are available and show how much of a pain in the ass it is to use the
+% R `Type1Font` function vs. how easy it is to set tikzDevice options and let
+% TeX do the heavy lifting.
+\begin{figure}[!hb]
+	\centering
+
+	\begin{minipage}[t]{0.4\linewidth}
+    \begin{tikzCodeBlock}[listing style=sweavechunk,
+      code body/.append style={codebody color=white}]
+pdf('pdf-example.pdf',
+  width = 3.25, height = 3.25)
+plot(1, 1, main = 'Hello!')
+dev.off()
+    \end{tikzCodeBlock}
+
+<<pdf-example,echo=FALSE,results=hide>>=
+  pdf('figs/pdf-example.pdf', width = 3.25, height = 3.25)
+  plot(1, 1, main = 'Hello!', ps = 10)
+  dev.off()
+@
+    \includegraphics{figs/pdf-example}
+    \caption{Output from \code{pdf()}}
+    \label{fig:pdf-example}
+	\end{minipage}
+  \hspace{0.1\linewidth}
+	\begin{minipage}[t]{0.4\linewidth}
+    \begin{tikzCodeBlock}[listing style=sweavechunk,
+      code body/.append style={codebody color=white}]
+tikz('tikz-example.tex',
+  width = 3.25, height = 3.25)
+plot(1, 1, main = 'Hello \\TeX !')
+dev.off()
+    \end{tikzCodeBlock}
+
+<<tikz-example,echo=FALSE,results=hide>>=
+  tikz('figs/tikz-example.tex', width = 3.25, height = 3.25)
+  plot(1, 1, main = 'Hello \\TeX !')
+  dev.off()
+@
+    \input{figs/tikz-example.tex}
+    \caption{Output from \code{tikz()}}
+    \label{fig:tikz-example}
+	\end{minipage}
+\end{figure}
+
+
+This document is divided into three parts. \autoref{part:usage} describes the
+package functionality and provides example usage. Besides the \pkg{R}
+environment, use of the \TikZ\ device device requires the user to have a
+working \LaTeX{} compiler along with an installed version of the \TikZ{}
+package---version 2.00 or greater. \autoref{part:installation} of this
+documentation offers suggestions on how to get these dependencies installed and
+working properly.
+
+\autoref{part:implementation} is intended for those who are curious as to the
+details of how this package is implemented. This part attempts to explain how
+the \pkg{tikzDevice} package does the things that it does and why it chooses to
+do them that way. The authors have attempted to write this part of the
+documentation in a way that is accessible to users as well as developers. This
+information is provided in the hope that the \pkg{tikzDevice} may serve as a
+case study for creating new \pkg{R} graphics devices. This part of the
+documentation may also help those considering undertaking the transition from
+casual package-building to full-on hacking of the \pkg{R} internals.
 
 \section{Acknowledgements}
 
-This package would not have been possible without the hard work and ingenuity of many individuals. This package straddles the divide between two great open source communities-- the \lang{R} programming language and the \TeX{} typesetting system. It is our hope that this work will make it easier to leverage the strengths of both systems.
+This package would not have been possible without the hard work and ingenuity
+of many individuals. This package straddles the divide between two great open
+source communities---the \pkg{R} programming language and the \TeX{}
+typesetting system. It is our hope that this work will make it easier for users
+to leverage the strengths of both systems.
 
-First off, we would like to thank the R Core Team for creating such a wonderful, open and flexible programming environment. Compared to other languages we have used, creating packages and extensions for \lang{R} has always been a liberating experience.
+First off, we would like to thank the R Core Team for creating such a
+wonderful, open and flexible programming environment. Compared to other
+languages we have used, creating packages and extensions for \pkg{R} has
+always been a liberating experience.
 
-This package started as a fork of the Pic\TeX{} device, created by Valerio Aimale. Without access to such a concise, compact example of implementing a \lang{R} graphics device we likely would have abandoned the project in it's infancy. We would also like to thank Paul Murrel for all of his work on the \lang{R} graphics system and especially for his research and documentation concerning the differences between the font systems used by \TeX{} and \lang{R}.
+This package started as a fork of the Pic\TeX\ device created by Valerio Aimale
+which is part of the \pkg{R} core graphics system.  Without access to this
+simple, compact example of implementing a graphics device we likely would have
+abandoned the project in it's infancy. We would also like to thank Paul Murrel
+for all of his work on the \pkg{R} graphics system and especially for his
+research and documentation concerning the differences between the font systems
+used by \TeX{} and \pkg{R}.
 
-This package also owes it's existence to Friedrich Leisch's work on the \code{Sweave} system and Roger D. Peng's \code{cacheSweave} extension. These two tools got us interested in the concept of Literate Programming and development of this package was driven by our desire to achieve a more seamless union between our reports and our code.
+This package also owes it's existence to Friedrich Leisch's work on the
+\pkg{Sweave} system and Roger D. Peng's \pkg{cacheSweave} extension. These
+two tools got us interested in the concept of Literate Programming and
+development of this package was driven by our desire to achieve a more seamless
+union between our reports and our code.
 
-The performance of this package is also enhanced by the database capabilities provided by Roger D. Peng's \code{filehash} package. Without this package, the approach to calculating font metrics taken by the \code{tikzDevice} would be infeasible.
+The performance of this package is also enhanced by the database capabilities
+provided by Roger D. Peng's \pkg{filehash} package. Without this package, the
+approach to calculating font metrics taken by the \pkg{tikzDevice} would be
+infeasible.
 
-Last, but certainly not least, we would like to thank Till Tantau, Mark Wibrow and the rest of the PGF/\TikZ{} team for creating the \LaTeX{} graphics package that makes the output of this device meaningful. We would also like to express deep appreciation for the excellent documentation that has been created for the \TikZ{} system.
+Last, but certainly not least, we would like to thank Till Tantau, Mark Wibrow
+and the rest of the PGF/\TikZ\ team for creating the \LaTeX\ graphics package
+that makes the output of this device meaningful. We would also like to express
+deep appreciation for the beautiful documentation that has been created for the
+\TikZ\ system.
 
-As always, there are many more who have contributed in ways too numerous to list.
+As always, there are many more who have contributed in ways too numerous to
+list.\\[\baselineskip]
 
-Thank you!\\
-\vbox{}{\quad\itshape --The tikzDevice Team}
+\noindent Thank you!\\
+\quad{\itshape ---The tikzDevice Team}
 
 \nocite{murrellTex}
 \nocite{rintern2009}
 \nocite{tantau2008}
 \nocite{peng2006}
 
+
+\partimage{
+ \node[above left = 1in of current page.south east,
+   anchor = south east,
+   scale = 1.25
+ ]
+   % This image is generated by an example in chapter 3.
+   {\input{figs/latexEx}};
+}
 \part{Usage and Examples}
-\label{part:one}
+  \label{part:usage}
 
-%----------------------------  Package Loading -----------------------------------------------------------
 
-\section{Loading the Package}
+% -----------------------------------------------------------------------------
+%                         Chapter 2: Package Loading
+% -----------------------------------------------------------------------------
+\chapter{Loading the Package}
 
-The functions in the \pkg{tikzDevice} package are made accessible in the \lang{R} environment by using either the \code{library()} or \code{require()} functions like so:
+The functions in the \pkg{tikzDevice} package are made accessible in the
+\pkg{R} environment by using either the \code{library()} or \code{require()}
+functions like so:
 
 \begin{Verbatim}[frame=single]
 require(tikzDevice)
 \end{Verbatim}
 
-Upon loading, the package will search for a usable \LaTeX{} compiler. Access to \LaTeX{} is essential for the device to produce correct output as the compiler is queried for font metrics several times during device output. For more information on why communication between the device and \LaTeX{} is necessary, see \autoref{part:three}. If the search for a compiler is successful the package startup message should look similar to the following:
+\noindent Upon loading, the package will search for the following \LaTeX\ compilers:
+
+\begin{itemize}
+  \item{\hologo{pdfLaTeX}}
+  \item{\hologo{XeLaTeX}}
+  \item{\hologo{LuaLaTeX}}
+\end{itemize}
+
+Access to \LaTeX\ is essential for the device to produce output as the compiler
+is queried for font metrics when constructing plots that contain text. For more
+information on why communication between the device and \LaTeX\ is necessary,
+see \autoref{part:implementation}. The package will fail to load if
+\hologo{pdfLaTeX} cannot be located. The presence of the \hologo{XeLaTeX} and
+\hologo{LuaLaTeX} compilers is optional. When the package loads successfully,
+a startup message will be printed that looks similar to the following:
 
 \begin{Verbatim}[frame=single]
-filehash: Simple key-value database (2.0-1 2008-12-19)
-tikzDevice: A Device for R Graphics Output in PGF/TikZ Format (v0.3.5)
-Checking for a LaTeX compiler...
-
-pdfTeX 3.1415926-1.40.9-2.2 (Web2C 7.5.7)
-kpathsea version 3.5.7
-...
-
-A working LaTeX compiler was found in:
-	The R environment variable R_LATEXCMD
-
-Global option tikzLatex set to:
-	/usr/texbin/latex
+Loading required package: filehash
+filehash: Simple key-value database (2.2 2011-07-21)
+tikzDevice: R Graphics Output in LaTeX Format (v0.7)
+  LaTeX found in the PATH using the command: pdflatex
+  XeLaTeX found in the PATH using the command: xelatex
+  LuaLaTeX found in the PATH using the command: lualatex
 \end{Verbatim}
 
-If a working \LaTeX{} compiler cannot be found, the \pkg{tikzDevice} package will fail to load and a warning message will be displayed:
+If a working \hologo{pdfLaTeX} compiler cannot be found, the \pkg{tikzDevice} package
+will fail to load and a warning message will be displayed:
 
 \begin{Verbatim}[frame=single]
+Error : .onLoad failed in loadNamespace() for 'tikzDevice', details:
+  call: fun(libname, pkgname)
+  error:
+
 An appropriate LaTeX compiler could not be found.
-Access to LaTeX is currently required in order for the
-TikZ device to produce output.
+Access to LaTeX is required in order for the TikZ device
+to produce output.
 
 The following places were tested for a valid LaTeX compiler:
 
-	A pre-existing value of the global option tikzLatex
-	The R environment variable R_LATEXCMD
-	The R environment variable R_PDFLATEXCMD
-	The global option latexcmd
-	The PATH using the command latex
-	The PATH using the command pdflatex
+	the global option: tikzLatex
+	the environment variable: R_LATEXCMD
+	the environment variable: R_PDFLATEXCMD
+	the global option: latexcmd
+	the PATH using the command: pdflatex
+	the PATH using the command: latex
+	the PATH using the command: /usr/texbin/pdflatex
+
 ...
 
-Error : .onLoad failed in 'loadNamespace' for 'tikzDevice'
-Error: package/namespace load failed for 'tikzDevice'
+Error: loading failed
 \end{Verbatim}
 
-In this case, \pkg{tikzDevice} has done it's very best to locate a working compiler and came up empty.  If you have a working \LaTeX{} compiler, the next section describes how to inform the \pkg{tikzDevice} package of its location.  For suggestions on how to obtain a \LaTeX{} compiler, see \autoref{part:two}.
+In this case, \pkg{tikzDevice} has done it's very best to locate a working
+compiler and came up empty.  If you have a working \LaTeX\ compiler, the next
+section describes how to inform the \pkg{tikzDevice} package of its location.
+For suggestions on how to obtain a \LaTeX\ compiler, see
+\autoref{part:installation}.
 
 
-\subsection{\lang{R} Options That Affect Package Behavior}\label{sec:options}
-The \pkg{tikzDevice} package is  influenced by a number of options that may be set locally in your \lang{R} scripts or in the \lang{R} console or globally in a \code{.Rprofile} file.  All of the options can be set by using \code{options(<option> = <value>)}.  These options allow for the use of custom \code{documentclass} declarations, \LaTeX{} packages, and typesetting engines (e.g. XeLaTeX). The defaults , if are any for a given option, are shown below the description.   The global options are:
+\section{Options That Affect Package Behavior}
+  \label{sec:options}
+
+The \pkg{tikzDevice} package is influenced by a number of options that may be
+set locally in your \pkg{R} scripts or in the \pkg{R} console or globally in
+a \code{.Rprofile} file. All of the options can be set by using
+\code{options(<option> = <value>)}. These options allow for the use of custom
+\code{documentclass} declarations, \LaTeX\ packages, and typesetting engines
+(e.g. \hologo{XeLaTeX} or \hologo{LuaLaTeX}).
+
+For convenience the function \code{setTikzDefaults()} is provided which sets
+all the global options back to their original values.
+
+The proper placement of a \code{.Rprofile} file is explained in the \pkg{R}
+manual page \code{?Startup}. For the details of why calling the \LaTeX\ compiler is
+necessary, see \autoref{part:implementation}.
+
+A lot of power is given to you through these global options, and with great
+power comes great responsibility. For example, if you do not include the
+\TikZ\ package in the \code{tikzLatexPackages} option then all of the string
+metric calculations will fail. Or if you use a different font when compiling
+than you used for calculating metrics, strings may be placed incorrectly.
+There are innumerable ways for packages to clash in \LaTeX\ so be aware.
 
 
-\begin{description}
+\subsection{The \pkgopt{tikzDefaultEngine} Option}
 
-% The additional indent added by the description will be picked up by the listings
-% package and inserted into the code blocks. It is hard to detect in general when this
-% happens- so we'll just temporarily shift the listing margin and shorten the max
-% width of tikzCodeBlock node bodies. Since this is all done inside the description
-% environment, the changes will disappear when the environment ends.
-\lstset{xleftmargin=-\leftmargini}
-\newlength\tikzShortenLine
-\setlength\tikzShortenLine{\textwidth}
-\addtolength\tikzShortenLine{-\leftmargini}
-\tikzset{/tikzCode/defaults/code body/.append style={text width=\tikzShortenLine}}
+This option specifies which typesetting engine the \pkg{tikzDevice} package
+will prefer. Current possible values are \code{pdftex}, \code{xetex} or
+\code{luatex} which will respectively trigger the use of the \hologo{pdfLaTeX},
+\hologo{XeLaTeX} or \hologo{LuaLaTeX} compilers.
 
-  \item[\code{tikzDefaultEngine}] {
-    Specifies which typesetting engine functions in the \pkg{tikzDevice}
-    package will prefer. Current possible values are \hologo{pdfTeX} or
-    \hologo{XeTeX} which will respectively trigger the use of the
-    \hologo{pdfLaTeX} and \hologo{XeLaTeX} compilers.
+\begin{tikzCodeBlock}[title={Default},listing style=sweavechunk]
+options(tikzDefaultEngine = 'pdftex')
+\end{tikzCodeBlock}
 
 \begin{tikzCodeBlock}[title={Choosing the \TeX\ engine},listing style=sweavechunk]
-options(tikzDefaultEngine = 'pdftex')
-# Or..
 options(tikzDefaultEngine = 'xetex')
+options(tikzDefaultEngine = 'luatex')
 \end{tikzCodeBlock}
-  }
 
-  \item[\code{tikzLatex} and \code{tikzXelatex}] {
-    Specifies the location of the \LaTeX{} and \hologo{XeLaTeX} compilers to be
-    used by \pkg{tikzDevice}. Setting a default for this this option may help
-    the package locate a missing compiler:
+
+\subsection{The \pkgopt{tikzLatex}, \pkgopt{tikzXelatex} and \pkgopt{tikzLualatex} Options}
+
+Specifies the location of the \LaTeX{}, \hologo{XeLaTeX} and \hologo{LuaLaTeX}
+compilers to be used by \pkg{tikzDevice}. Setting a default for this option may
+help the package locate a missing compiler:
 
 \begin{tikzCodeBlock}[title={Setting default compilers in \code{.Rprofile}},listing style=sweavechunk]
-options(tikzLatex = '/path/to/latex/compiler')
-options(tikzXelatex = '/path/to/xelatex/compiler')
+options(tikzLatex = '/path/to/pdflatex')
+options(tikzXelatex = '/path/to/xelatex')
+options(tikzLualatex = '/path/to/lualatex')
 \end{tikzCodeBlock}
-  }
 
-\item[\code{tikzMetricsDictionary}]{ When using the graphics device provided by \pkg{tikzDevice}, you may notice that \lang{R} appears to ``lag" or ``hang" when commands such as \code{plot()} are executed. This is because the device must query the \LaTeX{} compiler for string widths and font metrics. For a normal plot, this may happen dozens or hundreds of times- hence \lang{R} becomes unresponsive for a while. The good news is that the \code{tikz()} code is designed to cache the results of these computations so they need only be performed once for each string or character. By default, these values are stored in a temporary cache file which is deleted when \lang{R} is shut down. A location for a permanent cache file may be specified:
+
+\subsection{The \pkgopt{tikzMetricsDictionary} Option}
+
+When using the graphics device provided by \pkg{tikzDevice}, you may notice
+that \pkg{R} appears to ``lag" or ``hang" when commands such as \code{plot()}
+are executed. This is because the device must query the \LaTeX\ compiler for
+string widths and font metrics. For a normal plot, this may happen dozens or
+hundreds of times---hence \pkg{R} becomes unresponsive for a while. The good
+news is that the \code{tikz()} code is designed to cache the results of these
+computations so they need only be performed once for each string or character.
+By default, these values are stored in a temporary cache file which is deleted
+when \code{R} is shut down. Using the option \code{tikzMetricsDictionary}, a
+permanent cache file may be specified:
 
 \begin{tikzCodeBlock}[title={Setting a location in \code{.Rprofile} for a permanent metrics dictionary},listing style=sweavechunk]
-options( tikzMetricsDictionary = '/path/to/dictionary/location' )
-\end{tikzCodeBlock}
-}
-
-\item[\code{tikzDocumentDeclaration}]{A string. The documentclass declaration when \code{standAlone == TRUE} as well as when font metrics are calculated}
-
-\begin{tikzCodeBlock}[title={Default},listing style=sweavechunk]
-options( tikzDocumentDeclaration = "\\documentclass{article}" )
+options(tikzMetricsDictionary = '/path/to/dictionary/location')
 \end{tikzCodeBlock}
 
-\item[\code{tikzFooter}]{A character vector. The footer to be used only when \code{standAlone==TRUE} }
+
+\subsection{The \pkgopt{tikzDocumentDeclaration} Option}
+
+\code{standAlone == TRUE}. \code{tikzDocumentDeclaration} also influences the
+calculation of font metrics. If a base font size is specified as an option to
+the document class, the \pkg{tikzDevice} will use this value as the base font
+size for graphics.
 
 \begin{tikzCodeBlock}[title={Default},listing style=sweavechunk]
-options( tikzFooter = c( "\\end{document}" ) )
-\end{tikzCodeBlock} 
+options(tikzDocumentDeclaration = "\\documentclass[10pt]{article}")
+\end{tikzCodeBlock}
 
-  \item[\code{tikzLatexPackages} and \code{tikzXelatexPackages}]{
-    Character vectors. These are the packages which are included when using the
-    \code{standAlone} option as well as when font metrics are calculated.  If you
-    use additional packages that affect fonts, such as mathpazo which provides a
-    Palatino-style font, these packages should be added to this list.
+
+\subsection{The \pkgopt{tikzLatexPackages}, \pkgopt{tikzXelatexPackages} and \pkgopt{tikzLualatexPackages} Options}
+
+Character vectors. These are the packages which are included when using the
+\code{standAlone} option as well as when font metrics are calculated. If you
+use additional packages that affect fonts, such as \code{mathpazo}, or
+additional \LaTeX\ macros, such as \code{amsmath}, these packages should be
+added to this list.
 
 \begin{tikzCodeBlock}[title={Default},listing style=sweavechunk]
-options( tikzLatexPackages = c(
-  "\\usepackage{tikz}",
-  "\\usepackage[active,tightpage]{preview}",
-  "\\PreviewEnvironment{pgfpicture}",
-  "\\setlength\\PreviewBorder{0pt}")
+options(
+  tikzLatexPackages = c(
+    "\\usepackage{tikz}",
+    "\\usepackage[active,tightpage]{preview}",
+    "\\PreviewEnvironment{pgfpicture}",
+    "\\setlength\\PreviewBorder{0pt}")
+  ),
+
+  tikzXelatexPackages = c(
+    "\\usepackage{tikz}\n",
+    "\\usepackage[active,tightpage,xetex]{preview}\n",
+    "\\usepackage{fontspec,xunicode}\n",
+    "\\PreviewEnvironment{pgfpicture}\n",
+    "\\setlength\\PreviewBorder{0pt}\n"
+  ),
+
+  tikzLualatexPackages = c(
+    "\\usepackage{tikz}\n",
+    "\\usepackage[active,tightpage,psfixbb]{preview}\n",
+    "\\usepackage{fontspec,xunicode}\n",
+    "\\PreviewEnvironment{pgfpicture}\n",
+    "\\setlength\\PreviewBorder{0pt}\n"
+  )
 )
 \end{tikzCodeBlock}
 
@@ -384,279 +534,363 @@ options( tikzLatexPackages = c(
   "\\usepackage{mathpazo}"
 ))
 \end{tikzCodeBlock}
-  }
 
-\item[\code{tikzMetricPackages} and \code{tikzUnicodeMetricPackages}] {
-    Character vectors. These are the extra packages which are additionally
-    loaded when doing font metric calculations.  As you see below, the font
-    encoding is set to Type 1. This is very important so that character codes
-    of \LaTeX{} and \lang{R} match up. The Unicode metric packages are used
-    when a \hologo{XeTeX} engine is in use.
+
+\subsection{The \pkgopt{tikzMetricPackages} and \pkgopt{tikzUnicodeMetricPackages} Options}
+
+Character vectors. These are the extra packages which are additionally loaded
+when doing font metric calculations.  As you see below, the font encoding is
+set to Type 1. This is very important so that character codes of \LaTeX\ and
+\lang{R} match up. The Unicode metric packages are used when the \hologo{XeTeX}
+or \hologo{LuaTeX} engines are in use.
 
 \begin{tikzCodeBlock}[title={Default},listing style=sweavechunk]
-options( tikzMetricPackages = c(
-  "\\usepackage[utf8]{inputenc}",
-  "\\usepackage[T1]{fontenc}",
-  "\\usetikzlibrary{calc}")
+options(
+  tikzMetricPackages = c(
+    "\\usepackage[T1]{fontenc}\n",
+    "\\usetikzlibrary{calc}\n"
+  ),
+
+  tikzUnicodeMetricPackages = c(
+    "\\usepackage[T1]{fontenc}\n",
+    "\\usetikzlibrary{calc}\n",
+    "\\usepackage{fontspec,xunicode}\n"
+  )
 )
 \end{tikzCodeBlock}
-  }
 
 
-\item[\code{tikzSanitizeCharacters}]{A character vector of special latex characters to replace. These values should correspond to the replacement values from the \code{tikzReplacementCharacters} option.}
+\subsection{The \pkgopt{tikzFooter} Option}
 
-\begin{tikzCodeBlock}[title={Default},listing style=sweavechunk]
-options( tikzSanitizeCharacters = c('%','$','}','{','^') )
-\end{tikzCodeBlock}
-
-\item[\code{tikzReplacementCharacters}]{A character vector of replacements for special latex characters. These values should correspond to the values from the \code{tikzSanitizeCharacters} option.}
+A character vector. This footer is appended to the end of the figure when
+\code{standAlone==TRUE} before the \verb|\end{document}| statement.
 
 \begin{tikzCodeBlock}[title={Default},listing style=sweavechunk]
-options( tikzReplacementCharacters = c('\\%','\\$','\\','\\','\\^'))
+options(tikzFooter = "")
 \end{tikzCodeBlock}
 
-  \item[\code{tikzRasterResolution}] {
-    When \code{tikz} is requested to add a raster to a graphic, the
-    raster is written to a PNG file which is then included into the LaTeX
-    code. This option controls the resolution (dpi) at which the PNG files
-    are created.
+
+\subsection{The \pkgopt{tikzSanitizeCharacters} and \pkgopt{tikzReplacementCharacters} Options}
+
+\code{tikzSanitizeCharacters} is a character vector of special \LaTeX
+characters to replace while \code{tikzReplacementCharacters} is a character
+vector containing the corresponding replacements.
+
+\begin{tikzCodeBlock}[title={Default},listing style=sweavechunk]
+options(
+  tikzSanitizeCharacters = c('%','$','}','{','^','_','#','&','~'),
+  tikzReplacementCharacters = c('\\%','\\$','\\}','\\{','\\^{}','\\_{}',
+    '\\#','\\&','\\char`\\~')
+)
+\end{tikzCodeBlock}
+
+
+\subsection{The \pkgopt{tikzRasterResolution} Option}
+
+When \code{tikz} is requested to add a raster to a graphic, the raster is
+written to a PNG file which is then included into the \LaTeX\ code. This option
+controls the resolution (dpi) at which the PNG files are created.
 
 \begin{tikzCodeBlock}[title={Default},listing style=sweavechunk]
 options(tikzRasterResolution = 300)
 \end{tikzCodeBlock}
-  }
-
-  \item[\code{tikzPdftexWarnUTF}] {
-    A \code{TRUE/FALSE} value that controls whether warnings are printed if
-    Unicode characters are sent to a device using the \hologo{pdfTeX} engine.
-  }
-\end{description}
-
-For convenience the function \code{setTikzDefaults()} is provided which sets all the global options back to their original values.
-
-The proper placement of a \code{.Rprofile} file is explained in \code{?Startup}. For the details of why calling the \LaTeX{} compiler is necessary, see \autoref{part:three}.
-
-\tikzDocDisclaim{A Word of Caution About Setting Options.}
-{A lot of power is given to you through these global options, and with great power comes great responsibility.  For example, if you do not include the \TikZ{} package in the \code{tikzLatexPackages} option then all of the string metric calculations will fail. Or if you use a different font when compiling than you used for calculating metrics, strings may be placed incorrectly.  There are innumerable ways for packages to clash in \LaTeX{} so be aware. 
-}
 
 
-\label{cache:user}
+\subsection{The \pkgopt{tikzPdftexWarnUTF} Option}
 
-%----------------------------  tikz() function documentation -------------------------------------------------
+A \code{TRUE/FALSE} value that controls whether warnings are printed if
+Unicode characters are sent to a device using the \hologo{pdfTeX} engine.
 
-\section{The \code{tikz()} Function}
+\begin{tikzCodeBlock}[title={Default},listing style=sweavechunk]
+options(tikzPdftexWarnUTF = TRUE)
+\end{tikzCodeBlock}
 
-\subsection{Description}
-The \code{tikz()} function provides most of the functionality of the \pkg{tikzDevice} package. This function is responsible for creating new \lang{R} graphics devices that translate the output of graphics functions to the \TikZ{} format. The device supports many levels of output that range from stand-alone \LaTeX{} documents that may be compiled directly to code chunks that must be incorporated into existing \LaTeX{} documents using the \verb`\include{}` function.
 
-\subsection{Usage}
+% -----------------------------------------------------------------------------
+%                       Chapter 3: The tikz Function
+% -----------------------------------------------------------------------------
+\chapter{The \code{tikz} Function}
 
-The \code{tikz()} function opens a new graphics device and may be called with the following arguments:
+\section{Description}
+
+The \code{tikz} function provides most of the functionality of the
+\pkg{tikzDevice} package. This function opens an \pkg{R} graphics device that
+records plots as a series of \TikZ\ commands. The device supports many levels
+of output that range from stand-alone \LaTeX\ documents that may be compiled
+into figures to code chunks that must be incorporated into existing \LaTeX\
+documents using the \verb`\include{}` macro.
+
+
+\section{Usage}
+
+The \code{tikz} function opens a new graphics device and may be called with
+the following arguments:
 
 \begin{Verbatim}[frame=single]
-tikz(file = "Rplots.tex", width = 7, height = 7,
+function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
+  width = 7, height = 7, onefile = TRUE,
   bg="transparent", fg="black", pointsize = 10, standAlone = FALSE,
   bareBones = FALSE, console = FALSE, sanitize = FALSE,
-  engine = getOption("tikzDefaultEngine'),
+  engine = getOption("tikzDefaultEngine"),
   documentDeclaration = getOption("tikzDocumentDeclaration"),
-  packages = getOption("tikzLatexPackages"),
-  footer = getOption("tikzFooter"))
+  packages,
+  footer = getOption("tikzFooter")
 \end{Verbatim}
 
-\begin{description}
-\item[\code{file}]{ A character string indicating the desired path to the output file. It is recommended, but not required, that the filename end in \code{.tex}.}
-\item[\code{width}]{ The width of the output figure, in {\bfseries inches}. }
-\item[\code{height}]{ The height of the output figure, in {\bfseries inches}. }
-\item[\code{bg}]{ The starting background color for the plot. }
-\item[\code{fg}]{ The starting foreground color for the plot. }
-\item[\code{pointsize}]{ Base pointsize used in the LaTeX document.  This option is only referenced if a valid pointsize cannot be extracted from the value of \code{getOption("tikzDocumentDeclaration")}.  See \autoref{subsec:fontCalc} for more details.}
-\item[\code{standAlone}]{ A logical value indicating whether the resulting file should be suitable for direct processing by \LaTeX .}
-\item[\code{bareBones}]{ A logical value indicating whether the resulting \TikZ{} code produced without being placed within a \LaTeX{} \code{tikzpicture} environment.}
-\item[\code{console}]{Should the output of \code{tikz} be directed to the \lang{R} console (default FALSE). This is useful for dumping tikz output directly into a \LaTeX{} document via sink. If \code{TRUE}, the file argument is ignored. Setting \code{file=''} is equivalent to setting \code{console=TRUE}.}
-\item[\code{sanitize}]{Should special latex characters be replaced (Default \code{FALSE}). See the section ``Options That Affect Package Behavior'' for which characters are replaced.}
-\item[\code{engine}] {
-  A string specifying which TeX engine to use. Possible values are 'pdftex' and
-  'xetex'.
-}
-\item[\code{documentDeclaration}]{See Section \ref{sec:options}, ``Options That Affect Package Behavior.''}
-\item[\code{packages}]{See Section \ref{sec:options}, ``Options That Affect Package Behavior.''}
-\item[\code{footer}]{See Section \ref{sec:options}, ``Options That Affect Package Behavior.''}
-\end{description}
+\begin{flexlabelled}{code}{*}{0.5em}{0.5em}{*}{\leftmargin}
+  \item[file]
+    A character string indicating the desired path to the output file. It is
+    recommended, but not required, that the filename end in \code{.tex}.
 
-The first five options should be familiar to anyone who has used the default
-graphics devices shipped with \lang{R}. The options \code{file}, \code{width},
-\code{height}, \code{bg} and \code{fg} represent the standard graphics
-parameters currently implemented by \pkg{tikzDevice}. The last two options,
-\code{standAlone} and \code{bareBones}, are specific to the \code{tikz()}
-graphics device and affect the structure the output file. Using these options
-\code{tikz()} supports three modes of output:
+  \item[width]
+    The width of the output figure, in \emph{inches}.
+
+  \item[height]
+    The height of the output figure, in \emph{inches}.
+
+  \item[onefile]
+    Controls whether output should be directed to a single file containing one
+    \code{tikzpicture} environment per plot or split into multiple files each
+    containing a single \code{tikzpicture} environment.
+
+  \item[bg]
+    The starting background color for the plot.
+
+  \item[fg]
+    The starting foreground color for the plot.
+
+  \item[pointsize]
+    Base pointsize used in the LaTeX document.  This option is only referenced
+    if a valid pointsize cannot be extracted from the value of
+    \code{getOption("tikzDocumentDeclaration")}.  See \autoref{subsec:fontCalc}
+    for more details.
+
+  \item[standAlone]
+    A logical value indicating whether the resulting file should be suitable
+    for direct processing by \LaTeX.
+
+  \item[bareBones]
+    A logical value indicating whether \TikZ\ code is produced without being
+    placed within a \code{tikzpicture} environment.
+
+  \item[console]
+    Controls whether output is directed to the \pkg{R} console. This is useful
+    for dumping \TikZ\ output directly into a \LaTeX\ document via sink. If
+    \code{TRUE}, the \code{file} argument is ignored. Setting \code{file=''} is
+    equivalent to setting \code{console=TRUE}.
+
+  \item[sanitize]
+    Should special latex characters be replaced (Default \code{FALSE}). See the
+    section ``Options That Affect Package Behavior'' for which characters are
+    replaced.
+
+  \item[engine]
+    A string specifying which TeX engine to use. Possible values are
+    \code{'pdftex'}, \code{'xetex'} and \code{'luatex'}.
+
+  \item[documentDeclaration]
+    See Section \ref{sec:options}, ``Options That Affect Package Behavior.''
+
+  \item[packages]
+    See Section \ref{sec:options}, ``Options That Affect Package Behavior.''
+
+  \item[footer]
+    See Section \ref{sec:options}, ``Options That Affect Package Behavior.''
+\end{flexlabelled}
+
+The first six options should be familiar to anyone who has used the default
+graphics devices shipped with \lang{R}. The options \code{standAlone}
+and \code{bareBones} are specific to the \code{tikz()} graphics device and
+affect the structure the output file. Using these options \code{tikz}
+supports three modes of output:
 
 \begin{itemize}
+  \item
+    Graphics production as complete \LaTeX\ files suitable for compilation.
 
-	\item{Graphics production as complete \LaTeX{} files suitable for compilation.}
-	
-	\item{Graphics production as complete figures suitable for inclusion in \LaTeX{} files.}
-	
-	\item{Graphics production as raw figure code suitable for inclusion in an enclosing \code{tikzpicture} environment in a \LaTeX{} file.}
+  \item
+    Graphics production as complete figures suitable for inclusion in \LaTeX\
+    files.
 
+  \item
+    Graphics production as raw figure code suitable for inclusion in an
+    enclosing \code{tikzpicture} environment in a \LaTeX\ file.
 \end{itemize}
 
-\subsection{Font Size Calculations}
-\label{subsec:fontCalc}
-The overarching goal of the `tikzDevice' is to provide seamless integration
-between text in R graphics and the text of LaTeX documents that contain those
-graphics.  In order to achieve this integration the device must translate font
-sizes specified in R to corresponding font sizes in LaTeX.  The issue is that
-font sizes in LaTeX are controlled by a ``base font size'' that is specified at
-the beginning of the document- typically 10pt.  There is no easy way in LaTeX
-to change the font size to a new numerical value, such as 16pt for a plot
-title.  Fortunately, the TikZ graphics system allows text to be resized using a
-scaling factor.  The \code{tikzDevice} calculates a scaling factor used to
-approximate other font sizes using the following three inputs:
+
+\section{Font Size Calculations}
+  \label{subsec:fontCalc}
+
+The overarching goal of the \pkg{tikzDevice} is to provide seamless integration
+between text in R graphics and the text of \LaTeX\ documents that contain those
+graphics. In order to achieve this integration the device must translate font
+sizes specified in \pkg{R} to corresponding font sizes in \LaTeX. The issue is
+that font sizes in \LaTeX\ are controlled by a ``base font size'' that is
+specified at the beginning of the document---typically 10pt. There is no easy
+way in \LaTeX\ to change the font size to a new numerical value, such as 16pt
+for a plot title. Fortunately, the \TikZ\ graphics system allows text to be
+resized using a scaling factor. The \pkg{tikzDevice} calculates a scaling
+factor used to approximate other font sizes using the following three inputs:
 
 \begin{itemize}
+  \item
+    The ``base font size'' specified when the graphics device is created.
 
-  \item{The ``base font size'' specified when the graphics device is
-          created.}
+  \item
+    The ``character expansion factor'' parameter, specified using the `cex'
+    argument to functions such as described in the documentation of the \pkg{R}
+    function \code{par}.
 
-  \item{The ``character expansion factor'' parameter, specified using the `cex'
-    argument to functions such as described in the documentation of the
-    \lang{R} function \code{par()}.}
-  
-  \item{The ``font size'' parameter, specified using the `ps' argument to
-    functions such as \code{par()} or the `fontsize' argument to functions such
-    as \code{gpar()}.}
-
+  \item
+    The ``font size'' parameter, specified using the `ps' argument to functions
+    such as \code{par} or the `fontsize' argument to functions such as
+    \code{gpar}.
 \end{itemize}
 
 The calculation used is:
 
 \[
-\mbox{Scaling Factor} = \mbox{cex} \cdot \frac{\mbox{ps}}{\mbox{base font size}}
+  \mbox{Scaling Factor} = \mbox{cex} \cdot \frac{\mbox{ps}}{\mbox{base font size}}
 \]
 
-The tricky bit is the specification of the ``base font size''.  By default the tikzDevice will attempt to determine this parameter by scanning the value of \code{options( "tikzDocumentDeclaration" )} using the regular expression \code{\textbackslash d+[pt]}.  With the default header:
+The tricky bit is the specification of the ``base font size''. By default the
+\pkg{tikzDevice} will attempt to determine this parameter by scanning the value of
+\code{options( "tikzDocumentDeclaration" )} using the regular expression
+\code{\textbackslash d+[pt]}. With the default header:
 
+\[
+  \mbox{\code{\textbackslash documentclass[10pt]{article}}}
+\]
 
-\quad\code{\textbackslash documentclass[10pt]{article}}
-
-
-This regular expression will return 10 as the base pointsize to be used by the device.  If the regular expression fails to produce a match, the value of the \code{pointsize} argument to the \code{tikz()} function will be used.
+This regular expression will return 10 as the base pointsize to be used by the
+device. If the regular expression fails to produce a match, the value of the
+\code{pointsize} argument to the \code{tikz} function will be used.
 
 
 \subsection{UTF-8 Output}
 
-Version 0.6.0 introduced support for (multibyte) Unicode characters in the text
-of graphics.  There are a few important implications/limitations of this
-feature:
+Version 0.6.0 of the \pkg{tikzDevice} introduced support for (multibyte)
+Unicode characters in the text of graphics through support for \hologo{XeTeX}.
+Version 0.7.0 extended multilingual typesetting further by adding support for
+the \hologo{LuaTeX} compiler. Unicode support in \pkg{tikzDevice} is subject to
+a few important caveats:
 
 \begin{description}
+  \item[System Requirements:]
+    A working version of \hologo{XeLaTeX} or \hologo{LuaLaTeX}  along with the
+    packages \code{fontspec} and \code{xunicode} are required for direct
+    processing of Unicode input. If \pkg{tikzDevice} cannot find unicode-aware
+    compiler, then Unicode support cannot be guaranteed.
 
-\item[System Requirements:]
-  A working version of \hologo{XeLaTeX} along with the packages \code{fontspec}
-  and \code{xunicode} are required for direct processing of Unicode input.  If
-  \code{tikzDevice} cannot find \hologo{XeLaTeX} then Unicode support cannot be
-  guaranteed.
+  \item[Encoding:]
+    \pkg{tikzDevice} will try its best to convert characters from other
+    encodings but do not count on it converting things correctly, best to do
+    the conversion yourself beforehand to avoid unexpected output.
 
-\item[Encoding:] \code{tikzDevice} will try its best to convert characters from
-  other encodings but do not count on it converting things correctly, best to
-  do the conversion yourself beforehand to avoid unexpected output.
+  \item[Fonts:]
+    Having a Unicode character actually show up in your \LaTeX\ document relies
+    on the font you use having the glyph available. We leave it up to the user
+    to know for themselves what is available.  Otherwise you will likely just
+    get no output in place of where the character should be.
 
-\item[Fonts:] Having a Unicode character actually show up in your \LaTeX{}
-  document relies on the font you use having the glyph available. We leave it
-  up to the user to know for themselves what is available.  Otherwise you will
-  likely just get no output in place of where the character should be.
+  \item[Plotmath:]
+    There is specifically no support for input of plotmath characters as
+    unicode since the user can simply input \LaTeX\ math directly. We strongly
+    encourage the use of \LaTeX\ math over plotmath for style and consistency's
+    sake.  A consequence of this is that most of the \pkg{R} examples and demos
+    of plotmath won't work without significant manipulation (your mileage may
+    vary but you may get anything from errors to warnings to documents that
+    mysteriously won't compile). That is not to say that the output could not
+    be duplicated with \pkg{tikzDevice} but the examples will not work out of
+    the box.
 
-\item[plotmath:] There is specifically no support for input of plotmath
-  characters as unicode since the user can simply input \LaTeX{} math directly.
-  We strongly encourage the use of \LaTeX{} math over plotmath for style and
-  consistency's sake.  A consequence of this is that most of the \lang{R}
-  examples and demos of plotmath won't work without significant manipulation
-  (your milage may vary but you may get anything from errors to warnings to
-  documents that mysteriously won't compile).  That is not to say that the
-  output could not be duplicated with \code{tikzDevice} but the examples will
-  not work out of the box.
+  \item[Compiling:]
+    A graphic that contains UTF-8 characters should be compiled with
+    \hologo{XeLaTeX} or \hologo{LuaLaTeX} with the \code{xunicode} and
+    \code{fontspec} packages enabled.
 
-\item[Compiling:]
-  A graphic that contains UTF-8 characters should be compiled with
-  \hologo{XeLaTeX} (or possibly \hologo{LuaLaTeX}) with the \code{xunicode} and
-  \code{fontspec} packages enabled.
-
-\item[ASCII only:]
-  Everything should be exactly the same as previous versions if only ASCII
-  (single byte) characters are used (i.e. character codes less than 132).
-
+  \item[ASCII only:]
+    Everything should be exactly the same as previous versions if only ASCII
+    (single byte) characters are used (i.e. character codes less than 132).
 \end{description}
 
 
 
-\subsection{Examples}
-
-% We will shift into the figs directory here so that we don't have
-% to have separate Sweave code chunks with the 'figs/' path in
-% them.
+\section{Examples}
 <<pathStepIn,results=hide>>=
+  # Shift into the `figs` directory so that examples do not have to include
+  # `figs` in the output file path.
 	setwd('figs')
 @
-\subsubsection{Default Mode}
 
-The most common use of the \code{tikz()} function is to produce a plot that will be included in another \LaTeX{} document, such as a report. Running the following example in \lang{R} will produce a very simple graphic using the \code{plot()} function.
+\subsection{Default Mode}
 
-<<simpleEx,echo=T,results=hide>>=
+The most common use of the \code{tikz} function is to produce a plot that
+will be included in another \LaTeX\ document, such as a report. Running the
+following example in \pkg{R} will produce a very simple graphic using the
+\code{plot} function:
+
+<<simpleEx,echo=TRUE,results=hide>>=
 require(tikzDevice)
 tikz('simpleEx.tex',width=3.5,height=3.5)
 plot(1,main='Hello World!')
 dev.off()
 @
 
-A simple \LaTeX{} document is then required to display the output of the basic \code{tikz()} command. This document must include the \TikZ{} as one of the packages that it loads. The \TikZ{} package provides several optional libraries that provide additional functionality, however none of these libraries are currently required to use the output of \code{tikz()}. Inside the \LaTeX{} document, the contents of the file \code{simpleEx.tex} are imported using the \verb`\include{}` command.
+A \LaTeX\ document is then required to display the figure.  This document must
+include \TikZ\ as one of the packages that it loads. \TikZ\ provides several
+libraries that enable additional functionality, however none of these libraries
+are currently required to use the output of \code{tikz}. Inside the \LaTeX\
+document, the contents of the file \code{simpleEx.tex} are imported using the
+\verb|\include| command.
 
 \begin{figure}[H]
 	\centering
 
 	\begin{minipage}{0.5\textwidth}
-
-\begin{tikzCodeBlock}[title={Example \LaTeX{} Document},listing style=latexsource,code body/.append style={codebody color=white},no break=true]
+    \begin{tikzCodeBlock}[title={Example \LaTeX{} Document},listing style=latexsource,code body/.append style={codebody color=white}]
 \documentclass{article}
 
-% All LaTeX documents including 
-% tikz() output must use this 
+% All LaTeX documents including
+% tikz() output must use this
 % package!
 \usepackage{tikz}
 
 \begin{document}
   \begin{figure}[!h]
     \centering
-   
+
     % The output from tikz()
     % is imported here.
     \input{simpleEx.tex}
-      
+
     \caption{Simple Example}
   \end{figure}
 \end{document}
-\end{tikzCodeBlock}
-
-	\end{minipage}
+    \end{tikzCodeBlock}
+  \end{minipage}
 	\hfill
 	\begin{minipage}{0.45\textwidth}
 		\input{figs/simpleEx.tex}
 	\end{minipage}
-	\caption{Example of simple \code{tikz()} usage.}
+	\caption{Example of simple \code{tikz} usage.}
 \end{figure}
 
-One of the most exciting aspects of the \code{tikz()} function is that it allows the inclusion of arbitrary \LaTeX{} code in plotting commands. An important issue to note is that many \LaTeX{} commands pare prefixed by the backaslash, \textbackslash, character. This character has a special meaning as an escape charcter in many computing applications, including \lang{R}. Therefore, it is necessary to place two backslashes, \textbackslash\textbackslash, in the input to \lang{R} commands in order to cause one to appear in the output.  The next example demonstrates how to use \LaTeX{} commands in plot annotation.
+One of the most exciting aspects of the \code{tikz} function is that the
+inclusion of arbitrary \LaTeX\ code is allowed in strings passed to  plotting
+commands. An important issue to note is that many \LaTeX\ commands are prefixed
+by the backaslash character: \textbackslash. Unfortunately, in many programming
+languages, the backslash character is also given a special status when it
+appears in strings. Therefore, it is necessary to place two backslashes,
+\textbackslash\textbackslash, in \pkg{R} strings in order to cause backslash to
+appear in the output for \LaTeX. The next example demonstrates how to use
+\LaTeX\ commands in plot annotation.
 
-% Disable chunk page breaking so the following code doesn't get mangled.
-\makeatletter
-\tikzCode@breakPagesfalse
-\makeatother
 
 \begin{figure}[H]
 	\centering
 	\begin{minipage}{0.5\textwidth}
-<<latexEx,echo=T,results=hide,keep.source=T>>=
+<<latexEx,echo=TRUE,results=hide,keep.source=TRUE>>=
 require(tikzDevice)
 tikz('latexEx.tex',
   width=3.5,height=3.5)
@@ -668,17 +902,17 @@ model <- lm(y ~ x)
 rsq <- summary( model )$r.squared
 rsq <- signif(rsq,4)
 
-plot(x,y,main='Hello \\LaTeX!')
-abline(model,col='red')
+plot(x, y, main='Hello \\LaTeX!')
+abline(model, col='red')
 
 mtext(paste("Linear model: $R^{2}=",
-  rsq,"$" ),line=0.5)
-  
-legend('bottomright', legend = 
+  rsq, "$"), line=0.5)
+
+legend('bottomright', legend =
   paste("$y = ",
     round(coef(model)[2],3), 'x +',
     round(coef(model)[1],3), '$',
-    sep=''), bty= 'n')
+    sep = ''), bty = 'n')
 
 dev.off()
 @
@@ -687,63 +921,43 @@ dev.off()
 	\begin{minipage}{0.45\textwidth}
 		\input{figs/latexEx.tex}
 	\end{minipage}
-	\caption{A more complicated example of \code{tikz()} usage incorporating natively rendered \LaTeX{} commands.}
+	\caption{A more complicated example of \code{tikz} usage incorporating
+    natively rendered \LaTeX\ commands.}
 \end{figure}
 
-% Reinstate tikzCodeBlock defaults.
-\makeatletter
-\tikzCode@breakPagestrue
-\makeatother
 
-\subsubsection{\code{bareBones} Mode}
+\subsection{\pkgopt{bareBones} Mode}
 
-\code{barBones} output is designed to facilitate inclusion of code generated by
-\code{tikz()} into a larger \TikZ\ graphic. Normally \code{tikz()} packages the
-commands it produces as a self-contained figure. This is done by placing the
-\verb`\begin{tikzpicture}` and \verb`\end{tikzpicture}` commands at the
-beginning and end of the output file. When \code{bareBones} is invoked, the
-\code{tikzpicture} environment is omitted which allows the output to be
+\code{bareBones} output is designed to facilitate inclusion of code generated
+by \code{tikz} into a larger \TikZ\ graphic. Normally \code{tikz} wraps output
+as a self-contained \code{tikzpicture} environment. When \code{bareBones} is
+invoked, the wrapping environment is omitted. This option allows output to be
 embedded inside another \code{tikzpicture} of the users own construction.
 
-<<bareBonesExample,echo=T,results=hide,keep.source=T>>=
+<<bareBonesExample,echo=TRUE,results=hide,keep.source=TRUE>>=
 require(tikzDevice)
 require(maps)
 
 tikz('westCoast.tex', bareBones=TRUE)
+
 map('state', regions=c('california', 'oregon', 'washington'),
     lwd=4, col='grey40')
 
-eurekaLon <- grconvertX(-124.161, to='device')
-eurekaLat <- grconvertY(40.786, to='device')
-
-longviewLon <- grconvertX(-122.962, to='device')
-longviewLat <- grconvertY(46.148, to='device')
-
-coosLon <- grconvertX(-124.237, to='device')
-coosLat <- grconvertY(43.378, to='device')
-
-sfLon <- grconvertX(-122.419, to='device')
-sfLat <- grconvertY(37.775, to='device')
-
-tikzAnnotate(paste('\\coordinate (humBay) at (',
-  eurekaLon, ',', eurekaLat, ');', sep='') )
-
-tikzAnnotate(paste('\\coordinate (longView) at (',
-  longviewLon, ',', longviewLat, ');', sep='') )
-
-tikzAnnotate(paste('\\coordinate (coosBay) at (',
-  coosLon, ',', coosLat, ');', sep='') )
-
-tikzAnnotate(paste('\\coordinate (sfBay) at (',
-  sfLon, ',', sfLat, ');', sep='') )
+# Insert some named coordinates into the picture that will
+# be available once the picture is included into the
+# TeX document.
+tikzCoord(-124.161, 40.786, 'humBay')
+tikzCoord(-122.962, 46.148, 'longView')
+tikzCoord(-124.237, 43.378, 'coosBay')
+tikzCoord(-122.419, 37.775, 'sfBay')
 
 dev.off()
 @
 
-The \verb`\include{}` command may now be used to import the device output into
+The \verb|\include| command may now be used to import the device output into
 another \code{tikzpicture}. The included code must be wrapped in a \code{scope}
 environment that contains the options \code{x=1pt} and \code{y=1pt}. This
-informs \TikZ{} of the units being used in the coordinates of the plot output.
+informs \TikZ\ of the units being used in the coordinates of the plot output.
 The options \code{xshift} and \code{yshift} may also be applied to the
 \code{scope} in order to position the plot. The following code demonstrates how
 to embed \code{bareBones} output in a \code{tikzpicture}:
@@ -779,7 +993,6 @@ to embed \code{bareBones} output in a \code{tikzpicture}:
 \end{tikzCodeBlock}
 
 
-
 \begin{figure}[H]
 
 	\centering
@@ -807,30 +1020,37 @@ to embed \code{bareBones} output in a \code{tikzpicture}:
 
 	\end{tikzpicture}
 
-	\caption{A \TikZ{} drawing with embedded output from \code{tikz(bareBones=TRUE)}.}
+	\caption{A \TikZ\ drawing with embedded output from \code{tikz(bareBones=TRUE)}.}
 \end{figure}
 
-\subsubsection{\code{standAlone} Mode}
+\subsection{\pkgopt{standAlone} Mode}
 
-When the \code{standAlone} option is passed to \code{tikz()}, the resulting \code{.tex} file will be a complete \LaTeX{} document designed to be compiled on its own.  This means that in addition to \verb`\begin{tikzpicture}` and \verb`\end{tikzpicture}` the file will also contain \verb`\begin{document}`, \verb`\end{document}` and a \LaTeX{} preamble.  The \code{preview} package is also used in files produced by \code{standAlone} and is used to crop the pages in the resulting document to the bounding boxes of the figures that it contains.  Stand-alone output may be produced in the following manner:
+When the \code{standAlone} option is passed to \code{tikz}, the resulting
+\code{.tex} file will be a complete \LaTeX\ document that can be compiled into
+a stand-alone figure. This means that in addition to \verb|\begin{tikzpicture}|
+and \verb|\end{tikzpicture}| the file will also contain \verb|\begin{document}|,
+\verb|\end{document}| and a \LaTeX\ preamble. The \code{preview} package is also
+used in files produced by \code{standAlone} to crop the pages in the resulting
+document to the bounding boxes of the plots.  Stand-alone output may be
+produced in the following manner:
 
-<<standAloneExample,echo=T,results=hide,keep.source=T>>=
+<<standAloneExample,echo=TRUE,results=hide,keep.source=TRUE>>=
 require(tikzDevice)
-tikz('standAloneExample.tex',standAlone=T)
+tikz('standAloneExample.tex',standAlone=TRUE)
 plot(sin,-pi,2*pi,main="A Stand Alone TikZ Plot")
 dev.off()
 @
 
 
-<<standAloneCompileExample, results=hide, eval=F>>=
+<<standAloneCompileExample, results=hide, eval=FALSE>>=
 
 	require(tools)
-	
+
 	catch <- system(paste(Sys.which('pdflatex'),
 		'-interaction=batchmode -output-directory figs/ figs/standAloneExample.tex'),
 		ignore.stderr=T)
-	
-	# If compiling the example failed, we don't want to include a broken link.	
+
+	# If compiling the example failed, we don't want to include a broken link.
 	if( catch == 0 ){
 		pdfLink <- "The file \\\\code{standAloneExample.tex} may then be compiled to produce
 			\\\\href{./figs/standAloneExample.pdf}{standAloneExample.pdf}. "
@@ -840,131 +1060,139 @@ dev.off()
     #%\Sexpr{print(pdfLink)}
 @
 
-Note that files produced using the \code{standAlone} option should not be included in \LaTeX{} documents using the \verb`\input{}` command! Use \verb`\includegraphics{}` or load the \code{pdfpages} package and use \verb`\includepdf{}`.
+Note that files produced using the \code{standAlone} option should not be
+included in \LaTeX\ documents using the \verb|\input| command! Use
+\verb|\includegraphics| or load the \code{pdfpages} package and use
+\verb|\includepdf|.
 
-\subsubsection{\code{console} output Mode}
 
-Version 0.5.0 of \pkg{tikzDevice} introduced the \code{console} option.  Instead of sending its output to a file \code{tikz} will send it output to \code{stdout}. This kind of output can be redirected to a file with \code{sink()} or spit out directly into a \TeX{} document from a \lang{Sweave} file so that the \TeX{} file is self contained.  
+\subsection{\pkgopt{console} output Mode}
 
-\begin{tikzCodeBlock}[title={consoleExample.Rnw},listing style=sweavechunk]
+Version 0.5.0 of \pkg{tikzDevice} introduced the \code{console} option. With
+this option, \code{tikz} will send output to \code{stdout} instead of a file.
+This kind of output can be redirected to a file with \code{sink} or spit out
+directly into a \TeX\ document from a \pkg{Sweave} file so that the \TeX\ file
+is self contained and does not include other files via \verb|\input|.
+
+\begin{tikzCodeBlock}[title={Catching \code{tikz} output inside Sweave},listing style=sweavechunk]
  \documentclass{article}
- \usepackage{tikz}
- \usepackage[nogin]{Sweave}
+   \usepackage{tikz}
+   \usepackage[nogin]{Sweave}
+
  \begin{document}
- \begin{figure}[ht]
- \centering
- <<inline,echo=F,results=tex>>=
+   \begin{figure}[ht]
+     \centering
+ <<inline,echo=FALSE,results=tex>>=
 
  require(tikzDevice)
- tikz(console=T,width=5,height=5)
-   x <- rnorm(100)
-   plot(x)
+ tikz(console=TRUE,width=5,height=5)
+  x <- rnorm(100)
+  plot(x)
  dummy <- dev.off()
-
  @
- \caption{caption}
- \label{fig:inline}
- \end{figure}
+     \caption{caption}
+     \label{fig:inline}
+   \end{figure}
  \end{document}
 \end{tikzCodeBlock}
 
-\subsubsection{Getting around special \LaTeX{} characters}
 
-\subsubsection{Using the Global Options: An Xe\LaTeX{} example}
+\subsection{Using \hologo{XeLaTeX}}
 
-It is also possible to use other typesetting engines like Xe\LaTeX{} by using the global options provided by \pkg{tikzDevice}.  The following example was inspired by Dario Taraborelli and his article \href{http://nitens.org/taraborelli/latex}{The Beauty of LaTeX}.
+It is also possible to use other typesetting engines like \hologo{XeLaTeX} by
+using the global options provided by \pkg{tikzDevice}. The following example
+was inspired by Dario Taraborelli and his article
+\href{http://nitens.org/taraborelli/latex}{The Beauty of LaTeX}.
 
-\begin{tikzCodeBlock}[title={Xe\LaTeX{} Example},listing style=sweavechunk]
-#Set options for using XeLaTeX
-options(tikzLatex = 'xelatex')
-options(tikzDocumentDeclaration = '\\documentclass{article}')
-	# The preview package must be loaded first with the xetex driver option
-options( tikzLatexPackages = c(
-	"\\usepackage[active,tightpage,xetex]{preview}"
-	,"\\PreviewEnvironment{pgfpicture}"
-	,"\\setlength\\PreviewBorder{0pt}"
-	,"\\usepackage{fontspec}"
-	,"\\usepackage[colorlinks, breaklinks, pdftitle={The Beauty of LaTeX}," 	
-	,"pdfauthor={Taraborelli, Dario}]{hyperref}"
-	,"\\usepackage{tikz}"
-	,"\\usepackage{color}"
-	,"\\definecolor{Gray}{rgb}{.7,.7,.7}"
-	,"\\definecolor{lightblue}{rgb}{.2,.5,1}"
-	,"\\definecolor{myred}{rgb}{1,0,0}"
-	,"\\newcommand{\\red}[1]{\\color{myred} #1}"
-	,"\\newcommand{\\reda}[1]{\\color{myred}\\fontspec[Variant=2]{Zapfino}#1}"
-	,"\\newcommand{\\redb}[1]{\\color{myred}\\fontspec[Variant=3]{Zapfino}#1}"
-	,"\\newcommand{\\redc}[1]{\\color{myred}\\fontspec[Variant=4]{Zapfino}#1}"
-	,"\\newcommand{\\redd}[1]{\\color{myred}\\fontspec[Variant=5]{Zapfino}#1}"
-	,"\\newcommand{\\rede}[1]{\\color{myred}\\fontspec[Variant=6]{Zapfino}#1}"
-	,"\\newcommand{\\redf}[1]{\\color{myred}\\fontspec[Variant=7]{Zapfino}#1}"
-	,"\\newcommand{\\redg}[1]{\\color{myred}\\fontspec[Variant=8]{Zapfino}#1}"
-	,"\\newcommand{\\lbl}[1]{\\color{lightblue} #1}"
-	,"\\newcommand{\\lbla}[1]{\\color{lightblue}\\fontspec[Variant=2]{Zapfino}#1}"
-	,"\\newcommand{\\lblb}[1]{\\color{lightblue}\\fontspec[Variant=3]{Zapfino}#1}"
-	,"\\newcommand{\\lblc}[1]{\\color{lightblue}\\fontspec[Variant=4]{Zapfino}#1}"
-	,"\\newcommand{\\lbld}[1]{\\color{lightblue}\\fontspec[Variant=5]{Zapfino}#1}"
-	,"\\newcommand{\\lble}[1]{\\color{lightblue}\\fontspec[Variant=6]{Zapfino}#1}"
-	,"\\newcommand{\\lblf}[1]{\\color{lightblue}\\fontspec[Variant=7]{Zapfino}#1}"
-	,"\\newcommand{\\lblg}[1]{\\color{lightblue}\\fontspec[Variant=8]{Zapfino}#1}"
-	,"\\newcommand{\\old}[1]{"
-	,"\\fontspec[Ligatures={Common, Rare},Variant=1,%
-Swashes={LineInitial, LineFinal}]{Zapfino}"
-	,"\\fontsize{25pt}{30pt}\\selectfont #1}%"
-	,"\\newcommand{\\smallprint}[1]{\\fontspec{Hoefler Text}\\fontsize{10pt}{13pt}"%
-	,"\\color{Gray}\\selectfont #1}%\n"
-	))
+% `eval` normally set to `FALSE` as this example takes a long time to run and the
+% required fonts are only availble by default on OS X.
+<<xelatexFontVariantExample,keep.source=TRUE,echo=TRUE,eval=FALSE,results=hide>>=
+# Set options for using XeLaTeX font variants.
+options(tikzXelatexPackages = c(
+  getOption('tikzXelatexPackages'),
+  "\\usepackage[colorlinks, breaklinks]{hyperref}",
+  "\\usepackage{color}",
+  "\\definecolor{Gray}{rgb}{.7,.7,.7}",
+  "\\definecolor{lightblue}{rgb}{.2,.5,1}",
+  "\\definecolor{myred}{rgb}{1,0,0}",
+  "\\newcommand{\\red}[1]{\\color{myred} #1}",
+  "\\newcommand{\\reda}[1]{\\color{myred}\\fontspec[Variant=2]{Zapfino}#1}",
+  "\\newcommand{\\redb}[1]{\\color{myred}\\fontspec[Variant=3]{Zapfino}#1}",
+  "\\newcommand{\\redc}[1]{\\color{myred}\\fontspec[Variant=4]{Zapfino}#1}",
+  "\\newcommand{\\redd}[1]{\\color{myred}\\fontspec[Variant=5]{Zapfino}#1}",
+  "\\newcommand{\\rede}[1]{\\color{myred}\\fontspec[Variant=6]{Zapfino}#1}",
+  "\\newcommand{\\redf}[1]{\\color{myred}\\fontspec[Variant=7]{Zapfino}#1}",
+  "\\newcommand{\\redg}[1]{\\color{myred}\\fontspec[Variant=8]{Zapfino}#1}",
+  "\\newcommand{\\lbl}[1]{\\color{lightblue} #1}",
+  "\\newcommand{\\lbla}[1]{\\color{lightblue}\\fontspec[Variant=2]{Zapfino}#1}",
+  "\\newcommand{\\lblb}[1]{\\color{lightblue}\\fontspec[Variant=3]{Zapfino}#1}",
+  "\\newcommand{\\lblc}[1]{\\color{lightblue}\\fontspec[Variant=4]{Zapfino}#1}",
+  "\\newcommand{\\lbld}[1]{\\color{lightblue}\\fontspec[Variant=5]{Zapfino}#1}",
+  "\\newcommand{\\lble}[1]{\\color{lightblue}\\fontspec[Variant=6]{Zapfino}#1}",
+  "\\newcommand{\\lblf}[1]{\\color{lightblue}\\fontspec[Variant=7]{Zapfino}#1}",
+  "\\newcommand{\\lblg}[1]{\\color{lightblue}\\fontspec[Variant=8]{Zapfino}#1}",
+  "\\newcommand{\\old}[1]{",
+  "\\fontspec[Ligatures={Common, Rare},Variant=1,Swashes={LineInitial, LineFinal}]{Zapfino}",
+  "\\fontsize{25pt}{30pt}\\selectfont #1}%",
+  "\\newcommand{\\smallprint}[1]{\\fontspec{Hoefler Text}
+    \\fontsize{10pt}{13pt}\\color{Gray}\\selectfont #1}"
+))
 
-#Set the content using custom defined commands
-label <- c(  
-  "\\noindent{\\red d}roo{\\lbl g}"
-  ,"\\noindent{\\reda d}roo{\\lbla g}"
-  ,"\\noindent{\\redb d}roo{\\lblb g}"
-  ,"\\noindent{\\redf d}roo{\\lblf g}\\\\[.3cm]"
-  ,"\\noindent{\\redc d}roo{\\lblc g}"
-  ,"\\noindent{\\redd d}roo{\\lbld g}"
-  ,"\\noindent{\\rede d}roo{\\lble g}"
-  ,"\\noindent{\\redg d}roo{\\lblg g}\\\\[.2cm]")
+# Set the content using custom defined commands
+label <- c(
+  "\\noindent{\\red d}roo{\\lbl g}",
+  "\\noindent{\\reda d}roo{\\lbla g}",
+  "\\noindent{\\redb d}roo{\\lblb g}",
+  "\\noindent{\\redf d}roo{\\lblf g}\\\\[.3cm]",
+  "\\noindent{\\redc d}roo{\\lblc g}",
+  "\\noindent{\\redd d}roo{\\lbld g}",
+  "\\noindent{\\rede d}roo{\\lble g}",
+  "\\noindent{\\redg d}roo{\\lblg g}\\\\[.2cm]"
+)
 
-#Set the titles using custom defined commands, and hyperlinks
+# Set the titles using custom defined commands, and hyperlinks
 title <- c(
-    "\\smallprint{D. Taraborelli (2008), 
-      \\href{http://nitens.org/taraborelli/latex}%","{The Beauty of \\LaTeX}}"
-    ,"\\smallprint{\\\\\\emph{Some rights reserved}.% 
-    ,"\\href{http://creativecommons.org/licenses/by-sa/3.0/}
-      {\\textsc{cc-by-sa}}}"
-	)
-	
-#Draw the graphic
+paste(
+  "\\smallprint{D. Taraborelli (2008),",
+  "\\href{http://nitens.org/taraborelli/latex}",
+  "{The Beauty of \\LaTeX}}"
+), paste(
+  "\\smallprint{\\\\\\emph{Some rights reserved}.",
+  "\\href{http://creativecommons.org/licenses/by-sa/3.0/}",
+  "{\\textsc{cc-by-sa}}}"
+))
+
+# Draw the graphic
+tikz('xelatexEx.tex',
+  standAlone=TRUE,width=5,height=5,
+  engine = 'xetex')
 lim <- 0:(length(label)+1)
-tikz('xelatexEx.tex',standAlone=T,width=5,height=5)
-plot(lim,lim,cex=0,pch='.',xlab = 'Xe\\LaTeX{} Test',
-    ylab='', main = title[1], sub = title[2])
+plot(lim,lim,cex=0,pch='.',xlab = title[2],ylab='', main = title[1])
 for(i in 1:length(label))
-    text(i,i,label[i])
+  text(i,i,label[i])
 dev.off()
-\end{tikzCodeBlock}
+@
 
-Compiling the resulting file \code{xelatexEx.tex} like so:
-
-\begin{tikzCodeBlock}[title={Compiling with Xe\LaTeX{}},listing style=bashsource]
-xelatex xelatexEx.tex
-\end{tikzCodeBlock}
-
-will produce the output in \autoref{fig:xelatex}!  Please note some of the fonts used in the example may not be available on your system. 
+Compiling the resulting file with \hologo{XeLaTeX} will produce the output in
+\autoref{fig:xelatex}. Please note some of the fonts used in the example may
+not be available on every system.
 
 \begin{figure}[!h]
 \centering
-\includegraphics{img/testXeLaTeX.pdf}
-\caption{Result of Xe\LaTeX{} example}\label{fig:xelatex}
+\includegraphics{figs/xelatexEx.pdf}
+\caption{Result of \hologo{XeLaTeX} example}\label{fig:xelatex}
 \end{figure}
 
-\newpage
-\subsubsection{Annotating Graphics with \TikZ{} Commands}
 
-The function \code{tikzAnnotate} provides the ability to annotate you graphics with \TikZ{} commands.  There are a lot of exciting possibilities with this feature; It basically opens up the door for you to draw anything on your plot that can be drawn with \TikZ{}. Check out the results in \autoref{fig:annotation}.
+\subsection{Annotating Graphics with \TikZ\ Commands}
 
-<<annotation,echo=T,results=hide,keep.source=T>>=
+The function \code{tikzAnnotate} provides the ability to annotate you graphics
+with \TikZ\ commands.  There are a lot of exciting possibilities with this
+feature---it basically opens up the door for you to draw anything on your plot
+that can be drawn with \TikZ. Check out the results in
+\autoref{fig:annotation}.
+
+<<annotation,echo=TRUE,results=hide,keep.source=TRUE>>=
 require(tikzDevice)
 
 # Load some additional TikZ libraries
@@ -1008,15 +1236,15 @@ dev.off()
 \begin{figure}[!h]
 \centering
 \input{figs/annotation.tex}
-\caption{An example using \TikZ{} annotation.}\label{fig:annotation}
+\caption{An example using \TikZ\ annotation.}\label{fig:annotation}
 \end{figure}
 
 \begin{landscape}
 
-\subsubsection{\code{tikz()} vs. \code{pdf()} for \code{plotmath} symbols and Unicode characters}
+\subsection{\pkgopt{tikz} vs. \pkgopt{pdf} for \pkgopt{plotmath} symbols and Unicode characters}
 
 This is a side-by-side example showing how \code{tikz(..., engine = 'xetex')} handles UTF-8
-characters and plotmath symbols compared to the standard R \code{pdf()} device.
+characters and plotmath symbols compared to the standard R \code{pdf} device.
 
 \begin{figure}[!h]
 \centering
@@ -1033,20 +1261,25 @@ characters and plotmath symbols compared to the standard R \code{pdf()} device.
 
 \end{landscape}
 
-% Return to the normal working directory
 <<pathStepOut,results=hide>>=
+  # Return to the normal working directory.
 	setwd('../')
 @
 
-%----------------------------  text metrics function documentation ---------------------------------------
 
-\section{The \code{getLatexCharMetrics()} and \code{getLatexStrWidth()} Functions}
+% -----------------------------------------------------------------------------
+%                      Chapter 4: The Metrics Functions
+% -----------------------------------------------------------------------------
+\chapter{The \pkgopt{getLatexCharMetrics} and \pkgopt{getLatexStrWidth} Functions}
 
-\subsection{Description}
+\section{Description}
 
-These two functions may be used to retrieve font metrics through the interface provided by the \pkg{tikzDevice} package. Cached values of the metrics are returned if they have been calculated by the \pkg{tikzDevice} before. If no cached values exist, the \LaTeX{} compiler will be invoked to generate them.
+These two functions may be used to retrieve font metrics through the interface
+provided by the \pkg{tikzDevice} package. Cached values of the metrics are
+returned if they have been calculated by the \pkg{tikzDevice} before. If no
+cached values exist, a \LaTeX\ compiler will be invoked to generate them.
 
-\subsection{Usage}
+\section{Usage}
 
 The font metric functions are called as follows:
 
@@ -1056,24 +1289,42 @@ getLatexStrWidth( texString, cex = 1, face= 1)
 getLatexCharMetrics( charCode, cex = 1, face = 1 )
 \end{Verbatim}
 
-\begin{description}
-\item[\code{texString}]{ A string for which to compute the width. \LaTeX{} commands may be used in the string, however all backslashes will need to be doubled.}
-\item[\code{charCode}]{ An integer between 32 and 126 which indicates a printable character in the ASCII symbol table using the T1 font encoding. }
-\item[\code{cex}]{ The character expansion factor to be used when determining metrics. }
-\item[\code{face}]{ An integer specifying the \lang{R} font face to use during metric calculations. The accepted values are as follows: 
-	\begin{description}
-		\item[1:]{Text should be set in normal font face.}
-		\item[2:]{Text should be set in {\bfseries bold font face}.}
-		\item[3:]{Text should be set in {\itshape italic font face}.}
-		\item[4:]{Text should be set in {\bfseries\itshape bold italic font face}.}
-		\item[5:]{Text should be interpreted as \code{plotmath} symbol characters. Requests for font face 5 are currently ignored.}
-	\end{description}
-	}
-\end{description}
+\begin{flexlabelled}{code}{*}{0.5em}{0.5em}{*}{\leftmargin}
+  \item[texString]
+    A string for which to compute the width. \LaTeX\ commands may be used in
+    the string, however all backslashes will need to be doubled.
 
-\subsection{Examples}
+  \item[charCode]
+    An integer between 32 and 126 which indicates a printable character in the
+    ASCII symbol table using the T1 font encoding.
 
-The \code{getLatexStrWidth()} function may be used to calculate the width of strings containing fairly arbitrary \LaTeX{} commands. For example, consider the following calculations:
+  \item[cex]
+    The character expansion factor to be used when determining metrics.
+
+  \item[face]
+    An integer specifying the \pkg{R} font face to use during metric
+    calculations. The accepted values are as follows:
+
+    \begin{description}
+      \item[1:]
+        Text should be set in normal font face.
+      \item[2:]
+        Text should be set in {\bfseries bold font face}.
+      \item[3:]
+        Text should be set in {\itshape italic font face}.
+      \item[4:]
+        Text should be set in {\bfseries\itshape bold italic font face}.
+      \item[5:]
+        Text should be interpreted as \code{plotmath} symbol characters.
+        Requests for font face 5 are currently ignored.
+    \end{description}
+\end{flexlabelled}
+
+\section{Examples}
+
+The \code{getLatexStrWidth} function may be used to calculate the width of
+strings containing fairly arbitrary \LaTeX\ commands. For example, consider
+the following calculations:
 
 
 <<strWidthDemo,echo=T>>=
@@ -1081,21 +1332,32 @@ getLatexStrWidth( "The symbol: alpha" )
 getLatexStrWidth( "The symbol: $\\alpha$" )
 @
 
-For the first calculation, the word ``alpha" was interpreted as just a word and the widths of the characters `a', `l', `p', `h' and `a' were included in the string width. For the second string, \verb`\alpha` was interpreted as a mathematical symbol and only the width of the symbol `$\alpha$' was included in the string width.
+For the first calculation, the word ``alpha" was interpreted as just a word and
+the widths of the characters `a', `l', `p', `h' and `a' were included in the
+string width. For the second string, \verb|\alpha| was interpreted as a
+mathematical symbol and only the width of the symbol `$\alpha$' was included in
+the string width.
 
-The \code{getLatexCharWidth()} function must be passed an integer corresponding to an ASCII character code and returns three values:
+The \code{getLatexCharWidth} function must be passed an integer corresponding
+to an ASCII character code and returns three values:
 
-	\begin{itemize}
-		
-		\item{The \code{ascent} of the character- the distance between the baseline and the highest point of the character's glyph.}
-		
-		\item{The \code{descent} of the character- the distance between the baseline and the lowest point of the character's glyph.}
-		
-		\item{The width of the character.}
+\begin{itemize}
+  \item
+    The \code{ascent} of the character. This is the distance between the
+    baseline and the highest point of the character's glyph.
 
-	\end{itemize}
-	
-The character `y' has an \code{ASCII} symbol code of 121 and possesses a tail that descends below the text line. Therefore a non-zero value will be returned for the descent of `y'. The character `x', \code{ASCII} code 120, has no descenders, so its descent will be returned as zero.
+  \item
+    The \code{descent} of the character. This is the distance between the baseline and
+    the lowest point of the character's glyph.
+
+  \item
+    The width of the character.
+\end{itemize}
+
+The character `y' has an \code{ASCII} symbol code of 121 and possesses a tail
+that descends below the text line. Therefore a non-zero value will be returned
+for the descent of `y'. The character `x', \code{ASCII} code 120, has no
+descenders, so its descent will be returned as zero.
 
 <<charMetricDemo,echo=T,keep.source=T>>=
 # Get metrics for 'y'
@@ -1106,7 +1368,10 @@ getLatexCharMetrics(121)
 getLatexCharMetrics(120)
 @
 
-Note that characters, along with numbers outside the range of [32-126], may not be passed to the \nolinebreak\code{getLatexCharMetrics()}  function. If for some reason a floating point number is passed, it will be floored through conversion by \code{as.integer()}.
+Note that characters, along with numbers outside the range of [32--126], may not
+be passed to the \nolinebreak\code{getLatexCharMetrics}  function. If for
+some reason a floating point number is passed, it will be floored through
+conversion by \code{as.integer}.
 
 <<charMetricErrors,echo=T,keep.source=T>>=
 getLatexCharMetrics('y')
@@ -1117,123 +1382,262 @@ getLatexCharMetrics(121.99)
 @
 
 
-\newpage
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \part{Installation Guide}
-\label{part:two}
+  \label{part:installation}
 
-This section is intended to offer pointers on how to obtain a \LaTeX{} distribution if there is not one already installed on your system. The distributions detailed in this section are favorites of the \pkg{tikzDevice} developers as they integrated package managers which greatly simplify the process of installing additional \LaTeX{} packages. Currently this section is not, and may never be, a troubleshooting guide for \LaTeX{} installation. For those unfortunate situations we refer the user to the documentation of each distribution.
+\chapter{Obtaining a \LaTeX\ Distribution}
 
-\section{Obtaining a \LaTeX{} Distribution}
+This section offers pointers on how to obtain a \LaTeX\ distribution if there
+is not one already installed on your system. The distributions detailed in this
+section are favorites of the \pkg{tikzDevice} developers as they provide integrated
+package managers which greatly simplify the process of installing additional
+\LaTeX\ packages. Currently this section is not, and may never be, a
+troubleshooting guide for \LaTeX\ installation. For those unfortunate
+situations we refer the user to the documentation of each distribution.
 
-A \LaTeX{} distribution provides the packages and support programs required by the \pkg{tikzDevice} and the documents that use its output. In addition a \LaTeX{} compiler, a few extension packaged are required. \autoref{tikz:required} describes how to obtain and install these packages.
+A \LaTeX\ distribution provides the packages and support programs required by
+the \pkg{tikzDevice} and the documents that use its output. In addition to a
+\LaTeX\ compiler, a few extension packages are required.
+\autoref{tikz:required} describes how to obtain and install these packages.
 
-\subsection{Windows}
+\section{Windows}
 
-Windows users will probably prefer the MiKTeX distribution available at \url{http://www.miktex.org}. An amazing feature of the MiKTeX distribution is that it contains a package manager that will attempt to install missing packages on-the-fly. Normally when \LaTeX{} is compiling a document that tries to load a missing package it will wipe out with a warning message. When the MiKTeX compilers are used compilation will be suspended while the new package is downloaded.
+Windows users will probably prefer the MiKTeX distribution available at
+\url{http://www.miktex.org}. An amazing feature of the MiKTeX distribution is
+that it contains a package manager that will attempt to install missing
+packages on-the-fly. Normally when \LaTeX\ is compiling a document that tries
+to load a missing package it will wipe out with a warning message. When the
+MiKTeX compilers are used compilation will be suspended while the new package
+is downloaded.
 
 % Perhaps a mention of the new portable MiKTeX distribution that can be run off
 % of a thumbdrive? I haven't used it yet so I don't feel qualified to discuss it at this
 % time.
 
 
-\subsection{UNIX/Linux}
+\section{UNIX/Linux}
 
-For users running a Linux or UNIX operating system, we recommend the TeX Live distribution which is available at \url{http://www.tug.org/texlive/acquire.html}. TeX Live is maintained by the TeX Users Group and a new version is released every year. Note that the version of TeX Live provided by many Linux package management systems is the 2007 version. We recommend using TeX Live 2008 or higher as the \code{tlmgr} package manager was introduced in the 2008 distribution. Using \code{tlmgr} greatly simplifies the adding and removing packages from the distribution. The website offers an installation package, called \code{install-tl.tar.gz} or something similar, that contains a shell script that can be used to install an up-to-date version of the TeX Live distribution.
+For users running a Linux or UNIX operating system, we recommend the TeX Live
+distribution which is available at
+\url{http://www.tug.org/texlive/acquire.html}. TeX Live is maintained by the
+TeX Users Group and a new version is released every year. Note that the version
+of TeX Live provided by many Linux package management systems is the 2007
+version. We recommend using TeX Live 2008 or higher as the \code{tlmgr} package
+manager was introduced in the 2008 distribution. Using \code{tlmgr} greatly
+simplifies the adding and removing packages from the distribution. The website
+offers an installation package, called \code{install-tl.tar.gz} or something
+similar, that contains a shell script that can be used to install an up-to-date
+version of the TeX Live distribution.
 
-\subsection{Mac OS X}
+\section{Mac OS X}
 
-For users running Apple's OS X, we recommend the Mac TeX package available at \url{http://www.tug.org/mactex/}. Mac TeX is basically TeX Live packaged inside a convenient OS X installer along with a few add-on packages. One striking difference between the Mac TeX and TeX Live installers is that the installer for Mac TeX includes the whole TeX Live distribution in the initial download- for TeX Live 2008 this amounts to approximately 1.2 GB. This is quite a large download that contains several packages that the average or even advanced user will never ever use. To conserve time and space we recommend installing from the basic installer at \url{http://www.tug.org/mactex/morepackages.html} and using the \code{tlmgr} utility to add desired add-on packages.
+For users running Apple's OS X, we recommend the Mac TeX package available at
+\url{http://www.tug.org/mactex/}. Mac TeX is basically TeX Live packaged inside
+a convenient OS X installer along with a few add-on packages. One striking
+difference between the Mac TeX and TeX Live installers is that the installer
+for Mac TeX includes the whole TeX Live distribution in the initial download-
+for TeX Live 2008 this amounts to approximately 1.2 GB. This is quite a large
+download that contains several packages that the average or even advanced user
+will never ever use. To conserve time and space we recommend installing from
+the basic installer at \url{http://www.tug.org/mactex/morepackages.html} and
+using the \code{tlmgr} utility to add desired add-on packages.
 
-Adam R. Maxwell has created a very nice graphical interface to \code{tlmgr} for OS X called the TeX Live Utility. It may be obtained from \url{http://code.google.com/p/mactlmgr/} and we highly recommend it.
+Adam R. Maxwell has created a very nice graphical interface to \code{tlmgr} for
+OS X called the TeX Live Utility. It may be obtained from
+\url{http://code.google.com/p/mactlmgr/} and we highly recommend it.
 
 
-\section{Installing \TikZ{} and Other Packages}
-\label{tikz:required}
+\section{Installing \TikZ\ and Other Packages}
+  \label{tikz:required}
 
-Unsurprisingly, \pkg{tikzDevice} requires the \TikZ{} package to be installed and available in order to function properly. \TikZ{} is an abstraction of a lower-level graphics language called \lang{PGF} and both are distributed as the the \code{pgf} package. 
+Unsurprisingly, \pkg{tikzDevice} requires the \TikZ\ package to be installed
+and available in order to function properly. \TikZ\ is an abstraction of a
+lower-level graphics language called \lang{PGF} and both are distributed as the
+the \code{pgf} package. Users who do no have a full \TeX\ installation will
+also need to install a few more required packages:
+
+\begin{flexlabelled}{pkg}{0pt}{0.5em}{0.5em}{*}{\leftmargin}
+
+    \item[pgf]{As mentioned, provides \TikZ.}
+    \item[preview]{Used to crop documents in order to produce standalone figures.}
+    \item[ms]{A bundle of internally-used utility functions. Provides \code{everyshi.sty}.}
+    \item[xcolor]{Used by \TikZ\ to specify colors.}
+    \item[fontspec]{Used by \hologo{LuaTeX} and \hologo{XeTeX} to select fonts.}
+    \item[xunicode]{Assists \hologo{LuaTeX} and \hologo{XeTeX} with UTF-8 characters.}
+
+\end{flexlabelled}
 
 
-\subsection{Using a \LaTeX{} Package Manager}
+\subsection{Using a \LaTeX\ Package Manager}
 
-The easiest way to install \LaTeX{} packages is by using a distribution that includes a package manager such as MiKTeX or TeX Live/Mac TeX. For Windows users, the MiKTeX package manager usually handles package installation automagically during compilation of a document that is requesting a missing package. The MiKTeX package manager, \code{mpm}, can also be run manually from the command prompt:
+The easiest way to install \LaTeX\ packages is by using a distribution that
+includes a package manager such as MiKTeX or TeX Live/Mac TeX. For Windows
+users, the MiKTeX package manager usually handles package installation
+automagically during compilation of a document that is requesting a missing
+package. The MiKTeX package manager, \code{mpm}, can also be run manually from
+the command prompt:
 
-\begin{tikzCodeBlock}[title={Using \code{mpm} to install packages},listing style=bashsource,code body/.append style={codebody color=white}]
+\begin{tikzCodeNode}[title={Using \code{mpm} to install packages},listing style=bashsource,code body/.append style={codebody color=white}]
 mpm --install packagename
-\end{tikzCodeBlock}
+\end{tikzCodeNode}
 
-For versions of TeX Live and Mac TeX dated 2008 or newer, the \code{tlmgr} package manager is used in an almost identical manner:
+For versions of TeX Live and Mac TeX dated 2008 or newer, the \code{tlmgr}
+package manager is used in an almost identical manner:
 
-\begin{tikzCodeBlock}[title={Using \code{tlmgr} to install packages},listing style=bashsource,code body/.append style={codebody color=white}]
+\begin{tikzCodeNode}[title={Using \code{tlmgr} to install packages},listing style=bashsource,code body/.append style={codebody color=white}]
 tlmgr install packagename
-\end{tikzCodeBlock}
+\end{tikzCodeNode}
 
 \subsection{Manual Installation}
 
-Sometimes an automated package manager cannot be used. Common reasons may be that one is not available, as is the case with the TeX Live 2007 distribution, or that when running the package manager you do not have write access to the location where \LaTeX{} packages are stored, as is the case with accounts on shared computers. If this is the case, a manual install may be the best option for making a \LaTeX{} package available.
+Sometimes an automated package manager cannot be used. Common reasons may be
+that one is not available, as is the case with the TeX Live 2007 distribution,
+or that when running the package manager you do not have write access to the
+location where \LaTeX\ packages are stored, as is the case with accounts on
+shared computers. If this is the case, a manual install may be the best option
+for making a \LaTeX\ package available.
 
-Generally, the best place to find \LaTeX{} packages is the Comprehensive TeX Archive Network, or \lang{CTAN} located at \url{http://www.ctan.org}. In the case of the PGF/\TikZ{} package, the project homepage at \url{http://www.sourceforge.net/projects/pgf} is also a good place to obtain the package- especially if you would like to play with the bleeding-edge development version.
+Generally, the best place to find \LaTeX\ packages is the Comprehensive TeX
+Archive Network, or \lang{CTAN} located at \url{http://www.ctan.org}. In the
+case of the PGF/\TikZ\ package, the project homepage at
+\url{http://www.sourceforge.net/projects/pgf} is also a good place to obtain
+the package- especially if you would like to play with the bleeding-edge
+development version.
 
-Generally speaking, all \LaTeX{} packages are stored in a specially directory called a \code{texmf} folder. Most \TeX{} distributions allow for each user to have their own personal  \code{texmf} folder somewhere in their home path. The most usual locations, and here {\bfseries\itshape usual} is and unfortunately loose term, are as follows:
+Generally speaking, all \LaTeX\ packages are stored in a specially directory
+called a \code{texmf} folder. Most \TeX\ distributions allow for each user to
+have their own personal  \code{texmf} folder somewhere in their home path. The
+most usual locations, and here {\bfseries\itshape usual} is an unfortunately
+loose term, are as follows:
 
-\begin{tikzCodeBlock}[title={For UNIX/Linux},listing style=bashsource,code body/.append style={codebody color=white}]
+\begin{tikzCodeNode}[title={For UNIX/Linux},listing style=bashsource,code body/.append style={codebody color=white}]
 ~/texmf
-\end{tikzCodeBlock}
+\end{tikzCodeNode}
 
-\begin{tikzCodeBlock}[title={For Mac OS X},listing style=bashsource,code body/.append style={codebody color=white}]
+\begin{tikzCodeNode}[title={For Mac OS X},listing style=bashsource,code body/.append style={codebody color=white}]
 ~/Library/texmf
-\end{tikzCodeBlock}
+\end{tikzCodeNode}
 
-\begin{tikzCodeBlock}[title={For Windows, using MiKTeX},listing style=bashsource,code body/.append style={codebody color=white}]
+\begin{tikzCodeNode}[title={For Windows, using MiKTeX},listing style=bashsource,code body/.append style={codebody color=white}]
 # None predefined. However the following command will open
 # the MiKTeX options panel and a new texmf folder may be assigned
 # under the "Roots" tab.
 mo
-\end{tikzCodeBlock}
+\end{tikzCodeNode}
 
 
-The location of files and subfolders in the \code{texmf} directory should follow a standard pattern called the \TeX{} Directory Structure or TDS which is documented here: \url{http://tug.org/tds/tds.pdf}. Fortunately, most packages available on \lang{CTAN} are archived in such a way that they will unpack into a TDS-complient configuration. TDS-complient archives usually have the phrase \code{tds} somewhere in their filename and may be installed from a UNIX shell\footnote{Sorry Windows users, we enjoy using command prompt about as much as a poke in the eye with a sharp stick. Hence we don't use it enough to offer advice. May we suggest \href{http://www.cygwin.com}{Cygwin}?} like so:
+The location of files and subfolders in the \code{texmf} directory should
+follow a standard pattern called the \TeX\ Directory Structure or TDS which is
+documented here: \url{http://tug.org/tds/tds.pdf}. Fortunately, most packages
+available on \pkg{CTAN} are archived in such a way that they will unpack into
+a TDS-complient configuration. TDS-complient archives usually have the phrase
+\code{tds} somewhere in their filename and may be installed from a UNIX
+shell\footnote{Sorry Windows users, we enjoy using command prompt about as much
+as a poke in the eye with a sharp stick. Hence we don't use it enough to offer
+advice. May we suggest \href{http://www.cygwin.com}{Cygwin}?} like so:
 
-\begin{tikzCodeBlock}[title={Installing \LaTeX{} package archives},listing style=bashsource,code body/.append style={codebody color=white}]
+\begin{tikzCodeNode}[title={Installing \LaTeX{} package archives},listing style=bashsource,code body/.append style={codebody color=white}]
 # For zip files.
 unzip package.tds.zip -d /path/to/texmf
 
 # For tarballs.
 tar -xzf -C /path/to/texmf package.tar.gz
-\end{tikzCodeBlock}
+\end{tikzCodeNode}
 
-For packages that aren't provided in TDS-complient form look for installation notes- usually provided in the form of an \code{INSTALL} file. If all else fails \LaTeX{} packages can usually be installed by copying the files ending in \code{.sty} to \code{texmf/tex/latex/}.
+For packages that aren't provided in TDS-complient form look for installation
+notes- usually provided in the form of an \code{INSTALL} file. If all else
+fails \LaTeX\ packages can usually be installed by copying the files ending in
+\code{.sty} to \code{texmf/tex/latex/}.
 
-After package files have been unpacked to a \code{texmf} folder, the database of installed packages needs to be updated for the \LaTeX{} compiler to take notice of the additions. This is done with the \code{mktexlsr} command:
+After package files have been unpacked to a \code{texmf} folder, the database
+of installed packages needs to be updated for the \LaTeX\ compiler to take
+notice of the additions. This is done with the \code{mktexlsr} command:
 
-\begin{tikzCodeBlock}[title={Registering new \LaTeX{} packages},listing style=bashsource,code body/.append style={codebody color=white}]
+\begin{tikzCodeNode}[title={Registering new \LaTeX{} packages},listing style=bashsource,code body/.append style={codebody color=white}]
 mktexlsr
 
-# Successful package installation can be checked by running the 
+# Successful package installation can be checked by running the
 # kpsewhich command. For a package accessed in a document
 # by \usepackage{package}, kpsewhich should return a path to
 # package.sty
 kpsewhich tikz.sty
 !out/Users/Smithe/Library/texmf/tex/latex/pgf/frontendlayer/tikz.sty!/out
-\end{tikzCodeBlock}
+\end{tikzCodeNode}
 
-\newpage
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Listing commands cannot be saved in macros, so we execute them here and stash
+% the output in a box.
+\newsavebox{\programflow}
+\begin{lrbox}{\programflow}
+\begin{tikzpicture}
+
+  \node[text width = 4.3in] (r code) {
+    \begin{tikzCodeNode}[title={R User Types}, listing style=sweavechunk]
+tikz('Rplot.tex')
+plot(1)
+dev.off()
+    \end{tikzCodeNode}
+  };
+
+  \node[below = \baselineskip of r code, text width = 4.3in] (c code) {
+    \begin{tikzCodeNode}[title={TikZ Device Translates}, listing style = csource]
+static void TikZ_Circle( double x, double y, double r,
+    const pGEcontext plotParams, pDevDesc deviceInfo){
+
+...
+
+  printOutput(tikzInfo,"\n\\path[");
+  TikZ_WriteDrawOptions(plotParams, deviceInfo, ops);
+
+  /* End options, print coordinates. */
+  printOutput(tikzInfo, "] (%6.2f,%6.2f) circle (%6.2f);\n",
+    x,y,r);
+}
+    \end{tikzCodeNode}
+  };
+
+  \node[below = \baselineskip of c code, text width = 4.3in] (latex code) {
+    \begin{tikzCodeNode}[title={\LaTeX\ Output is Produced}, listing style = latexexample]
+% Created by tikzDevice
+% !TEX encoding = UTF-8 Unicode
+\begin{tikzpicture}[x=1pt,y=1pt]
+
+...
+
+\path[draw=drawColor,line width= 0.4pt,
+  line join=round,line cap=round]
+  (264.94,258.95) circle (  2.25);
+
+...
+
+\end{tikzpicture}
+    \end{tikzCodeNode}
+  };
+
+\end{tikzpicture}
+\end{lrbox}
+
+
+\partimage{
+ \node[above left = 1in of current page.south east,
+   anchor = south east,
+   scale = 1.25
+ ]
+   % Here we use the box containing the output.
+   {\usebox{\programflow}};
+}
+
 \part{Package Internals}
-\label{part:three}
+  \label{part:implementation}
 
 \epigraph{We will encourage you to develop the three great virtues of a programmer: {\itshape laziness}, {\itshape impatience}, and {\itshape hubris}.}{{\itshape Programming Perl}\\ --{\scshape Larry Wall}}
 
-\section{Introduction and Background}
+\chapter{Introduction and Background}
 
-% A friendly reminder that this portion of the documen-scratch that, ravings may be more % incoherent and crazy than the preceding sections..
-\tikzDocDisclaim{Caveat Lector}
-{
-The following introduction currently presents a \sout{vision}(delusion?) of what this section of the documentation could be. Currently the only portion of the inner workings of this package that we attempt to explain and document are those related to using the \LaTeX{} compiler to obtain font metrics.
-}
 
 We learn best through working with examples. When it comes to programming languages this involves taking working code that someone else has written, breaking it in as many places at it can possibly be broken, and then trying to build something out of the wreckage. Open source software facilitates this process wonderfully by ensuring the source code of a project is always available for inspection and experimentation. The \pkg{tikzDevice} its self was created by disassembling and then rebuilding Valerio Aimale's Pic\TeX{} device driver which is a part of the \lang{R} core codebase.
 
@@ -1251,7 +1655,7 @@ We wish you luck!\\
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Anatomy of an \lang{R} Graphics Device}
+\chapter{Anatomy of an \lang{R} Graphics Device}
 
 The core of an \lang{R} graphics device is a collection of functions, written in C, that perform various specialized tasks. A description of some of these functions can be found in the {\itshape R Internals} manual while the main documentation is in the C header file \code{GraphicsDevice.h}. For most \lang{R} installations this header file can be found in the directory \code{R\_HOME/include/R\_ext}. For copies of \lang{R} distributed in source code form, \code{GraphicsDevice.h} is located inside \code{R-version/src/include/R\_ext}. The following is a description of the functions each graphics device is expected to provide:
 
@@ -1261,7 +1665,7 @@ The core of an \lang{R} graphics device is a collection of functions, written in
 \begin{multicols}{2}
 
 
-\subsection*{Drawing Routines}
+\section{Drawing Routines}
 
 \begin{itemize}
 
@@ -1281,7 +1685,7 @@ The core of an \lang{R} graphics device is a collection of functions, written in
 
 \end{itemize}
 
-\subsection*{Font Metric Routines}
+\section{Font Metric Routines}
 
 \begin{itemize}
 
@@ -1291,7 +1695,7 @@ The core of an \lang{R} graphics device is a collection of functions, written in
 
 \end{itemize}
 
-\subsection*{Utility Routines}
+\section{Utility Routines}
 
 \begin{itemize}
 
@@ -1315,7 +1719,7 @@ The core of an \lang{R} graphics device is a collection of functions, written in
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Calculating Font Metrics}
+\chapter{Calculating Font Metrics}
 
 Font metrics are measurements associated with the glyphs, or printed characters, of a particular font. \lang{R} requires three of these metrics in order to produce correctly aligned output. The three metrics graphics devices are required to supply are:
 
@@ -1488,7 +1892,7 @@ The last portion of the code chunk is responsible for loading the function name 
 
 When dealing with a vector \code{SEXP} such as \code{RCallBack}, which has 2 slots, we need to use a different function to access the second slot. The \code{CDR} function will allow us to move to the second slot in \code{RCallBack} where we may perform a \code{SETCAR} to specify a value. In the example code, these operations were combined by using the \code{SETCADR} function which has the same effect as:
 
-\begin{tikzCodeBlock}[no break=true,listing style=sweavechunk]
+\begin{tikzCodeBlock}[listing style=sweavechunk]
 SETCAR( CDR(RCallBack), ScalarInteger( c ) );
 \end{tikzCodeBlock}
 
@@ -1697,7 +2101,7 @@ Here we use the \code{grep} function to search through the log output for the ta
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{On the Importance of Font and Style Consistency in Reports}
+\chapter{On the Importance of Font and Style Consistency in Reports}
 If you haven't figured it out by now, we are quite picky about the way our graphics and reports look.  We are especially picky about the consistency in fonts (both sizes and shapes).  Without launching into a diatribe about this, we just want to say with tools like \pkg{tikzDevice} you no longer have to settle for what is ``just okay.'' So go nuts, be picky about how your text and graphics look.  Don't be afraid to snub your nose at reports which pay no attention to detail.  Be that person who says ``NO! I wont settle for half rate graphics, I want the best!''
 
 \section{The \pkg{pgfSweave} Package and Automatic Report Generation}
