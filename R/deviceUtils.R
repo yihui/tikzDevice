@@ -14,20 +14,16 @@ getDocumentPointsize <- function( docString ){
   # scaling factors and is stored at the C level in the
   # startps component of the pDevDesc structure. 
 
-  # Search the document declaration for the pointsize.
-  psLocation <- regexpr( '\\<\\d+pt\\>', docString, ignore.case = T, perl = T )
+  # Search the document declaration for the pointsize, and extract it if it is
+  # there.
+  pointsize <- gsub( '^(?:.*[[, \t](\\d+)pt[], \t])?.*$', '\\1', docString,
+                     ignore.case = F, perl = T )
 
-  # If there were no matches, regexpr() returns -1 and this
-  # function returns NA.
-  if( psLocation == -1 ){
+  if( pointsize == "" ){
 
     return( NA )
 
   } else {
-
-    # Extract and return the pointsize.
-    pointsize <- substr( docString, psLocation,
-      psLocation + attr( psLocation, 'match.length') - 3 )
 
     return( as.numeric( pointsize ) )
 
