@@ -675,22 +675,22 @@ cat(formatR::usage(tikz), file="tikzFormals.tex")
     equivalent to setting \code{console=TRUE}.
 
   \item[sanitize]
-    Should special latex characters be replaced (Default \code{FALSE}). See the
-    section ``Options That Affect Package Behavior'' for which characters are
-    replaced.
+    Should special latex characters be replaced (Default \code{FALSE}). See
+    \autoref{sec:options}, ``Options That Affect Package Behavior''
+    for which characters are replaced.
 
   \item[engine]
     A string specifying which TeX engine to use. Possible values are
     \code{'pdftex'}, \code{'xetex'} and \code{'luatex'}.
 
   \item[documentDeclaration]
-    See Section \ref{sec:options}, ``Options That Affect Package Behavior.''
+    See \autoref{sec:options}, ``Options That Affect Package Behavior.''
 
   \item[packages]
-    See Section \ref{sec:options}, ``Options That Affect Package Behavior.''
+    See \autoref{sec:options}, ``Options That Affect Package Behavior.''
 
   \item[footer]
-    See Section \ref{sec:options}, ``Options That Affect Package Behavior.''
+    See \autoref{sec:options}, ``Options That Affect Package Behavior.''
 \end{flexlabelled}
 
 The first six options should be familiar to anyone who has used the default
