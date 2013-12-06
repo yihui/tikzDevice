@@ -1251,11 +1251,6 @@ characters and plotmath symbols compared to the standard \lang{R} \code{pdf} dev
 
 \end{landscape}
 
-<<pathStepOut,results=hide>>=
-  # Return to the normal working directory.
-	setwd('../')
-@
-
 
 % -----------------------------------------------------------------------------
 %                      Chapter 4: The Metrics Functions
