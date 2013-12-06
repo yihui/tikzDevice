@@ -483,7 +483,7 @@ options(tikzMetricsDictionary = '/path/to/dictionary/location')
 
 \subsection{The \pkgopt{tikzDocumentDeclaration} Option}
 
-\code{standAlone == TRUE}. \code{tikzDocumentDeclaration} also influences the
+For \code{standAlone == TRUE}, \code{tikzDocumentDeclaration} also influences the
 calculation of font metrics. If a base font size is specified as an option to
 the document class, the \pkg{tikzDevice} will use this value as the base font
 size for graphics.
@@ -588,7 +588,7 @@ options(
 \subsection{The \pkgopt{tikzRasterResolution} Option}
 
 When \code{tikz} is requested to add a raster to a graphic, the raster is
-written to a PNG file which is then included into the \LaTeX\ code. This option
+written to a PNG file which is then included by the \LaTeX\ code. This option
 controls the resolution (dpi) at which the PNG files are created.
 
 \begin{tikzCodeBlock}[title={Default},listing style=sweavechunk]
@@ -676,7 +676,7 @@ function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
   \item[console]
     Controls whether output is directed to the \pkg{R} console. This is useful
     for dumping \TikZ\ output directly into a \LaTeX\ document via sink. If
-    \code{TRUE}, the \code{file} argument is ignored. Setting \code{file=''} is
+    \code{TRUE}, the \code{file} argument is ignored. Setting \code{file=\'{}\'{}} is
     equivalent to setting \code{console=TRUE}.
 
   \item[sanitize]
@@ -756,13 +756,11 @@ The calculation used is:
 The tricky bit is the specification of the ``base font size''. By default the
 \pkg{tikzDevice} will attempt to determine this parameter by scanning the value of
 \code{options( "tikzDocumentDeclaration" )} using the regular expression
-\code{\textbackslash d+[pt]}. With the default header:
-
+\code{\textbackslash d+pt}. With the default header:
 \[
-  \mbox{\code{\textbackslash documentclass[10pt]{article}}}
+  \mbox{\code{\textbackslash documentclass[10pt]\{article\}}}
 \]
-
-This regular expression will return 10 as the base pointsize to be used by the
+this regular expression will return 10 as the base pointsize to be used by the
 device. If the regular expression fails to produce a match, the value of the
 \code{pointsize} argument to the \code{tikz} function will be used.
 
@@ -779,7 +777,7 @@ a few important caveats:
   \item[System Requirements:]
     A working version of \hologo{XeLaTeX} or \hologo{LuaLaTeX}  along with the
     packages \code{fontspec} and \code{xunicode} are required for direct
-    processing of Unicode input. If \pkg{tikzDevice} cannot find unicode-aware
+    processing of Unicode input. If \pkg{tikzDevice} cannot find a Unicode-aware
     compiler, then Unicode support cannot be guaranteed.
 
   \item[Encoding:]
@@ -1531,7 +1529,7 @@ The location of files and subfolders in the \code{texmf} directory should
 follow a standard pattern called the \TeX\ Directory Structure or TDS which is
 documented here: \url{http://tug.org/tds/tds.pdf}. Fortunately, most packages
 available on \pkg{CTAN} are archived in such a way that they will unpack into
-a TDS-complient configuration. TDS-complient archives usually have the phrase
+a TDS-compliant configuration. TDS-compliant archives usually have the phrase
 \code{tds} somewhere in their filename and may be installed from a UNIX
 shell\footnote{Sorry Windows users, we enjoy using command prompt about as much
 as a poke in the eye with a sharp stick. Hence we don't use it enough to offer
@@ -1545,7 +1543,7 @@ unzip package.tds.zip -d /path/to/texmf
 tar -xzf -C /path/to/texmf package.tar.gz
 \end{tikzCodeNode}
 
-For packages that aren't provided in TDS-complient form look for installation
+For packages that aren't provided in TDS-compliant form look for installation
 notes- usually provided in the form of an \code{INSTALL} file. If all else
 fails \LaTeX\ packages can usually be installed by copying the files ending in
 \code{.sty} to \code{texmf/tex/latex/}.
@@ -1809,7 +1807,7 @@ Width is the distance between the left and right sides of a character's glyph.
 For the "g" printed to the left, the width has been calculated as: \the\xone};
 \end{tikzpicture}
 
-Providing font metrics and string widths is without a doubt most difficult task a \lang{R} graphics device must undertake. The calculation of string widths is made even difficult for the \pkg{tikzDevice} as we attempt to process arbitrary \LaTeX{} strings. Inside \lang{R} the string ``\verb`$\alpha$`" literally has 8 characters, but when it is typeset it only has one: $\alpha$.
+Providing font metrics and string widths is without a doubt the most difficult task a \lang{R} graphics device must undertake. The calculation of string widths is made even more difficult for the \pkg{tikzDevice} as we attempt to process arbitrary \LaTeX{} strings. Inside \lang{R} the string ``\verb`$\alpha$`" literally has 8 characters, but when it is typeset it only has one: $\alpha$.
 
 Calculating font metrics is a tricky business to begin with and the fact that the typeset representation of a \LaTeX{} string is different from its representation in source code compounds the difficulty of the task immensely. Therefore, we took the path of laziness and started looking for an easy way out (remember the three great virtues of a programmer?). The solution we came up with seemed easy enough-- make \LaTeX{} calculate these metrics for us, after all that is what a \LaTeX{} compiler does for a living.
 
@@ -1915,7 +1913,7 @@ And that's it! We create a new \code{SEXP} to hold the return values of \code{ge
   return;
 \end{tikzCodeBlock}
 
-Here the \code{REAL} function is used to coerce the \code{SEXP} variable \code{RMetrics} to a vector of real numbers. These numbers are then extracted and assigned to the return values of \code{metricInfo}. In \lang{C} we must specify the `first' value in a vector using the index 0 rather than the index 1 \footnote{There are good logical reasons for this from the point of view of a computer scientist-- but if your background in arrays is rooted in linear algebra it will be a bit disorienting.}. The last thing to do is release the restrictions we placed on the \lang{R} garbage collector. Since we used the \code{PROTECT} function twice, we must call \code{UNPROTECT} and pass 2 as the argument.
+Here the \code{REAL} function is used to coerce the \code{SEXP} variable \code{RMetrics} to a vector of real numbers. These numbers are then extracted and assigned to the return values of \code{metricInfo}. In \lang{C} we must specify the `first' value in a vector using the index 0 rather than the index 1. \footnote{There are good logical reasons for this from the point of view of a computer scientist-- but if your background in arrays is rooted in linear algebra it will be a bit disorienting.} The last thing to do is release the restrictions we placed on the \lang{R} garbage collector. Since we used the \code{PROTECT} function twice, we must call \code{UNPROTECT} and pass 2 as the argument.
 
 \subsection{Implementing a System Call to \LaTeX}
 
@@ -1952,7 +1950,7 @@ Now that we have a place to work, we set up a couple of filenames- one for the i
 Here we have started a standard \LaTeX{} input file by specifying
 \code{article} as the document class. We also add the \code{fontenc} package
 and specify \code{T1} as its option. This ensures we are using the Type 1 font
-encoding- by default \TeX and \LaTeX{} use an encoding called \code{OT1}. Why
+encoding- by default \TeX{} and \LaTeX{} use an encoding called \code{OT1}. Why
 do we need to worry about font encodings? Well, a font encoding specifies which
 \code{ASCII} symbol codes map to which characters and by default, \lang{R}
 expects us to be using the Type 1 encoding (\lang{R} does support other
@@ -1966,7 +1964,7 @@ The other two packages we load are the \code{tikz} package and its \code{calc}
 library. Essentially we will have \TikZ{} drop the character into a box and
 report some measurements concerning the size of that box. The last command,
 \code{batchmode} tells \LaTeX{} that there isn't any user available to interact
-with-- so it should bother to stop and ask any questions while processing this
+with-- so it should not bother to stop and ask any questions while processing this
 file.
 
 The next step is to set up the part of the \LaTeX{} file that will actually
@@ -1977,7 +1975,7 @@ following code will be presented as straight \LaTeX{} --
 \code{getLatexCharMetrics} inserts it into the \code{texIn} file by means of
 \code{writeLines} as we have been doing all along. The string highlighted in
 {\color{red} red} should be replaced with the value of the variable charCode
-that was passed in to the function\code{getLatexCharMetrics}.
+that was passed in to the function \code{getLatexCharMetrics}.
 
 \begin{tikzCodeBlock}[title={Extracting character dimensions using \TikZ},listing style=latexexample]
 \begin{tikzpicture}
@@ -2050,13 +2048,11 @@ This performs a vector subtraction between the coordinates of \code{char.north} 
 \n1 = {veclen(\x1,\y1)}
 \end{tikzCodeBlock}
 
-This code \code{let} operation treats the coordinates stored in \verb`\p1` as a vector and calculates its magnitude. The `1' appended to the \verb`\x` and \verb`\y` variables specifies that we are accessing the x and y components of \verb`\p1`. This result is stored in the `number' variable \verb`\n1`. Now, that our metric is stored in \verb`\n1`, our final task is to ensure it makes it into the \LaTeX{} \code{.log} file-- this is done by adding a \code{node} containing the \verb`\typeout` command. The contents of the node:
-
+This \code{let} operation treats the coordinates stored in \verb`\p1` as a vector and calculates its magnitude. The `1' appended to the \verb`\x` and \verb`\y` variables specifies that we are accessing the x and y components of \verb`\p1`. This result is stored in the `number' variable \verb`\n1`. Now, that our metric is stored in \verb`\n1`, our final task is to ensure it makes it into the \LaTeX{} \code{.log} file-- this is done by adding a \code{node} containing the \verb`\typeout` command. The contents of the node:
 \begin{tikzCodeBlock}[]
 \typeout{tikzTexAscent=\n1}
 \end{tikzCodeBlock}
-
-Cause the phrase `tikzTexAscent=' to appear in the \code{.log} file- followed by the ascent calculated using the node anchors. After the ascent, descent and width have been calculated the \LaTeX{} compiler may be shut down, this is done by adding the final two lines to the input file:
+cause the phrase `tikzTexAscent=' to appear in the \code{.log} file- followed by the ascent calculated using the node anchors. After the ascent, descent and width have been calculated the \LaTeX{} compiler may be shut down, this is done by adding the final two lines to the input file:
 
 \begin{tikzCodeBlock}[title={Terminating a \LaTeX{} compilation},listing style=sweavechunk]
   writeLines("\\makeatother", texIn)
