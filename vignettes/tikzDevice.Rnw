@@ -1411,14 +1411,16 @@ is downloaded.
 For users running a Linux or UNIX operating system, we recommend the TeX Live
 distribution which is available at
 \url{http://www.tug.org/texlive/acquire.html}. TeX Live is maintained by the
-TeX Users Group and a new version is released every year. Note that the version
-of TeX Live provided by many Linux package management systems is the 2007
-version. We recommend using TeX Live 2008 or higher as the \code{tlmgr} package
+TeX Users Group and a new version is released every year.
+We recommend using TeX Live 2008 or higher as the \code{tlmgr} package
 manager was introduced in the 2008 distribution. Using \code{tlmgr} greatly
 simplifies the adding and removing packages from the distribution. The website
 offers an installation package, called \code{install-tl.tar.gz} or something
 similar, that contains a shell script that can be used to install an up-to-date
 version of the TeX Live distribution.
+Note that the version
+of TeX Live provided by many Linux package management systems sometimes
+lags behind the version provided directly by the TeX Users Group.
 
 \section{Mac OS X}
 
@@ -1427,7 +1429,7 @@ For users running Apple's OS X, we recommend the Mac TeX package available at
 a convenient OS X installer along with a few add-on packages. One striking
 difference between the Mac TeX and TeX Live installers is that the installer
 for Mac TeX includes the whole TeX Live distribution in the initial download-
-for TeX Live 2008 this amounts to approximately 1.2 GB. This is quite a large
+for TeX Live 2013 this amounts to approximately 2.3 GB. This is quite a large
 download that contains several packages that the average or even advanced user
 will never ever use. To conserve time and space we recommend installing from
 the basic installer at \url{http://www.tug.org/mactex/morepackages.html} and
