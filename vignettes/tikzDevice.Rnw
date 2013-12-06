@@ -196,14 +196,14 @@
 % -----------------------------------------------------------------------------
 \chapter{Introduction}
 
-The \pkg{tikzDevice} package provides a graphics output device for \pkg{R} that
+The \pkg{tikzDevice} package provides a graphics output device for \lang{R} that
 records plots in a \LaTeX -friendly format. The device transforms plotting
 commands issued by R functions into \LaTeX\ code blocks. When included in a
 paper typeset by \LaTeX , these blocks are interpreted with the help of
 TikZ---a graphics package for \TeX\ and friends written by Till Tantau. By
-allowing \LaTeX\ to handle typesetting of text in \pkg{R} plots along with the
+allowing \LaTeX\ to handle typesetting of text in \lang{R} plots along with the
 rest of the text in the paper the full power of \TeX\ is available to the
-\pkg{R} user. There are also no discontinuities in font selection and
+\lang{R} user. There are also no discontinuities in font selection and
 typesetting as demonstrated by a comparison between \autoref{fig:pdf-example}
 and \autoref{fig:tikz-example}.
 
@@ -257,7 +257,7 @@ dev.off()
 
 
 This document is divided into three parts. \autoref{part:usage} describes the
-package functionality and provides example usage. Besides the \pkg{R}
+package functionality and provides example usage. Besides the \lang{R}
 environment, use of the \TikZ\ device device requires the user to have a
 working \LaTeX{} compiler along with an installed version of the \TikZ{}
 package---version 2.00 or greater. \autoref{part:installation} of this
@@ -270,30 +270,30 @@ the \pkg{tikzDevice} package does the things that it does and why it chooses to
 do them that way. The authors have attempted to write this part of the
 documentation in a way that is accessible to users as well as developers. This
 information is provided in the hope that the \pkg{tikzDevice} may serve as a
-case study for creating new \pkg{R} graphics devices. This part of the
+case study for creating new \lang{R} graphics devices. This part of the
 documentation may also help those considering undertaking the transition from
-casual package-building to full-on hacking of the \pkg{R} internals.
+casual package-building to full-on hacking of the \lang{R} internals.
 
 \section{Acknowledgements}
 
 This package would not have been possible without the hard work and ingenuity
 of many individuals. This package straddles the divide between two great open
-source communities---the \pkg{R} programming language and the \TeX{}
+source communities---the \lang{R} programming language and the \TeX{}
 typesetting system. It is our hope that this work will make it easier for users
 to leverage the strengths of both systems.
 
 First off, we would like to thank the R Core Team for creating such a
 wonderful, open and flexible programming environment. Compared to other
-languages we have used, creating packages and extensions for \pkg{R} has
+languages we have used, creating packages and extensions for \lang{R} has
 always been a liberating experience.
 
 This package started as a fork of the Pic\TeX\ device created by Valerio Aimale
-which is part of the \pkg{R} core graphics system.  Without access to this
+which is part of the \lang{R} core graphics system.  Without access to this
 simple, compact example of implementing a graphics device we likely would have
 abandoned the project in it's infancy. We would also like to thank Paul Murrel
-for all of his work on the \pkg{R} graphics system and especially for his
+for all of his work on the \lang{R} graphics system and especially for his
 research and documentation concerning the differences between the font systems
-used by \TeX{} and \pkg{R}.
+used by \TeX{} and \lang{R}.
 
 This package also owes it's existence to Friedrich Leisch's work on the
 \pkg{Sweave} system and Roger D. Peng's \pkg{cacheSweave} extension. These
@@ -342,7 +342,7 @@ list.\\[\baselineskip]
 \chapter{Loading the Package}
 
 The functions in the \pkg{tikzDevice} package are made accessible in the
-\pkg{R} environment by using either the \code{library()} or \code{require()}
+\lang{R} environment by using either the \code{library()} or \code{require()}
 functions like so:
 
 \begin{Verbatim}[frame=single]
@@ -412,7 +412,7 @@ For suggestions on how to obtain a \LaTeX\ compiler, see
   \label{sec:options}
 
 The \pkg{tikzDevice} package is influenced by a number of options that may be
-set locally in your \pkg{R} scripts or in the \pkg{R} console or globally in
+set locally in your \lang{R} scripts or in the \lang{R} console or globally in
 a \code{.Rprofile} file. All of the options can be set by using
 \code{options(<option> = <value>)}. These options allow for the use of custom
 \code{documentclass} declarations, \LaTeX\ packages, and typesetting engines
@@ -421,7 +421,7 @@ a \code{.Rprofile} file. All of the options can be set by using
 For convenience the function \code{setTikzDefaults()} is provided which sets
 all the global options back to their original values.
 
-The proper placement of a \code{.Rprofile} file is explained in the \pkg{R}
+The proper placement of a \code{.Rprofile} file is explained in the \lang{R}
 manual page \code{?Startup}. For the details of why calling the \LaTeX\ compiler is
 necessary, see \autoref{part:implementation}.
 
@@ -466,14 +466,14 @@ options(tikzLualatex = '/path/to/lualatex')
 \subsection{The \pkgopt{tikzMetricsDictionary} Option}
 
 When using the graphics device provided by \pkg{tikzDevice}, you may notice
-that \pkg{R} appears to ``lag" or ``hang" when commands such as \code{plot()}
+that \lang{R} appears to ``lag" or ``hang" when commands such as \code{plot()}
 are executed. This is because the device must query the \LaTeX\ compiler for
 string widths and font metrics. For a normal plot, this may happen dozens or
-hundreds of times---hence \pkg{R} becomes unresponsive for a while. The good
+hundreds of times---hence \lang{R} becomes unresponsive for a while. The good
 news is that the \code{tikz()} code is designed to cache the results of these
 computations so they need only be performed once for each string or character.
 By default, these values are stored in a temporary cache file which is deleted
-when \code{R} is shut down. Using the option \code{tikzMetricsDictionary}, a
+when \lang{R} is shut down. Using the option \code{tikzMetricsDictionary}, a
 permanent cache file may be specified:
 
 \begin{tikzCodeBlock}[title={Setting a location in \code{.Rprofile} for a permanent metrics dictionary},listing style=sweavechunk]
@@ -614,7 +614,7 @@ options(tikzPdftexWarnUTF = TRUE)
 \section{Description}
 
 The \code{tikz} function provides most of the functionality of the
-\pkg{tikzDevice} package. This function opens an \pkg{R} graphics device that
+\pkg{tikzDevice} package. This function opens an \lang{R} graphics device that
 records plots as a series of \TikZ\ commands. The device supports many levels
 of output that range from stand-alone \LaTeX\ documents that may be compiled
 into figures to code chunks that must be incorporated into existing \LaTeX\
@@ -674,7 +674,7 @@ function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
     placed within a \code{tikzpicture} environment.
 
   \item[console]
-    Controls whether output is directed to the \pkg{R} console. This is useful
+    Controls whether output is directed to the \lang{R} console. This is useful
     for dumping \TikZ\ output directly into a \LaTeX\ document via sink. If
     \code{TRUE}, the \code{file} argument is ignored. Setting \code{file=\'{}\'{}} is
     equivalent to setting \code{console=TRUE}.
@@ -724,7 +724,7 @@ supports three modes of output:
 The overarching goal of the \pkg{tikzDevice} is to provide seamless integration
 between text in R graphics and the text of \LaTeX\ documents that contain those
 graphics. In order to achieve this integration the device must translate font
-sizes specified in \pkg{R} to corresponding font sizes in \LaTeX. The issue is
+sizes specified in \lang{R} to corresponding font sizes in \LaTeX. The issue is
 that font sizes in \LaTeX\ are controlled by a ``base font size'' that is
 specified at the beginning of the document---typically 10pt. There is no easy
 way in \LaTeX\ to change the font size to a new numerical value, such as 16pt
@@ -738,7 +738,7 @@ factor used to approximate other font sizes using the following three inputs:
 
   \item
     The ``character expansion factor'' parameter, specified using the `cex'
-    argument to functions such as described in the documentation of the \pkg{R}
+    argument to functions such as described in the documentation of the \lang{R}
     function \code{par}.
 
   \item
@@ -795,7 +795,7 @@ a few important caveats:
     There is specifically no support for input of plotmath characters as
     unicode since the user can simply input \LaTeX\ math directly. We strongly
     encourage the use of \LaTeX\ math over plotmath for style and consistency's
-    sake.  A consequence of this is that most of the \pkg{R} examples and demos
+    sake.  A consequence of this is that most of the \lang{R} examples and demos
     of plotmath won't work without significant manipulation (your mileage may
     vary but you may get anything from errors to warnings to documents that
     mysteriously won't compile). That is not to say that the output could not
@@ -825,7 +825,7 @@ a few important caveats:
 
 The most common use of the \code{tikz} function is to produce a plot that
 will be included in another \LaTeX\ document, such as a report. Running the
-following example in \pkg{R} will produce a very simple graphic using the
+following example in \lang{R} will produce a very simple graphic using the
 \code{plot} function:
 
 <<simpleEx,echo=TRUE,results=hide>>=
@@ -880,7 +880,7 @@ commands. An important issue to note is that many \LaTeX\ commands are prefixed
 by the backaslash character: \textbackslash. Unfortunately, in many programming
 languages, the backslash character is also given a special status when it
 appears in strings. Therefore, it is necessary to place two backslashes,
-\textbackslash\textbackslash, in \pkg{R} strings in order to cause backslash to
+\textbackslash\textbackslash, in \lang{R} strings in order to cause backslash to
 appear in the output for \LaTeX. The next example demonstrates how to use
 \LaTeX\ commands in plot annotation.
 
@@ -1300,7 +1300,7 @@ getLatexCharMetrics( charCode, cex = 1, face = 1 )
     The character expansion factor to be used when determining metrics.
 
   \item[face]
-    An integer specifying the \pkg{R} font face to use during metric
+    An integer specifying the \lang{R} font face to use during metric
     calculations. The accepted values are as follows:
 
     \begin{description}
