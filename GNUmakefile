@@ -76,8 +76,8 @@ news:
 
 vignette:
 	cd vignettes;\
-		"$(RBIN)/R" CMD Sweave $(PKGNAME).Rnw;\
-		texi2dvi --pdf $(PKGNAME).tex;\
+		"$(RBIN)/R" CMD Sweave --pdf $(PKGNAME).Rnw;\
+		pdflatex $(PKGNAME).tex;\
 		"$(RBIN)/R" --vanilla --slave -e "tools:::compactPDF(getwd(), gs_quality='printer')"
 
 
