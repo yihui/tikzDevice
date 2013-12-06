@@ -15,6 +15,8 @@
 
   # So that prompts and continuation prompts don't show up in the output.
   options(prompt = ' ', continue = ' ')
+
+  options(tikzMetricsDictionary='.tikzMetrics')
 @
 \SweaveOpts{echo=F,prefix.string=figs/fig}
 
