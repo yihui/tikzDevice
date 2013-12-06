@@ -1263,7 +1263,7 @@ characters and plotmath symbols compared to the standard R \code{pdf} device.
 % -----------------------------------------------------------------------------
 %                      Chapter 4: The Metrics Functions
 % -----------------------------------------------------------------------------
-\chapter{The \pkgopt{getLatexCharMetrics} and \pkgopt{getLatexStrWidth} Functions}
+\chapter{The \code{getLatexCharMetrics} and \code{getLatexStrWidth} Functions}
 
 \section{Description}
 
