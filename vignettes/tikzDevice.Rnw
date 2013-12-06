@@ -466,7 +466,7 @@ options(tikzLualatex = '/path/to/lualatex')
 \subsection{The \pkgopt{tikzMetricsDictionary} Option}
 
 When using the graphics device provided by \pkg{tikzDevice}, you may notice
-that \lang{R} appears to ``lag" or ``hang" when commands such as \code{plot()}
+that \lang{R} appears to ``lag" or ``hang'' when commands such as \code{plot()}
 are executed. This is because the device must query the \LaTeX\ compiler for
 string widths and font metrics. For a normal plot, this may happen dozens or
 hundreds of times---hence \lang{R} becomes unresponsive for a while. The good
@@ -1330,7 +1330,7 @@ getLatexStrWidth( "The symbol: alpha" )
 getLatexStrWidth( "The symbol: $\\alpha$" )
 @
 
-For the first calculation, the word ``alpha" was interpreted as just a word and
+For the first calculation, the word ``alpha'' was interpreted as just a word and
 the widths of the characters `a', `l', `p', `h' and `a' were included in the
 string width. For the second string, \verb|\alpha| was interpreted as a
 mathematical symbol and only the width of the symbol `$\alpha$' was included in
@@ -1641,7 +1641,7 @@ We learn best through working with examples. When it comes to programming langua
 
 This section is our attempt to help anyone who may be experimenting with our code, and by extension the internals of the R graphics system. There may also be useful, or useless, tidbits concerning building R packages and interacting with the core R language. The R language can be extended in so many interesting and useful ways and it is our hope that the following documentation may provide a case study for anyone attempting such an extension.
 
-We will make an attempt to assume no special expertise with any of the systems or programming languages leveraged by this package and described by this documentation. Therefore, if you are an experienced developer and find yourself thinking ``My god, are they {\bfseries really} about to launch into a description of how C header files work?", please feel free to skip ahead a few paragraphs. We received our formal introduction to computer programming in a college engineering program- therefore our programming background is rooted in Fortran (or, if you prefer, {\scshape fortran}). We are attempting to write the sort of documentation that we would have found invaluable at the start of this project
+We will make an attempt to assume no special expertise with any of the systems or programming languages leveraged by this package and described by this documentation. Therefore, if you are an experienced developer and find yourself thinking ``My god, are they {\bfseries really} about to launch into a description of how C header files work?'', please feel free to skip ahead a few paragraphs. We received our formal introduction to computer programming in a college engineering program- therefore our programming background is rooted in Fortran (or, if you prefer, {\scshape fortran}). We are attempting to write the sort of documentation that we would have found invaluable at the start of this project
 
 Therefore, this section is for all the budding developers like ourselves out there- people who have done some programming and who are starting to take a close look at the nuts and bolts of the \lang{R} programming environment. If you feel like you are wandering through a vast forest getting smacked in the face by every branch then maybe this section will help pull some of those branches out of the way...
 
@@ -1744,7 +1744,7 @@ Font metrics are measurements associated with the glyphs, or printed characters,
 
 \node[anchor = north west,outer sep=0pt,text width=0.6\textwidth] at ($(centerpoint) + (8em, 0)$){
 Ascent is the distance between the baseline and the tallest point on a
-character's glyph. For the "g" printed to the left, the ascent has been
+character's glyph. For the ``g'' printed to the left, the ascent has been
 calculated as: \the\yone
 };
 \end{tikzpicture}
@@ -1775,7 +1775,7 @@ calculated as: \the\yone
 
 \node[anchor = north west,outer sep=0pt,text width=0.6\textwidth] at ($(centerpoint) + (8em, 0)$){
 Descent is the distance between the baseline and the lowest point on a
-character's glyph. For the "g" printed to the left, the descent has been
+character's glyph. For the ``g'' printed to the left, the descent has been
 calculated as: \the\yone
 };
 \end{tikzpicture}
@@ -1804,10 +1804,10 @@ calculated as: \the\yone
 
 \node[anchor = north west,outer sep=0pt,text width=0.6\textwidth] at ($(centerpoint) + (8em, 0)$){
 Width is the distance between the left and right sides of a character's glyph.
-For the "g" printed to the left, the width has been calculated as: \the\xone};
+For the ``g'' printed to the left, the width has been calculated as: \the\xone};
 \end{tikzpicture}
 
-Providing font metrics and string widths is without a doubt the most difficult task a \lang{R} graphics device must undertake. The calculation of string widths is made even more difficult for the \pkg{tikzDevice} as we attempt to process arbitrary \LaTeX{} strings. Inside \lang{R} the string ``\verb`$\alpha$`" literally has 8 characters, but when it is typeset it only has one: $\alpha$.
+Providing font metrics and string widths is without a doubt the most difficult task a \lang{R} graphics device must undertake. The calculation of string widths is made even more difficult for the \pkg{tikzDevice} as we attempt to process arbitrary \LaTeX{} strings. Inside \lang{R} the string ``\verb`$\alpha$`'' literally has 8 characters, but when it is typeset it only has one: $\alpha$.
 
 Calculating font metrics is a tricky business to begin with and the fact that the typeset representation of a \LaTeX{} string is different from its representation in source code compounds the difficulty of the task immensely. Therefore, we took the path of laziness and started looking for an easy way out (remember the three great virtues of a programmer?). The solution we came up with seemed easy enough-- make \LaTeX{} calculate these metrics for us, after all that is what a \LaTeX{} compiler does for a living.
 
@@ -1849,7 +1849,7 @@ Portable \lang{C} code could be written to handle each of these situations, but 
 
 \subsection{Calling \lang{R} Functions from \lang{C} Functions}
 
-The ``Ritual of the Calling of the R Function" is easy enough to perform as long as you don't have burning need to know all the details of the objects you are handling. The \lang{C} level representation of a \lang{R} object such as a variable or function is an object known as a \code{SEXP}. For the exact details on what a \code{SEXP} is and how it works, we refer the interested user to chapter one of the {\itshape R Internals} manual.
+The ``Ritual of the Calling of the R Function'' is easy enough to perform as long as you don't have burning need to know all the details of the objects you are handling. The \lang{C} level representation of a \lang{R} object such as a variable or function is an object known as a \code{SEXP}. For the exact details on what a \code{SEXP} is and how it works, we refer the interested user to chapter one of the {\itshape R Internals} manual.
 
 The \lang{R} function we will be calling is declared in the \lang{R} environment as follows:
 
@@ -1882,7 +1882,7 @@ void (metricInfo)(int c, const pGEcontext gc, double* ascent, double* descent,
 }
 \end{tikzCodeBlock}
 
-The first thing that happens in the code chunk above is that a new \code{SEXP} variable named \code{RCallBack} is created. This variable will be the agent through which we will communicate with the \lang{R} environment. The next action is to allocate our callback variable as a vector of length 2-- we need one slot for the \lang{R} function name and one slot for the value that is being passed into the function. This allocation happens inside the \lang{R} environment, so it is executed inside the \code{PROTECT} statement. The reason for using \code{PROTECT} is that the \lang{R} garbage collector is constantly on the prowl for unused objects in the \lang{R} environment. An object is considered ``unused" if it is not attached to any variable name in the \lang{R} environment. Since the object is only attached to the variable \code{RCallBack} in our \lang{C} function, the \lang{R} garbage collector will see it a valid candidate for deletion. The purpose of \code{PROTECT} is to keep our new vector from being trashed.
+The first thing that happens in the code chunk above is that a new \code{SEXP} variable named \code{RCallBack} is created. This variable will be the agent through which we will communicate with the \lang{R} environment. The next action is to allocate our callback variable as a vector of length 2-- we need one slot for the \lang{R} function name and one slot for the value that is being passed into the function. This allocation happens inside the \lang{R} environment, so it is executed inside the \code{PROTECT} statement. The reason for using \code{PROTECT} is that the \lang{R} garbage collector is constantly on the prowl for unused objects in the \lang{R} environment. An object is considered ``unused'' if it is not attached to any variable name in the \lang{R} environment. Since the object is only attached to the variable \code{RCallBack} in our \lang{C} function, the \lang{R} garbage collector will see it a valid candidate for deletion. The purpose of \code{PROTECT} is to keep our new vector from being trashed.
 
 The next portion of the \lang{C} function retrieves the \lang{R} function object for \code{getLatexCharMetrics}. The function is searched for in \lang{R} global namespace, so it must be one that is available to the user from the \lang{R} command prompt when the package is loaded. The function is stored in the \code{SEXP} variable \code{metricFun}. We do not have to involve \code{PROTECT} in the assignment since \code{getLatexCharMetrics} exists as a variable name in the \lang{R} environment.
 
@@ -1894,7 +1894,7 @@ When dealing with a vector \code{SEXP} such as \code{RCallBack}, which has 2 slo
 SETCAR( CDR(RCallBack), ScalarInteger( c ) );
 \end{tikzCodeBlock}
 
-After assigning the value of the \lang{C} variable \code{c} as the second value of \code{RCallBack}, we need to "tag" it as the value that corresponds to the \code{charCode} argument of \code{getLatexCharMetrics}. This is done by using the \code{SET\_TAG} function. Once again, we use \code{CDR} to shift our area of operation to the second slot of \code{RCallBack}. Now that the \code{RCallBack} object is set up, we are ready to actually call the \code{getLatexCharMetrics} function.
+After assigning the value of the \lang{C} variable \code{c} as the second value of \code{RCallBack}, we need to ``tag'' it as the value that corresponds to the \code{charCode} argument of \code{getLatexCharMetrics}. This is done by using the \code{SET\_TAG} function. Once again, we use \code{CDR} to shift our area of operation to the second slot of \code{RCallBack}. Now that the \code{RCallBack} object is set up, we are ready to actually call the \code{getLatexCharMetrics} function.
 
 \begin{tikzCodeBlock}[title={Executing a \lang{R} function call inside \lang{C}}]
 SEXP LatexMetrics;
@@ -1995,7 +1995,7 @@ that was passed in to the function \code{getLatexCharMetrics}.
   node{ \typeout{tikzTeXDescent=\n1} };
 \end{tikzCodeBlock}
 
-What the heck just happened? Well, first we instructed \LaTeX{} to enter the \TikZ{} picture environment using \verb`\begin{tikzpicture}`. Then we ordered \TikZ{} to create a node named "char" containing the command \verb`\char` followed by the value of charCode. For example, if we were passed `103' as the character code, which corresponds to the character `g', the node line should be:
+What the heck just happened? Well, first we instructed \LaTeX{} to enter the \TikZ{} picture environment using \verb`\begin{tikzpicture}`. Then we ordered \TikZ{} to create a node named ``char'' containing the command \verb`\char` followed by the value of charCode. For example, if we were passed `103' as the character code, which corresponds to the character `g', the node line should be:
 
 \begin{tikzCodeBlock}[listing style=latexexample]
 \node[inner sep=0pt,outer sep=0pt] (char) {\char103};
