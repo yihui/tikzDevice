@@ -1169,7 +1169,7 @@ not be available on every system.
 
 \begin{figure}[!h]
 \centering
-\IfFileExists{figs/xelatexEx.pdf}{\includegraphics{figs/xelatexEx.pdf}}
+\includegraphics{figs/xelatexEx.pdf}
 \caption{Result of \hologo{XeLaTeX} example}\label{fig:xelatex}
 \end{figure}
 
