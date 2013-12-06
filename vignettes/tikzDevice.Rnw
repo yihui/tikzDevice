@@ -200,7 +200,7 @@
 
 The \pkg{tikzDevice} package provides a graphics output device for \lang{R} that
 records plots in a \LaTeX -friendly format. The device transforms plotting
-commands issued by R functions into \LaTeX\ code blocks. When included in a
+commands issued by \lang{R} functions into \LaTeX\ code blocks. When included in a
 paper typeset by \LaTeX , these blocks are interpreted with the help of
 TikZ---a graphics package for \TeX\ and friends written by Till Tantau. By
 allowing \LaTeX\ to handle typesetting of text in \lang{R} plots along with the
@@ -284,7 +284,7 @@ source communities---the \lang{R} programming language and the \TeX{}
 typesetting system. It is our hope that this work will make it easier for users
 to leverage the strengths of both systems.
 
-First off, we would like to thank the R Core Team for creating such a
+First off, we would like to thank the \lang{R} Core Team for creating such a
 wonderful, open and flexible programming environment. Compared to other
 languages we have used, creating packages and extensions for \lang{R} has
 always been a liberating experience.
@@ -719,7 +719,7 @@ supports three modes of output:
   \label{subsec:fontCalc}
 
 The overarching goal of the \pkg{tikzDevice} is to provide seamless integration
-between text in R graphics and the text of \LaTeX\ documents that contain those
+between text in \lang{R} graphics and the text of \LaTeX\ documents that contain those
 graphics. In order to achieve this integration the device must translate font
 sizes specified in \lang{R} to corresponding font sizes in \LaTeX. The issue is
 that font sizes in \LaTeX\ are controlled by a ``base font size'' that is
@@ -1234,7 +1234,7 @@ dev.off()
 \subsection{\pkgopt{tikz} vs. \pkgopt{pdf} for \pkgopt{plotmath} symbols and Unicode characters}
 
 This is a side-by-side example showing how \code{tikz(..., engine = 'xetex')} handles UTF-8
-characters and plotmath symbols compared to the standard R \code{pdf} device.
+characters and plotmath symbols compared to the standard \lang{R} \code{pdf} device.
 
 \begin{figure}[!h]
 \centering
@@ -1568,7 +1568,7 @@ kpsewhich tikz.sty
 \begin{tikzpicture}
 
   \node[text width = 4.3in] (r code) {
-    \begin{tikzCodeNode}[title={R User Types}, listing style=sweavechunk]
+    \begin{tikzCodeNode}[title={\lang{R} User Types}, listing style=sweavechunk]
 tikz('Rplot.tex')
 plot(1)
 dev.off()
@@ -1633,13 +1633,13 @@ static void TikZ_Circle( double x, double y, double r,
 
 We learn best through working with examples. When it comes to programming languages this involves taking working code that someone else has written, breaking it in as many places at it can possibly be broken, and then trying to build something out of the wreckage. Open source software facilitates this process wonderfully by ensuring the source code of a project is always available for inspection and experimentation. The \pkg{tikzDevice} its self was created by disassembling and then rebuilding Valerio Aimale's Pic\TeX{} device driver which is a part of the \lang{R} core codebase.
 
-This section is our attempt to help anyone who may be experimenting with our code, and by extension the internals of the R graphics system. There may also be useful, or useless, tidbits concerning building R packages and interacting with the core R language. The R language can be extended in so many interesting and useful ways and it is our hope that the following documentation may provide a case study for anyone attempting such an extension.
+This section is our attempt to help anyone who may be experimenting with our code, and by extension the internals of the \lang{R} graphics system. There may also be useful, or useless, tidbits concerning building \lang{R} packages and interacting with the core \lang{R} language. The \lang{R} language can be extended in so many interesting and useful ways and it is our hope that the following documentation may provide a case study for anyone attempting such an extension.
 
-We will make an attempt to assume no special expertise with any of the systems or programming languages leveraged by this package and described by this documentation. Therefore, if you are an experienced developer and find yourself thinking ``My god, are they {\bfseries really} about to launch into a description of how C header files work?'', please feel free to skip ahead a few paragraphs. We received our formal introduction to computer programming in a college engineering program---therefore our programming background is rooted in Fortran (or, if you prefer, {\scshape fortran}). We are attempting to write the sort of documentation that we would have found invaluable at the start of this project
+We will make an attempt to assume no special expertise with any of the systems or programming languages leveraged by this package and described by this documentation. Therefore, if you are an experienced developer and find yourself thinking ``My god, are they {\bfseries really} about to launch into a description of how \lang{C} header files work?'', please feel free to skip ahead a few paragraphs. We received our formal introduction to computer programming in a college engineering program---therefore our programming background is rooted in Fortran (or, if you prefer, {\scshape fortran}). We are attempting to write the sort of documentation that we would have found invaluable at the start of this project
 
 Therefore, this section is for all the budding developers like ourselves out there---people who have done some programming and who are starting to take a close look at the nuts and bolts of the \lang{R} programming environment. If you feel like you are wandering through a vast forest getting smacked in the face by every branch then maybe this section will help pull some of those branches out of the way...
 
-...then again we have a lot of material to cover: R, C, \LaTeX , \TikZ{} , typography and the details of computerized font systems. Our grip may fail and send those branches flying back with increased velocity.
+...then again we have a lot of material to cover: \lang{R}, \lang{C}, \LaTeX , \TikZ{} , typography and the details of computerized font systems. Our grip may fail and send those branches flying back with increased velocity.
 
 We wish you luck!\\
 \vbox{}\quad{\itshape -The tikzDevice Team}
@@ -1649,7 +1649,7 @@ We wish you luck!\\
 
 \chapter{Anatomy of an \lang{R} Graphics Device}
 
-The core of an \lang{R} graphics device is a collection of functions, written in C, that perform various specialized tasks. A description of some of these functions can be found in the {\itshape R Internals} manual while the main documentation is in the C header file \code{GraphicsDevice.h}. For most \lang{R} installations this header file can be found in the directory \code{R\_HOME/include/R\_ext}. For copies of \lang{R} distributed in source code form, \code{GraphicsDevice.h} is located inside \code{R-version/src/include/R\_ext}. The following is a description of the functions each graphics device is expected to provide:
+The core of an \lang{R} graphics device is a collection of functions, written in \lang{C}, that perform various specialized tasks. A description of some of these functions can be found in the {\itshape R Internals} manual while the main documentation is in the \lang{C} header file \code{GraphicsDevice.h}. For most \lang{R} installations this header file can be found in the directory \code{R\_HOME/include/R\_ext}. For copies of \lang{R} distributed in source code form, \code{GraphicsDevice.h} is located inside \code{R-version/src/include/R\_ext}. The following is a description of the functions each graphics device is expected to provide:
 
 
 \setlength\columnsep{5em}
@@ -1809,7 +1809,7 @@ Now, how to do that?
 
 \subsection{Character Metrics}
 
-As a starting point, let's examine the interface of the C function that \lang{R} calls in order to determine character metrics:
+As a starting point, let's examine the interface of the \lang{C} function that \lang{R} calls in order to determine character metrics:
 
 \begin{tikzCodeBlock}[title={Function declaration for \code{metricInfo}}]
 void (metricInfo)(int c, const pGEcontext gc,
@@ -1843,7 +1843,7 @@ Portable \lang{C} code could be written to handle each of these situations, but 
 
 \subsection{Calling \lang{R} Functions from \lang{C} Functions}
 
-The ``Ritual of the Calling of the R Function'' is easy enough to perform as long as you don't have burning need to know all the details of the objects you are handling. The \lang{C} level representation of a \lang{R} object such as a variable or function is an object known as a \code{SEXP}. For the exact details on what a \code{SEXP} is and how it works, we refer the interested user to chapter one of the {\itshape R Internals} manual.
+The ``Ritual of the Calling of the \lang{R} Function'' is easy enough to perform as long as you don't have burning need to know all the details of the objects you are handling. The \lang{C} level representation of a \lang{R} object such as a variable or function is an object known as a \code{SEXP}. For the exact details on what a \code{SEXP} is and how it works, we refer the interested user to chapter one of the {\itshape \lang{R} Internals} manual.
 
 The \lang{R} function we will be calling is declared in the \lang{R} environment as follows:
 
