@@ -25,6 +25,7 @@ Suggests:
     testthat (>= 0.6),
     evaluate,
     stringr,
+    formatR,
     ggplot2,
     maps
 SystemRequirements: pgf (>= 2.00)

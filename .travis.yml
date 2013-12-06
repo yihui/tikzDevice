@@ -30,6 +30,7 @@ install:
       sudo make install
     ); fi
   - ./travis-tool.sh r_binary_install colorspace zoo RColorBrewer dichromat munsell labeling Formula sp mvtnorm TH.data sandwich gtable reshape2 scales proto quantreg Hmisc mapproj hexbin maptools multcomp filehash ggplot2 testthat
+  - ./travis-tool.sh install_deps
   - ( cd ..; R CMD build tikzDevice --no-build-vignettes --no-manual; R CMD INSTALL tikzDevice*.*.tar.gz )
   - ./travis-tool.sh dump_sysinfo
 after_failure:

@@ -626,16 +626,11 @@ documents using the \verb`\include{}` macro.
 The \code{tikz} function opens a new graphics device and may be called with
 the following arguments:
 
-\begin{Verbatim}[frame=single]
-function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
-  width = 7, height = 7, onefile = TRUE,
-  bg="transparent", fg="black", pointsize = 10, standAlone = FALSE,
-  bareBones = FALSE, console = FALSE, sanitize = FALSE,
-  engine = getOption("tikzDefaultEngine"),
-  documentDeclaration = getOption("tikzDocumentDeclaration"),
-  packages,
-  footer = getOption("tikzFooter")
-\end{Verbatim}
+<<tikzFormals,echo=F,results=hide>>=
+cat(formatR::usage(tikz), file="tikzFormals.tex")
+@
+
+\tikzCodeInput[title={Usage},listing style=sweavechunk]{tikzFormals.tex}
 
 \begin{flexlabelled}{code}{*}{0.5em}{0.5em}{*}{\leftmargin}
   \item[file]
