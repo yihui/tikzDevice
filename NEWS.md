@@ -4,11 +4,6 @@
 
 ---
 
-## Bug Fixes
-
-- Point size of main font in document is now inferred correctly, again fixed
-  regexp in getDocumentPointsize (yihui/tikzDevice#34).
-
 ## Contributors
 
 Package maintainers: Kirill Müller and Yihui Xie.
