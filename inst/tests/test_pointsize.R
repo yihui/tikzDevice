@@ -1,0 +1,14 @@
+# Switch to the detailed reporter implemented in helper_reporters.R
+testthat:::with_reporter(DetailedReporter$new(), {
+
+  context('Querying of pointsize')
+
+  test_that('Pointsize is extracted correctly',{
+    expect_equal(getDocumentPointsize('\\documentclass[draft,12pt]{article}'), 12)
+    expect_equal(getDocumentPointsize('\\documentclass[11pt,draft]{article}'), 11)
+    expect_equal(getDocumentPointsize('\\documentclass[ 10pt ,draft]{article}'), 10)
+    expect_equal(getDocumentPointsize('\\documentclass{article}'), NA)
+  })
+
+  testthat:::end_context() # Needs to be done manually due to reporter swap
+}) # End reporter swap
