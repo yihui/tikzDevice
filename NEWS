@@ -1,5 +1,20 @@
   ---
 
+		 Changes in version 0.6.6 (2013-12-10)
+
+  ---
+
+New Features
+
+  - Updated vignette (yihui/tikzDevice#36).
+
+Bug Fixes
+
+  - Point size of main font in document is now inferred even if the option
+  tikzDocumentDeclaration contains newlines.
+
+  ---
+
 		 Changes in version 0.6.5 (2013-12-05)
 
   ---
@@ -134,6 +149,8 @@ tikzDevice:
 
   - corecode for fixing the getDocumentPointsize routines for corner cases
 
+  - Sietse Brouwer for enumerating the exact list of LaTeX packages
+  `tikzDevice` requires and for vignette spelling/style corrections.
 
   ---
 

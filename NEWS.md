@@ -1,4 +1,17 @@
+---
+
+# Changes in version 0.6.6 (2013-12-10)
+
+---
+
+## New Features
+
 - Updated vignette (yihui/tikzDevice#36).
+
+## Bug Fixes
+
+- Point size of main font in document is now inferred even if the option
+  tikzDocumentDeclaration contains newlines.
 
 ---
 
