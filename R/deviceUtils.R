@@ -15,20 +15,13 @@ getDocumentPointsize <- function( docString ){
   # startps component of the pDevDesc structure. 
 
   # Search the document declaration for the pointsize, and extract it if it is
-  # there.
-  pointsize <- gsub( '^(?:.*[[, \t](\\d+)pt[], \t])?.*$', '\\1', docString,
+  # there.  (Split the input by newlines before.)
+  pointsize <- gsub( '^(?:.*[[, \t](\\d+)pt[], \t])?.*$', '\\1',
+                     strsplit(docString, "\n", fixed = TRUE),
                      ignore.case = F, perl = T )
 
-  if( pointsize == "" ){
-
-    return( NA )
-
-  } else {
-
-    return( as.numeric( pointsize ) )
-
-  }
-
+  # Return first matching line (if any), or NA otherwise
+  as.numeric(pointsize[pointsize != ""][1])
 }
 
 
