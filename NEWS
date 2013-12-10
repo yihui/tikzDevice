@@ -1,5 +1,16 @@
   ---
 
+		 Changes in version 0.6.6 (2013-12-10)
+
+  ---
+
+Bug Fixes
+
+  - Point size of main font in document is now inferred even if the option
+  tikzDocumentDeclaration contains newlines.
+
+  ---
+
 		 Changes in version 0.6.5 (2013-12-05)
 
   ---
