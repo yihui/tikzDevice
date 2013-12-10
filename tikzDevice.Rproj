@@ -15,4 +15,5 @@ RootDocument: vignettes/tikzDevice.Rnw
 
 BuildType: Package
 PackageInstallArgs: --no-multiarch --with-keep.source
+PackageBuildArgs: --compact-vignettes=gs+qpdf
 PackageRoxygenize: rd,collate,namespace
