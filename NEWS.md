@@ -1,6 +1,6 @@
 ---
 
-# Changes in version 0.7.0 (2013-12-05, CRAN release)
+# Changes in version 0.7.0 (2013-12-10, CRAN release)
 
 ---
 
@@ -8,6 +8,20 @@
 
 Package maintainers: Kirill Müller and Yihui Xie.
 
+---
+
+# Changes in version 0.6.6 (2013-12-10)
+
+---
+
+## New Features
+
+- Updated vignette (yihui/tikzDevice#36).
+
+## Bug Fixes
+
+- Point size of main font in document is now inferred even if the option
+  tikzDocumentDeclaration contains newlines.
 
 ---
 
@@ -143,6 +157,8 @@ Thanks to the following people who contributed to this release of the tikzDevice
 
 - corecode for fixing the getDocumentPointsize routines for corner cases
 
+- Sietse Brouwer for enumerating the exact list of LaTeX packages
+  `tikzDevice` requires and for vignette spelling/style corrections.
 
 ---
 

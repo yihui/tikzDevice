@@ -75,9 +75,9 @@ news:
 	sed -e 's/^-/  -/' -e 's/^## *//' -e 's/^#/\t\t/' <NEWS.md | fmt -80 > NEWS
 
 vignette:
-	cd inst/doc;\
-		"$(RBIN)/R" CMD Sweave $(PKGNAME).Rnw;\
-		texi2dvi --pdf $(PKGNAME).tex;\
+	cd vignettes;\
+		"$(RBIN)/R" CMD Sweave --pdf $(PKGNAME).Rnw;\
+		pdflatex $(PKGNAME).tex;\
 		"$(RBIN)/R" --vanilla --slave -e "tools:::compactPDF(getwd(), gs_quality='printer')"
 
 
