@@ -96,7 +96,7 @@
       font = {\Huge\bfseries}
     ]
       (subtitle)
-      {\LaTeX\ Graphics for R};
+      {\LaTeX\ Graphics for \lang{R}};
 
     {\huge
     \node[below = \baselineskip of subtitle.base west,
