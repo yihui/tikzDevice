@@ -24,7 +24,7 @@
 \title{TikZDevice: LaTeX Graphics for R}
 \author{Charlie Sharpsteen and Cameron Bracken}
 \date{\Sexpr{strftime(read.dcf(system.file('DESCRIPTION', package = 'tikzDevice'), fields = 'Date'), format = '%B %d, %Y')}}
-\gdef\packageURL{\url{http://r-forge.r-project.org/projects/tikzdevice}}
+\gdef\packageURL{\url{https://github.com/yihui/tikzDevice}}
 \gdef\packageVersion{\Sexpr{tikzDevice:::getTikzDeviceVersion()}}
 
 % Use the hyperref package to fill in PDF metadata.
