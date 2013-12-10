@@ -373,6 +373,7 @@
 % This is like the tikzCodeBlock environment except that it reads input from a
 % file.
 \newcommand{\tikzCodeInput}[2][]{%
+ {% use a separate namespace
   % Process environment options.
   \tikzCode@setupKeys
   % Shift the key directory to our namespace.
@@ -386,6 +387,7 @@
     \lstinputlisting[style = \tikzCode@listingStyle, resetmargins = true]{#2}%
   \fi
   \endMakeFramed
+ }
 }
 
 

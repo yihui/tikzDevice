@@ -10,3 +10,5 @@
 /*.pdf
 /*.tex
 /*.toc
+/.tikzMetrics
+/Sweave.sty

@@ -15,6 +15,8 @@
 
   # So that prompts and continuation prompts don't show up in the output.
   options(prompt = ' ', continue = ' ')
+
+  options(tikzMetricsDictionary='.tikzMetrics')
 @
 \SweaveOpts{echo=F,prefix.string=figs/fig}
 
@@ -22,7 +24,7 @@
 \title{TikZDevice: LaTeX Graphics for R}
 \author{Charlie Sharpsteen and Cameron Bracken}
 \date{\Sexpr{strftime(read.dcf(system.file('DESCRIPTION', package = 'tikzDevice'), fields = 'Date'), format = '%B %d, %Y')}}
-\gdef\packageURL{\url{http://r-forge.r-project.org/projects/tikzdevice}}
+\gdef\packageURL{\url{https://github.com/yihui/tikzDevice}}
 \gdef\packageVersion{\Sexpr{tikzDevice:::getTikzDeviceVersion()}}
 
 % Use the hyperref package to fill in PDF metadata.
@@ -94,7 +96,7 @@
       font = {\Huge\bfseries}
     ]
       (subtitle)
-      {\LaTeX\ Graphics for R};
+      {\LaTeX\ Graphics for \lang{R}};
 
     {\huge
     \node[below = \baselineskip of subtitle.base west,
@@ -196,14 +198,14 @@
 % -----------------------------------------------------------------------------
 \chapter{Introduction}
 
-The \pkg{tikzDevice} package provides a graphics output device for \pkg{R} that
+The \pkg{tikzDevice} package provides a graphics output device for \lang{R} that
 records plots in a \LaTeX -friendly format. The device transforms plotting
-commands issued by R functions into \LaTeX\ code blocks. When included in a
+commands issued by \lang{R} functions into \LaTeX\ code blocks. When included in a
 paper typeset by \LaTeX , these blocks are interpreted with the help of
 TikZ---a graphics package for \TeX\ and friends written by Till Tantau. By
-allowing \LaTeX\ to handle typesetting of text in \pkg{R} plots along with the
+allowing \LaTeX\ to handle typesetting of text in \lang{R} plots along with the
 rest of the text in the paper the full power of \TeX\ is available to the
-\pkg{R} user. There are also no discontinuities in font selection and
+\lang{R} user. There are also no discontinuities in font selection and
 typesetting as demonstrated by a comparison between \autoref{fig:pdf-example}
 and \autoref{fig:tikz-example}.
 
@@ -257,7 +259,7 @@ dev.off()
 
 
 This document is divided into three parts. \autoref{part:usage} describes the
-package functionality and provides example usage. Besides the \pkg{R}
+package functionality and provides example usage. Besides the \lang{R}
 environment, use of the \TikZ\ device device requires the user to have a
 working \LaTeX{} compiler along with an installed version of the \TikZ{}
 package---version 2.00 or greater. \autoref{part:installation} of this
@@ -270,30 +272,30 @@ the \pkg{tikzDevice} package does the things that it does and why it chooses to
 do them that way. The authors have attempted to write this part of the
 documentation in a way that is accessible to users as well as developers. This
 information is provided in the hope that the \pkg{tikzDevice} may serve as a
-case study for creating new \pkg{R} graphics devices. This part of the
+case study for creating new \lang{R} graphics devices. This part of the
 documentation may also help those considering undertaking the transition from
-casual package-building to full-on hacking of the \pkg{R} internals.
+casual package-building to full-on hacking of the \lang{R} internals.
 
 \section{Acknowledgements}
 
 This package would not have been possible without the hard work and ingenuity
 of many individuals. This package straddles the divide between two great open
-source communities---the \pkg{R} programming language and the \TeX{}
+source communities---the \lang{R} programming language and the \TeX{}
 typesetting system. It is our hope that this work will make it easier for users
 to leverage the strengths of both systems.
 
-First off, we would like to thank the R Core Team for creating such a
+First off, we would like to thank the \lang{R} Core Team for creating such a
 wonderful, open and flexible programming environment. Compared to other
-languages we have used, creating packages and extensions for \pkg{R} has
+languages we have used, creating packages and extensions for \lang{R} has
 always been a liberating experience.
 
 This package started as a fork of the Pic\TeX\ device created by Valerio Aimale
-which is part of the \pkg{R} core graphics system.  Without access to this
+which is part of the \lang{R} core graphics system.  Without access to this
 simple, compact example of implementing a graphics device we likely would have
 abandoned the project in it's infancy. We would also like to thank Paul Murrel
-for all of his work on the \pkg{R} graphics system and especially for his
+for all of his work on the \lang{R} graphics system and especially for his
 research and documentation concerning the differences between the font systems
-used by \TeX{} and \pkg{R}.
+used by \TeX{} and \lang{R}.
 
 This package also owes it's existence to Friedrich Leisch's work on the
 \pkg{Sweave} system and Roger D. Peng's \pkg{cacheSweave} extension. These
@@ -342,7 +344,7 @@ list.\\[\baselineskip]
 \chapter{Loading the Package}
 
 The functions in the \pkg{tikzDevice} package are made accessible in the
-\pkg{R} environment by using either the \code{library()} or \code{require()}
+\lang{R} environment by using either the \code{library()} or \code{require()}
 functions like so:
 
 \begin{Verbatim}[frame=single]
@@ -412,7 +414,7 @@ For suggestions on how to obtain a \LaTeX\ compiler, see
   \label{sec:options}
 
 The \pkg{tikzDevice} package is influenced by a number of options that may be
-set locally in your \pkg{R} scripts or in the \pkg{R} console or globally in
+set locally in your \lang{R} scripts or in the \lang{R} console or globally in
 a \code{.Rprofile} file. All of the options can be set by using
 \code{options(<option> = <value>)}. These options allow for the use of custom
 \code{documentclass} declarations, \LaTeX\ packages, and typesetting engines
@@ -421,7 +423,7 @@ a \code{.Rprofile} file. All of the options can be set by using
 For convenience the function \code{setTikzDefaults()} is provided which sets
 all the global options back to their original values.
 
-The proper placement of a \code{.Rprofile} file is explained in the \pkg{R}
+The proper placement of a \code{.Rprofile} file is explained in the \lang{R}
 manual page \code{?Startup}. For the details of why calling the \LaTeX\ compiler is
 necessary, see \autoref{part:implementation}.
 
@@ -466,14 +468,14 @@ options(tikzLualatex = '/path/to/lualatex')
 \subsection{The \pkgopt{tikzMetricsDictionary} Option}
 
 When using the graphics device provided by \pkg{tikzDevice}, you may notice
-that \pkg{R} appears to ``lag" or ``hang" when commands such as \code{plot()}
+that \lang{R} appears to ``lag" or ``hang'' when commands such as \code{plot()}
 are executed. This is because the device must query the \LaTeX\ compiler for
 string widths and font metrics. For a normal plot, this may happen dozens or
-hundreds of times---hence \pkg{R} becomes unresponsive for a while. The good
+hundreds of times---hence \lang{R} becomes unresponsive for a while. The good
 news is that the \code{tikz()} code is designed to cache the results of these
 computations so they need only be performed once for each string or character.
 By default, these values are stored in a temporary cache file which is deleted
-when \code{R} is shut down. Using the option \code{tikzMetricsDictionary}, a
+when \lang{R} is shut down. Using the option \code{tikzMetricsDictionary}, a
 permanent cache file may be specified:
 
 \begin{tikzCodeBlock}[title={Setting a location in \code{.Rprofile} for a permanent metrics dictionary},listing style=sweavechunk]
@@ -483,7 +485,7 @@ options(tikzMetricsDictionary = '/path/to/dictionary/location')
 
 \subsection{The \pkgopt{tikzDocumentDeclaration} Option}
 
-\code{standAlone == TRUE}. \code{tikzDocumentDeclaration} also influences the
+For \code{standAlone == TRUE}, \code{tikzDocumentDeclaration} also influences the
 calculation of font metrics. If a base font size is specified as an option to
 the document class, the \pkg{tikzDevice} will use this value as the base font
 size for graphics.
@@ -588,7 +590,7 @@ options(
 \subsection{The \pkgopt{tikzRasterResolution} Option}
 
 When \code{tikz} is requested to add a raster to a graphic, the raster is
-written to a PNG file which is then included into the \LaTeX\ code. This option
+written to a PNG file which is then included by the \LaTeX\ code. This option
 controls the resolution (dpi) at which the PNG files are created.
 
 \begin{tikzCodeBlock}[title={Default},listing style=sweavechunk]
@@ -614,7 +616,7 @@ options(tikzPdftexWarnUTF = TRUE)
 \section{Description}
 
 The \code{tikz} function provides most of the functionality of the
-\pkg{tikzDevice} package. This function opens an \pkg{R} graphics device that
+\pkg{tikzDevice} package. This function opens an \lang{R} graphics device that
 records plots as a series of \TikZ\ commands. The device supports many levels
 of output that range from stand-alone \LaTeX\ documents that may be compiled
 into figures to code chunks that must be incorporated into existing \LaTeX\
@@ -634,7 +636,7 @@ function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
   engine = getOption("tikzDefaultEngine"),
   documentDeclaration = getOption("tikzDocumentDeclaration"),
   packages,
-  footer = getOption("tikzFooter")
+  footer = getOption("tikzFooter"))
 \end{Verbatim}
 
 \begin{flexlabelled}{code}{*}{0.5em}{0.5em}{*}{\leftmargin}
@@ -674,28 +676,28 @@ function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
     placed within a \code{tikzpicture} environment.
 
   \item[console]
-    Controls whether output is directed to the \pkg{R} console. This is useful
+    Controls whether output is directed to the \lang{R} console. This is useful
     for dumping \TikZ\ output directly into a \LaTeX\ document via sink. If
-    \code{TRUE}, the \code{file} argument is ignored. Setting \code{file=''} is
+    \code{TRUE}, the \code{file} argument is ignored. Setting \code{file=\'{}\'{}} is
     equivalent to setting \code{console=TRUE}.
 
   \item[sanitize]
-    Should special latex characters be replaced (Default \code{FALSE}). See the
-    section ``Options That Affect Package Behavior'' for which characters are
-    replaced.
+    Should special latex characters be replaced (Default \code{FALSE}). See
+    \autoref{sec:options}, ``Options That Affect Package Behavior''
+    for which characters are replaced.
 
   \item[engine]
     A string specifying which TeX engine to use. Possible values are
     \code{'pdftex'}, \code{'xetex'} and \code{'luatex'}.
 
   \item[documentDeclaration]
-    See Section \ref{sec:options}, ``Options That Affect Package Behavior.''
+    See \autoref{sec:options}, ``Options That Affect Package Behavior.''
 
   \item[packages]
-    See Section \ref{sec:options}, ``Options That Affect Package Behavior.''
+    See \autoref{sec:options}, ``Options That Affect Package Behavior.''
 
   \item[footer]
-    See Section \ref{sec:options}, ``Options That Affect Package Behavior.''
+    See \autoref{sec:options}, ``Options That Affect Package Behavior.''
 \end{flexlabelled}
 
 The first six options should be familiar to anyone who has used the default
@@ -722,9 +724,9 @@ supports three modes of output:
   \label{subsec:fontCalc}
 
 The overarching goal of the \pkg{tikzDevice} is to provide seamless integration
-between text in R graphics and the text of \LaTeX\ documents that contain those
+between text in \lang{R} graphics and the text of \LaTeX\ documents that contain those
 graphics. In order to achieve this integration the device must translate font
-sizes specified in \pkg{R} to corresponding font sizes in \LaTeX. The issue is
+sizes specified in \lang{R} to corresponding font sizes in \LaTeX. The issue is
 that font sizes in \LaTeX\ are controlled by a ``base font size'' that is
 specified at the beginning of the document---typically 10pt. There is no easy
 way in \LaTeX\ to change the font size to a new numerical value, such as 16pt
@@ -738,7 +740,7 @@ factor used to approximate other font sizes using the following three inputs:
 
   \item
     The ``character expansion factor'' parameter, specified using the `cex'
-    argument to functions such as described in the documentation of the \pkg{R}
+    argument to functions such as described in the documentation of the \lang{R}
     function \code{par}.
 
   \item
@@ -756,13 +758,11 @@ The calculation used is:
 The tricky bit is the specification of the ``base font size''. By default the
 \pkg{tikzDevice} will attempt to determine this parameter by scanning the value of
 \code{options( "tikzDocumentDeclaration" )} using the regular expression
-\code{\textbackslash d+[pt]}. With the default header:
-
+\code{\textbackslash d+pt}. With the default header:
 \[
-  \mbox{\code{\textbackslash documentclass[10pt]{article}}}
+  \mbox{\code{\textbackslash documentclass[10pt]\{article\}}}
 \]
-
-This regular expression will return 10 as the base pointsize to be used by the
+this regular expression will return 10 as the base pointsize to be used by the
 device. If the regular expression fails to produce a match, the value of the
 \code{pointsize} argument to the \code{tikz} function will be used.
 
@@ -779,7 +779,7 @@ a few important caveats:
   \item[System Requirements:]
     A working version of \hologo{XeLaTeX} or \hologo{LuaLaTeX}  along with the
     packages \code{fontspec} and \code{xunicode} are required for direct
-    processing of Unicode input. If \pkg{tikzDevice} cannot find unicode-aware
+    processing of Unicode input. If \pkg{tikzDevice} cannot find a Unicode-aware
     compiler, then Unicode support cannot be guaranteed.
 
   \item[Encoding:]
@@ -797,7 +797,7 @@ a few important caveats:
     There is specifically no support for input of plotmath characters as
     unicode since the user can simply input \LaTeX\ math directly. We strongly
     encourage the use of \LaTeX\ math over plotmath for style and consistency's
-    sake.  A consequence of this is that most of the \pkg{R} examples and demos
+    sake.  A consequence of this is that most of the \lang{R} examples and demos
     of plotmath won't work without significant manipulation (your mileage may
     vary but you may get anything from errors to warnings to documents that
     mysteriously won't compile). That is not to say that the output could not
@@ -817,22 +817,17 @@ a few important caveats:
 
 
 \section{Examples}
-<<pathStepIn,results=hide>>=
-  # Shift into the `figs` directory so that examples do not have to include
-  # `figs` in the output file path.
-	setwd('figs')
-@
 
 \subsection{Default Mode}
 
 The most common use of the \code{tikz} function is to produce a plot that
 will be included in another \LaTeX\ document, such as a report. Running the
-following example in \pkg{R} will produce a very simple graphic using the
+following example in \lang{R} will produce a very simple graphic using the
 \code{plot} function:
 
 <<simpleEx,echo=TRUE,results=hide>>=
 require(tikzDevice)
-tikz('simpleEx.tex',width=3.5,height=3.5)
+tikz('figs/simpleEx.tex',width=3.5,height=3.5)
 plot(1,main='Hello World!')
 dev.off()
 @
@@ -882,7 +877,7 @@ commands. An important issue to note is that many \LaTeX\ commands are prefixed
 by the backaslash character: \textbackslash. Unfortunately, in many programming
 languages, the backslash character is also given a special status when it
 appears in strings. Therefore, it is necessary to place two backslashes,
-\textbackslash\textbackslash, in \pkg{R} strings in order to cause backslash to
+\textbackslash\textbackslash, in \lang{R} strings in order to cause backslash to
 appear in the output for \LaTeX. The next example demonstrates how to use
 \LaTeX\ commands in plot annotation.
 
@@ -892,7 +887,7 @@ appear in the output for \LaTeX. The next example demonstrates how to use
 	\begin{minipage}{0.5\textwidth}
 <<latexEx,echo=TRUE,results=hide,keep.source=TRUE>>=
 require(tikzDevice)
-tikz('latexEx.tex',
+tikz('figs/latexEx.tex',
   width=3.5,height=3.5)
 
 x <- rnorm(10)
@@ -938,7 +933,7 @@ embedded inside another \code{tikzpicture} of the users own construction.
 require(tikzDevice)
 require(maps)
 
-tikz('westCoast.tex', bareBones=TRUE)
+tikz('figs/westCoast.tex', bareBones=TRUE)
 
 map('state', regions=c('california', 'oregon', 'washington'),
     lwd=4, col='grey40')
@@ -1196,7 +1191,7 @@ that can be drawn with \TikZ. Check out the results in
 require(tikzDevice)
 
 # Load some additional TikZ libraries
-tikz("annotation.tex",width=4,height=4,
+tikz("figs/annotation.tex",width=4,height=4,
   packages = c(getOption('tikzLatexPackages'),
     "\\usetikzlibrary{decorations.pathreplacing}",
     "\\usetikzlibrary{positioning}",
@@ -1244,7 +1239,7 @@ dev.off()
 \subsection{\pkgopt{tikz} vs. \pkgopt{pdf} for \pkgopt{plotmath} symbols and Unicode characters}
 
 This is a side-by-side example showing how \code{tikz(..., engine = 'xetex')} handles UTF-8
-characters and plotmath symbols compared to the standard R \code{pdf} device.
+characters and plotmath symbols compared to the standard \lang{R} \code{pdf} device.
 
 \begin{figure}[!h]
 \centering
@@ -1261,16 +1256,11 @@ characters and plotmath symbols compared to the standard R \code{pdf} device.
 
 \end{landscape}
 
-<<pathStepOut,results=hide>>=
-  # Return to the normal working directory.
-	setwd('../')
-@
-
 
 % -----------------------------------------------------------------------------
 %                      Chapter 4: The Metrics Functions
 % -----------------------------------------------------------------------------
-\chapter{The \pkgopt{getLatexCharMetrics} and \pkgopt{getLatexStrWidth} Functions}
+\chapter{The \code{getLatexCharMetrics} and \code{getLatexStrWidth} Functions}
 
 \section{Description}
 
@@ -1302,7 +1292,7 @@ getLatexCharMetrics( charCode, cex = 1, face = 1 )
     The character expansion factor to be used when determining metrics.
 
   \item[face]
-    An integer specifying the \pkg{R} font face to use during metric
+    An integer specifying the \lang{R} font face to use during metric
     calculations. The accepted values are as follows:
 
     \begin{description}
@@ -1332,7 +1322,7 @@ getLatexStrWidth( "The symbol: alpha" )
 getLatexStrWidth( "The symbol: $\\alpha$" )
 @
 
-For the first calculation, the word ``alpha" was interpreted as just a word and
+For the first calculation, the word ``alpha'' was interpreted as just a word and
 the widths of the characters `a', `l', `p', `h' and `a' were included in the
 string width. For the second string, \verb|\alpha| was interpreted as a
 mathematical symbol and only the width of the symbol `$\alpha$' was included in
@@ -1421,14 +1411,16 @@ is downloaded.
 For users running a Linux or UNIX operating system, we recommend the TeX Live
 distribution which is available at
 \url{http://www.tug.org/texlive/acquire.html}. TeX Live is maintained by the
-TeX Users Group and a new version is released every year. Note that the version
-of TeX Live provided by many Linux package management systems is the 2007
-version. We recommend using TeX Live 2008 or higher as the \code{tlmgr} package
+TeX Users Group and a new version is released every year.
+We recommend using TeX Live 2008 or higher as the \code{tlmgr} package
 manager was introduced in the 2008 distribution. Using \code{tlmgr} greatly
 simplifies the adding and removing packages from the distribution. The website
 offers an installation package, called \code{install-tl.tar.gz} or something
 similar, that contains a shell script that can be used to install an up-to-date
 version of the TeX Live distribution.
+Note that the version
+of TeX Live provided by many Linux package management systems sometimes
+lags behind the version provided directly by the TeX Users Group.
 
 \section{Mac OS X}
 
@@ -1437,7 +1429,7 @@ For users running Apple's OS X, we recommend the Mac TeX package available at
 a convenient OS X installer along with a few add-on packages. One striking
 difference between the Mac TeX and TeX Live installers is that the installer
 for Mac TeX includes the whole TeX Live distribution in the initial download-
-for TeX Live 2008 this amounts to approximately 1.2 GB. This is quite a large
+for TeX Live 2013 this amounts to approximately 2.3 GB. This is quite a large
 download that contains several packages that the average or even advanced user
 will never ever use. To conserve time and space we recommend installing from
 the basic installer at \url{http://www.tug.org/mactex/morepackages.html} and
@@ -1502,7 +1494,7 @@ Generally, the best place to find \LaTeX\ packages is the Comprehensive TeX
 Archive Network, or \lang{CTAN} located at \url{http://www.ctan.org}. In the
 case of the PGF/\TikZ\ package, the project homepage at
 \url{http://www.sourceforge.net/projects/pgf} is also a good place to obtain
-the package- especially if you would like to play with the bleeding-edge
+the package---especially if you would like to play with the bleeding-edge
 development version.
 
 Generally speaking, all \LaTeX\ packages are stored in a specially directory
@@ -1531,7 +1523,7 @@ The location of files and subfolders in the \code{texmf} directory should
 follow a standard pattern called the \TeX\ Directory Structure or TDS which is
 documented here: \url{http://tug.org/tds/tds.pdf}. Fortunately, most packages
 available on \pkg{CTAN} are archived in such a way that they will unpack into
-a TDS-complient configuration. TDS-complient archives usually have the phrase
+a TDS-compliant configuration. TDS-compliant archives usually have the phrase
 \code{tds} somewhere in their filename and may be installed from a UNIX
 shell\footnote{Sorry Windows users, we enjoy using command prompt about as much
 as a poke in the eye with a sharp stick. Hence we don't use it enough to offer
@@ -1545,8 +1537,8 @@ unzip package.tds.zip -d /path/to/texmf
 tar -xzf -C /path/to/texmf package.tar.gz
 \end{tikzCodeNode}
 
-For packages that aren't provided in TDS-complient form look for installation
-notes- usually provided in the form of an \code{INSTALL} file. If all else
+For packages that aren't provided in TDS-compliant form look for installation
+notes---usually provided in the form of an \code{INSTALL} file. If all else
 fails \LaTeX\ packages can usually be installed by copying the files ending in
 \code{.sty} to \code{texmf/tex/latex/}.
 
@@ -1576,7 +1568,7 @@ kpsewhich tikz.sty
 \begin{tikzpicture}
 
   \node[text width = 4.3in] (r code) {
-    \begin{tikzCodeNode}[title={R User Types}, listing style=sweavechunk]
+    \begin{tikzCodeNode}[title={\lang{R} User Types}, listing style=sweavechunk]
 tikz('Rplot.tex')
 plot(1)
 dev.off()
@@ -1641,13 +1633,13 @@ static void TikZ_Circle( double x, double y, double r,
 
 We learn best through working with examples. When it comes to programming languages this involves taking working code that someone else has written, breaking it in as many places at it can possibly be broken, and then trying to build something out of the wreckage. Open source software facilitates this process wonderfully by ensuring the source code of a project is always available for inspection and experimentation. The \pkg{tikzDevice} its self was created by disassembling and then rebuilding Valerio Aimale's Pic\TeX{} device driver which is a part of the \lang{R} core codebase.
 
-This section is our attempt to help anyone who may be experimenting with our code, and by extension the internals of the R graphics system. There may also be useful, or useless, tidbits concerning building R packages and interacting with the core R language. The R language can be extended in so many interesting and useful ways and it is our hope that the following documentation may provide a case study for anyone attempting such an extension.
+This section is our attempt to help anyone who may be experimenting with our code, and by extension the internals of the \lang{R} graphics system. There may also be useful, or useless, tidbits concerning building \lang{R} packages and interacting with the core \lang{R} language. The \lang{R} language can be extended in so many interesting and useful ways and it is our hope that the following documentation may provide a case study for anyone attempting such an extension.
 
-We will make an attempt to assume no special expertise with any of the systems or programming languages leveraged by this package and described by this documentation. Therefore, if you are an experienced developer and find yourself thinking ``My god, are they {\bfseries really} about to launch into a description of how C header files work?", please feel free to skip ahead a few paragraphs. We received our formal introduction to computer programming in a college engineering program- therefore our programming background is rooted in Fortran (or, if you prefer, {\scshape fortran}). We are attempting to write the sort of documentation that we would have found invaluable at the start of this project
+We will make an attempt to assume no special expertise with any of the systems or programming languages leveraged by this package and described by this documentation. Therefore, if you are an experienced developer and find yourself thinking ``My god, are they {\bfseries really} about to launch into a description of how \lang{C} header files work?'', please feel free to skip ahead a few paragraphs. We received our formal introduction to computer programming in a college engineering program---therefore our programming background is rooted in Fortran (or, if you prefer, {\scshape fortran}). We are attempting to write the sort of documentation that we would have found invaluable at the start of this project
 
-Therefore, this section is for all the budding developers like ourselves out there- people who have done some programming and who are starting to take a close look at the nuts and bolts of the \lang{R} programming environment. If you feel like you are wandering through a vast forest getting smacked in the face by every branch then maybe this section will help pull some of those branches out of the way...
+Therefore, this section is for all the budding developers like ourselves out there---people who have done some programming and who are starting to take a close look at the nuts and bolts of the \lang{R} programming environment. If you feel like you are wandering through a vast forest getting smacked in the face by every branch then maybe this section will help pull some of those branches out of the way...
 
-...then again we have a lot of material to cover: R, C, \LaTeX , \TikZ{} , typography and the details of computerized font systems. Our grip may fail and send those branches flying back with increased velocity.
+...then again we have a lot of material to cover: \lang{R}, \lang{C}, \LaTeX , \TikZ{} , typography and the details of computerized font systems. Our grip may fail and send those branches flying back with increased velocity.
 
 We wish you luck!\\
 \vbox{}\quad{\itshape -The tikzDevice Team}
@@ -1657,7 +1649,7 @@ We wish you luck!\\
 
 \chapter{Anatomy of an \lang{R} Graphics Device}
 
-The core of an \lang{R} graphics device is a collection of functions, written in C, that perform various specialized tasks. A description of some of these functions can be found in the {\itshape R Internals} manual while the main documentation is in the C header file \code{GraphicsDevice.h}. For most \lang{R} installations this header file can be found in the directory \code{R\_HOME/include/R\_ext}. For copies of \lang{R} distributed in source code form, \code{GraphicsDevice.h} is located inside \code{R-version/src/include/R\_ext}. The following is a description of the functions each graphics device is expected to provide:
+The core of an \lang{R} graphics device is a collection of functions, written in \lang{C}, that perform various specialized tasks. A description of some of these functions can be found in the {\itshape R Internals} manual while the main documentation is in the \lang{C} header file \code{GraphicsDevice.h}. For most \lang{R} installations this header file can be found in the directory \code{R\_HOME/include/R\_ext}. For copies of \lang{R} distributed in source code form, \code{GraphicsDevice.h} is located inside \code{R-version/src/include/R\_ext}. The following is a description of the functions each graphics device is expected to provide:
 
 
 \setlength\columnsep{5em}
@@ -1699,9 +1691,9 @@ The core of an \lang{R} graphics device is a collection of functions, written in
 
 \begin{itemize}
 
-\item[\code{activate}]{This function is called when the device is designated as the active output device- i.e. by using \code{dev.set()} in \lang{R}}
+\item[\code{activate}]{This function is called when the device is designated as the active output device---i.e. by using \code{dev.set()} in \lang{R}}
 
-\item[\code{close}]{This function is called when the device is shut down- i.e. by using \code{dev.off()} in \lang{R}}
+\item[\code{close}]{This function is called when the device is shut down---i.e. by using \code{dev.off()} in \lang{R}}
 
 \item[\code{deactivate}]{This function is called when another device is designated as the active output device.}
 
@@ -1746,7 +1738,7 @@ Font metrics are measurements associated with the glyphs, or printed characters,
 
 \node[anchor = north west,outer sep=0pt,text width=0.6\textwidth] at ($(centerpoint) + (8em, 0)$){
 Ascent is the distance between the baseline and the tallest point on a
-character's glyph. For the "g" printed to the left, the ascent has been
+character's glyph. For the ``g'' printed to the left, the ascent has been
 calculated as: \the\yone
 };
 \end{tikzpicture}
@@ -1777,7 +1769,7 @@ calculated as: \the\yone
 
 \node[anchor = north west,outer sep=0pt,text width=0.6\textwidth] at ($(centerpoint) + (8em, 0)$){
 Descent is the distance between the baseline and the lowest point on a
-character's glyph. For the "g" printed to the left, the descent has been
+character's glyph. For the ``g'' printed to the left, the descent has been
 calculated as: \the\yone
 };
 \end{tikzpicture}
@@ -1806,18 +1798,18 @@ calculated as: \the\yone
 
 \node[anchor = north west,outer sep=0pt,text width=0.6\textwidth] at ($(centerpoint) + (8em, 0)$){
 Width is the distance between the left and right sides of a character's glyph.
-For the "g" printed to the left, the width has been calculated as: \the\xone};
+For the ``g'' printed to the left, the width has been calculated as: \the\xone};
 \end{tikzpicture}
 
-Providing font metrics and string widths is without a doubt most difficult task a \lang{R} graphics device must undertake. The calculation of string widths is made even difficult for the \pkg{tikzDevice} as we attempt to process arbitrary \LaTeX{} strings. Inside \lang{R} the string ``\verb`$\alpha$`" literally has 8 characters, but when it is typeset it only has one: $\alpha$.
+Providing font metrics and string widths is without a doubt the most difficult task a \lang{R} graphics device must undertake. The calculation of string widths is made even more difficult for the \pkg{tikzDevice} as we attempt to process arbitrary \LaTeX{} strings. Inside \lang{R} the string ``\verb`$\alpha$`'' literally has 8 characters, but when it is typeset it only has one: $\alpha$.
 
-Calculating font metrics is a tricky business to begin with and the fact that the typeset representation of a \LaTeX{} string is different from its representation in source code compounds the difficulty of the task immensely. Therefore, we took the path of laziness and started looking for an easy way out (remember the three great virtues of a programmer?). The solution we came up with seemed easy enough-- make \LaTeX{} calculate these metrics for us, after all that is what a \LaTeX{} compiler does for a living.
+Calculating font metrics is a tricky business to begin with and the fact that the typeset representation of a \LaTeX{} string is different from its representation in source code compounds the difficulty of the task immensely. Therefore, we took the path of laziness and started looking for an easy way out (remember the three great virtues of a programmer?). The solution we came up with seemed easy enough---make \LaTeX{} calculate these metrics for us, after all that is what a \LaTeX{} compiler does for a living.
 
 Now, how to do that?
 
 \subsection{Character Metrics}
 
-As a starting point, let's examine the interface of the C function that \lang{R} calls in order to determine character metrics:
+As a starting point, let's examine the interface of the \lang{C} function that \lang{R} calls in order to determine character metrics:
 
 \begin{tikzCodeBlock}[title={Function declaration for \code{metricInfo}}]
 void (metricInfo)(int c, const pGEcontext gc,
@@ -1831,7 +1823,7 @@ The outgoing variables are \code{ascent}, \code{descent} and \code{width}. The a
 
 The other two variables present in the function are the \code{pGEcontext} variable \code{gc} and the \code{pDevDesc} variable \code{dd}. \code{gc} contains information such as the font face, foreground color, background color, character expansion factor, ect. currently in use by the graphics system. \code{dd} is the object which contains \lang{R}'s representation of the graphics device. For the sake of simplifying the following discussion, we will ignore these variables.
 
-So, to recap-- we have an integer \code{c} coming in that represents a code for a character in the \code{ASCII} or \code{UTF8} symbol tables (for the sake of the following discussion, we will assume \code{ASCII} characters only). Our overall task is to somehow turn that integer into three numbers which can be assigned to the pointer variables \code{ascent}, \code{descent} and \code{width}. And, since we're being lazy, we've decided that the best way to do that is to ask the \LaTeX{} compiler to compute the numbers for us.
+So, to recap---we have an integer \code{c} coming in that represents a code for a character in the \code{ASCII} or \code{UTF8} symbol tables (for the sake of the following discussion, we will assume \code{ASCII} characters only). Our overall task is to somehow turn that integer into three numbers which can be assigned to the pointer variables \code{ascent}, \code{descent} and \code{width}. And, since we're being lazy, we've decided that the best way to do that is to ask the \LaTeX{} compiler to compute the numbers for us.
 
 Recovering these numbers from the \LaTeX{} compiler involves the execution of three additional tasks:
 
@@ -1845,13 +1837,13 @@ Recovering these numbers from the \LaTeX{} compiler involves the execution of th
 
 \end{enumerate}
 
-Each of these tasks could be executed from inside our \lang{C} function, \code{metricInfo}. However, we will run into some difficulties- namely with step 2, which involves calling out to the operating system with orders to run \LaTeX . Each operating system handles these calls a little differently and our package must attempt to get this job done whether it is running on Windows, UNIX, Linux or Mac OS X.
+Each of these tasks could be executed from inside our \lang{C} function, \code{metricInfo}. However, we will run into some difficulties---namely with step 2, which involves calling out to the operating system with orders to run \LaTeX . Each operating system handles these calls a little differently and our package must attempt to get this job done whether it is running on Windows, UNIX, Linux or Mac OS X.
 
-Portable \lang{C} code could be written to handle each of these situations, but that is starting to sound like work and we're trying to be lazy here. What we need is to be able to work at a higher {\itshape level of abstraction}. That is-- instead of using \lang{C}, we need to be working inside a language that shields us from such details as what operating system is being used. \lang{R} may have called this \lang{C} function to calculate font metrics, but we really want to do the actual computations back inside \lang{R}.
+Portable \lang{C} code could be written to handle each of these situations, but that is starting to sound like work and we're trying to be lazy here. What we need is to be able to work at a higher {\itshape level of abstraction}. That is---instead of using \lang{C}, we need to be working inside a language that shields us from such details as what operating system is being used. \lang{R} may have called this \lang{C} function to calculate font metrics, but we really want to do the actual computations back inside \lang{R}.
 
 \subsection{Calling \lang{R} Functions from \lang{C} Functions}
 
-The ``Ritual of the Calling of the R Function" is easy enough to perform as long as you don't have burning need to know all the details of the objects you are handling. The \lang{C} level representation of a \lang{R} object such as a variable or function is an object known as a \code{SEXP}. For the exact details on what a \code{SEXP} is and how it works, we refer the interested user to chapter one of the {\itshape R Internals} manual.
+The ``Ritual of the Calling of the \lang{R} Function'' is easy enough to perform as long as you don't have burning need to know all the details of the objects you are handling. The \lang{C} level representation of a \lang{R} object such as a variable or function is an object known as a \code{SEXP}. For the exact details on what a \code{SEXP} is and how it works, we refer the interested user to chapter one of the {\itshape \lang{R} Internals} manual.
 
 The \lang{R} function we will be calling is declared in the \lang{R} environment as follows:
 
@@ -1863,7 +1855,7 @@ getLatexCharMetrics <- function( charCode ){
 }
 \end{tikzCodeBlock}
 
-In order to call this function for \lang{C}, we need a vector composed of two \lang{C}-level \lang{R} objects-- one containing the name of the function we are calling and another one containing the value we are passing for \code{charCode}. This is set up in \lang{C} as follows:
+In order to call this function for \lang{C}, we need a vector composed of two \lang{C}-level \lang{R} objects---one containing the name of the function we are calling and another one containing the value we are passing for \code{charCode}. This is set up in \lang{C} as follows:
 
 \begin{tikzCodeBlock}[title={Preparing a \lang{R} function call inside \lang{C}}]
 void (metricInfo)(int c, const pGEcontext gc, double* ascent, double* descent,
@@ -1884,7 +1876,7 @@ void (metricInfo)(int c, const pGEcontext gc, double* ascent, double* descent,
 }
 \end{tikzCodeBlock}
 
-The first thing that happens in the code chunk above is that a new \code{SEXP} variable named \code{RCallBack} is created. This variable will be the agent through which we will communicate with the \lang{R} environment. The next action is to allocate our callback variable as a vector of length 2-- we need one slot for the \lang{R} function name and one slot for the value that is being passed into the function. This allocation happens inside the \lang{R} environment, so it is executed inside the \code{PROTECT} statement. The reason for using \code{PROTECT} is that the \lang{R} garbage collector is constantly on the prowl for unused objects in the \lang{R} environment. An object is considered ``unused" if it is not attached to any variable name in the \lang{R} environment. Since the object is only attached to the variable \code{RCallBack} in our \lang{C} function, the \lang{R} garbage collector will see it a valid candidate for deletion. The purpose of \code{PROTECT} is to keep our new vector from being trashed.
+The first thing that happens in the code chunk above is that a new \code{SEXP} variable named \code{RCallBack} is created. This variable will be the agent through which we will communicate with the \lang{R} environment. The next action is to allocate our callback variable as a vector of length 2-- we need one slot for the \lang{R} function name and one slot for the value that is being passed into the function. This allocation happens inside the \lang{R} environment, so it is executed inside the \code{PROTECT} statement. The reason for using \code{PROTECT} is that the \lang{R} garbage collector is constantly on the prowl for unused objects in the \lang{R} environment. An object is considered ``unused'' if it is not attached to any variable name in the \lang{R} environment. Since the object is only attached to the variable \code{RCallBack} in our \lang{C} function, the \lang{R} garbage collector will see it a valid candidate for deletion. The purpose of \code{PROTECT} is to keep our new vector from being trashed.
 
 The next portion of the \lang{C} function retrieves the \lang{R} function object for \code{getLatexCharMetrics}. The function is searched for in \lang{R} global namespace, so it must be one that is available to the user from the \lang{R} command prompt when the package is loaded. The function is stored in the \code{SEXP} variable \code{metricFun}. We do not have to involve \code{PROTECT} in the assignment since \code{getLatexCharMetrics} exists as a variable name in the \lang{R} environment.
 
@@ -1896,7 +1888,7 @@ When dealing with a vector \code{SEXP} such as \code{RCallBack}, which has 2 slo
 SETCAR( CDR(RCallBack), ScalarInteger( c ) );
 \end{tikzCodeBlock}
 
-After assigning the value of the \lang{C} variable \code{c} as the second value of \code{RCallBack}, we need to "tag" it as the value that corresponds to the \code{charCode} argument of \code{getLatexCharMetrics}. This is done by using the \code{SET\_TAG} function. Once again, we use \code{CDR} to shift our area of operation to the second slot of \code{RCallBack}. Now that the \code{RCallBack} object is set up, we are ready to actually call the \code{getLatexCharMetrics} function.
+After assigning the value of the \lang{C} variable \code{c} as the second value of \code{RCallBack}, we need to ``tag'' it as the value that corresponds to the \code{charCode} argument of \code{getLatexCharMetrics}. This is done by using the \code{SET\_TAG} function. Once again, we use \code{CDR} to shift our area of operation to the second slot of \code{RCallBack}. Now that the \code{RCallBack} object is set up, we are ready to actually call the \code{getLatexCharMetrics} function.
 
 \begin{tikzCodeBlock}[title={Executing a \lang{R} function call inside \lang{C}}]
 SEXP LatexMetrics;
@@ -1915,7 +1907,7 @@ And that's it! We create a new \code{SEXP} to hold the return values of \code{ge
   return;
 \end{tikzCodeBlock}
 
-Here the \code{REAL} function is used to coerce the \code{SEXP} variable \code{RMetrics} to a vector of real numbers. These numbers are then extracted and assigned to the return values of \code{metricInfo}. In \lang{C} we must specify the `first' value in a vector using the index 0 rather than the index 1 \footnote{There are good logical reasons for this from the point of view of a computer scientist-- but if your background in arrays is rooted in linear algebra it will be a bit disorienting.}. The last thing to do is release the restrictions we placed on the \lang{R} garbage collector. Since we used the \code{PROTECT} function twice, we must call \code{UNPROTECT} and pass 2 as the argument.
+Here the \code{REAL} function is used to coerce the \code{SEXP} variable \code{RMetrics} to a vector of real numbers. These numbers are then extracted and assigned to the return values of \code{metricInfo}. In \lang{C} we must specify the `first' value in a vector using the index 0 rather than the index 1. \footnote{There are good logical reasons for this from the point of view of a computer scientist---but if your background in arrays is rooted in linear algebra it will be a bit disorienting.} The last thing to do is release the restrictions we placed on the \lang{R} garbage collector. Since we used the \code{PROTECT} function twice, we must call \code{UNPROTECT} and pass 2 as the argument.
 
 \subsection{Implementing a System Call to \LaTeX}
 
@@ -1934,9 +1926,9 @@ getLatexCharMetrics <- function( charCode ){
   # To be continued...
 \end{tikzCodeBlock}
 
-The first thing we do is choose a place to create this input file. Now, when the \LaTeX{} compiler is run on a \code{.tex} file, a lot of additional files get created-- the whole process is a bit messy. Since the user probably wouldn't appreciate having to clean up our mess, we use the \code{tempdir()} function to retrieve a path to a {\itshape temporary directory} on the system. Here is the first place we benefit from the added level of abstraction granted by \lang{R}. Each operating system has different locations for temporary directories. If we were still working in \lang{C}, we would have to worry about such details. \lang{R} takes care of those details for us.
+The first thing we do is choose a place to create this input file. Now, when the \LaTeX{} compiler is run on a \code{.tex} file, a lot of additional files get created---the whole process is a bit messy. Since the user probably wouldn't appreciate having to clean up our mess, we use the \code{tempdir()} function to retrieve a path to a {\itshape temporary directory} on the system. Here is the first place we benefit from the added level of abstraction granted by \lang{R}. Each operating system has different locations for temporary directories. If we were still working in \lang{C}, we would have to worry about such details. \lang{R} takes care of those details for us.
 
-Now that we have a place to work, we set up a couple of filenames- one for the input file, which ends in \code{.tex} and one for the \LaTeX{} log file, which ends in \code{.log}. We then open the \code{.tex} file for writing. The next step is to setup the preamble of the \LaTeX{} file.
+Now that we have a place to work, we set up a couple of filenames---one for the input file, which ends in \code{.tex} and one for the \LaTeX{} log file, which ends in \code{.log}. We then open the \code{.tex} file for writing. The next step is to setup the preamble of the \LaTeX{} file.
 
 \begin{tikzCodeBlock}[title={Setting up the preamble of a \LaTeX{} input file},listing style=sweavechunk]
   writeLines("\\documentclass{article}", texIn)
@@ -1952,11 +1944,11 @@ Now that we have a place to work, we set up a couple of filenames- one for the i
 Here we have started a standard \LaTeX{} input file by specifying
 \code{article} as the document class. We also add the \code{fontenc} package
 and specify \code{T1} as its option. This ensures we are using the Type 1 font
-encoding- by default \TeX and \LaTeX{} use an encoding called \code{OT1}. Why
+encoding---by default \TeX{} and \LaTeX{} use an encoding called \code{OT1}. Why
 do we need to worry about font encodings? Well, a font encoding specifies which
 \code{ASCII} symbol codes map to which characters and by default, \lang{R}
 expects us to be using the Type 1 encoding (\lang{R} does support other
-encodings- but we're ignoring that for now). For example, in the Type 1
+encodings---but we're ignoring that for now). For example, in the Type 1
 encoding, the character that corresponds to the \code{ASCII} code 60 is the
 less-than sign: `{\char60}'. If we were to allow \TeX{}
 to retain its default \code{OT1} encoding, that same character code would
@@ -1966,7 +1958,7 @@ The other two packages we load are the \code{tikz} package and its \code{calc}
 library. Essentially we will have \TikZ{} drop the character into a box and
 report some measurements concerning the size of that box. The last command,
 \code{batchmode} tells \LaTeX{} that there isn't any user available to interact
-with-- so it should bother to stop and ask any questions while processing this
+with---so it should not bother to stop and ask any questions while processing this
 file.
 
 The next step is to set up the part of the \LaTeX{} file that will actually
@@ -1977,7 +1969,7 @@ following code will be presented as straight \LaTeX{} --
 \code{getLatexCharMetrics} inserts it into the \code{texIn} file by means of
 \code{writeLines} as we have been doing all along. The string highlighted in
 {\color{red} red} should be replaced with the value of the variable charCode
-that was passed in to the function\code{getLatexCharMetrics}.
+that was passed in to the function \code{getLatexCharMetrics}.
 
 \begin{tikzCodeBlock}[title={Extracting character dimensions using \TikZ},listing style=latexexample]
 \begin{tikzpicture}
@@ -1997,7 +1989,7 @@ that was passed in to the function\code{getLatexCharMetrics}.
   node{ \typeout{tikzTeXDescent=\n1} };
 \end{tikzCodeBlock}
 
-What the heck just happened? Well, first we instructed \LaTeX{} to enter the \TikZ{} picture environment using \verb`\begin{tikzpicture}`. Then we ordered \TikZ{} to create a node named "char" containing the command \verb`\char` followed by the value of charCode. For example, if we were passed `103' as the character code, which corresponds to the character `g', the node line should be:
+What the heck just happened? Well, first we instructed \LaTeX{} to enter the \TikZ{} picture environment using \verb`\begin{tikzpicture}`. Then we ordered \TikZ{} to create a node named ``char'' containing the command \verb`\char` followed by the value of charCode. For example, if we were passed `103' as the character code, which corresponds to the character `g', the node line should be:
 
 \begin{tikzCodeBlock}[listing style=latexexample]
 \node[inner sep=0pt,outer sep=0pt] (char) {\char103};
@@ -2025,7 +2017,7 @@ The \code{inner sep} and \code{outer sep} options are set to \code{0pt} in order
 \end{tikzpicture}
 \end{center}
 
-The `base' anchor sits on the baseline of the text-- therefore to calculate the ascent of the character `g', all we have to do is figure out the difference in height between the positions \code{char.north} and \code{char.base}. Similarly, for the descent we would calculate the difference in height between \code{char.base} and \code{char.south} and width can be obtained using \code{char.west} and \code{char.east}. This is the purpose of the admittedly cryptic \verb`\path` commands that are inserted in the \LaTeX{} input file. Let's examine one of them:
+The `base' anchor sits on the baseline of the text---therefore to calculate the ascent of the character `g', all we have to do is figure out the difference in height between the positions \code{char.north} and \code{char.base}. Similarly, for the descent we would calculate the difference in height between \code{char.base} and \code{char.south} and width can be obtained using \code{char.west} and \code{char.east}. This is the purpose of the admittedly cryptic \verb`\path` commands that are inserted in the \LaTeX{} input file. Let's examine one of them:
 
 \begin{tikzCodeBlock}[]
 \path let \p1 = ($(char.north) - (char.base)$), 
@@ -2050,13 +2042,11 @@ This performs a vector subtraction between the coordinates of \code{char.north} 
 \n1 = {veclen(\x1,\y1)}
 \end{tikzCodeBlock}
 
-This code \code{let} operation treats the coordinates stored in \verb`\p1` as a vector and calculates its magnitude. The `1' appended to the \verb`\x` and \verb`\y` variables specifies that we are accessing the x and y components of \verb`\p1`. This result is stored in the `number' variable \verb`\n1`. Now, that our metric is stored in \verb`\n1`, our final task is to ensure it makes it into the \LaTeX{} \code{.log} file-- this is done by adding a \code{node} containing the \verb`\typeout` command. The contents of the node:
-
+This \code{let} operation treats the coordinates stored in \verb`\p1` as a vector and calculates its magnitude. The `1' appended to the \verb`\x` and \verb`\y` variables specifies that we are accessing the x and y components of \verb`\p1`. This result is stored in the `number' variable \verb`\n1`. Now, that our metric is stored in \verb`\n1`, our final task is to ensure it makes it into the \LaTeX{} \code{.log} file---this is done by adding a \code{node} containing the \verb`\typeout` command. The contents of the node:
 \begin{tikzCodeBlock}[]
 \typeout{tikzTexAscent=\n1}
 \end{tikzCodeBlock}
-
-Cause the phrase `tikzTexAscent=' to appear in the \code{.log} file- followed by the ascent calculated using the node anchors. After the ascent, descent and width have been calculated the \LaTeX{} compiler may be shut down, this is done by adding the final two lines to the input file:
+cause the phrase `tikzTexAscent=' to appear in the \code{.log} file---followed by the ascent calculated using the node anchors. After the ascent, descent and width have been calculated the \LaTeX{} compiler may be shut down, this is done by adding the final two lines to the input file:
 
 \begin{tikzCodeBlock}[title={Terminating a \LaTeX{} compilation},listing style=sweavechunk]
   writeLines("\\makeatother", texIn)
@@ -2096,7 +2086,7 @@ The \LaTeX{} compiler is executed through the \code{system} function which handl
   return( as.double( c(ascent,descent,width) ) )
 \end{tikzCodeBlock}
 
-Here we use the \code{grep} function to search through the log output for the tags `tikzTeXWidth=', `tikzTeXAscent=' and `tikzTeXDescent=' that we specified when we used \verb`\typeout`. After we recover a line containing one of these tags, we use the \code{gsub} command to remove the letters and the equals sign from the text line-- leaving just the number we're interested in. These values are then coerced using \code{as.double} and set as the return value of \code{getLatexCharMetrics}.
+Here we use the \code{grep} function to search through the log output for the tags `tikzTeXWidth=', `tikzTeXAscent=' and `tikzTeXDescent=' that we specified when we used \verb`\typeout`. After we recover a line containing one of these tags, we use the \code{gsub} command to remove the letters and the equals sign from the text line---leaving just the number we're interested in. These values are then coerced using \code{as.double} and set as the return value of \code{getLatexCharMetrics}.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
