@@ -1,4 +1,5 @@
 #' TikZ Graphics Device
+#'
 #' \code{tikz} is used to open a R graphics device which supports output in the
 #' TikZ graphics language. TikZ code may be included inside a LaTeX document by
 #' specifying \code{\\usepackage{tikz}} in the document header.

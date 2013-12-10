@@ -1,62 +1,131 @@
 ---
 
-# Changes in version 0.6.4 (2013-XX-XX)
+# Changes in version 0.6.6 (2013-12-10)
+
+---
+
+## New Features
+
+- Updated vignette (yihui/tikzDevice#36).
+
+## Bug Fixes
+
+- Point size of main font in document is now inferred even if the option
+  tikzDocumentDeclaration contains newlines.
+
+---
+
+# Changes in version 0.6.5 (2013-12-05)
 
 ---
 
 ## Bug Fixes
+
+- Point size of main font in document is now inferred correctly, again fixed
+  regexp in getDocumentPointsize (yihui/tikzDevice#34).
+
+---
+
+# Changes in version 0.6.4 (2013-11-20)
+
+---
+
+## Bug Fixes
+
+- Package can be installed in R 3.0.2.
 
 - No C warnings when installing (#68).
 
 - Function `grid.tikzNode` works again, had no effect due to a missing S3
   export.
 
+- Fixed formatting of documentation.
+
 ## Behind the scenes
 
-- Enable continuous integration via craigcitro/r-travis
+- The tikzDevice now requires R 2.14.0 or later.
+
+- Semantic versioning will be used from now on
+
+- Package is uploaded to RForge (http://rforge.net)
+
+- Enable continuous integration via craigcitro/r-travis.  All supported R
+  versions are tested.
+
+## Contributors
+
+This release has been prepared by Yihui Xie and Kirill Müller, both plan to
+further maintain this package.
+
 
 ---
 
-# Changes in version 0.6.3 (2013-10-31)
+# Changes in version 0.6.3 (2013-04-04, not officially released)
 
 ---
 
 ## New Features
 
-- Handle text opacity; check text colors for transparency
+- The `tikz` function now has a `onefile` argument that behaves similar to
+  the `onefile` argument of the `pdf` device (#40).
 
-- `onefile` option for output to multiple files (#40).
+- LuaLaTeX is now supported directly and can be selected by passing
+  `engine = 'luatex'` to `tikz` (#28).
 
 - New function `tikzCompilerInfo`, reports information concerning the compilers
   used by the tikzDevice
 
-- Add support for LuaLaTeX (#28).
-
 ## Bug Fixes
 
-- Properly copy strings containing LaTeX info, avoiding use of freed memory.
+- Colorized text now obeys transparency settings.
 
-- Print footer when closing standAlone plots (#52).
+- The tikzDevice no longer produces output for plots that are completely
+  empty.
+
+- The `tikz` option `footer` now works as described by the documentation.
+  Previously, it had no effect (#52).
+
+- The `tikz` device can now handle raster images with negative widths or
+  heights that arise from calling a raster plotting function using reversed
+  axes (#53).
+
+- Creating raster output with the tikzDevice could mess with the behavior of
+  some graphical paramaters such as par('mfrow'). This has been fixed (#54).
+
+- Calls to the `filehash` package have been protected from user interruptions.
+  This should prevent rogue lockfiles and corrupted metrics dictionaries.
+
+- The `documentDeclaration` and `packages` arguments to the `tikz` function
+  are now used in metric calculations. Previously, only global options were
+  consulted.
 
 - getDocumentPointsize: fix regexp to match only digits followed by "pt"
 
-## Depreciation Notices
-
-- Versions of R < 2.12.0 are no longer supported.
+- Properly copy strings containing LaTeX info, avoiding use of freed memory.
 
 ## Behind the scenes
 
-- Twaddle some magic numbers in `tikzDevice.c`. (#49).
+- The tikzDevice now requires R 2.12.0 or later.
 
-- Define an enumeration to describe drawing operations.
+- Upgrade documentation generation from Roxygen to Roxygen2.
 
-- Replace old StyleDef code by `TikZ_DefineColors`, `TikZ_WriteDrawOptions`
-  and `TikZ_WriteLineStyle`, which are easier to use and maintain (#46).
+- Testing framework updated to use testthat 0.6. Earlier versions of testthat
+  are no longer supported due to a switch from Mutatr classes to standard R
+  Reference Classes (#56).
 
-- Reduce number of calls to TikZ_GetDrawOps.
+- Some magic numbers that control the leading used in the margin text of base
+  graphics were adjusted to values used by the PDF device. Hopefully this
+  will make the spacing used by x axis labels and y axis labels a bit more
+  symmetric (#49).
 
-- Only start clipping scopes after a draw operation, this can reduce the size of TikZ
-  output by ~3/4 (#45).
+- The tikzDevice now delays the creation of clipping scopes until a drawing
+  operation occurs that can be clipped. This prevents empty clipping scopes
+  from appearing in the output and can reduce the size of the output by ~3/4
+  in some cases (#45).
+
+- The code that handles line color and fill color has been completely
+  refactored to avoid useless operations such as 0 transparency fills and
+  draws (#46).
 
 - Defer starting new tikzpicture environments (#12).
 
@@ -64,14 +133,22 @@
 
 - Reduce verbosity of start-up message.
 
-- Allow TikZ_Raster to handle negative width or height, will cause the raster to
-  be flipped (#53).
+- Support ggplot 0.9.0.
 
-- Don't reset par after creating raster output (#54).
+## Contributors
 
-- Support testthat 0.6 (#56) and ggplot 0.9.0.
+Thanks to the following people who contributed to this release of the tikzDevice:
 
-- Protect calls to Filehash from user interrupts.
+- Zack Weinberg for suggestions and comments that led to optimizations in the
+  quality and quantity of TikZ output.
+
+- Romain Franconville for bugreports that led to the discovery of two bugs in
+  the raster routines.
+
+- corecode for fixing the getDocumentPointsize routines for corner cases
+
+- Sietse Brouwer for enumerating the exact list of LaTeX packages
+  `tikzDevice` requires and for vignette spelling/style corrections.
 
 ---
 
@@ -332,8 +409,10 @@ The following people contributed to this release of the tikzDevice:
 ---
 
 - Initial Beta Release
+
 - Support for all essential graphical parameters: colors, line types, 
   line weights, semi-transparency, line endings and line joining.
+
 - String width and character metrics are calculated by direct calls to a LaTeX
   compiler. This is an inefficient but robust method. Some of the inefficiency 
   of this method is compensated for by storing calculated string widths in a 

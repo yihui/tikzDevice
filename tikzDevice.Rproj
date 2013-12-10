@@ -9,8 +9,9 @@ UseSpacesForTab: Yes
 NumSpacesForTab: 2
 Encoding: UTF-8
 
-RnwWeave: knitr
+RnwWeave: Sweave
 LaTeX: pdfLaTeX
+RootDocument: vignettes/tikzDevice.Rnw
 
 BuildType: Package
 PackageInstallArgs: --no-multiarch --with-keep.source

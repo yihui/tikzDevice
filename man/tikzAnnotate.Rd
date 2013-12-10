@@ -10,27 +10,26 @@
 \alias{tikzNodeGrob}
 \title{Add Custom TikZ Code to an Active Device}
 \usage{
-  tikzAnnotate(annotation)
+tikzAnnotate(annotation)
 
-  tikzNode(x = NULL, y = NULL, opts = NULL, name = NULL,
-    content = NULL, units = "user")
+tikzNode(x = NULL, y = NULL, opts = NULL, name = NULL, content = NULL,
+  units = "user")
 
-  tikzCoord(x, y, name, units = "user")
+tikzCoord(x, y, name, units = "user")
 
-  tikzAnnotateGrob(annotation)
+tikzAnnotateGrob(annotation)
 
-  tikzNodeGrob(x = NULL, y = NULL, opts = NULL,
-    name = NULL, content = NULL, units = "native")
+tikzNodeGrob(x = NULL, y = NULL, opts = NULL, name = NULL,
+  content = NULL, units = "native")
 
-  tikzCoordGrob(x, y, name, units = "native")
+tikzCoordGrob(x, y, name, units = "native")
 
-  grid.tikzAnnotate(annotation, draw = TRUE)
+grid.tikzAnnotate(annotation, draw = TRUE)
 
-  grid.tikzNode(x = NULL, y = NULL, opts = NULL,
-    name = NULL, content = NULL, units = "native",
-    draw = TRUE)
+grid.tikzNode(x = NULL, y = NULL, opts = NULL, name = NULL,
+  content = NULL, units = "native", draw = TRUE)
 
-  grid.tikzCoord(x, y, name, units = "native", draw = TRUE)
+grid.tikzCoord(x, y, name, units = "native", draw = TRUE)
 }
 \arguments{
   \item{annotation}{A character vector, one element per
@@ -68,48 +67,40 @@
   output should be produced.}
 }
 \value{
-  Nothing returned.
+Nothing returned.
 }
 \description{
-  These functions allow custom (LaTeX) commands to be added
-  to the output of an active tikzDevice.
+These functions allow custom (LaTeX) commands to be added to the output of an
+active tikzDevice.
 }
 \details{
-  \code{tikzAnnotate} is intended to allow the insertion of
-  arbitrary TikZ commands into the output stream of a
-  graphic. For LaTeX commands that reference specific
-  locations in an R plot, coordinates must be specified in
-  "device units" which for \code{tikz} output are TeX
-  points relative to the lower left corner of the device
-  canvas. Functions such as \code{\link{grconvertX}} and
-  \code{\link{gridToDevice}} can help make the necessary
-  conversions for base and grid graphics. The
-  \code{tikzNode} and \code{tikzCoord} functions
-  automatically perform unit conversions acording the the
-  value of their \code{units} parameters.
+\code{tikzAnnotate} is intended to allow the insertion of arbitrary TikZ
+commands into the output stream of a graphic. For LaTeX commands that
+reference specific locations in an R plot, coordinates must be specified in
+"device units" which for \code{tikz} output are TeX points relative to the
+lower left corner of the device canvas. Functions such as
+\code{\link{grconvertX}} and \code{\link{gridToDevice}} can help make the
+necessary conversions for base and grid graphics. The \code{tikzNode} and
+\code{tikzCoord} functions automatically perform unit conversions acording
+the the value of their \code{units} parameters.
 
-  \code{tikzNode} is a wrapper for \code{tikzAnnotate} that
-  inserts TikZ \code{\\node} or \code{\\coordinates}
-  commands into the output. The difference between a node
-  and a coordinate is the presence of a \code{content}
-  section that can contain arbitrary LaTeX text. This is
-  useful for adding textual annotations at specific
-  locations in a TikZ graphic. The \code{tikzCoord}
-  function is a wrapper for \code{tikzNode} that simplifies
-  the task of inserting named coordinates.
+\code{tikzNode} is a wrapper for \code{tikzAnnotate} that inserts TikZ
+\code{\\node} or \code{\\coordinates} commands into the output. The
+difference between a node and a coordinate is the presence of a
+\code{content} section that can contain arbitrary LaTeX text. This is
+useful for adding textual annotations at specific locations in a TikZ
+graphic. The \code{tikzCoord} function is a wrapper for \code{tikzNode}
+that simplifies the task of inserting named coordinates.
 
-  Additionally, the \code{tikzAnnotateGrob},
-  \code{tikzNodeGrob} and \code{tikzCoordGrob} functions
-  are supplied for creating grid objects or
-  "\code{\link{grob}}s" that can be used in Grid graphics.
-  High level wrapper functions \code{grid.tikzAnnotate},
-  \code{grid.tikzNode} and \code{grid.tikzCoord} are also
-  supplied which creat and render a \code{grob} in one
-  step.
+Additionally, the \code{tikzAnnotateGrob}, \code{tikzNodeGrob} and
+\code{tikzCoordGrob} functions are supplied for creating grid objects
+or "\code{\link{grob}}s" that can be used in Grid graphics. High level
+wrapper functions \code{grid.tikzAnnotate}, \code{grid.tikzNode} and
+\code{grid.tikzCoord} are also supplied which creat and render a \code{grob}
+in one step.
 
-  See the TikZ Device vignette for more information and
-  examples and the TikZ manual for the definitive reference
-  on what is possible with nodes.
+See the TikZ Device vignette for more information and examples and the
+TikZ manual for the definitive reference on what is possible with nodes.
 }
 \examples{
 \dontrun{
@@ -178,12 +169,14 @@ dev.off()
 }
 }
 \author{
-  Cameron Bracken <cameron.bracken@gmail.com> and Charlie
-  Sharpsteen \email{source@sharpsteen.net}
+Cameron Bracken <cameron.bracken@gmail.com> and Charlie Sharpsteen
+  \email{source@sharpsteen.net}
 }
 \seealso{
-  \code{\link{grconvertX}} \code{\link{grconvertY}}
-  \code{\link{gridToDevice}} \code{\link{unit}}
+\code{\link{grconvertX}}
+  \code{\link{grconvertY}}
+  \code{\link{gridToDevice}}
+  \code{\link{unit}}
   \code{\link{tikz}}
 }
 \keyword{annotation}

@@ -1,13 +1,9 @@
 \name{sanitizeTexString}
 \alias{sanitizeTexString}
-\title{Replace LaTeX Special Characters in a String
-This function is used by tikzDevice when \code{sanitize=TRUE} to replace
-special LaTeX characters (such as the comment character %) in plotting text
-where the user does not have direct control over the generated text.}
+\title{Replace LaTeX Special Characters in a String}
 \usage{
-  sanitizeTexString(string,
-    strip = getOption("tikzSanitizeCharacters"),
-    replacement = getOption("tikzReplacementCharacters"))
+sanitizeTexString(string, strip = getOption("tikzSanitizeCharacters"),
+  replacement = getOption("tikzReplacementCharacters"))
 }
 \arguments{
   \item{string}{A character vector of length 1 (a string).}
@@ -19,36 +15,51 @@ where the user does not have direct control over the generated text.}
   values.}
 }
 \value{
-  \item{sanitizedString}{A character vector of length 1
-  with all special characters replaced.}
+\item{sanitizedString}{A character vector of length 1 with all
+  special characters replaced.}
 }
 \description{
-  \code{sanitizeTexString} searches character by character
-  through a string replacing each occurrence of a special
-  character contained in \code{strip[i]} with the
-  corresponding replacement value in \code{replacement[i]}.
-  tikzDevice calls back this function for every piece of
-  text when the sanitize option is TRUE. See
-  \code{\link{tikz}} for more information on the default
-  special characters and replacement values.
+This function is used by tikzDevice when \code{sanitize=TRUE} to replace
+special LaTeX characters (such as the comment character %) in plotting text
+where the user does not have direct control over the generated text.
 }
 \details{
-  By default, `tikzSanitizeCharacters` replaces the
-  following characters:
+\code{sanitizeTexString} searches character by character through a string
+replacing each occurrence of a special character contained in
+\code{strip[i]} with the corresponding replacement value in
+\code{replacement[i]}.  tikzDevice calls back this function for every piece
+of text when the sanitize option is TRUE. See \code{\link{tikz}} for more
+information on the default special characters and replacement values.
 
-  \itemize{ \item \verb{\%} \item \verb{$} \item \verb{\}}
-  \item \verb{\{} \item \verb{^} \item \verb{_} \item
-  \verb{#} \item \verb{&} \item \verb{~} }
+By default, `tikzSanitizeCharacters` replaces the following characters:
 
-  With the contents of `tikzReplacementCharacters`:
+\itemize{
+  \item \verb{\%}
+  \item \verb{$}
+  \item \verb{\}}
+  \item \verb{\{}
+  \item \verb{^}
+  \item \verb{_}
+  \item \verb{#}
+  \item \verb{&}
+  \item \verb{~}
+}
 
-  \itemize{ \item \verb{\\\%} \item \verb{\\$} \item
-  \verb{\\\}} \item \verb{\\\{} \item \verb{\\^{}} \item
-  \verb{\\_{}} \item \verb{\\#} \item \verb{\\&} \item
-  \verb{\char`\~} }
+With the contents of `tikzReplacementCharacters`:
 
-  These defaults may be adjusted using the
-  \code{\link{options}} function.
+\itemize{
+  \item \verb{\\\%}
+  \item \verb{\\$}
+  \item \verb{\\\}}
+  \item \verb{\\\{}
+  \item \verb{\\^{}}
+  \item \verb{\\_{}}
+  \item \verb{\\#}
+  \item \verb{\\&}
+  \item \verb{\char`\~}
+ }
+
+These defaults may be adjusted using the \code{\link{options}} function.
 }
 \examples{
 # Be careful with sanitizing, it may lead to unexpected behavior.
@@ -60,10 +71,10 @@ where the user does not have direct control over the generated text.}
 }
 }
 \author{
-  Cameron Bracken \email{cameron.bracken@gmail.com}
+Cameron Bracken \email{cameron.bracken@gmail.com}
 }
 \seealso{
-  \code{\link{tikz}}
+\code{\link{tikz}}
 }
 \keyword{character}
 

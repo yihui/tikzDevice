@@ -1,4 +1,4 @@
-.git*
+\.git.*$
 NEWS.md
 NEWS.pdf
 README.md

@@ -14,25 +14,14 @@ getDocumentPointsize <- function( docString ){
   # scaling factors and is stored at the C level in the
   # startps component of the pDevDesc structure. 
 
-  # Search the document declaration for the pointsize.
-  psLocation <- regexpr( '\\<\\d+pt\\>', docString, ignore.case = T, perl = T )
+  # Search the document declaration for the pointsize, and extract it if it is
+  # there.  (Split the input by newlines before.)
+  pointsize <- gsub( '^(?:.*[[, \t](\\d+)pt[], \t])?.*$', '\\1',
+                     strsplit(docString, "\n", fixed = TRUE),
+                     ignore.case = F, perl = T )
 
-  # If there were no matches, regexpr() returns -1 and this
-  # function returns NA.
-  if( psLocation == -1 ){
-
-    return( NA )
-
-  } else {
-
-    # Extract and return the pointsize.
-    pointsize <- substr( docString, psLocation,
-      psLocation + attr( psLocation, 'match.length') - 3 )
-
-    return( as.numeric( pointsize ) )
-
-  }
-
+  # Return first matching line (if any), or NA otherwise
+  as.numeric(pointsize[pointsize != ""][1])
 }
 
 
@@ -201,6 +190,7 @@ evalWithoutInterrupts <- function(expr, envir = parent.frame())
 
 
 #' Check If a String Contains Multibyte UTF-8 characters
+#'
 #' This function is used by tikzDevice to check if an incoming string contains
 #' multibyte UTF-8 characters
 #'
