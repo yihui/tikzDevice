@@ -1,0 +1,301 @@
+% !TEX TS-program = Sweave
+% !TEX root = tikzDevice.Rnw
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{tikzDeviceVignette}
+
+\RequirePackage[T1]{fontenc}
+\RequirePackage{microtype}
+\RequirePackage{lmodern}
+\RequirePackage[scaled=.85]{inconsolata}
+\RequirePackage[colorlinks]{hyperref}
+
+% Various TeX logos---included in the Oberdiek bundle which contains hyperref,
+% so there is a good chance it will be installed.
+\RequirePackage{hologo}
+
+% Sexyness
+\RequirePackage{tikz}
+\usetikzlibrary{calc,positioning}
+\usetikzlibrary{shapes.multipart,shapes.geometric,shapes.symbols,shapes.arrows}
+\usetikzlibrary{decorations.shapes,decorations.text,decorations.pathreplacing}
+
+% Page layout
+\RequirePackage{epigraph}
+\RequirePackage{multicol}
+\RequirePackage{pdflscape}
+
+% Graphics control.
+\RequirePackage{graphicx}
+\RequirePackage{float}
+
+% Bibliography
+\RequirePackage{natbib}
+\bibliographystyle{agufull04}
+
+\RequirePackage[nogin,noae]{Sweave}
+% Extra pretty pretty printing.
+\RequirePackage{tikzCodeBlock}
+\RequirePackage{sweavetolst}
+
+% Text macros
+\newcommand{\TikZ}{Ti\textit{k}Z}
+
+
+% -----------------------------------------------------------------------------
+%                                 Page Setup
+% -----------------------------------------------------------------------------
+
+% Text Block and Margins
+% ======================
+% See page p. 72 of the memoir manual
+% Define text width by setting right and left margins
+\setlrmarginsandblock{0.75in}{0.75in}{*}
+% Define text height by setting upper and lower margins
+\setulmarginsandblock{0.75in}{1.25in}{*}
+% These define the distance from the type block of the header and footer
+\setheadfoot{\baselineskip}{0.25in}
+\setheaderspaces{*}{0.25in}{*}
+\checkandfixthelayout
+
+% Header and Footer
+% =================
+\makepagestyle{tikzDevice}
+  \makeevenhead{tikzDevice}{\leftmark}{}{\thepage}
+  \makeoddhead{tikzDevice}{\rightmark}{}{\thepage}
+  \makeheadrule{tikzDevice}{\textwidth}{\normalrulethickness}
+  \makepsmarks{tikzDevice}{%
+    \nouppercaseheads
+    \createmark{chapter}{both}{nonumber}{}{}
+    \createplainmark{toc}{both}{\contentsname}
+    \createplainmark{lof}{both}{\listfigurename}
+    \createplainmark{lot}{both}{\listtablename}
+    \createplainmark{bib}{both}{\bibname}
+    \createplainmark{index}{both}{\indexname}
+    \createplainmark{glossary}{both}{\glossaryname}
+  }
+  \makeevenfoot{tikzDevice}{{\footnotesize\TikZ}Device}{}{\LaTeX\ Graphics for \lang{R}}
+  \makeoddfoot{tikzDevice}{{\footnotesize\TikZ}Device}{}{\LaTeX\ Graphics for \lang{R}}
+  \makefootrule{tikzDevice}{\textwidth}{\normalrulethickness}{\footruleskip}
+
+\pagestyle{tikzDevice}
+
+% Styles for Document Divisions
+% =============================
+
+
+% Part Divisions
+% --------------
+% Inspired by the cover page of the tikzDevice manual.
+
+% Kill the commands memoir normally uses to set the part name and
+% number---everything will be taken care of by the command that sets the title.
+\renewcommand{\printpartname}{}
+\renewcommand{\printpartnum}{}
+
+% Define a command that can be used to add custom graphics to each part page.
+\newcommand{\partimage}[1]{\gdef\@partimage{#1}}
+\partimage{\null}
+
+% This is where all the magic happens.
+\renewcommand{\printparttitle}[1]{
+  \begin{tikzpicture}[remember picture, overlay]
+    % Title and Info
+    % --------------
+    {\fontsize{60}{36}
+    \node[below right = 0.5em of current page.north west,
+      anchor = north east,
+      rotate = 90,
+      outer sep = 0pt,
+      inner sep = 0pt,
+      font = {\bfseries}
+    ]
+      (title)
+      {\partname\ \thepart};
+    }
+
+    \draw[line width = 5pt] ([xshift = 7.5pt]title.base west) -- ([xshift = 7.5pt]title.base east);
+
+    \node[right = 12.5pt of title.base east,
+      anchor = north west,
+      align = left,
+      font = {\Huge\bfseries}
+    ]
+      (subtitle)
+      {#1};
+
+    \@partimage
+
+  \end{tikzpicture}%
+  \partimage{\null} % Make sure a part image is not recycled
+}
+
+\aliaspagestyle{part}{empty}
+
+
+% Chapter Divisions
+% -----------------
+% Inspired by Alain Matthes' tkz-doc class which uses `\titleformat[frame]`
+% from the `titlesec` package. A similar result is produced here using TikZ
+% nodes. Helpful tips for handling numberd/non-numbered chapters taken from the
+% documentation of the `memoirchapterstyles` package by Lars Madsen.
+\makechapterstyle{tkzframed}{%
+  % Inherit most attributes, such as spacing, from Memoir's article chapter
+  % style.
+  \chapterstyle{article}
+
+  % The chapter number has to be set after the title since it is positioned
+  % relative to a node containing the title. A boolean is used to control the
+  % appearance of the node containing the chapter numbers.
+  \newif\ifnumberedchap
+  \numberedchaptrue
+  \renewcommand{\printchapternum}{\global\numberedchaptrue}
+  \renewcommand{\printchapternonum}{\global\numberedchapfalse}
+  \renewcommand{\chapnumfont}{\footnotesize\scshape}
+
+  \renewcommand{\printchaptertitle}[1]{%
+    \begin{tikzpicture}
+      % Print text inside a block containing the font commands so that
+      % parameters such as `\baselineskip` and sizes such as `em` and `ex` are
+      % sized relative to the font size.
+      {\chapnamefont
+        \node[draw,
+          line width = \fboxrule,
+          outer sep = 0pt,
+          inner xsep = 0pt,
+          inner ysep = \baselineskip,
+          text width = \linewidth,
+          align = center
+        ]
+          (title)
+          % Double the hash symbol, #, because this macro definition is inside
+          % another macro definition.
+          {##1};
+      }
+      \ifnumberedchap
+        {\chapnumfont
+          \node[
+            fill = white,
+            anchor = west,
+            right = 1ex of title.north west,
+            outer sep = 0pt,
+            inner xsep = 0.5em,
+            inner ysep = 0pt
+          ]
+            % Set the chapter number using old-style lower case numerals, if
+            % available.
+            {Chapter \oldstylenums{\thechapter}};
+        }
+      \fi
+    \end{tikzpicture}%
+  }
+}
+
+\chapterstyle{tkzframed}
+% Don't mess with the header/footer when starting a new chapter.
+\aliaspagestyle{chapter}{tikzDevice}
+
+
+% Section Divisions
+% -----------------
+% The style of sectional divisions is also cribbed from tkz-doc. Here we define
+% a hook function that gets called before setting section titles. The hook
+% function causes the section number to be placed within a `\fbox` and tosses
+% in a following quad (1em) space. During typesetting, the macro
+% `\setsecnumformat` is passed a single parameter, represented by `##1`, that
+% contains the division level---in this case: section. This is transformed into
+% `\thesection` by `\csname` and `\endcsname` which is the name of the counter
+% storing the section number.
+\setsecheadstyle{\large\bfseries}
+\setsechook{\setsecnumformat{\fbox{\csname the##1\endcsname}\quad}}
+
+% TODO:
+% Style subsections and below (if used).
+
+% Don't number any division below section level.
+\maxtocdepth{subsection}
+\setsecnumdepth{section}
+
+
+% Font macros
+\newcommand{\lang}{\textsf}
+% Mbox it to prevent hyphenation of code
+\newcommand{\code}[1]{\mbox{\ttfamily #1}}
+\newcommand{\pkg}{\textbf}
+\newcommand{\pkgopt}[1]{{\color{red}#1}}
+
+% Other LaTeX macros
+\renewcommand{\sectionautorefname}{Section}
+\renewcommand{\subsectionautorefname}{Subsection}
+
+
+% Source code formatting macros
+\lstset{basicstyle = \ttfamily}
+
+\lstdefinestyle{latexsource}{
+  language = [LaTeX]TeX,
+  showstringspaces = false,
+  upquote = false,
+  commentstyle = {\color{red!80}\itshape}
+}
+
+\lstdefinestyle{latexexample}{
+  language = [LaTeX]TeX,
+  showstringspaces = false,
+  upquote = false,
+  commentstyle = {\color{red!80}\itshape},
+  moredelim=[is][\color{red}]{XX}{XX}
+}
+
+\lstdefinestyle{bashsource}{
+  language = bash,
+  % literate={~}{{$\sim$}}1,
+  moredelim=[is][\color{gray}]
+    {!out}
+    {!/out},
+  showstringspaces = false,
+  upquote = false,
+  commentstyle = {\color{blue!80}\itshape}
+}
+
+\lstdefinestyle{csource}{
+  language = c,
+  upquote = false,
+  commentstyle = {\color{blue!80}\itshape}
+}
+
+
+% TikZ Style definitions.
+\tikzset{
+  % Taken from one of the first examples in the PGF manuel.
+  package warning/.style={
+    rectangle split,
+    rectangle split parts = 2,
+    rounded corners,
+    draw = red!50,
+    thick,
+    fill = red!10,
+    inner sep = 1ex,
+    text width = \textwidth
+  }
+}
+
+
+% TikZ Macros.
+
+\newcommand{\tikzDocDisclaim}[2]{
+  \noindent\begin{tikzpicture}
+
+    \node[package warning]{
+      \begin{center}
+        \large\bfseries
+        #1
+      \end{center}
+      \nodepart{second}
+        #2
+    };
+
+  \end{tikzpicture}%
+}
+
+\endinput
