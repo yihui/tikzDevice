@@ -1,10 +1,12 @@
-- Updated vignette (yihui/tikzDevice#36).
-
 ---
 
 # Changes in version 0.6.6 (2013-12-10)
 
 ---
+
+## New Features
+
+- Updated vignette (yihui/tikzDevice#36).
 
 ## Bug Fixes
 
