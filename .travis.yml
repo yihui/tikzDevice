@@ -3,23 +3,23 @@ language: c
 # language: objective-c
 env:
   matrix:
-    - TYPE=cran VIGNETTE=--no-build-vignettes
-    - TYPE=cran VIGNETTE=--no-build-vignettes RELEASE=trunk
-    - TYPE=tests VIGNETTE=--no-build-vignettes
-    - TYPE=tests VIGNETTE=--no-build-vignettes RELEASE=trunk
-    - TYPE=tests VIGNETTE=--no-build-vignettes RELEASE=tags/R-3-0-1
-    - TYPE=tests VIGNETTE=--no-build-vignettes RELEASE=tags/R-3-0-0
-    - TYPE=tests VIGNETTE=--no-vignettes RELEASE=tags/R-2-15-3
-    - TYPE=tests VIGNETTE=--no-vignettes RELEASE=tags/R-2-15-2
-    - TYPE=tests VIGNETTE=--no-vignettes RELEASE=tags/R-2-15-1
-    - TYPE=tests VIGNETTE=--no-vignettes RELEASE=tags/R-2-15-0
-    - TYPE=tests VIGNETTE=--no-vignettes RELEASE=tags/R-2-14-2
-    - TYPE=tests VIGNETTE=--no-vignettes RELEASE=tags/R-2-14-1
-    - TYPE=tests VIGNETTE=--no-vignettes RELEASE=tags/R-2-14-0
+    - TYPE=cran
+    - TYPE=cran RELEASE=trunk
+    - TYPE=tests
+    - TYPE=tests RELEASE=trunk
+    - TYPE=tests RELEASE=tags/R-3-0-1
+    - TYPE=tests RELEASE=tags/R-3-0-0
+    - TYPE=tests RELEASE=tags/R-2-15-3
+    - TYPE=tests RELEASE=tags/R-2-15-2
+    - TYPE=tests RELEASE=tags/R-2-15-1
+    - TYPE=tests RELEASE=tags/R-2-15-0
+    - TYPE=tests RELEASE=tags/R-2-14-2
+    - TYPE=tests RELEASE=tags/R-2-14-1
+    - TYPE=tests RELEASE=tags/R-2-14-0
 
 script:
-  - if [ $TYPE == cran ]; then ( cd ..; R CMD check tikzDevice*.*.tar.gz --as-cran --no-build-vignettes ); fi
-  - if [ $TYPE == tests ]; then ( cd tests; ./unit_tests.R ); fi
+  - if [ $TYPE == cran ]; then ./travis-tool.sh run_tests; fi
+  - if [ $TYPE == tests ]; then ( cd ..; R CMD build tikzDevice; R CMD INSTALL tikzDevice*.*.tar.gz ); ( cd tests; ./unit_tests.R ); fi
 
 before_install:
   - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
@@ -44,7 +44,6 @@ install:
       fi
     ); fi
   - ./travis-tool.sh r_binary_install colorspace zoo RColorBrewer dichromat munsell labeling Formula sp mvtnorm TH.data sandwich gtable reshape2 scales proto quantreg Hmisc mapproj hexbin maptools multcomp filehash ggplot2 testthat
-  - ( cd ..; R CMD build tikzDevice $VIGNETTE; R CMD INSTALL tikzDevice*.*.tar.gz )
   - ./travis-tool.sh dump_sysinfo
 after_failure:
   - cat tikzDevice.Rcheck/00install.out || true
