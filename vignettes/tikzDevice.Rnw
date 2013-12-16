@@ -1174,7 +1174,7 @@ not be available on every system.
 
 \begin{figure}[!h]
 \centering
-\includegraphics{figs/xelatexEx.pdf}
+\includegraphics{img/xelatexEx.pdf}
 \caption{Result of \hologo{XeLaTeX} example}\label{fig:xelatex}
 \end{figure}
 
