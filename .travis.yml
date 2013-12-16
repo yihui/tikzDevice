@@ -13,12 +13,15 @@ script:
 before_install:
   - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
   - chmod 755 ./travis-tool.sh
+  - OS=$(uname -s)
+  - IsLinux() { [[ "$OS" == "Linux" ]]; }
   - ./travis-tool.sh bootstrap
   - IsSourceInstall() { [[ -n "${RELEASE}" ]]; }
   - if [ $TYPE == tests ]; then APT_EXTRA="texlive-xetex imagemagick"; export DISPLAY=:99.0; fi
   - if IsSourceInstall; then export FORCE_SOURCE_INSTALL=1; fi
 install:
-  - sudo apt-get install --no-install-recommends texinfo texlive-latex-recommended texlive-latex-extra lmodern texlive-fonts-recommended texlive-fonts-extra pgf $APT_EXTRA
+  - ./travis-tool.sh install_latex
+  - if IsLinux; then sudo apt-get install --no-install-recommends $APT_EXTRA; fi
   - sh -e /etc/init.d/xvfb start
   - if IsSourceInstall; then (
       cd ~ &&
