@@ -2,6 +2,8 @@ language: c
 # To build on OSX, switch the previous line to
 # language: objective-c
 env:
+  global:
+    - BOOTSTRAP_LATEX=1
   matrix:
     - TYPE=cran
     - TYPE=tests
@@ -20,7 +22,6 @@ before_install:
   - if [ $TYPE == tests ]; then APT_EXTRA="texlive-xetex imagemagick"; export DISPLAY=:99.0; fi
   - if IsSourceInstall; then export FORCE_SOURCE_INSTALL=1; fi
 install:
-  - ./travis-tool.sh install_latex
   - if IsLinux; then sudo apt-get install --no-install-recommends $APT_EXTRA; fi
   - sh -e /etc/init.d/xvfb start
   - if IsSourceInstall; then (
