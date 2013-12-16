@@ -7,8 +7,8 @@ env:
     - TYPE=tests
 
 script:
-  - if [ $TYPE == cran ]; then ( cd ..; R CMD check tikzDevice*.*.tar.gz --as-cran --no-build-vignettes --no-manual ); fi
-  - if [ $TYPE == tests ]; then ( cd tests; ./unit_tests.R ); fi
+  - if [ $TYPE == cran ]; then ./travis-tool.sh run_tests; fi
+  - if [ $TYPE == tests ]; then ( cd ..; R CMD build tikzDevice; R CMD INSTALL tikzDevice*.*.tar.gz ); ( cd tests; ./unit_tests.R ); fi
 
 before_install:
   - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
@@ -30,7 +30,6 @@ install:
       sudo make install
     ); fi
   - ./travis-tool.sh r_binary_install colorspace zoo RColorBrewer dichromat munsell labeling Formula sp mvtnorm TH.data sandwich gtable reshape2 scales proto quantreg Hmisc mapproj hexbin maptools multcomp filehash ggplot2 testthat
-  - ( cd ..; R CMD build tikzDevice --no-build-vignettes --no-manual; R CMD INSTALL tikzDevice*.*.tar.gz )
   - ./travis-tool.sh dump_sysinfo
 after_failure:
   - cat tikzDevice.Rcheck/00install.out || true
