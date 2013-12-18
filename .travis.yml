@@ -36,7 +36,29 @@ install:
       svn co -q https://svn.r-project.org/R/${RELEASE}/ r-source &&
       cd r-source &&
       tools/rsync-recommended &&
-      ./configure --enable-R-shlib &&
+      R_BATCHSAVE="--no-save --no-restore" \
+      R_BROWSER=xdg-open \
+      PAGER=/usr/bin/pager \
+      PERL=/usr/bin/perl \
+      R_UNZIPCMD=/usr/bin/unzip \
+      R_ZIPCMD=/usr/bin/zip \
+      R_PRINTCMD=/usr/bin/lpr \
+      LIBnn=lib \
+      AWK=/usr/bin/awk\
+      CC="ccache gcc" \
+      CFLAGS="-ggdb -pipe -std=gnu99 -Wall -pedantic" \
+      CXX="ccache g++" \
+      CXXFLAGS="-ggdb -pipe -Wall -pedantic" \
+      FC="ccache gfortran" \
+      F77="ccache gfortran" \
+      MAKE="make -j2" \
+      ./configure \
+          --prefix=/usr/local/lib/R-devel \
+          --enable-R-shlib \
+          --with-blas \
+          --with-lapack \
+          --with-readline \
+      &&
       make -j2 &&
       sudo make install &&
       if [[ "${RELEASE}" == tags/R-2-14-0 ]]; then
