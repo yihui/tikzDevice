@@ -26,7 +26,7 @@ before_install:
   - chmod 755 ./travis-tool.sh
   - ./travis-tool.sh bootstrap
   - IsSourceInstall() { [[ -n "${RELEASE}" ]]; }
-  - if [ $TYPE == tests ]; then APT_EXTRA="texlive-xetex imagemagick"; export DISPLAY=:99.0; fi
+  - if [ $TYPE == tests ]; then APT_EXTRA="texlive-xetex imagemagick ccache"; export DISPLAY=:99.0; fi
   - if IsSourceInstall; then export FORCE_SOURCE_INSTALL=1; fi
 install:
   - sudo apt-get install --no-install-recommends texinfo texlive-latex-recommended texlive-latex-extra lmodern texlive-fonts-recommended texlive-fonts-extra pgf $APT_EXTRA
