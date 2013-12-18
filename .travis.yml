@@ -26,7 +26,7 @@ before_install:
   - chmod 755 ./travis-tool.sh
   - ./travis-tool.sh bootstrap
   - IsSourceInstall() { [[ -n "${RELEASE}" ]]; }
-  - if [ $TYPE == tests ]; then APT_EXTRA="texlive-xetex imagemagick ccache"; export DISPLAY=:99.0; fi
+  - if [ $TYPE == tests ]; then APT_EXTRA="texlive-xetex imagemagick"; export DISPLAY=:99.0; fi
   - if IsSourceInstall; then export FORCE_SOURCE_INSTALL=1; fi
 install:
   - sudo apt-get install --no-install-recommends texinfo texlive-latex-recommended texlive-latex-extra lmodern texlive-fonts-recommended texlive-fonts-extra pgf $APT_EXTRA
@@ -45,12 +45,12 @@ install:
         R_PRINTCMD=/usr/bin/lpr
         LIBnn=lib
         AWK=/usr/bin/awk
-        CC="ccache gcc"
+        CC=gcc
         CFLAGS="-ggdb -pipe -std=gnu99 -Wall -pedantic"
-        CXX="ccache g++"
+        CXX=g++
         CXXFLAGS="-ggdb -pipe -Wall -pedantic"
-        FC="ccache gfortran"
-        F77="ccache gfortran"
+        FC=gfortran
+        F77=gfortran
         MAKE="make -j2"
           ./configure --enable-R-shlib &&
       make -j2 &&
@@ -62,5 +62,6 @@ install:
   - ./travis-tool.sh r_binary_install colorspace zoo RColorBrewer dichromat munsell labeling Formula sp mvtnorm TH.data sandwich gtable reshape2 scales proto quantreg Hmisc mapproj hexbin maptools multcomp filehash ggplot2 testthat
   - ./travis-tool.sh dump_sysinfo
 after_failure:
+  - cat ~/r-source/config.log || true
   - cat tikzDevice.Rcheck/00install.out || true
   - cat tikzDevice.Rcheck/00check.log || true
