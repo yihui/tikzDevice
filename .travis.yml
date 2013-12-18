@@ -55,10 +55,7 @@ install:
         MAKE="make -j2"
           ./configure --enable-R-shlib &&
       make -j2 &&
-      sudo make install &&
-      if [[ "${RELEASE}" == tags/R-2-14-0 ]]; then
-          sudo chmod 2777 /usr/local/lib64/R/library;
-      fi
+      sudo make install
     ); fi
   - ./travis-tool.sh r_binary_install colorspace zoo RColorBrewer dichromat munsell labeling Formula sp mvtnorm TH.data sandwich gtable reshape2 scales proto quantreg Hmisc mapproj hexbin maptools multcomp filehash ggplot2 testthat
   - ./travis-tool.sh dump_sysinfo
