@@ -185,7 +185,9 @@ static double ScaleFont( const pGEcontext plotParams, pDevDesc deviceInfo );
 static void printOutput(tikzDevDesc *tikzInfo, const char *format, ...);
 static void Print_TikZ_Header( tikzDevDesc *tikzInfo );
 static char *Sanitize(const char *str);
+#if 0
 static Rboolean contains_multibyte_chars(const char *str);
+#endif
 static double dim2dev( double length );
 static void TikZ_CheckState(pDevDesc deviceInfo);
 static char *calloc_strcpy(const char *str);
