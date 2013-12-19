@@ -1073,27 +1073,7 @@ This kind of output can be redirected to a file with \code{sink} or spit out
 directly into a \TeX\ document from a \pkg{Sweave} file so that the \TeX\ file
 is self contained and does not include other files via \verb|\input|.
 
-\begin{tikzCodeBlock}[title={Catching \code{tikz} output inside Sweave},listing style=sweavechunk]
- \documentclass{article}
-   \usepackage{tikz}
-
-
- \begin{document}
-   \begin{figure}[ht]
-     \centering
- <<inline,echo=FALSE,results='tex'>>=
-
- require(tikzDevice)
- tikz(console=TRUE,width=5,height=5)
-  x <- rnorm(100)
-  plot(x)
- dummy <- dev.off()
- @
-     \caption{caption}
-     \label{fig:inline}
-   \end{figure}
- \end{document}
-\end{tikzCodeBlock}
+\tikzCodeInput[title={Catching \code{tikz} output inside Sweave},listing style=sweavechunk]{consoleExample}
 
 
 \subsection{Using \hologo{XeLaTeX}}
