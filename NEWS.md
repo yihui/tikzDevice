@@ -1,5 +1,15 @@
 ---
 
+# Changes in version 0.7.0 (2013-12-10, CRAN release)
+
+---
+
+## Contributors
+
+Package maintainers: Kirill Müller and Yihui Xie.
+
+---
+
 # Changes in version 0.6.6 (2013-12-10)
 
 ---
