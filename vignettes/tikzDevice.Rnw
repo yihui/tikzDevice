@@ -17,10 +17,14 @@
   options(prompt = ' ', continue = ' ')
 
   options(tikzMetricsDictionary='.tikzMetrics')
-@
 
-<<include=FALSE>>=
-opts_chunk$set(echo=F,fig.path='figs/fig')
+  opts_chunk$set(echo=F, fig.path='figs/fig', message=F)
+  knit_hooks$set(source = function(x, options) {
+    paste("\\begin{tikzCodeBlock}[listing style=sweavechunk]",
+          paste(x, collapse = '\n'),
+          "\\end{tikzCodeBlock}", sep = '\n')
+  },
+                 chunk = function(x, options) x)
 @
 
 
