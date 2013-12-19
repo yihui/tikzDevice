@@ -927,7 +927,7 @@ dev.off()
 by \code{tikz} into a larger \TikZ\ graphic. Normally \code{tikz} wraps output
 as a self-contained \code{tikzpicture} environment. When \code{bareBones} is
 invoked, the wrapping environment is omitted. This option allows output to be
-embedded inside another \code{tikzpicture} of the users own construction.
+embedded inside another \code{tikzpicture} of the user's own construction.
 
 <<bareBonesExample,echo=TRUE,results=hide,keep.source=TRUE>>=
 require(tikzDevice)
