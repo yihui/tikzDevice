@@ -3,10 +3,10 @@ language: c
 # language: objective-c
 env:
   matrix:
-    - TYPE=cran
     - TYPE=cran RELEASE=trunk
-    - TYPE=tests
+    - TYPE=cran RELEASE=tags/R-3-0-2
     - TYPE=tests RELEASE=trunk
+    - TYPE=tests RELEASE=tags/R-3-0-2
     - TYPE=tests RELEASE=tags/R-3-0-1
     - TYPE=tests RELEASE=tags/R-3-0-0
     - TYPE=tests RELEASE=tags/R-2-15-3
