@@ -1630,7 +1630,7 @@ static TikZ_DrawOps TikZ_GetDrawOps(pGEcontext plotParams)
     ops |= DRAWOP_FILL;
 
   return ops;
-};
+}
 
 static void TikZ_DefineColors(pGEcontext plotParams, pDevDesc deviceInfo, TikZ_DrawOps ops)
 {
@@ -1991,6 +1991,7 @@ static char *Sanitize(const char *str){
   return cleanStringCP;
 }
 
+#if 0
 static Rboolean contains_multibyte_chars(const char *str){
   /*
    * Recover package namespace as the multibyte check function
@@ -2022,6 +2023,7 @@ static Rboolean contains_multibyte_chars(const char *str){
 
   return(asLogical(result));
 }
+#endif
 
 
 /*
@@ -2131,5 +2133,5 @@ static char *calloc_x_strlen(const char *str, size_t extra){
 }
 
 static void const_free(const void *ptr){
-  return free((void*)ptr);
+  free((void*)ptr);
 }

@@ -1,0 +1,12 @@
+Package: tikzDevice
+Version: 0.7.0
+Depends:
+    R (>= 2.14.0),
+    filehash
+Suggests:
+    testthat (>= 0.6),
+    evaluate,
+    stringr,
+    ggplot2,
+    maps
+License: GPL (>= 2)
