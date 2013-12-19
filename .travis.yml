@@ -29,7 +29,7 @@ install:
        sudo texhash);
     else
       mkdir -p inst/doc &&
-      touch inst/doc/tikzDevice.pdf
+      touch inst/doc/tikzDevice.pdf;
     fi
   - sh -e /etc/init.d/xvfb start
   - if IsSourceInstall; then (
