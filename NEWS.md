@@ -8,6 +8,9 @@
 
 Package maintainers: Kirill Müller and Yihui Xie.
 
+Thanks to Stéphane Laurent for reporting a bug in the detection of the document
+font size.
+
 ---
 
 # Changes in version 0.6.6 (2013-12-10)
