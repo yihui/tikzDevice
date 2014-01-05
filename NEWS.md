@@ -1,3 +1,10 @@
+## Bug Fixes
+
+- Fixed typos in vignette (#45, thanks Greg Jefferis).
+
+- Vignette now also compiles if the zi4 TeX package is installed instead of
+  inconsolata.  This should fix the CRAN notes and warnings on Windows.
+
 ---
 
 # Changes in version 0.7.0 (2013-12-10, CRAN release)
