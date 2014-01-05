@@ -1,3 +1,9 @@
+---
+
+# Changes in version 0.7.2 (2014-01-05)
+
+---
+
 ## Bug Fixes
 
 - In console mode, print a \relax statement after the comment to allow using
