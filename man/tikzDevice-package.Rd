@@ -16,8 +16,8 @@ annotations}.
 \tabular{ll}{
   Package: \tab tikzDevice\cr
   Type: \tab Package\cr
-  Version: \tab 0.7.1\cr
-  Date: \tab 2013-12-21\cr
+  Version: \tab 0.7.2\cr
+  Date: \tab 2014-01-05\cr
   License: \tab GPL 2 or greater\cr
   LazyLoad: \tab yes\cr
 }
