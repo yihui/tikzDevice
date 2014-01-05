@@ -1934,6 +1934,9 @@ static void Print_TikZ_Header( tikzDevDesc *tikzInfo ){
 	//Specifically for TeXShop, force it to open the file with UTF-8 encoding
 	printOutput(tikzInfo, "%% !TEX encoding = UTF-8 Unicode\n");
 
+  if ( tikzInfo->console )
+    printOutput(tikzInfo, "\\relax\n");
+
   UNPROTECT(3);
 
 }

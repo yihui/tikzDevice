@@ -1,5 +1,11 @@
 ## Bug Fixes
 
+- In console mode, print a \relax statement after the comment to allow using
+  tikzDevice in a Sweave code chunk with results=tex, as advertised in the
+  vignette.  (The default is strip.white=TRUE which makes the following
+  \begin{tikzpicture} appear on the same line as the encoding comment in the
+  resulting .tex file.)  (#47, thanks Bill Venables)
+
 - Fixed typos in vignette (#45, thanks Greg Jefferis).
 
 - Vignette now also compiles if the zi4 TeX package is installed instead of
