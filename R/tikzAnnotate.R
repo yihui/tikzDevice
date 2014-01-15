@@ -90,6 +90,9 @@ gridToDevice <- function(x = 0, y = 0, units = 'native') {
 #' @param annotation A character vector, one element per line to be added to
 #'   the open tikz device.
 #'
+#' @param checkstate A logical, whether to "flush" the device state prior to
+#'   writing the \code{annotation}.
+#'
 #' @return Nothing returned.
 #'
 #' @author Cameron Bracken <cameron.bracken@@gmail.com> and Charlie Sharpsteen
@@ -175,7 +178,7 @@ gridToDevice <- function(x = 0, y = 0, units = 'native') {
 #' @useDynLib tikzDevice TikZ_Annotate
 #' @export
 tikzAnnotate <-
-function (annotation)
+function (annotation, checkstate=TRUE)
 {
 
 	if (!isTikzDevice()){
@@ -183,7 +186,7 @@ function (annotation)
   }
 
 	.C(TikZ_Annotate, as.character(annotation),
-		as.integer(length(annotation)))
+		as.integer(length(annotation)), as.logical(checkstate))
 
 	invisible()
 }
@@ -195,7 +198,7 @@ function (annotation)
 #' @param opts A character string that will be used as options for a \code{node}.
 #'   See the "Nodes and Edges" section of the TikZ manual for complete details.
 #' @param name Optional character string that will be used as a name for a
-#'   \code{coordiinate} or \code{node}. Other TikZ commands can use this
+#'   \code{coordinate} or \code{node}. Other TikZ commands can use this
 #'   name to refer to a location in a graphic.
 #' @param content A character string that will be used as the content to be displayed
 #'   inside of a \code{node}. If left as \code{NULL} a \code{coordinate} will be

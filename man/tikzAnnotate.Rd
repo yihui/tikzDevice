@@ -10,7 +10,7 @@
 \alias{tikzNodeGrob}
 \title{Add Custom TikZ Code to an Active Device}
 \usage{
-tikzAnnotate(annotation)
+tikzAnnotate(annotation, checkstate = TRUE)
 
 tikzNode(x = NULL, y = NULL, opts = NULL, name = NULL, content = NULL,
   units = "user")
@@ -34,6 +34,9 @@ grid.tikzCoord(x, y, name, units = "native", draw = TRUE)
 \arguments{
   \item{annotation}{A character vector, one element per
   line to be added to the open tikz device.}
+
+  \item{checkstate}{A logical, whether to "flush" the
+  device state prior to writing the \code{annotation}.}
 
   \item{x}{numeric, x location for a named coordinate in
   user coordinates}
