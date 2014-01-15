@@ -326,6 +326,18 @@ test_graphs <- list(
   ),
 
   list(
+    short_name = 'annotation_noflush',
+    description = 'Annotation prior to any graphics output',
+    tags = c('base', 'annotation'),
+    graph_code = quote({
+        plot.new()
+        plot.window(0:1,0:1)
+        tikzCoord (0.5,0.5,name="center")
+        tikzAnnotate ('\\node at (center) {hello world};');
+    })
+  ),
+
+  list(
     short_name = 'ggplot2_test',
     description = 'Test of ggplot2 graphics',
     tags = c('ggplot2'),
