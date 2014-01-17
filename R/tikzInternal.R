@@ -18,16 +18,19 @@ getTikzDeviceVersion <- function() {
 
 tikz_writeRaster <- function(fileName, rasterCount, rasterData,
                              nrows, ncols, finalDims, interpolate) {
-  raster_file <- paste0(
-      tools::file_path_sans_ext(fileName),
-      '_ras', rasterCount, '.png')
-
   # Convert the 4 vectors of RGBA data contained in rasterData to a raster
   # image.
   rasterData[['maxColorValue']] = 255
   rasterData = do.call( grDevices::rgb, rasterData )
   rasterData = as.raster(
     matrix( rasterData, nrow = nrows, ncol = ncols, byrow = TRUE ) )
+
+  raster_file <- paste0(
+      tools::file_path_sans_ext(fileName),
+      '_ras', rasterCount, '.png')
+
+  res = getOption('tikzRasterResolution')
+  if (is.null(res)) res = NA;
 
   # Write the image to a PNG file.
 
@@ -36,25 +39,44 @@ tikz_writeRaster <- function(fileName, rasterCount, rasterData,
   # being compiled into OS X binaries.  Technically, cannot count on Aqua/Quartz
   # either but you would have to be a special kind of special to leave it out.
   # Using type='Xlib' also causes a segfault for me on OS X 10.6.4
-  if ( Sys.info()['sysname'] == 'Darwin' && capabilities('aqua') ){
-      grDevices::quartz(
-          file = raster_file, type = 'png',
-          width = ncols, height = nrows, dpi=1,
-          antialias = FALSE )
+  if ( Sys.info()['sysname'] == 'Darwin' && capabilities('aqua') ) {
+    if ( is.na(res)) {
+        grDevices::quartz(
+            file = raster_file, type = 'png',
+            width = ncols, height = nrows, dpi = 1,
+            antialias = FALSE )
+    } else {
+        grDevices::quartz(
+            file = raster_file, type = 'png',
+            width = finalDims$width, height = finalDims$height,
+            antialias = FALSE,  dpi = res )
+    }
   } else if (Sys.info()['sysname'] == 'Windows') {
-      png( filename = raster_file,
-          width = ncols, height = nrows, units = 'px')
+    if (is.na(res)) {
+        png(filename = raster_file,
+            width = ncols, height = nrows, units = 'px')
+    } else {
+        png(filename = raster_file,
+            width = finalDims$width, height = finalDims$height,
+            units = 'in', res = res )
+    }
   } else {
     # Linux/UNIX and OS X without Aqua.
-      png( filename = raster_file,
-          width = ncols, height = nrows, units = 'px',
-          type = 'Xlib', antialias = 'none' )
+    if (is.na(res)) {
+        png(filename = raster_file,
+            width = ncols, height = nrows, units = 'px',
+            type = 'Xlib', antialias = 'none' )
+    } else {
+        png(filename = raster_file,
+            width = finalDims$width, height = finalDims$height,
+            type = 'Xlib', antialias = 'none',
+            units = 'in', res=res )
+    }
   }
 
   par(mar=c(0,0,0,0))
   plot.new()
   plotArea = par('usr')
-
   rasterImage(rasterData, plotArea[1], plotArea[3],
     plotArea[2], plotArea[4], interpolate = FALSE )
   dev.off()
