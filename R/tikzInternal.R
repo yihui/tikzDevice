@@ -31,6 +31,7 @@ tikz_writeRaster <- function(fileName, rasterCount, rasterData,
 
   res = getOption('tikzRasterResolution')
   if (is.null(res)) res = NA;
+  if (is.na(res)) interpolate = FALSE;
 
   # Write the image to a PNG file.
 
@@ -40,16 +41,16 @@ tikz_writeRaster <- function(fileName, rasterCount, rasterData,
   # either but you would have to be a special kind of special to leave it out.
   # Using type='Xlib' also causes a segfault for me on OS X 10.6.4
   if ( Sys.info()['sysname'] == 'Darwin' && capabilities('aqua') ) {
-    if ( is.na(res)) {
+    if (is.na(res)) {
         grDevices::quartz(
             file = raster_file, type = 'png',
-            width = ncols, height = nrows, dpi = 1,
-            antialias = FALSE )
+            width = ncols, height = nrows,
+            antialias = FALSE, dpi = 1 )
     } else {
         grDevices::quartz(
             file = raster_file, type = 'png',
             width = finalDims$width, height = finalDims$height,
-            antialias = FALSE,  dpi = res )
+            antialias = FALSE, dpi = res )
     }
   } else if (Sys.info()['sysname'] == 'Windows') {
     if (is.na(res)) {
@@ -78,7 +79,7 @@ tikz_writeRaster <- function(fileName, rasterCount, rasterData,
   plot.new()
   plotArea = par('usr')
   rasterImage(rasterData, plotArea[1], plotArea[3],
-    plotArea[2], plotArea[4], interpolate = FALSE )
+    plotArea[2], plotArea[4], interpolate = interpolate)
   dev.off()
 
   return(
