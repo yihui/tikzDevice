@@ -178,7 +178,7 @@ gridToDevice <- function(x = 0, y = 0, units = 'native') {
 #' @useDynLib tikzDevice TikZ_Annotate
 #' @export
 tikzAnnotate <-
-function (annotation, checkstate=TRUE)
+function (annotation, checkstate = TRUE)
 {
 
 	if (!isTikzDevice()){
