@@ -47,7 +47,7 @@
 #' @references PGF Manual
 #' @export
 getLatexStrWidth <-
-function(texString, cex = 1, face= 1, engine = getOption('tikzDefaultEngine'),
+function(texString, cex = 1, face = 1, engine = getOption('tikzDefaultEngine'),
    documentDeclaration = getOption("tikzDocumentDeclaration"), packages)
 {
 
