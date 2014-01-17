@@ -332,8 +332,9 @@ test_graphs <- list(
     graph_code = quote({
         plot.new()
         plot.window(0:1,0:1)
-        tikzCoord (0.5,0.5,name="center")
-        tikzAnnotate ('\\node at (center) {hello world};');
+        tikzCoord (0,0,name="ll")
+        tikzCoord (1,1,name="ur")
+        tikzAnnotate ('\\draw (ll) rectangle (ur);');
     })
   ),
 
@@ -586,7 +587,7 @@ test_graphs <- list(
     graph_code =  quote({
       n <- 8
       chars <- intToUtf8(seq(187,,1,n*n),multiple=T)
-      
+
       plot(1:n,type='n',xlab='',ylab='',axes=FALSE, main="UTF-8 Characters")
       text(rep(1:n, n), rep(1:n, rep(n, n)), chars)
     })
