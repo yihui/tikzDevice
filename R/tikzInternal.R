@@ -54,8 +54,10 @@ tikz_writeRaster <- function(fileName, rasterCount, rasterData,
     }
   } else if (Sys.info()['sysname'] == 'Windows') {
     if (is.na(res)) {
-        png(filename = raster_file,
-            width = ncols, height = nrows, units = 'px')
+        # we can create very small PNGs with this code, so suppress
+        # warnings about this
+        suppressWarnings(png(filename = raster_file,
+            width = ncols, height = nrows, units = 'px'))
     } else {
         png(filename = raster_file,
             width = finalDims$width, height = finalDims$height,
@@ -64,9 +66,11 @@ tikz_writeRaster <- function(fileName, rasterCount, rasterData,
   } else {
     # Linux/UNIX and OS X without Aqua.
     if (is.na(res)) {
-        png(filename = raster_file,
+        # we can create very small PNGs with this code, so suppress
+        # warnings about this
+        suppressWarnings(png(filename = raster_file,
             width = ncols, height = nrows, units = 'px',
-            type = 'Xlib', antialias = 'none' )
+            type = 'Xlib', antialias = 'none' ))
     } else {
         png(filename = raster_file,
             width = finalDims$width, height = finalDims$height,
