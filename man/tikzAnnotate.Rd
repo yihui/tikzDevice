@@ -49,7 +49,7 @@ grid.tikzCoord(x, y, name, units = "native", draw = TRUE)
   section of the TikZ manual for complete details.}
 
   \item{name}{Optional character string that will be used
-  as a name for a \code{coordiinate} or \code{node}. Other
+  as a name for a \code{coordinate} or \code{node}. Other
   TikZ commands can use this name to refer to a location in
   a graphic.}
 
