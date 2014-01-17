@@ -1806,7 +1806,7 @@ ScaleFont( const pGEcontext plotParams, pDevDesc deviceInfo ){
 
 ==============================================================================*/
 
-void TikZ_Annotate(const char **annotation, int *size){
+void TikZ_Annotate(const char **annotation, int *size, int *checkstate){
   
   //1. Get values of tikzInfo and deviceInfo
   //2. Print out annotation 
@@ -1820,6 +1820,9 @@ void TikZ_Annotate(const char **annotation, int *size){
   if(tikzInfo->debug == TRUE)
     printOutput(tikzInfo,"\n%% Annotating Graphic\n");
   
+  if (*checkstate)
+    TikZ_CheckState(deviceInfo);
+
   for(i = 0; i < size[0]; ++i)
     printOutput(tikzInfo, "%s\n", annotation[i] );
 }
