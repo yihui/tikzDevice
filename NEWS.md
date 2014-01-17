@@ -1,3 +1,8 @@
+## Bug Fixes
+
+- Add parameter checkstate to allow adding annotations to a new plot (#52,
+  thanks @smason)
+
 ---
 
 # Changes in version 0.7.2 (2014-01-05)
