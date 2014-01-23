@@ -1,7 +1,9 @@
 ## Bug Fixes
 
 - Add parameter checkstate to allow adding annotations to a new plot (#52,
-  thanks @smason)
+  thanks Sam Mason)
+- Allow raster images to be output without resampling by setting
+  options(tikzRasterResolution = NA) (#54, thanks Sam Mason)
 
 ---
 
