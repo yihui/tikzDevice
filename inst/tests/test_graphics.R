@@ -492,7 +492,7 @@ test_graphs <- list(
       tikzRasterResolution = NA),
     graph_code = quote({
       plot.new()
-      rasterImage(as.raster(matrix(seq(0,1,len=9),3)),0,0,1,1,interpolate=TRUE)
+      suppressWarnings(rasterImage(as.raster(matrix(seq(0,1,len=9),3)),0,0,1,1,interpolate=TRUE))
     })
   ),
 

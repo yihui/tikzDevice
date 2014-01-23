@@ -30,8 +30,26 @@ tikz_writeRaster <- function(fileName, rasterCount, rasterData,
       '_ras', rasterCount, '.png')
 
   res = getOption('tikzRasterResolution')
-  if (is.null(res)) res = NA;
-  if (is.na(res)) interpolate = FALSE;
+  # handle NULL the same as NA
+  if (is.null(res))
+      res = NA;
+
+  if (is.na(res)) {
+      interpolate = FALSE
+      width = ncols
+      height = nrows
+      units = 'px'
+      dpi = 1
+  } else {
+      width = finalDims$width
+      height = finalDims$height
+      units = 'in'
+      dpi = res
+  }
+
+  png_type = 'Xlib'
+  if (Sys.info()['sysname'] == 'Windows')
+      png_type = getOption("bitmapType")
 
   # Write the image to a PNG file.
 
@@ -41,42 +59,15 @@ tikz_writeRaster <- function(fileName, rasterCount, rasterData,
   # either but you would have to be a special kind of special to leave it out.
   # Using type='Xlib' also causes a segfault for me on OS X 10.6.4
   if ( Sys.info()['sysname'] == 'Darwin' && capabilities('aqua') ) {
-    if (is.na(res)) {
-        grDevices::quartz(
-            file = raster_file, type = 'png',
-            width = ncols, height = nrows,
-            antialias = FALSE, dpi = 1 )
-    } else {
-        grDevices::quartz(
-            file = raster_file, type = 'png',
-            width = finalDims$width, height = finalDims$height,
-            antialias = FALSE, dpi = res )
-    }
-  } else if (Sys.info()['sysname'] == 'Windows') {
-    if (is.na(res)) {
-        # we can create very small PNGs with this code, so suppress
-        # warnings about this
-        suppressWarnings(png(filename = raster_file,
-            width = ncols, height = nrows, units = 'px'))
-    } else {
-        png(filename = raster_file,
-            width = finalDims$width, height = finalDims$height,
-            units = 'in', res = res )
-    }
+      grDevices::quartz(
+          file = raster_file, type = 'png',
+          width = width, height = height,
+          antialias = FALSE, dpi = dpi )
   } else {
-    # Linux/UNIX and OS X without Aqua.
-    if (is.na(res)) {
-        # we can create very small PNGs with this code, so suppress
-        # warnings about this
-        suppressWarnings(png(filename = raster_file,
-            width = ncols, height = nrows, units = 'px',
-            type = 'Xlib', antialias = 'none' ))
-    } else {
-        png(filename = raster_file,
-            width = finalDims$width, height = finalDims$height,
-            type = 'Xlib', antialias = 'none',
-            units = 'in', res=res )
-    }
+      png(filename = raster_file,
+          width = width, height = height,
+          units = units, res = dpi,
+          type = png_type, antialias = 'none' )
   }
 
   par(mar=c(0,0,0,0))
