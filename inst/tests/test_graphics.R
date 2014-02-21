@@ -484,6 +484,18 @@ test_graphs <- list(
     })
   ),
 
+  list(
+    short_name = 'base_raster_noresample',
+    description = 'Test noresampling raster support in base graphics',
+    tags = c('base', 'raster'),
+    graph_options = list(
+      tikzRasterResolution = NA),
+    graph_code = quote({
+      plot.new()
+      suppressWarnings(rasterImage(as.raster(matrix(seq(0,1,len=9),3)),0,0,1,1,interpolate=TRUE))
+    })
+  ),
+
   # New pdfLaTeX tests go here
   #list(
   #  short_name = 'something_suitable_as_a_filename',

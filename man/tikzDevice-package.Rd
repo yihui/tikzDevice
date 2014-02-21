@@ -136,7 +136,8 @@ annotations}.
   \code{\link{tikz}} is requested to add a raster to a
   graphic, the raster is written to a PNG file which is
   then included into the LaTeX code. This option controls
-  the resolution (dpi) at which the PNG files are created.
+  the resolution (DPI) at which the PNG files are created,
+  or when set to \code{NA} the raster is output unchanged.
   }
 
   \item{\code{tikzPdftexWarnUTF}}{ A \code{TRUE/FALSE}
