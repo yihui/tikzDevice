@@ -29,11 +29,7 @@ tikz_writeRaster <- function(fileName, rasterCount, rasterData,
       tools::file_path_sans_ext(fileName),
       '_ras', rasterCount, '.png')
 
-  res = getOption('tikzRasterResolution')
-  # handle NULL the same as NA
-  if (is.null(res))
-      res = NA;
-
+  res = getOption('tikzRasterResolution', NA)
   if (is.na(res)) {
       interpolate = FALSE
       width = ncols
