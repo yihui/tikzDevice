@@ -8,16 +8,7 @@
 #' being typeset by LaTeX. Using LaTeX to generate graph text also means that
 #' \strong{LaTeX mathematics can be typeset directly into labels and
 #' annotations}.
-#' 
-#' \tabular{ll}{
-#'   Package: \tab tikzDevice\cr
-#'   Type: \tab Package\cr
-#'   Version: \tab 0.7.2\cr
-#'   Date: \tab 2014-01-05\cr
-#'   License: \tab GPL 2 or greater\cr
-#'   LazyLoad: \tab yes\cr
-#' }
-#' 
+#'
 #' @name tikzDevice-package
 #' @aliases tikzDevice-package tikzDevice
 #' @docType package
@@ -121,13 +112,9 @@
 #' 
 #' Default values for all options may be viewed or restored using the
 #' \code{\link{setTikzDefaults}} function.
-#' @author Cameron Bracken: \email{cameron.bracken@@gmail.com}
-#' 
-#' Charlie Sharpsteen: \email{source@@sharpsteen.net}
-#' 
-#' Yihui Xie: \email{xie@@yihui.name}
-#' 
-#' Submit bug reports to: \url{https://github.com/yihui/tikzDevice/issues}
+#' @author See \code{packageDescription("tikzDevice")}.
+#'
+#'   Submit bug reports to: \url{https://github.com/yihui/tikzDevice/issues}
 #' @seealso \code{\link{tikz}}
 #' @references The TikZ and PGF Packages: Manual for version 2.00\cr
 #' \url{http://sourceforge.net/projects/pgf}\cr Till Tanatu, February 20, 2008
