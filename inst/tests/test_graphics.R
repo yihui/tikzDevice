@@ -326,6 +326,19 @@ test_graphs <- list(
   ),
 
   list(
+    short_name = 'annotation_noflush',
+    description = 'Annotation prior to any graphics output',
+    tags = c('base', 'annotation'),
+    graph_code = quote({
+        plot.new()
+        plot.window(0:1, 0:1)
+        tikzCoord(0, 0, name="ll")
+        tikzCoord(1, 1, name="ur")
+        tikzAnnotate('\\draw (ll) rectangle (ur);');
+    })
+  ),
+
+  list(
     short_name = 'ggplot2_test',
     description = 'Test of ggplot2 graphics',
     tags = c('ggplot2'),
@@ -471,6 +484,18 @@ test_graphs <- list(
     })
   ),
 
+  list(
+    short_name = 'base_raster_noresample',
+    description = 'Test noresampling raster support in base graphics',
+    tags = c('base', 'raster'),
+    graph_options = list(
+      tikzRasterResolution = NA),
+    graph_code = quote({
+      plot.new()
+      suppressWarnings(rasterImage(as.raster(matrix(seq(0,1,len=9),3)),0,0,1,1,interpolate=TRUE))
+    })
+  ),
+
   # New pdfLaTeX tests go here
   #list(
   #  short_name = 'something_suitable_as_a_filename',
@@ -574,7 +599,7 @@ test_graphs <- list(
     graph_code =  quote({
       n <- 8
       chars <- intToUtf8(seq(187,,1,n*n),multiple=T)
-      
+
       plot(1:n,type='n',xlab='',ylab='',axes=FALSE, main="UTF-8 Characters")
       text(rep(1:n, n), rep(1:n, rep(n, n)), chars)
     })
