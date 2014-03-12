@@ -262,36 +262,7 @@ function( TeXMetrics ){
   # Open the TeX file for writing.
   texIn <- file( texFile, 'w')
 
-  writeLines(getOption("tikzDocumentDeclaration"), texIn)
-
-  # Add extra packages, it wont really matter if the user puts
-  # in duplicate packages or many irrelevant packages since they
-  # mostly wont be used. The packages we do care about are the
-  # font ones. I suppose it is possible that the user could add
-  # some wacky macros that could screw stuff up but lets pretend
-  # that cant happen for now.
-  #
-  # Also, we load the user packages last so the user can override
-  # things if they need to.
-  #
-  # The user MUST load the tikz package here.
-  #
-  # Load important packages for calculating metrics, must use different
-  # packages for (multibyte) unicode characters.
-  writeLines(TeXMetrics$packages, texIn)
-  switch(TeXMetrics$engine,
-    pdftex = {
-      writeLines(getOption('tikzMetricPackages'), texIn)
-    },
-    xetex = {
-      writeLines(getOption('tikzUnicodeMetricPackages'), texIn)
-    },
-    luatex = {
-      writeLines(getOption('tikzUnicodeMetricPackages'), texIn)
-    }
-  )
-
-  writeLines("\\batchmode", texIn)
+  writePreamble(texIn, TeXMetrics)
 
   # Begin a tikz picture.
   writeLines("\\begin{document}\n\\begin{tikzpicture}", texIn)
@@ -481,6 +452,39 @@ function( TeXMetrics ){
 
   }
 
+}
+
+writePreamble <- function(texIn, TeXMetrics) {
+  writeLines(getOption("tikzDocumentDeclaration"), texIn)
+  
+  # Add extra packages, it wont really matter if the user puts
+  # in duplicate packages or many irrelevant packages since they
+  # mostly wont be used. The packages we do care about are the
+  # font ones. I suppose it is possible that the user could add
+  # some wacky macros that could screw stuff up but lets pretend
+  # that cant happen for now.
+  #
+  # Also, we load the user packages last so the user can override
+  # things if they need to.
+  #
+  # The user MUST load the tikz package here.
+  #
+  # Load important packages for calculating metrics, must use different
+  # packages for (multibyte) unicode characters.
+  writeLines(TeXMetrics$packages, texIn)
+  switch(TeXMetrics$engine,
+         pdftex = {
+           writeLines(getOption('tikzMetricPackages'), texIn)
+         },
+         xetex = {
+           writeLines(getOption('tikzUnicodeMetricPackages'), texIn)
+         },
+         luatex = {
+           writeLines(getOption('tikzUnicodeMetricPackages'), texIn)
+         }
+  )
+
+  writeLines("\\batchmode", texIn)
 }
 
 extractNum <-
