@@ -979,8 +979,7 @@ to embed \code{bareBones} output in a \code{tikzpicture}:
   } {
     \node[circle, draw, ultra thick, fill=green!60!brown!40,
       outer sep=6pt,minimum size=12pt,
-      pin={[
-        draw, ultra thick,
+      pin={[draw, ultra thick,
         rounded corners,
         pin edge={black, ultra thick, <-, >=stealth}
       ] 180 : \name}] at (\port) {};
@@ -1008,8 +1007,7 @@ to embed \code{bareBones} output in a \code{tikzpicture}:
     } {
       \node[circle, draw, ultra thick, fill=green!60!brown!40,
         outer sep=6pt,minimum size=12pt,
-        pin={[
-          draw, ultra thick,
+        pin={[draw, ultra thick,
           rounded corners,
           pin edge={black, ultra thick, <-, >=stealth}
         ] 180 : \name}] at (\port) {};
