@@ -444,7 +444,7 @@ function( TeXMetrics ){
   }else{
 
     # For a character, we want ascent and descent too.
-    return( as.double( metrics[1:3] ) )
+    return( as.double( metrics[c(2, 3, 1)] ) )
 
   }
 
