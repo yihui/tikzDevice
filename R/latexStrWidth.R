@@ -393,7 +393,7 @@ function( TeXMetrics ){
 
   # avoid warnings about non-zero exit status, we know tex exited abnormally
   # it was designed that way for speed
-  suppressWarnings(silence <- system( latexCmd, intern=T, ignore.stderr=T))
+  suppressWarnings(silence <- system( latexCmd, intern=TRUE, ignore.stderr=TRUE))
 
   if (TeXMetrics$engine == 'xetex') {
     # Read the contents of the log file.
