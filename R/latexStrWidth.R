@@ -269,7 +269,9 @@ function( TeXMetrics ){
 
   # Open a file for metrics output.
   writeLines(
-    "\\immediate\\openout\\tikzMetrics tikzMetrics.out",
+    c(
+      "\\newwrite\\tikzMetrics",
+      "\\immediate\\openout\\tikzMetrics=tikzMetrics.out\\relax"),
     texIn
   )
 
@@ -411,12 +413,11 @@ function( TeXMetrics ){
   }
 
   # Read the contents of the output file.
-  metrics <- readLines( texOut )
-
-  # TODO: Compute width, height, and ascent here for checking
+  metrics.text <- if (file.exists(texOut)) readLines( texOut ) else character()
+  metrics <- extractNum( metrics.text )
 
   # complete.cases() checks for NULLs, NAs and NaNs
-  if( length(width) == 0 | any(!complete.cases(width)) ){
+  if( length(metrics) == 0 || any(!complete.cases(metrics)) ){
 
     message(paste(readLines(texFile),collapse='\n'))
     message(paste(readLines(texLog),collapse='\n'))
@@ -434,21 +435,15 @@ function( TeXMetrics ){
 
   }
 
-  width <- extractNum( metrics[1] )
-  message(width)
-
   # If we're dealing with a string, we're done.
   if( TeXMetrics$type == 'string' ){
 
-    return( as.double( width ) )
+    return( as.double( metrics[1] ) )
 
   }else{
 
     # For a character, we want ascent and descent too.
-    ascent <- extractNum( metrics[2] )
-    descent <- extractNum( metrics[3] )
-
-    return( as.double( c(ascent,descent,width) ) )
+    return( as.double( metrics[c(2,3,1)] ) )
 
   }
 
