@@ -346,11 +346,7 @@ getMetricsMethod <- function() {
   method <- .metricsMethods[method.pos]
 }
 
-writeMeasurementFile <- function(TeXMetrics, texDir, texFile) {
-  # Open the TeX file for writing.
-  texIn <- file( texFile, 'w')
-  on.exit(close(texIn))
-
+writePreamble <- function(TeXMetrics, texDir, texIn) {
   method <- getMetricsMethod()
 
   preamble <- getPreamble(TeXMetrics)
@@ -366,6 +362,14 @@ writeMeasurementFile <- function(TeXMetrics, texDir, texFile) {
   if (writeExplicitPreamble) {
     writeLines(preamble, texIn)
   }
+}
+
+writeMeasurementFile <- function(TeXMetrics, texDir, texFile) {
+  # Open the TeX file for writing.
+  texIn <- file( texFile, 'w')
+  on.exit(close(texIn))
+
+  writePreamble(TeXMetrics, texDir, texIn)
 
   # Begin a tikz picture.
   writeLines("\\begin{document}\n\\begin{tikzpicture}", texIn)
