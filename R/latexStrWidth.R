@@ -520,7 +520,7 @@ providePrecompiledPreamble <- function(preamble, latexCmd, texDir) {
         oldwd <- setwd(texDir)
         on.exit(setwd(oldwd), add=TRUE)
         message("Creating precompiled preamble at:\n ", formatFileName)
-        texFile <- 'tikzStringWidthCalc.ltx'
+        texFile <- file.path(texDir, 'tikzStringWidthCalc.ltx')
         writeLines(preamble, texFile)
         on.exit(unlink(texFile), add=TRUE)
         latexFormat <- basename(latexCmd)
