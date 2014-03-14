@@ -513,7 +513,7 @@ getPreamble <- function(TeXMetrics) {
 providePrecompiledPreamble <- function(preamble, latexCmd, texDir) {
   tryCatch(
     {
-      preambleHash <- sha1(preamble)
+      preambleHash <- sha1(c(latexCmd, preamble))
       formatFileBase <- sprintf("%s-%s", .tikzInternal$dictionaryFile, preambleHash)
       formatFileName <- sprintf("%s.fmt", formatFileBase)
       if (!file.exists(formatFileName)) {
