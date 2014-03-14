@@ -82,7 +82,7 @@ if (nchar(Sys.getenv('R_TESTS')) == 0){
   options(oldwarn)
 
 
-  test_package('tikzDevice')
+  test_check('tikzDevice')
 
   stopifnot(!test.failed)
 
