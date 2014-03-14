@@ -373,12 +373,10 @@ writeMeasurementFile <- function(TeXMetrics, texDir, texFile) {
 
   writePreamble(TeXMetrics, texDir, texIn)
 
-  # Begin a tikz picture.
-  writeLines("\\begin{tikzpicture}", texIn)
-
-  # Open a file for metrics output.
+  # Begin a tikzpicture, open a file for metrics output.
   writeLines(
     c(
+      "\\begin{tikzpicture}",
       "\\newwrite\\tikzMetrics",
       "\\immediate\\openout\\tikzMetrics=tikzMetrics.out\\relax"),
     texIn
@@ -453,7 +451,7 @@ writeMeasurementFile <- function(TeXMetrics, texDir, texFile) {
                node{ \\immediate\\write\\tikzMetrics{\\n1} };", texIn)
   }
 
-  # Close output file.
+  # Close output file, end tikzpicture.
   writeLines(
     c(
       "\\immediate\\close\\tikzMetrics",
