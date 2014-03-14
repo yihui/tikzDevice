@@ -351,7 +351,7 @@ writeMeasurementFile <- function(TeXMetrics, texDir, texFile) {
 
   preamble <- getPreamble(TeXMetrics)
   writePreamble <- TRUE
-  if (method == "preamble" && is.null(.tikzInternal$avoidPreambleMetricsMethod)) {
+  if (method == "preamble") {
     ppName <- providePrecompiledPreamble(preamble, TeXMetrics$engine, texDir)
     if (!is.na(ppName)) {
       writeLines(sprintf("%%&%s", ppName), texIn)
@@ -497,6 +497,9 @@ providePrecompiledPreamble <- function(preamble, engine, texDir) {
 
     return (NA)
   }
+
+  if (!is.null(.tikzInternal$avoidPreambleMetricsMethod))
+    return(NA)
 
   tryCatch(
     {
