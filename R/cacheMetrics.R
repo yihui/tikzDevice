@@ -81,8 +81,9 @@ function()
 			dbCreate( dbFile, type='DB1' )
 		}
 
-		# Add the dictionary as an object in the .tikzOptions
+		# Add the dictionary (and the file name) as an object in the .tikzOptions
 		# environment.
+		.tikzInternal[['dictionaryFile']] <- dbFile
 		.tikzInternal[['dictionary']] <- dbInit(dbFile)
 
 	}

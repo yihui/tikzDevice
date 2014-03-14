@@ -106,8 +106,30 @@
 #'   whether warnings are printed if Unicode characters are sent to a device
 #'   using the \code{pdftex} engine.  } }
 #'
+#'   \item{\code{tikzMetricsMethod}}{ A \code{character} that chooses the
+#'   method used for computing metrics.  This mostly affects the run time for
+#'   rendering plots with many textual elements and a "cold" metrics cache
+#'   (see above).
+#'   
+#'      \describe{
+#'         \item{\code{"preamble"}}{ Use a
+#'         \url{http://magic.aladdin.cs.cmu.edu/2007/11/02/precompiled-preamble-for-latex/}{"precompiled preamble"}
+#'         to speed up measurement (experimental).  With this method, the
+#'         precompiled preamble is stored alongside the metrics dictionary (see
+#'         above) but with a suffix depending on the actual preamble used. 
+#'         If the option \code{tikzMetricsDictionary} is not set, the preamble
+#'         is temporary just like the metrics cache; otherwise it is persistent.
+#'         It is probably wise to delete these files after major upgrades to 
+#'         your LaTeX installation. }
+#'         
+#'         \item{\code{"robust"}}{ (or anything else) uses a slower but
+#'         robust method. }
+#'         
+#'   Default: \code{"robust"}. }
+#'
 #'   Default values for all options may be viewed or restored using the
 #'   \code{\link{setTikzDefaults}} function.
+#'
 #' @author See \code{packageDescription("tikzDevice")}.
 #'
 #'   Submit bug reports to: \url{https://github.com/yihui/tikzDevice/issues}

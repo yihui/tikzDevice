@@ -116,15 +116,16 @@ setTikzDefaults <- function( overwrite = TRUE ){
       "\\usepackage{fontspec,xunicode}\n"
     ),
 
- 
     tikzSanitizeCharacters = c('%','$','}','{','^','_','#','&','~'), 
- 
+
     tikzReplacementCharacters = c('\\%','\\$','\\}','\\{','\\^{}','\\_{}',
       '\\#','\\&','\\char`\\~'),
 
     tikzRasterResolution = 300,
 
-    tikzPdftexWarnUTF = TRUE
+    tikzPdftexWarnUTF = TRUE,
+
+    tikzMetricsMethod = "robust"
 
   )
 

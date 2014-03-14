@@ -236,6 +236,8 @@ function(charCode, cex = 1, face = 1, engine = getOption('tikzDefaultEngine'),
   }
 }
 
+.metricsMethods <- c("robust", "preamble")
+
 getMetricsFromLatex <-
 function( TeXMetrics ){
 
@@ -262,8 +264,40 @@ function( TeXMetrics ){
   # Open the TeX file for writing.
   texIn <- file( texFile, 'w')
 
+  # Recover the latex command.
+  latexCmd <- switch(TeXMetrics$engine,
+                     pdftex = getOption('tikzLatex'),
+                     xetex  = getOption('tikzXelatex'),
+                     luatex  = getOption('tikzLualatex'),
+  )
+
+  method <- getOption('tikzMetricsMethod', )
+  method.pos <- pmatch(method, .metricsMethods, 0L)
+  if (is.na(method.pos)) method.pos <- 1L
+  if (method.pos == 0L) {
+    if (is.null(.tikzInternal$warnMetricsMethod) ||
+          .tikzInternal$warnMetricsMethod != method) {
+      warning("Unsupported value for option tikzMetricsMethod: ", method,
+              "\nSupported values: ", paste(.metricsMethods, collapse=", "))
+      method.pos <- 1L
+      .tikzInternal$warnMetricsMethod <- method
+    }
+  }
+  method <- .metricsMethods[method.pos]
+
   preamble <- getPreamble(TeXMetrics)
-  writeLines(preamble, texIn)
+  writePreamble <- TRUE
+  if (method == "preamble" && is.null(.tikzInternal$avoidPreambleMetricsMethod)) {
+    ppName <- providePrecompiledPreamble(preamble, latexCmd, texDir)
+    if (!is.na(ppName)) {
+      writeLines(sprintf("%%&%s", ppName), texIn)
+      writePreamble <- FALSE
+    }
+  }
+
+  if (writePreamble) {
+    writeLines(preamble, texIn)
+  }
 
   # Begin a tikz picture.
   writeLines("\\begin{document}\n\\begin{tikzpicture}", texIn)
@@ -380,21 +414,14 @@ function( TeXMetrics ){
   # Close the LaTeX file, ready to compile
   close( texIn )
 
-  # Recover the latex command. Use XeLaTeX if the character is not ASCII
-  latexCmd <- switch(TeXMetrics$engine,
-    pdftex = getOption('tikzLatex'),
-    xetex  = getOption('tikzXelatex'),
-    luatex  = getOption('tikzLualatex'),
-  )
-
   # Append the batchmode flag to increase LaTeX
   # efficiency.
-  latexCmd <- paste( latexCmd, '-interaction=batchmode', '-halt-on-error',
+  latexCmdFull <- paste( latexCmd, '-interaction=batchmode', '-halt-on-error',
     '-output-directory', texDir, texFile)
 
   # avoid warnings about non-zero exit status, we know tex exited abnormally
   # it was designed that way for speed
-  suppressWarnings(silence <- system( latexCmd, intern=TRUE, ignore.stderr=TRUE))
+  suppressWarnings(silence <- system( latexCmdFull, intern=TRUE, ignore.stderr=TRUE))
 
   if (TeXMetrics$engine == 'xetex') {
     # Read the contents of the log file.
@@ -480,6 +507,44 @@ getPreamble <- function(TeXMetrics) {
     ),
 
     "\\batchmode"
+  )
+}
+
+providePrecompiledPreamble <- function(preamble, latexCmd, texDir) {
+  tryCatch(
+    {
+      preambleHash <- sha1(preamble)
+      formatFileBase <- sprintf("%s-%s", .tikzInternal$dictionaryFile, preambleHash)
+      formatFileName <- sprintf("%s.fmt", formatFileBase)
+      if (!file.exists(formatFileName)) {
+        oldwd <- setwd(texDir)
+        on.exit(setwd(oldwd), add=TRUE)
+        message("Creating precompiled preamble at:\n ", formatFileName)
+        texFile <- 'tikzStringWidthCalc.ltx'
+        writeLines(preamble, texFile)
+        on.exit(unlink(texFile), add=TRUE)
+        latexFormat <- basename(latexCmd)
+        latexCmdFull <- paste(
+          latexCmd, '-ini',
+          shQuote(sprintf("&%s %s\\dump", latexFormat, texFile)) )
+
+        status <- system(latexCmdFull)
+        stopifnot(status == 0)
+
+        file.copy(file.path(texDir, 'tikzStringWidthCalc.fmt'),
+                  formatFileName)
+        unlink(file.path(texDir, 'tikzStringWidthCalc.fmt'))
+      }
+
+      formatFileBase
+    },
+
+    error=function(e) {
+      warning("Could not measure using preamble method.\n",
+              "Falling back to robust method for this session.")
+      .tikzInternal$avoidPreambleMetricsMethod <- TRUE
+      NA_character_
+    }
   )
 }
 
