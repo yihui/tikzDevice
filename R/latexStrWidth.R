@@ -526,7 +526,7 @@ providePrecompiledPreamble <- function(preamble, latexCmd, texDir) {
           latexCmd, '-ini', '-output-directory', shQuote(texDir),
           shQuote(sprintf("&%s %s\\dump", latexFormat, texFile)) )
 
-        status <- system(latexCmdFull)
+        status <- system(latexCmdFull, ignore.stdout=TRUE, ignore.stderr=TRUE)
         stopifnot(status == 0)
 
         file.copy(file.path(texDir, 'tikzStringWidthCalc.fmt'),
