@@ -236,8 +236,6 @@ function(charCode, cex = 1, face = 1, engine = getOption('tikzDefaultEngine'),
   }
 }
 
-.metricsMethods <- c("robust", "preamble")
-
 getMetricsFromLatex <-
 function( TeXMetrics ){
 
@@ -330,11 +328,9 @@ function( TeXMetrics ){
 
 }
 
-writeMeasurementFile <- function(TeXMetrics, texDir, texFile) {
-  # Open the TeX file for writing.
-  texIn <- file( texFile, 'w')
-  on.exit(close(texIn))
+.metricsMethods <- c("robust", "preamble")
 
+getMetricsMethod <- function() {
   method <- getOption('tikzMetricsMethod', default="robust")
   method.pos <- pmatch(method, .metricsMethods, 0L)
   if (is.na(method.pos)) method.pos <- 1L
@@ -348,6 +344,14 @@ writeMeasurementFile <- function(TeXMetrics, texDir, texFile) {
     }
   }
   method <- .metricsMethods[method.pos]
+}
+
+writeMeasurementFile <- function(TeXMetrics, texDir, texFile) {
+  # Open the TeX file for writing.
+  texIn <- file( texFile, 'w')
+  on.exit(close(texIn))
+
+  method <- getMetricsMethod()
 
   preamble <- getPreamble(TeXMetrics)
   writePreamble <- TRUE
