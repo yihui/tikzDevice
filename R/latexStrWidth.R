@@ -517,15 +517,13 @@ providePrecompiledPreamble <- function(preamble, latexCmd, texDir) {
       formatFileBase <- sprintf("%s-%s", .tikzInternal$dictionaryFile, preambleHash)
       formatFileName <- sprintf("%s.fmt", formatFileBase)
       if (!file.exists(formatFileName)) {
-        oldwd <- setwd(texDir)
-        on.exit(setwd(oldwd), add=TRUE)
         message("Creating precompiled preamble at:\n ", formatFileName)
         texFile <- file.path(texDir, 'tikzStringWidthCalc.ltx')
         writeLines(preamble, texFile)
         on.exit(unlink(texFile), add=TRUE)
         latexFormat <- basename(latexCmd)
         latexCmdFull <- paste(
-          latexCmd, '-ini',
+          latexCmd, '-ini', '-output-directory', shQuote(texDir),
           shQuote(sprintf("&%s %s\\dump", latexFormat, texFile)) )
 
         status <- system(latexCmdFull)
