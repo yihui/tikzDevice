@@ -455,7 +455,10 @@ writeMeasurementFile <- function(TeXMetrics, texDir, texFile) {
 
   # Close output file.
   writeLines(
-    "\\immediate\\close\\tikzMetrics",
+    c(
+      "\\immediate\\close\\tikzMetrics",
+      "\\end{tikzpicture}"
+    ),
     texIn
   )
 
