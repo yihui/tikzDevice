@@ -354,16 +354,16 @@ writeMeasurementFile <- function(TeXMetrics, texDir, texFile) {
   method <- getMetricsMethod()
 
   preamble <- getPreamble(TeXMetrics)
-  writePreamble <- TRUE
+  writeExplicitPreamble <- TRUE
   if (method == "preamble") {
     ppName <- providePrecompiledPreamble(preamble, TeXMetrics$engine, texDir)
     if (!is.na(ppName)) {
       writeLines(sprintf("%%&%s", ppName), texIn)
-      writePreamble <- FALSE
+      writeExplicitPreamble <- FALSE
     }
   }
 
-  if (writePreamble) {
+  if (writeExplicitPreamble) {
     writeLines(preamble, texIn)
   }
 
