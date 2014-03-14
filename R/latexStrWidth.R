@@ -413,9 +413,14 @@ providePrecompiledPreamble <- function(preamble, engine, texDir) {
         status <- system(latexCmdFull, ignore.stdout=TRUE, ignore.stderr=TRUE)
         stopifnot(status == 0)
 
-        file.copy(file.path(texDir, 'tikzStringWidthCalc.fmt'),
-                  formatFileName)
-        unlink(file.path(texDir, 'tikzStringWidthCalc.fmt'))
+        formatFileNameSrc <- file.path(texDir, 'tikzStringWidthCalc.fmt')
+        tryCatch(
+          file.rename(formatFileNameSrc, formatFileName),
+          error=function(e) {
+            file.copy(formatFileNameSrc, formatFileName)
+            unlink(formatFileNameSrc)
+          }
+        )
       }
 
       formatFileBase
