@@ -366,13 +366,7 @@ writePreamble <- function(TeXMetrics, texDir, texIn) {
   writeLines("\\begin{document}", texIn)
 }
 
-writeMeasurementFile <- function(TeXMetrics, texDir, texFile) {
-  # Open the TeX file for writing.
-  texIn <- file( texFile, 'w')
-  on.exit(close(texIn))
-
-  writePreamble(TeXMetrics, texDir, texIn)
-
+writeMeasurementCode <- function(TeXMetrics, texIn) {
   # Begin a tikzpicture, open a file for metrics output.
   writeLines(
     c(
@@ -413,7 +407,6 @@ writeMeasurementFile <- function(TeXMetrics, texDir, texFile) {
     # We are currently ignoring R's symbol fonts.
     symbol = ''
   ) # End output font face switch.
-
 
   # Now for the content. For string width we set the whole string in
   # the node. For character metrics we have an integer corresponding
@@ -459,6 +452,16 @@ writeMeasurementFile <- function(TeXMetrics, texDir, texFile) {
     ),
     texIn
   )
+}
+
+writeMeasurementFile <- function(TeXMetrics, texDir, texFile) {
+  # Open the TeX file for writing.
+  texIn <- file(texFile, 'w')
+  on.exit(close(texIn))
+
+  writePreamble(TeXMetrics, texDir, texIn)
+
+  writeMeasurementCode(TeXMetrics, texIn)
 
   # Stop before creating output
   writeLines("\\makeatletter", texIn)
