@@ -73,11 +73,12 @@ do_graphics_test <- function(short_name, description, graph_code,
 
 create_graph <- function(graph_code, graph_file, engine){
 
-    if (engine == "pdftex")
-      options(tikzMetricsMethod="preamble")
+    old.options <- options(
+      tikzMetricsMethod=if (engine == "pdftex") "preamble" else "robust")
+    on.exit(options(old.options), add = TRUE)
 
     tikz(file = graph_file, standAlone = TRUE, engine = engine)
-    on.exit(dev.off())
+    on.exit(dev.off(), add = TRUE)
 
     eval(graph_code)
 
