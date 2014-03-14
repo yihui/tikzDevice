@@ -284,7 +284,7 @@ function( TeXMetrics ){
   preamble <- getPreamble(TeXMetrics)
   writePreamble <- TRUE
   if (method == "preamble" && is.null(.tikzInternal$avoidPreambleMetricsMethod)) {
-    ppName <- providePrecompiledPreamble(preamble, latexCmd, texDir)
+    ppName <- providePrecompiledPreamble(preamble, TeXMetrics$engine, texDir)
     if (!is.na(ppName)) {
       writeLines(sprintf("%%&%s", ppName), texIn)
       writePreamble <- FALSE
@@ -506,10 +506,20 @@ getPreamble <- function(TeXMetrics) {
   )
 }
 
-providePrecompiledPreamble <- function(preamble, latexCmd, texDir) {
+providePrecompiledPreamble <- function(preamble, engine, texDir) {
+  if (engine != "pdftex") {
+    if (is.null(.tikzInternal$warnNonPdfTeXPreamble)) {
+      warning("The preamble method is only available with the pdftex engine.\n",
+              "Falling back to robust method.")
+      .tikzInternal$warnNonPdfTeXPreamble <- TRUE
+    }
+
+    return (NA)
+  }
+
   tryCatch(
     {
-      preambleHash <- sha1(c(latexCmd, preamble))
+      preambleHash <- sha1(c(engine, preamble))
       formatFileBase <- sprintf("%s-%s", .tikzInternal$dictionaryFile, preambleHash)
       formatFileName <- sprintf("%s.fmt", formatFileBase)
       if (!file.exists(formatFileName)) {
@@ -517,6 +527,7 @@ providePrecompiledPreamble <- function(preamble, latexCmd, texDir) {
         texFile <- file.path(texDir, 'tikzStringWidthCalc.ltx')
         writeLines(preamble, texFile)
         on.exit(unlink(texFile), add=TRUE)
+        latexCmd <- getLatexCmd(engine)
         latexFormat <- basename(latexCmd)
         latexCmdFull <- paste(
           latexCmd, '-ini', '-output-directory', shQuote(texDir),

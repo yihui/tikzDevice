@@ -73,6 +73,9 @@ do_graphics_test <- function(short_name, description, graph_code,
 
 create_graph <- function(graph_code, graph_file, engine){
 
+    if (engine == "pdftex")
+      options(tikzMetricsMethod="preamble")
+
     tikz(file = graph_file, standAlone = TRUE, engine = engine)
     on.exit(dev.off())
 
