@@ -264,9 +264,6 @@ function( TeXMetrics ){
   # Open the TeX file for writing.
   texIn <- file( texFile, 'w')
 
-  # Recover the latex command.
-  latexCmd <- getLatexCmd(TeXMetrics$engine)
-
   method <- getOption('tikzMetricsMethod', )
   method.pos <- pmatch(method, .metricsMethods, 0L)
   if (is.na(method.pos)) method.pos <- 1L
@@ -409,6 +406,9 @@ function( TeXMetrics ){
 
   # Close the LaTeX file, ready to compile
   close( texIn )
+
+  # Recover the latex command.
+  latexCmd <- getLatexCmd(TeXMetrics$engine)
 
   # Append the batchmode flag to increase LaTeX
   # efficiency.
