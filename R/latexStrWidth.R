@@ -362,6 +362,8 @@ writePreamble <- function(TeXMetrics, texDir, texIn) {
   if (writeExplicitPreamble) {
     writeLines(preamble, texIn)
   }
+
+  writeLines("\\begin{document}", texIn)
 }
 
 writeMeasurementFile <- function(TeXMetrics, texDir, texFile) {
@@ -372,7 +374,7 @@ writeMeasurementFile <- function(TeXMetrics, texDir, texFile) {
   writePreamble(TeXMetrics, texDir, texIn)
 
   # Begin a tikz picture.
-  writeLines("\\begin{document}\n\\begin{tikzpicture}", texIn)
+  writeLines("\\begin{tikzpicture}", texIn)
 
   # Open a file for metrics output.
   writeLines(
