@@ -265,11 +265,7 @@ function( TeXMetrics ){
   texIn <- file( texFile, 'w')
 
   # Recover the latex command.
-  latexCmd <- switch(TeXMetrics$engine,
-                     pdftex = getOption('tikzLatex'),
-                     xetex  = getOption('tikzXelatex'),
-                     luatex  = getOption('tikzLualatex'),
-  )
+  latexCmd <- getLatexCmd(TeXMetrics$engine)
 
   method <- getOption('tikzMetricsMethod', )
   method.pos <- pmatch(method, .metricsMethods, 0L)
@@ -543,6 +539,14 @@ providePrecompiledPreamble <- function(preamble, latexCmd, texDir) {
       .tikzInternal$avoidPreambleMetricsMethod <- TRUE
       NA_character_
     }
+  )
+}
+
+getLatexCmd <- function(engine) {
+  switch(engine,
+         pdftex = getOption('tikzLatex'),
+         xetex  = getOption('tikzXelatex'),
+         luatex  = getOption('tikzLualatex'),
   )
 }
 
