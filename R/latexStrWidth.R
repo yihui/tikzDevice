@@ -545,8 +545,8 @@ providePrecompiledPreamble <- function(preamble, engine, texDir) {
     },
 
     error=function(e) {
-      warning("Could not measure using preamble method.\n",
-              "Falling back to robust method for this session.")
+      warning("Could not measure using preamble method:\n",
+              e, "Falling back to robust method for this session.")
       .tikzInternal$avoidPreambleMetricsMethod <- TRUE
       NA_character_
     }
