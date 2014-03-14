@@ -91,7 +91,7 @@ DetailedReporter <- setRefClass('DetailedReporter', where = .GlobalEnv, contains
           0, getOption("width") - nchar(header))
         line <- charrep("-", linewidth )
 
-        message <- sapply(failures, "[[", "message")
+        message <- sapply(failures, "[[", "failure_msg")
 
         cat(str_c(
           colourise(header, "red"), line, "\n",
@@ -234,7 +234,7 @@ GraphicsReporter <- setRefClass('GraphicsReporter', where = .GlobalEnv, contains
           0, getOption("width") - nchar(header))
         line <- charrep("-", linewidth )
 
-        message <- sapply(failures, "[[", "message")
+        message <- sapply(failures, "[[", "failure_msg")
 
         cat(str_c(
           colourise(header, "red"), line, "\n",

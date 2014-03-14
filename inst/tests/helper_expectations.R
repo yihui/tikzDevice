@@ -13,6 +13,6 @@ runs_cleanly <- function ()
         is_try_error = inherits(res, 'try-error')
         testthat:::expectation(!is_try_error,
                                sprintf("warnings or errors occurred:\n%s",
-                               as.character(res)))
+                                       as.character(res)))
     }
 }

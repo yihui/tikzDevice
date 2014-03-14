@@ -23,7 +23,7 @@ Depends:
 Imports:
     filehash
 Suggests:
-    testthat (>= 0.6),
+    testthat (>= 0.8),
     evaluate,
     stringr,
     ggplot2,

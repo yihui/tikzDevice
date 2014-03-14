@@ -1,10 +1,6 @@
 # This file contains functions that help set up and run the tikzDevice through
 # test graphs.
 
-# Workaround until testthat 0.7.2 is on CRAN; see also hadley/testthat#102
-get_reporter <- if (exists("get_reporter", envir = asNamespace("testthat")))
-  testthat:::get_reporter else testthat:::test_reporter
-
 do_graphics_test <- function(short_name, description, graph_code,
   engine = 'pdftex', graph_options = NULL, skip_if = NULL, tags = NULL, ...) {
 
