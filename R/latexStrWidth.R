@@ -261,151 +261,8 @@ function( TeXMetrics ){
   texOut <- file.path( texDir,'tikzMetrics.out' )
   texFile <- file.path( texDir,'tikzStringWidthCalc.tex' )
 
-  # Open the TeX file for writing.
-  texIn <- file( texFile, 'w')
-
-  method <- getOption('tikzMetricsMethod', )
-  method.pos <- pmatch(method, .metricsMethods, 0L)
-  if (is.na(method.pos)) method.pos <- 1L
-  if (method.pos == 0L) {
-    if (is.null(.tikzInternal$warnMetricsMethod) ||
-          .tikzInternal$warnMetricsMethod != method) {
-      warning("Unsupported value for option tikzMetricsMethod: ", method,
-              "\nSupported values: ", paste(.metricsMethods, collapse=", "))
-      method.pos <- 1L
-      .tikzInternal$warnMetricsMethod <- method
-    }
-  }
-  method <- .metricsMethods[method.pos]
-
-  preamble <- getPreamble(TeXMetrics)
-  writePreamble <- TRUE
-  if (method == "preamble" && is.null(.tikzInternal$avoidPreambleMetricsMethod)) {
-    ppName <- providePrecompiledPreamble(preamble, TeXMetrics$engine, texDir)
-    if (!is.na(ppName)) {
-      writeLines(sprintf("%%&%s", ppName), texIn)
-      writePreamble <- FALSE
-    }
-  }
-
-  if (writePreamble) {
-    writeLines(preamble, texIn)
-  }
-
-  # Begin a tikz picture.
-  writeLines("\\begin{document}\n\\begin{tikzpicture}", texIn)
-
-  # Open a file for metrics output.
-  writeLines(
-    c(
-      "\\newwrite\\tikzMetrics",
-      "\\immediate\\openout\\tikzMetrics=tikzMetrics.out\\relax"),
-    texIn
-  )
-
-  # Insert the value of cex into the node options.
-  nodeOpts <- paste('\\node[inner sep=0pt, outer sep=0pt, scale=',
-    TeXMetrics$scale,']', sep='')
-
-  # Create the node contents depending on the type of metrics
-  # we are after.
-
-  # First, which font face are we using?
-  #
-  # From ?par:
-  #
-  # font
-  #
-  #    An integer which specifies which font to use for text. If possible,
-  #    device drivers arrange so that 1 corresponds to plain text (the default),
-  #    2 to bold face, 3 to italic and 4 to bold italic. Also, font 5 is expected
-  #    to be the symbol font, in Adobe symbol encoding. On some devices font families
-  #    can be selected by family to choose different sets of 5 fonts.
-
-  nodeContent <- ''
-  switch( TeXMetrics$face,
-
-    normal = {
-      # We do nothing for font face 1, normal font.
-    },
-
-    bold = {
-      # Using bold, we set in bold *series*
-      nodeContent <- '\\bfseries'
-    },
-
-    italic = {
-      # Using italic, we set in the italic *shape*
-      nodeContent <- '\\itshape'
-    },
-
-    bolditalic = {
-      # With bold italic we set in bold *series* with italic *shape*
-      nodeContent <- '\\bfseries\\itshape'
-    },
-
-    symbol = {
-      # We are currently ignoring R's symbol fonts.
-    }
-
-  ) # End output font face switch.
-
-
-  # Now for the content. For string width we set the whole string in
-  # the node. For character metrics we have an integer corresponding
-  # to a posistion in the ASCII character table- so we use the LaTeX
-  # \char command to translate it to an actual character.
-  switch( TeXMetrics$type,
-
-    string = {
-
-      nodeContent <- paste( nodeContent,TeXMetrics$value )
-
-    },
-
-    char = {
-
-      nodeContent <- paste( nodeContent,'\\char',TeXMetrics$value, sep='' )
-
-    }
-
-  )# End switch for metric type.
-
-  writeLines( paste( nodeOpts, ' (TeX) {', nodeContent, "};", sep=''), texIn)
-
-  # We calculate width for both characters and strings.
-  writeLines("\\path let \\p1 = ($(TeX.east) - (TeX.west)$),
-    \\n1 = {veclen(\\x1,\\y1)} in (TeX.east) -- (TeX.west)
-    node{ \\immediate\\write\\tikzMetrics{\\n1} };", texIn)
-
-  # We only want to calculate ascent and descent when dealing with
-  # single characters.
-  if( TeXMetrics$type == 'char' ){
-
-    # Calculate the ascent and print it to the log.
-    writeLines("\\path let \\p1 = ($(TeX.north) - (TeX.base)$),
-      \\n1 = {veclen(\\x1,\\y1)} in (TeX.north) -- (TeX.base)
-      node{ \\immediate\\write\\tikzMetrics{\\n1} };", texIn)
-
-    # Calculate the descent and print it to the log.
-    writeLines("\\path let \\p1 = ($(TeX.base) - (TeX.south)$),
-      \\n1 = {veclen(\\x1,\\y1)} in (TeX.base) -- (TeX.south)
-      node{ \\immediate\\write\\tikzMetrics{\\n1} };", texIn)
-
-  }
-
-  # Close output file.
-  writeLines(
-    "\\immediate\\close\\tikzMetrics",
-    texIn
-  )
-
-  # Stop before creating output
-  writeLines("\\makeatletter", texIn)
-  writeLines("\\@@end", texIn)
-
-  # Close the LaTeX file, ready to compile
-  close( texIn )
+  # Write LaTeX code to file.
+  writeMeasurementFile(TeXMetrics, texDir, texFile)
 
   # Recover the latex command.
   latexCmd <- getLatexCmd(TeXMetrics$engine)
@@ -471,6 +328,139 @@ function( TeXMetrics ){
 
   }
 
+}
+
+writeMeasurementFile <- function(TeXMetrics, texDir, texFile) {
+  # Open the TeX file for writing.
+  texIn <- file( texFile, 'w')
+  on.exit(close(texIn))
+
+  method <- getOption('tikzMetricsMethod', default="robust")
+  method.pos <- pmatch(method, .metricsMethods, 0L)
+  if (is.na(method.pos)) method.pos <- 1L
+  if (method.pos == 0L) {
+    if (is.null(.tikzInternal$warnMetricsMethod) ||
+          .tikzInternal$warnMetricsMethod != method) {
+      warning("Unsupported value for option tikzMetricsMethod: ", method,
+              "\nSupported values: ", paste(.metricsMethods, collapse=", "))
+      method.pos <- 1L
+      .tikzInternal$warnMetricsMethod <- method
+    }
+  }
+  method <- .metricsMethods[method.pos]
+
+  preamble <- getPreamble(TeXMetrics)
+  writePreamble <- TRUE
+  if (method == "preamble" && is.null(.tikzInternal$avoidPreambleMetricsMethod)) {
+    ppName <- providePrecompiledPreamble(preamble, TeXMetrics$engine, texDir)
+    if (!is.na(ppName)) {
+      writeLines(sprintf("%%&%s", ppName), texIn)
+      writePreamble <- FALSE
+    }
+  }
+
+  if (writePreamble) {
+    writeLines(preamble, texIn)
+  }
+
+  # Begin a tikz picture.
+  writeLines("\\begin{document}\n\\begin{tikzpicture}", texIn)
+
+  # Open a file for metrics output.
+  writeLines(
+    c(
+      "\\newwrite\\tikzMetrics",
+      "\\immediate\\openout\\tikzMetrics=tikzMetrics.out\\relax"),
+    texIn
+  )
+
+  # Insert the value of cex into the node options.
+  nodeOpts <- paste('\\node[inner sep=0pt, outer sep=0pt, scale=',
+                    TeXMetrics$scale,']', sep='')
+
+  # Create the node contents depending on the type of metrics
+  # we are after.
+
+  # First, which font face are we using?
+  #
+  # From ?par:
+  #
+  # font
+  #
+  #    An integer which specifies which font to use for text. If possible,
+  #    device drivers arrange so that 1 corresponds to plain text (the default),
+  #    2 to bold face, 3 to italic and 4 to bold italic. Also, font 5 is expected
+  #    to be the symbol font, in Adobe symbol encoding. On some devices font families
+  #    can be selected by family to choose different sets of 5 fonts.
+  nodeContent <- ''
+  switch( TeXMetrics$face,
+          normal = {
+            # We do nothing for font face 1, normal font.
+          },
+          bold = {
+            # Using bold, we set in bold *series*
+            nodeContent <- '\\bfseries'
+          },
+          italic = {
+            # Using italic, we set in the italic *shape*
+            nodeContent <- '\\itshape'
+          },
+          bolditalic = {
+            # With bold italic we set in bold *series* with italic *shape*
+            nodeContent <- '\\bfseries\\itshape'
+          },
+          symbol = {
+            # We are currently ignoring R's symbol fonts.
+          }
+  ) # End output font face switch.
+
+
+  # Now for the content. For string width we set the whole string in
+  # the node. For character metrics we have an integer corresponding
+  # to a posistion in the ASCII character table- so we use the LaTeX
+  # \char command to translate it to an actual character.
+  switch( TeXMetrics$type,
+          string = {
+            nodeContent <- paste( nodeContent,TeXMetrics$value )
+          },
+
+          char = {
+            nodeContent <- paste( nodeContent,'\\char',TeXMetrics$value, sep='' )
+          }
+  )# End switch for metric type.
+
+  writeLines( paste( nodeOpts, ' (TeX) {', nodeContent, "};", sep=''), texIn)
+
+  # We calculate width for both characters and strings.
+  writeLines("\\path let \\p1 = ($(TeX.east) - (TeX.west)$),
+             \\n1 = {veclen(\\x1,\\y1)} in (TeX.east) -- (TeX.west)
+             node{ \\immediate\\write\\tikzMetrics{\\n1} };", texIn)
+
+  # We only want to calculate ascent and descent when dealing with
+  # single characters.
+  if( TeXMetrics$type == 'char' ){
+
+    # Calculate the ascent and print it to the log.
+    writeLines("\\path let \\p1 = ($(TeX.north) - (TeX.base)$),
+               \\n1 = {veclen(\\x1,\\y1)} in (TeX.north) -- (TeX.base)
+               node{ \\immediate\\write\\tikzMetrics{\\n1} };", texIn)
+
+    # Calculate the descent and print it to the log.
+    writeLines("\\path let \\p1 = ($(TeX.base) - (TeX.south)$),
+               \\n1 = {veclen(\\x1,\\y1)} in (TeX.base) -- (TeX.south)
+               node{ \\immediate\\write\\tikzMetrics{\\n1} };", texIn)
+
+  }
+
+  # Close output file.
+  writeLines(
+    "\\immediate\\close\\tikzMetrics",
+    texIn
+  )
+
+  # Stop before creating output
+  writeLines("\\makeatletter", texIn)
+  writeLines("\\@@end", texIn)
 }
 
 getPreamble <- function(TeXMetrics) {
