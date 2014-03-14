@@ -346,6 +346,20 @@ getMetricsMethod <- function() {
   method <- .metricsMethods[method.pos]
 }
 
+writeMeasurementFile <- function(TeXMetrics, texDir, texFile) {
+  # Open the TeX file for writing.
+  texIn <- file(texFile, 'w')
+  on.exit(close(texIn))
+
+  writePreamble(TeXMetrics, texDir, texIn)
+
+  writeMeasurementCode(TeXMetrics, texIn)
+
+  # Stop before creating output
+  writeLines("\\makeatletter", texIn)
+  writeLines("\\@@end", texIn)
+}
+
 writePreamble <- function(TeXMetrics, texDir, texIn) {
   method <- getMetricsMethod()
 
@@ -364,6 +378,56 @@ writePreamble <- function(TeXMetrics, texDir, texIn) {
   }
 
   writeLines("\\begin{document}", texIn)
+}
+
+providePrecompiledPreamble <- function(preamble, engine, texDir) {
+  if (engine != "pdftex") {
+    if (is.null(.tikzInternal$warnNonPdfTeXPreamble)) {
+      warning("The preamble method is only available with the pdftex engine.\n",
+              "Falling back to robust method.")
+      .tikzInternal$warnNonPdfTeXPreamble <- TRUE
+    }
+
+    return (NA)
+  }
+
+  if (!is.null(.tikzInternal$avoidPreambleMetricsMethod))
+    return(NA)
+
+  tryCatch(
+    {
+      preambleHash <- sha1(c(engine, preamble))
+      formatFileBase <- sprintf("%s-%s", .tikzInternal$dictionaryFile, preambleHash)
+      formatFileName <- sprintf("%s.fmt", formatFileBase)
+      if (!file.exists(formatFileName)) {
+        message("Creating precompiled preamble at:\n ", formatFileName)
+        texFile <- file.path(texDir, 'tikzStringWidthCalc.ltx')
+        writeLines(preamble, texFile)
+        on.exit(unlink(texFile), add=TRUE)
+        latexCmd <- getLatexCmd(engine)
+        latexFormat <- basename(latexCmd)
+        latexCmdFull <- paste(
+          latexCmd, '-ini', '-output-directory', shQuote(texDir),
+          shQuote(sprintf("&%s %s\\dump", latexFormat, texFile)) )
+
+        status <- system(latexCmdFull, ignore.stdout=TRUE, ignore.stderr=TRUE)
+        stopifnot(status == 0)
+
+        file.copy(file.path(texDir, 'tikzStringWidthCalc.fmt'),
+                  formatFileName)
+        unlink(file.path(texDir, 'tikzStringWidthCalc.fmt'))
+      }
+
+      formatFileBase
+    },
+
+    error=function(e) {
+      warning("Could not measure using preamble method:\n",
+              e, "Falling back to robust method for this session.")
+      .tikzInternal$avoidPreambleMetricsMethod <- TRUE
+      NA_character_
+    }
+  )
 }
 
 writeMeasurementCode <- function(TeXMetrics, texIn) {
@@ -454,20 +518,6 @@ writeMeasurementCode <- function(TeXMetrics, texIn) {
   )
 }
 
-writeMeasurementFile <- function(TeXMetrics, texDir, texFile) {
-  # Open the TeX file for writing.
-  texIn <- file(texFile, 'w')
-  on.exit(close(texIn))
-
-  writePreamble(TeXMetrics, texDir, texIn)
-
-  writeMeasurementCode(TeXMetrics, texIn)
-
-  # Stop before creating output
-  writeLines("\\makeatletter", texIn)
-  writeLines("\\@@end", texIn)
-}
-
 getPreamble <- function(TeXMetrics) {
   c(
     getOption("tikzDocumentDeclaration"),
@@ -498,56 +548,6 @@ getPreamble <- function(TeXMetrics) {
     ),
 
     "\\batchmode"
-  )
-}
-
-providePrecompiledPreamble <- function(preamble, engine, texDir) {
-  if (engine != "pdftex") {
-    if (is.null(.tikzInternal$warnNonPdfTeXPreamble)) {
-      warning("The preamble method is only available with the pdftex engine.\n",
-              "Falling back to robust method.")
-      .tikzInternal$warnNonPdfTeXPreamble <- TRUE
-    }
-
-    return (NA)
-  }
-
-  if (!is.null(.tikzInternal$avoidPreambleMetricsMethod))
-    return(NA)
-
-  tryCatch(
-    {
-      preambleHash <- sha1(c(engine, preamble))
-      formatFileBase <- sprintf("%s-%s", .tikzInternal$dictionaryFile, preambleHash)
-      formatFileName <- sprintf("%s.fmt", formatFileBase)
-      if (!file.exists(formatFileName)) {
-        message("Creating precompiled preamble at:\n ", formatFileName)
-        texFile <- file.path(texDir, 'tikzStringWidthCalc.ltx')
-        writeLines(preamble, texFile)
-        on.exit(unlink(texFile), add=TRUE)
-        latexCmd <- getLatexCmd(engine)
-        latexFormat <- basename(latexCmd)
-        latexCmdFull <- paste(
-          latexCmd, '-ini', '-output-directory', shQuote(texDir),
-          shQuote(sprintf("&%s %s\\dump", latexFormat, texFile)) )
-
-        status <- system(latexCmdFull, ignore.stdout=TRUE, ignore.stderr=TRUE)
-        stopifnot(status == 0)
-
-        file.copy(file.path(texDir, 'tikzStringWidthCalc.fmt'),
-                  formatFileName)
-        unlink(file.path(texDir, 'tikzStringWidthCalc.fmt'))
-      }
-
-      formatFileBase
-    },
-
-    error=function(e) {
-      warning("Could not measure using preamble method:\n",
-              e, "Falling back to robust method for this session.")
-      .tikzInternal$avoidPreambleMetricsMethod <- TRUE
-      NA_character_
-    }
   )
 }
 
