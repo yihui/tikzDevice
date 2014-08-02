@@ -255,8 +255,8 @@ function( TeXMetrics ){
 	# Create the TeX file in a temporary directory so
 	# it doesn't clutter anything.
 	texDir <- tempdir()
-	texLog <- file.path( texDir,'tikzStringWidthCalc.log' )
-	texFile <- file.path( texDir,'tikzStringWidthCalc.tex' )
+	texLog <- normalizePath(file.path(texDir, 'tikzStringWidthCalc.log'), '/')
+	texFile <- normalizePath(file.path(texDir, 'tikzStringWidthCalc.tex'), '/')
 
 	# Open the TeX file for writing.
 	texIn <- file( texFile, 'w')
