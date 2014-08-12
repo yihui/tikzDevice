@@ -99,9 +99,9 @@ function(texString, cex = 1, face = 1, engine = getOption('tikzDefaultEngine'),
 	# our dictionary for this string.
 	width <- queryMetricsDictionary( TeXMetrics )
 
-	if( width > 0 ){
+	if( width >= 0 ){
 
-		# Positive string width means there was a
+		# Positive (and zero) string width means there was a
 		# cached value available. Yay! We're done.
 		return( width )
 
