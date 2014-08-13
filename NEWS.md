@@ -1,5 +1,6 @@
 ## Bug Fixes
 
+- Performance improvements with zero-width strings (#66, thanks Gvozden Neskovic)
 - Add parameter checkstate to allow adding annotations to a new plot (#52,
   thanks Sam Mason)
 - Allow raster images to be output without resampling by setting
