@@ -11,7 +11,7 @@ script:
   - sh -e /etc/init.d/xvfb start
   - curl https://raw.githubusercontent.com/yihui/r-shippable/master/r-cmd-check | bash
   - cd ..; R CMD build code; R CMD INSTALL *_*.tar.gz
-  - cd tests; ./unit_tests.R
+  - cd code/tests; ./unit_tests.R
   - sh -e /etc/init.d/xvfb stop
 
 after_failure:
