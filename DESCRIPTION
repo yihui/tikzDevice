@@ -1,7 +1,7 @@
 Package: tikzDevice
 Type: Package
 Title: R Graphics Output in LaTeX Format
-Version: 0.7.2
+Version: 0.7.3
 Date: 2014-01-05
 Authors@R: c(person("Charlie", "Sharpsteen", role = "aut"), person("Cameron",
     "Bracken", role = "aut"), person("Kirill", "Mueller", role = c("ctb",
