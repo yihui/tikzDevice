@@ -378,8 +378,10 @@ grid.tikzCoord <- function(x, y, name, units = 'native', draw = TRUE) {
 # device. They handle the actual "drawing" of the annotations by calling to the
 # base graphics functions.
 
+if ('roxygen2' %in% loadedNamespaces()) do.call(library, list('grid'))
+
 #' @importFrom grid drawDetails
-#' @S3method drawDetails tikz_annotation
+#' @export
 drawDetails.tikz_annotation <- function(x, recording) {
 
   tikzAnnotate(x$annotation)
@@ -388,7 +390,7 @@ drawDetails.tikz_annotation <- function(x, recording) {
 
 
 #' @importFrom grid drawDetails
-#' @S3method drawDetails tikz_node
+#' @export
 drawDetails.tikz_node <- function(x, recording) {
 
   if ( is.null(x$x) && is.null(x$y) ) {
@@ -404,7 +406,7 @@ drawDetails.tikz_node <- function(x, recording) {
 
 
 #' @importFrom grid drawDetails
-#' @S3method drawDetails tikz_coord
+#' @export
 drawDetails.tikz_coord <- function(x, recording) {
 
   coords <- gridToDevice(x$x, x$y, x$units)
