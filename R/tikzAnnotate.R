@@ -143,7 +143,7 @@ gridToDevice <- function(x = 0, y = 0, units = 'native') {
 #'
 #'
 #' ### Example 2: Annotations in Grid Graphics
-#' require(grid)
+#' library(grid)
 #'
 #' tikz("grid_annotation.tex",width=4,height=4,
 #'   packages = c(getOption('tikzLatexPackages'),
