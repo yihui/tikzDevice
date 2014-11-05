@@ -1649,8 +1649,13 @@ static void TikZ_DefineColors(pGEcontext plotParams, pDevDesc deviceInfo, TikZ_D
     if ( color != tikzInfo->oldDrawColor ) {
       tikzInfo->oldDrawColor = color;
       if( tikzInfo->symboliccols )
+      {
+        const char *scol = col2name(color);
+        if( scol[0] == '#' )
+          scol = scol+1;
         printOutput(tikzInfo,
-          "\\definecolor{drawColor}{named}{%s}\n",col2name(color));
+          "\\definecolor{drawColor}{named}{%s}\n", scol);
+      }
       else
         printOutput(tikzInfo,
           "\\definecolor[named]{drawColor}{rgb}{%4.2f,%4.2f,%4.2f}\n",
@@ -1665,8 +1670,13 @@ static void TikZ_DefineColors(pGEcontext plotParams, pDevDesc deviceInfo, TikZ_D
     if( color != tikzInfo->oldFillColor ) {
       tikzInfo->oldFillColor = color;
       if( tikzInfo->symboliccols )
+      {
+        const char *scol = col2name(color);
+        if( scol[0] == '#' )
+          scol = scol+1;
         printOutput(tikzInfo,
-          "\\definecolor{fillColor}{named}{%s}\n",col2name(color));
+          "\\definecolor{fillColor}{named}{%s}\n", scol);
+      }
       else
         printOutput(tikzInfo,
           "\\definecolor[named]{fillColor}{rgb}{%4.2f,%4.2f,%4.2f}\n",
