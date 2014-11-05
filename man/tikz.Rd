@@ -9,7 +9,7 @@ tikz(file = ifelse(onefile, "./Rplots.tex", "./Rplot\%03d.tex"), width = 7,
   console = FALSE, sanitize = FALSE,
   engine = getOption("tikzDefaultEngine"),
   documentDeclaration = getOption("tikzDocumentDeclaration"), packages,
-  footer = getOption("tikzFooter"))
+  footer = getOption("tikzFooter"), symboliccols = FALSE)
 }
 \arguments{
 \item{file}{A character string indicating the desired path to the output

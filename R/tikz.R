@@ -190,7 +190,8 @@ function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
   engine = getOption("tikzDefaultEngine"),
   documentDeclaration = getOption("tikzDocumentDeclaration"),
   packages,
-  footer = getOption("tikzFooter")
+  footer = getOption("tikzFooter"),
+  symboliccols = FALSE
 ){
 
   tryCatch({
@@ -260,7 +261,7 @@ function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
 
   .External(TikZ_StartDevice, file, width, height, onefile, bg, fg, baseSize,
     standAlone, bareBones, documentDeclaration, packages, footer, console,
-    sanitize, engine)
+    sanitize, engine, symboliccols)
 
   invisible()
 

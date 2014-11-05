@@ -80,6 +80,7 @@ typedef struct {
 	Rboolean sanitize;
   TikZ_ClipState clipState;
   TikZ_PageState pageState;
+  Rboolean symboliccols;
 } tikzDevDesc;
 
 
@@ -99,7 +100,8 @@ static Rboolean TikZ_Setup(
 		Rboolean standAlone, Rboolean bareBones,
 		const char *documentDeclaration,
 		const char *packages, const char *footer,
-		Rboolean console, Rboolean sanitize, int engine );
+		Rboolean console, Rboolean sanitize, int engine,
+		Rboolean symboliccols );
 
 
 /* Graphics Engine function hooks. Defined in GraphicsDevice.h . */

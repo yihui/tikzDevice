@@ -81,7 +81,7 @@ SEXP TikZ_StartDevice ( SEXP args ){
   Rboolean standAlone, bareBones;
   const char *documentDeclaration, *packages, *footer;
   double baseSize;
-  Rboolean console, sanitize, onefile;
+  Rboolean console, sanitize, onefile, symboliccols;
 
   /* 
    * pGEDevDesc is a variable provided by the R Graphics Engine
@@ -159,7 +159,12 @@ SEXP TikZ_StartDevice ( SEXP args ){
   /*
    * See the definition of tikz_engine in tikzDevice.h
    */
-  int engine = asInteger(CAR(args));
+  int engine = asInteger(CAR(args)); args = CDR(args);
+
+  /*
+   * Should symbolic names be used (red instead of 1.0, 1.0, 1.0)
+   */
+  symboliccols = asLogical(CAR(args));
 
   /* Ensure there is an empty slot avaliable for a new device. */
   R_CheckDeviceAvailable();
@@ -190,8 +195,8 @@ SEXP TikZ_StartDevice ( SEXP args ){
     */
     if( !TikZ_Setup( deviceInfo, fileName, width, height, onefile, bg, fg, baseSize,
         standAlone, bareBones, documentDeclaration, packages,
-        footer, console, sanitize, engine ) ){
-      /* 
+        footer, console, sanitize, engine, symboliccols ) ){
+      /*
        * If setup was unsuccessful, destroy the device and return
        * an error message.
       */
@@ -233,8 +238,9 @@ static Rboolean TikZ_Setup(
   const char *bg, const char *fg, double baseSize,
   Rboolean standAlone, Rboolean bareBones,
   const char *documentDeclaration,
-  const char *packages, const char *footer, 
-  Rboolean console, Rboolean sanitize, int engine ){
+  const char *packages, const char *footer,
+  Rboolean console, Rboolean sanitize, int engine,
+  Rboolean symboliccols ){
 
   /* 
    * Create tikzInfo, this variable contains information which is
@@ -282,7 +288,7 @@ static Rboolean TikZ_Setup(
   tikzInfo->documentDeclaration = calloc_strcpy(documentDeclaration);
   tikzInfo->packages = calloc_strcpy(packages);
   tikzInfo->footer = calloc_strcpy(footer);
-
+  tikzInfo->symboliccols = symboliccols;
   tikzInfo->console = console;
   tikzInfo->sanitize = sanitize;
   tikzInfo->clipState = TIKZ_NO_CLIP;
@@ -1642,11 +1648,15 @@ static void TikZ_DefineColors(pGEcontext plotParams, pDevDesc deviceInfo, TikZ_D
     color = plotParams->col;
     if ( color != tikzInfo->oldDrawColor ) {
       tikzInfo->oldDrawColor = color;
-      printOutput(tikzInfo,
-        "\\definecolor[named]{drawColor}{rgb}{%4.2f,%4.2f,%4.2f}\n",
-        R_RED(color)/255.0,
-        R_GREEN(color)/255.0,
-        R_BLUE(color)/255.0);
+      if( tikzInfo->symboliccols )
+        printOutput(tikzInfo,
+          "\\definecolor{drawColor}{named}{%s}\n",col2name(color));
+      else
+        printOutput(tikzInfo,
+          "\\definecolor[named]{drawColor}{rgb}{%4.2f,%4.2f,%4.2f}\n",
+          R_RED(color)/255.0,
+          R_GREEN(color)/255.0,
+          R_BLUE(color)/255.0);
     }
   }
 
@@ -1654,11 +1664,15 @@ static void TikZ_DefineColors(pGEcontext plotParams, pDevDesc deviceInfo, TikZ_D
     color = plotParams->fill;
     if( color != tikzInfo->oldFillColor ) {
       tikzInfo->oldFillColor = color;
-      printOutput(tikzInfo,
-        "\\definecolor[named]{fillColor}{rgb}{%4.2f,%4.2f,%4.2f}\n",
-        R_RED(color)/255.0,
-        R_GREEN(color)/255.0,
-        R_BLUE(color)/255.0);
+      if( tikzInfo->symboliccols )
+        printOutput(tikzInfo,
+          "\\definecolor{fillColor}{named}{%s}\n",col2name(color));
+      else
+        printOutput(tikzInfo,
+          "\\definecolor[named]{fillColor}{rgb}{%4.2f,%4.2f,%4.2f}\n",
+          R_RED(color)/255.0,
+          R_GREEN(color)/255.0,
+          R_BLUE(color)/255.0);
     }
   }
 
