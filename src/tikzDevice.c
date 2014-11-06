@@ -281,22 +281,6 @@ static Rboolean TikZ_Setup(
 
   tikzInfo->originalColorFileName = calloc_strcpy(colorFileName);
 
-  tikzInfo->outColorFileName = calloc_x_strlen(tikzInfo->originalColorFileName, strlen(tikzInfo->outFileName));
-
- /* deal with the extension */
-  const char *ext = strrchr(tikzInfo->outFileName, '.');
-
-  if( strcmp(ext, ".tex") == 0)
-  {
-    char *fname = calloc_strcpy(tikzInfo->outFileName);
-    fname[ext - tikzInfo->outFileName] = '\0';
-    snprintf(tikzInfo->outColorFileName, strlen(tikzInfo->originalColorFileName)+strlen(tikzInfo->outFileName), tikzInfo->originalColorFileName, fname);
-    printf("<%s>\n", tikzInfo->outColorFileName);
-    free(fname);
-  }
-  else
-    snprintf(tikzInfo->outColorFileName, strlen(tikzInfo->originalColorFileName)+strlen(tikzInfo->outFileName), tikzInfo->originalColorFileName, tikzInfo->outFileName);
-
   tikzInfo->ncolors = 0;
   tikzInfo->colors = NULL;
   tikzInfo->colorFile = NULL;
@@ -586,6 +570,26 @@ static Rboolean TikZ_Open( pDevDesc deviceInfo )
   /* If creating multiple files, add the page number to the filename. */
   if ( !tikzInfo->onefile )
     sprintf(tikzInfo->outFileName, tikzInfo->originalFileName, tikzInfo->pageNum);
+
+  if( strlen(tikzInfo->originalColorFileName) > 0 )
+    {
+      tikzInfo->outColorFileName = calloc_x_strlen(tikzInfo->originalColorFileName, strlen(tikzInfo->outFileName));
+
+      /* deal with the extension */
+      const char *ext = strrchr(tikzInfo->outFileName, '.');
+
+      if( strcmp(ext, ".tex") == 0)
+      {
+        char *fname = calloc_strcpy(tikzInfo->outFileName);
+        fname[ext - tikzInfo->outFileName] = '\0';
+        snprintf(tikzInfo->outColorFileName, strlen(tikzInfo->originalColorFileName)+strlen(tikzInfo->outFileName), tikzInfo->originalColorFileName, fname);
+        free(fname);
+      }
+      else
+        snprintf(tikzInfo->outColorFileName, strlen(tikzInfo->originalColorFileName)+strlen(tikzInfo->outFileName), tikzInfo->originalColorFileName, tikzInfo->outFileName);
+    }
+    else
+      tikzInfo->outColorFileName = NULL;
 
   if ( !tikzInfo->console )
     if ( !(tikzInfo->outputFile = fopen(R_ExpandFileName(tikzInfo->outFileName), "w")) )

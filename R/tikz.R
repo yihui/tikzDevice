@@ -45,9 +45,10 @@
 #' When the option \code{symbolicColors} is set to \code{TRUE}, the colors will
 #' be written as symbolic names, e.g. \code{red, gray90} and similar. If the
 #' color is not mapped to a symbolic name in R, the color will be named
-#' \code{XXXXX} when \code{#XXXXXX} is its hexadecimal color. As all the color
-#' names will have to be defined in the enclosing document, this option is
-#' only used if \code{standAlone} is set to \code{FALSE}.
+#' \code{XXXXX} when \code{#XXXXXX} is its hexadecimal color. All the color
+#' names will have to be defined in the enclosing document, which is
+#' automatically written if the path of a color file \code{colorFileName} is
+#' set.
 #'
 #' @param file A character string indicating the desired path to the output
 #'   file.
@@ -91,11 +92,12 @@
 #'   \link{tikzDevice-package}.
 #' @param symbolicColors A logical value indicating whether colors are written
 #'  as RGB values or as symbolic names in which case the need to be defined in
-#'  the enclosing LaTeX document. It can only be used when
-#'  \code{standAlone==FALSE}.
-#'
-#' @param colorFileName a character string indicating where the color map for 
-#' symbolic colors is to be stored.
+#'  the enclosing LaTeX document. These definitions can be generated with the
+#'  following \code{colorFileName} parameter.
+#' @param colorFileName a character string indicating where the color map for
+#'  symbolic colors is to be stored. It can contain a placeholder \code{\%s}
+#'  where the tikz filename is inserted. If the string is empty, no file is
+#'  written.
 #'
 #' @return \code{tikz()} returns no values.
 #'
