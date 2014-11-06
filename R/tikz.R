@@ -94,6 +94,8 @@
 #'  the enclosing LaTeX document. It can only be used when
 #'  \code{standAlone==FALSE}.
 #'
+#' @param colorFileName a character string indicating where the color map for 
+#' symbolic colors is to be stored.
 #'
 #' @return \code{tikz()} returns no values.
 #'
@@ -202,7 +204,7 @@ function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
   documentDeclaration = getOption("tikzDocumentDeclaration"),
   packages,
   footer = getOption("tikzFooter"),
-  symbolicColors = FALSE
+  symbolicColors = FALSE, colorFileName = "%s_colors.tex"
 ){
 
   tryCatch({
@@ -256,9 +258,6 @@ function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
   if( footer != getOption("tikzFooter") && !standAlone)
     warning( "Footers are ignored when standAlone is set to FALSE" )
 
-  if( symbolicColors && standAlone)
-    warning( "Symbolic colors are ignored when standAlone is set to TRUE" )
-
   # Extract the document pointsize from the documentDeclaration
   baseSize <- getDocumentPointsize( documentDeclaration )
 
@@ -275,7 +274,7 @@ function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
 
   .External(TikZ_StartDevice, file, width, height, onefile, bg, fg, baseSize,
     standAlone, bareBones, documentDeclaration, packages, footer, console,
-    sanitize, engine, symbolicColors)
+    sanitize, engine, symbolicColors, colorFileName)
 
   invisible()
 

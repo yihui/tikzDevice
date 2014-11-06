@@ -9,7 +9,8 @@ tikz(file = ifelse(onefile, "./Rplots.tex", "./Rplot\%03d.tex"), width = 7,
   console = FALSE, sanitize = FALSE,
   engine = getOption("tikzDefaultEngine"),
   documentDeclaration = getOption("tikzDocumentDeclaration"), packages,
-  footer = getOption("tikzFooter"), symbolicColors = FALSE)
+  footer = getOption("tikzFooter"), symbolicColors = FALSE,
+  colorFileName = "\%s_colors.tex")
 }
 \arguments{
 \item{file}{A character string indicating the desired path to the output
@@ -71,6 +72,9 @@ for more details.}
  as RGB values or as symbolic names in which case the need to be defined in
  the enclosing LaTeX document. It can only be used when
  \code{standAlone==FALSE}.}
+
+\item{colorFileName}{a character string indicating where the color map for
+symbolic colors is to be stored.}
 }
 \value{
 \code{tikz()} returns no values.

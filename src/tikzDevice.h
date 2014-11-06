@@ -60,27 +60,32 @@ typedef enum {
  * Device routines.
 */
 typedef struct {
-	FILE *outputFile;
+  FILE *outputFile;
+  FILE *colorFile;
   char *outFileName;
   char *originalFileName;
+  char *outColorFileName;
+  char *originalColorFileName;
   tikz_engine engine;
   int rasterFileCount;
   int pageNum;
-	Rboolean debug;
-	Rboolean standAlone;
-	Rboolean bareBones;
+  Rboolean debug;
+  Rboolean standAlone;
+  Rboolean bareBones;
   Rboolean onefile;
-	int oldFillColor;
-	int oldDrawColor;
-	int stringWidthCalls;
-	const char *documentDeclaration;
-	const char *packages;
-	const char *footer;
-	Rboolean console;
-	Rboolean sanitize;
+  int oldFillColor;
+  int oldDrawColor;
+  int stringWidthCalls;
+  const char *documentDeclaration;
+  const char *packages;
+  const char *footer;
+  Rboolean console;
+  Rboolean sanitize;
   TikZ_ClipState clipState;
   TikZ_PageState pageState;
   Rboolean symbolicColors;
+  int* colors;
+  int ncolors;
 } tikzDevDesc;
 
 
@@ -101,7 +106,7 @@ static Rboolean TikZ_Setup(
 		const char *documentDeclaration,
 		const char *packages, const char *footer,
 		Rboolean console, Rboolean sanitize, int engine,
-		Rboolean symbolicColors );
+		Rboolean symbolicColors, const char *colorFileName );
 
 
 /* Graphics Engine function hooks. Defined in GraphicsDevice.h . */
