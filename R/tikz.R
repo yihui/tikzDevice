@@ -42,6 +42,13 @@
 #' In cases where both \code{standAlone} and \code{bareBones} have been set to
 #' \code{TRUE}, the \code{standAlone} option will take precedence.
 #'
+#' When the option \code{symbolicColors} is set to \code{TRUE}, the colors will
+#' be written as symbolic names, e.g. \code{red, gray90} and similar. If the
+#' color is not mapped to a symbolic name in R, the color will be named
+#' \code{XXXXX} when \code{#XXXXXX} is its hexadecimal color. As all the color
+#' names will have to be defined in the enclosing document, this option is
+#' only used if \code{standAlone} is set to \code{FALSE}.
+#'
 #' @param file A character string indicating the desired path to the output
 #'   file.
 #' @param width The width of the output figure, in \bold{inches}.
@@ -82,6 +89,10 @@
 #'   \link{tikzDevice-package}.
 #' @param footer See the section ``Options That Affect Package Behavior'' of
 #'   \link{tikzDevice-package}.
+#' @param symbolicColors A logical value indicating whether colors are written
+#'  as RGB values or as symbolic names in which case the need to be defined in
+#'  the enclosing LaTeX document. It can only be used when
+#'  \code{standAlone==FALSE}.
 #'
 #'
 #' @return \code{tikz()} returns no values.
@@ -191,7 +202,7 @@ function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
   documentDeclaration = getOption("tikzDocumentDeclaration"),
   packages,
   footer = getOption("tikzFooter"),
-  symboliccols = FALSE
+  symbolicColors = FALSE
 ){
 
   tryCatch({
@@ -245,6 +256,9 @@ function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
   if( footer != getOption("tikzFooter") && !standAlone)
     warning( "Footers are ignored when standAlone is set to FALSE" )
 
+  if( symbolicColors && standAlone)
+    warning( "Symbolic colors are ignored when standAlone is set to TRUE" )
+
   # Extract the document pointsize from the documentDeclaration
   baseSize <- getDocumentPointsize( documentDeclaration )
 
@@ -261,7 +275,7 @@ function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
 
   .External(TikZ_StartDevice, file, width, height, onefile, bg, fg, baseSize,
     standAlone, bareBones, documentDeclaration, packages, footer, console,
-    sanitize, engine, symboliccols)
+    sanitize, engine, symbolicColors)
 
   invisible()
 
