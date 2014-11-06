@@ -1766,6 +1766,9 @@ static Rboolean TikZ_CheckColor(tikzDevDesc *tikzInfo, int color)
 
 static void TikZ_CheckAndAddColor(tikzDevDesc *tikzInfo, int color)
 {
+  if( !tikzInfo->symbolicColors )
+    return;
+
   if( !TikZ_CheckColor(tikzInfo, color) )
   {
     tikzInfo->colors = realloc(tikzInfo->colors, tikzInfo->ncolors+1);
