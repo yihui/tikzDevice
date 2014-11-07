@@ -582,7 +582,8 @@ static Rboolean TikZ_Open( pDevDesc deviceInfo )
       if( strcmp(ext, ".tex") == 0)
       {
         char *fname = calloc_strcpy(tikzInfo->outFileName);
-        fname[ext - tikzInfo->outFileName] = '\0';
+        size_t extposition = ext - tikzInfo->outFileName;
+        fname[extposition] = '\0';
         snprintf(tikzInfo->outColorFileName, strlen(tikzInfo->originalColorFileName)+strlen(tikzInfo->outFileName), tikzInfo->originalColorFileName, fname);
         free(fname);
       }
