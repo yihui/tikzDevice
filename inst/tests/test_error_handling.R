@@ -120,7 +120,7 @@ test_that('symbolicColors warns about too many colors',{
   )
 })
 
-test_that('maxSymbolicColors is checked nonnegtative',{
+test_that('check that maxSymbolicColors is nonnegative',{
   expect_that(
       tikz(symbolicColors = T, maxSymbolicColors = -1),
        throws_error("maxSymbolicColors needs to be nonnegative")

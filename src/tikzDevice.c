@@ -505,6 +505,34 @@ static Rboolean TikZ_Setup(
   return TRUE;
 }
 
+static void TikZ_WriteColorDefinition( tikzDevDesc *tikzInfo, int color, const char* colorname, const char* colorstr )
+{
+  if( colorstr[0] == '#')
+  {
+    if( colorname[0] == '#' )
+      colorname= colorname +1;
+
+    printOutput(tikzInfo,
+      "\\definecolor{%s}{HTML}{%s}\n",
+      colorname, colorstr+1);
+  }
+  else if ( strncmp(colorstr, "gray", 4) == 0)
+  {
+    int perc = atoi(colorstr+4);
+    printOutput(tikzInfo,
+      "\\definecolor{%s}{gray}{%4.2f}\n",
+      colorname,
+      perc/100.0);
+  }
+  else
+    printOutput(tikzInfo,
+      "\\definecolor{%s}{RGB}{%d,%d,%d}\n",
+      colorname,
+      R_RED(color),
+      R_GREEN(color),
+      R_BLUE(color));
+}
+
 static void TikZ_WriteColorDefinitions( tikzDevDesc *tikzInfo )
 {
   /* save the output because printOutput has the output file name hardcoded */
@@ -515,31 +543,10 @@ static void TikZ_WriteColorDefinitions( tikzDevDesc *tikzInfo )
 
   for( i = 0; i < tikzInfo->ncolors; ++i)
   {
-    int color = tikzInfo->colors[i];
-    const char* colorstr = col2name(color);
-    if( colorstr[0] == '#')
-    {
-      printOutput(tikzInfo,
-        "\\definecolor{%s}{HTML}{%s}\n",
-        colorstr+1, colorstr+1);
-
-    }
-    else if ( strncmp(colorstr, "gray", 4) == 0)
-    {
-      int perc = atoi(colorstr+4);
-      printOutput(tikzInfo,
-        "\\definecolor{%s}{gray}{%4.2f}\n",
-        colorstr,
-        perc/100.0);
-    }
-    else
-      printOutput(tikzInfo,
-        "\\definecolor{%s}{rgb}{%4.2f,%4.2f,%4.2f}\n",
-        colorstr,
-        R_RED(color)/255.0,
-        R_GREEN(color)/255.0,
-        R_BLUE(color)/255.0);
+    const char* colorstr = col2name(tikzInfo->colors[i]);
+    TikZ_WriteColorDefinition(tikzInfo, tikzInfo->colors[i], colorstr, colorstr);
   }
+
   /* restore output */
   tikzInfo->outputFile = outfile;
 }
@@ -1742,26 +1749,6 @@ static TikZ_DrawOps TikZ_GetDrawOps(pGEcontext plotParams)
   return ops;
 }
 
-static void TikZ_DefineDrawColor(tikzDevDesc *tikzInfo, int color, const char* colortype, Rboolean symbolic)
-{
-  if( symbolic )
-  {
-    const char *scol = col2name(color);
-    if( scol[0] == '#' )
-     scol = scol+1;
-    printOutput(tikzInfo, "\\definecolor{%s}{named}{%s}\n", colortype, scol);
-  }
-  else
-  {
-    printOutput(tikzInfo,
-      "\\definecolor[named]{%s}{rgb}{%4.2f,%4.2f,%4.2f}\n",
-      colortype,
-      R_RED(color)/255.0,
-      R_GREEN(color)/255.0,
-      R_BLUE(color)/255.0);
-  }
-}
-
 static Rboolean TikZ_CheckColor(tikzDevDesc *tikzInfo, int color)
 {
   int i;
@@ -1801,10 +1788,24 @@ static Rboolean TikZ_CheckAndAddColor(tikzDevDesc *tikzInfo, int color)
   return colorfound;
 }
 
+static void TikZ_DefineDrawColor(tikzDevDesc *tikzInfo, int color, const char* colortype)
+{
+  const char *colorstr = col2name(color);
+
+  if( TikZ_CheckAndAddColor(tikzInfo, color) )
+  {
+    if( colorstr[0] == '#' )
+      colorstr = colorstr+1;
+    printOutput(tikzInfo, "\\definecolor{%s}{named}{%s}\n", colortype, colorstr);
+  }
+  else
+    TikZ_WriteColorDefinition(tikzInfo, color, colortype, colorstr);
+
+}
+
 static void TikZ_DefineColors(pGEcontext plotParams, pDevDesc deviceInfo, TikZ_DrawOps ops)
 {
   int color;
-  Rboolean symbolic = FALSE;
   tikzDevDesc *tikzInfo = (tikzDevDesc *) deviceInfo->deviceSpecific;
 
   if ( ops & DRAWOP_DRAW ) {
@@ -1812,8 +1813,7 @@ static void TikZ_DefineColors(pGEcontext plotParams, pDevDesc deviceInfo, TikZ_D
 
     if ( color != tikzInfo->oldDrawColor ) {
       tikzInfo->oldDrawColor = color;
-      symbolic = TikZ_CheckAndAddColor(tikzInfo, color);
-      TikZ_DefineDrawColor(tikzInfo, color, "drawColor", symbolic);
+      TikZ_DefineDrawColor(tikzInfo, color, "drawColor");
     }
   }
 
@@ -1821,8 +1821,7 @@ static void TikZ_DefineColors(pGEcontext plotParams, pDevDesc deviceInfo, TikZ_D
     color = plotParams->fill;
     if( color != tikzInfo->oldFillColor ) {
       tikzInfo->oldFillColor = color;
-      symbolic = TikZ_CheckAndAddColor(tikzInfo, color);
-      TikZ_DefineDrawColor(tikzInfo, color, "fillColor", symbolic);
+      TikZ_DefineDrawColor(tikzInfo, color, "fillColor");
     }
   }
 
@@ -2251,8 +2250,7 @@ static void TikZ_CheckState(pDevDesc deviceInfo)
      */
     int color = deviceInfo->startfill;
     tikzInfo->oldFillColor = color;
-    Rboolean symbolic = TikZ_CheckAndAddColor(tikzInfo, color);
-    TikZ_DefineDrawColor(tikzInfo, color, "fillColor", symbolic);
+    TikZ_DefineDrawColor(tikzInfo, color, "fillColor");
 
     printOutput(tikzInfo, "\\path[use as bounding box");
 
