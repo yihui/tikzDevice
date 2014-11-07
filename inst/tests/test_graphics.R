@@ -496,6 +496,21 @@ test_graphs <- list(
     })
   ),
 
+  list(
+    short_name = 'base_symbolic_simple',
+    description = 'Test symbolic colors for a simple image',
+    tags = c('base', 'symbolic'),
+    graph_options = list(
+      tikzSymbolicColors=TRUE),
+    graph_code = quote({
+      plot.new()
+      points(0,0)
+      points(0,1, col="red")
+      points(1,1, col="green")
+      points(1,0, col="gray50")
+      points(0.5,0.5, col="#F3346A")
+    })
+  ),
   # New pdfLaTeX tests go here
   #list(
   #  short_name = 'something_suitable_as_a_filename',

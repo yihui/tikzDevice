@@ -104,7 +104,11 @@
 #'
 #'   \item{\code{tikzPdftexWarnUTF}}{ A \code{TRUE/FALSE} value that controls
 #'   whether warnings are printed if Unicode characters are sent to a device
-#'   using the \code{pdftex} engine.  } }
+#'   using the \code{pdftex} engine.  }
+#'
+#'   \item{\code{symbolicColors}}{ A logical value indicating whether colors are
+#'   written as RGB values or as symbolic names in which case the need to be
+#'   defined in the LaTeX document. } }
 #'
 #'   Default values for all options may be viewed or restored using the
 #'   \code{\link{setTikzDefaults}} function.

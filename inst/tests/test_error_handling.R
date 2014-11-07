@@ -99,6 +99,28 @@ test_that('tikzNode warns about more than one Y coordinate value',{
 
 })
 
+test_that('symbolicColors warns about wrong filename',{
+  tikz(symbolicColors = T, colorFileName = '/')
+  plot(1,2,axes=F, xlab='', ylab='')
+
+  expect_that(
+      dev.off(),
+      gives_warning('Color definition file could not be opened and is missing')
+  )
+})
+
+test_that('symbolicColors warns about too many colors',{
+  tikz(symbolicColors = T, maxSymbolicColors = 1)
+  plot(1,2,axes=F, xlab='', ylab='')
+  on.exit(dev.off())
+  expect_that(
+      plot(1,3,axes=F, xlab='', ylab='', col="red"),
+      gives_warning('Too many colors used, reverting to non-symbolic storage')
+  )
+})
+
+
+
 testthat:::end_context() # Needs to be done manually due to reporter swap
 }) # End reporter swap
 

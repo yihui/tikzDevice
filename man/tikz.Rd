@@ -9,8 +9,9 @@ tikz(file = ifelse(onefile, "./Rplots.tex", "./Rplot\%03d.tex"), width = 7,
   console = FALSE, sanitize = FALSE,
   engine = getOption("tikzDefaultEngine"),
   documentDeclaration = getOption("tikzDocumentDeclaration"), packages,
-  footer = getOption("tikzFooter"), symbolicColors = FALSE,
-  colorFileName = "\%s_colors.tex")
+  footer = getOption("tikzFooter"),
+  symbolicColors = getOption("tikzSymbolicColors"),
+  colorFileName = "\%s_colors.tex", maxSymbolicColors = 100)
 }
 \arguments{
 \item{file}{A character string indicating the desired path to the output
@@ -70,13 +71,18 @@ for more details.}
 
 \item{symbolicColors}{A logical value indicating whether colors are written
 as RGB values or as symbolic names in which case the need to be defined in
-the enclosing LaTeX document. These definitions can be generated with the
-following \code{colorFileName} parameter.}
+the LaTeX document. These definitions can be generated with the following
+\code{colorFileName} parameter. See also the section ``Options That Affect
+Package Behavior'' of \link{tikzDevice-package}.}
 
 \item{colorFileName}{a character string indicating where the color map for
- symbolic colors is to be stored. It can contain a placeholder \code{\%s}
- where the tikz filename is inserted. If the string is empty, no file is
- written.}
+symbolic colors is to be stored. It can contain a placeholder \code{\%s}
+where the tikz filename is inserted. If the string is empty, no file is
+written.}
+
+\item{maxSymbolicColors}{an integer number indicating the maximal number
+of distinct colors to write symbolically. Any excess color will be defined
+as if \code{symbolicColors} was set to \code{FALSE}.}
 }
 \value{
 \code{tikz()} returns no values.

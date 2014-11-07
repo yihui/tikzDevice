@@ -165,7 +165,8 @@ SEXP TikZ_StartDevice ( SEXP args ){
    * Should symbolic names be used (red instead of 1.0, 1.0, 1.0)
    */
   symbolicColors = asLogical(CAR(args)); args = CDR(args);
-  colorFileName = translateChar(asChar(CAR(args)));
+  colorFileName = translateChar(asChar(CAR(args))); args = CDR(args);
+  int maxSymbolicColors = asInteger(CAR(args));
 
   /* Ensure there is an empty slot avaliable for a new device. */
   R_CheckDeviceAvailable();
@@ -196,7 +197,7 @@ SEXP TikZ_StartDevice ( SEXP args ){
     */
     if( !TikZ_Setup( deviceInfo, fileName, width, height, onefile, bg, fg, baseSize,
         standAlone, bareBones, documentDeclaration, packages,
-        footer, console, sanitize, engine, symbolicColors, colorFileName ) ){
+        footer, console, sanitize, engine, symbolicColors, colorFileName, maxSymbolicColors ) ){
       /*
        * If setup was unsuccessful, destroy the device and return
        * an error message.
@@ -241,7 +242,7 @@ static Rboolean TikZ_Setup(
   const char *documentDeclaration,
   const char *packages, const char *footer,
   Rboolean console, Rboolean sanitize, int engine,
-  Rboolean symbolicColors, const char* colorFileName ){
+  Rboolean symbolicColors, const char* colorFileName, int maxSymbolicColors){
 
   /*
    * Create tikzInfo, this variable contains information which is
@@ -280,11 +281,11 @@ static Rboolean TikZ_Setup(
   tikzInfo->outputFile= NULL;
 
   tikzInfo->originalColorFileName = calloc_strcpy(colorFileName);
-
   tikzInfo->ncolors = 0;
-  tikzInfo->colors = NULL;
   tikzInfo->colorFile = NULL;
-
+  tikzInfo->maxSymbolicColors = maxSymbolicColors;
+  tikzInfo->colors = calloc(maxSymbolicColors, sizeof(int));
+  tikzInfo->excessWarningPrinted = FALSE;
   tikzInfo->engine = engine;
   tikzInfo->rasterFileCount = 1;
   tikzInfo->debug = DEBUG;
@@ -603,9 +604,6 @@ static Rboolean TikZ_Open( pDevDesc deviceInfo )
     printOutput(tikzInfo,"%s",tikzInfo->documentDeclaration);
     printOutput(tikzInfo,"%s",tikzInfo->packages);
     printOutput(tikzInfo,"\\begin{document}\n\n");
-
-    if( tikzInfo->symbolicColors && tikzInfo->outColorFileName)
-      printOutput(tikzInfo, "\\input{%s}\n", tikzInfo->outColorFileName);
   }
 
   return TRUE;
@@ -1733,7 +1731,7 @@ static TikZ_DrawOps TikZ_GetDrawOps(pGEcontext plotParams)
 
 static void TikZ_DefineDrawColor(tikzDevDesc *tikzInfo, int color, const char* colortype)
 {
-  if( tikzInfo->symbolicColors )
+  if( tikzInfo->symbolicColors && tikzInfo->ncolors < tikzInfo->maxSymbolicColors )
   {
     const char *scol = col2name(color);
     if( scol[0] == '#' )
@@ -1769,9 +1767,15 @@ static void TikZ_CheckAndAddColor(tikzDevDesc *tikzInfo, int color)
   if( !tikzInfo->symbolicColors )
     return;
 
-  if( !TikZ_CheckColor(tikzInfo, color) )
+  if( !tikzInfo->excessWarningPrinted && tikzInfo->ncolors == tikzInfo->maxSymbolicColors )
   {
-    tikzInfo->colors = realloc(tikzInfo->colors, tikzInfo->ncolors+1);
+    warning("Too many colors used, reverting to non-symbolic storage");
+    tikzInfo->excessWarningPrinted = TRUE;
+    return;
+  }
+
+  if( tikzInfo->ncolors < tikzInfo->maxSymbolicColors && !TikZ_CheckColor(tikzInfo, color) )
+  {
     tikzInfo->colors[tikzInfo->ncolors] = color;
     tikzInfo->ncolors++;
   }
@@ -2213,8 +2217,12 @@ static void TikZ_CheckState(pDevDesc deviceInfo)
         "%% Beginning new tikzpicture 'page'\n");
 
     if ( tikzInfo->bareBones != TRUE )
+    {
       printOutput(tikzInfo, "\\begin{tikzpicture}[x=1pt,y=1pt]\n");
 
+      if( tikzInfo->symbolicColors && tikzInfo->outColorFileName)
+        printOutput(tikzInfo, "\\InputIfFileExists{%s}{}{}\n", tikzInfo->outColorFileName);
+    }
     /*
      * Emit a path that encloses the entire canvas area in order to ensure that
      * the final typeset plot is the size the user specified. Adding the `use as

@@ -92,12 +92,16 @@
 #'   \link{tikzDevice-package}.
 #' @param symbolicColors A logical value indicating whether colors are written
 #'  as RGB values or as symbolic names in which case the need to be defined in
-#'  the enclosing LaTeX document. These definitions can be generated with the
-#'  following \code{colorFileName} parameter.
+#'  the LaTeX document. These definitions can be generated with the following
+#'  \code{colorFileName} parameter. See also the section ``Options That Affect
+#'  Package Behavior'' of \link{tikzDevice-package}.
 #' @param colorFileName a character string indicating where the color map for
 #'  symbolic colors is to be stored. It can contain a placeholder \code{\%s}
 #'  where the tikz filename is inserted. If the string is empty, no file is
 #'  written.
+#' @param maxSymbolicColors an integer number indicating the maximal number
+#' of distinct colors to write symbolically. Any excess color will be defined
+#' as if \code{symbolicColors} was set to \code{FALSE}.
 #'
 #' @return \code{tikz()} returns no values.
 #'
@@ -206,7 +210,8 @@ function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
   documentDeclaration = getOption("tikzDocumentDeclaration"),
   packages,
   footer = getOption("tikzFooter"),
-  symbolicColors = FALSE, colorFileName = "%s_colors.tex"
+  symbolicColors = getOption("tikzSymbolicColors"), colorFileName = "%s_colors.tex",
+  maxSymbolicColors = 100
 ){
 
   tryCatch({
@@ -276,7 +281,7 @@ function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
 
   .External(TikZ_StartDevice, file, width, height, onefile, bg, fg, baseSize,
     standAlone, bareBones, documentDeclaration, packages, footer, console,
-    sanitize, engine, symbolicColors, colorFileName)
+    sanitize, engine, symbolicColors, colorFileName, maxSymbolicColors)
 
   invisible()
 

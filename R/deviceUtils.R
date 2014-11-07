@@ -124,7 +124,9 @@ setTikzDefaults <- function( overwrite = TRUE ){
 
     tikzRasterResolution = 300,
 
-    tikzPdftexWarnUTF = TRUE
+    tikzPdftexWarnUTF = TRUE,
+
+    tikzSymbolicColors = FALSE
 
   )
 
