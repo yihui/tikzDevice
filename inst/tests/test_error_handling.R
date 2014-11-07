@@ -110,11 +110,12 @@ test_that('symbolicColors warns about wrong filename',{
 })
 
 test_that('symbolicColors warns about too many colors',{
-  tikz(symbolicColors = T, maxSymbolicColors = 1)
-  plot(1,2,axes=F, xlab='', ylab='')
+  tikz(symbolicColors = T, maxSymbolicColors = 2)
+  plot.new()
+  points(0,0)
   on.exit(dev.off())
   expect_that(
-      plot(1,3,axes=F, xlab='', ylab='', col="red"),
+      points(0,1, col ="red"),
       gives_warning('Too many colors used, reverting to non-symbolic storage')
   )
 })

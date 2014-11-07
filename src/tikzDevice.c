@@ -544,6 +544,26 @@ static void TikZ_WriteColorDefinitions( tikzDevDesc *tikzInfo )
   tikzInfo->outputFile = outfile;
 }
 
+static void TikZ_WriteColorFile(tikzDevDesc *tikzInfo)
+{
+  if ( tikzInfo->outColorFileName )
+  {
+    tikzInfo->colorFile = fopen(R_ExpandFileName(tikzInfo->outColorFileName), "w");
+    if( tikzInfo->colorFile)
+    {
+      TikZ_WriteColorDefinitions(tikzInfo);
+      fclose(tikzInfo->colorFile);
+    }
+    else
+    {
+      warning( "Color definition file could not be opened and is missing.\n" );
+    }
+
+    /* delete all colors used up till now */
+    tikzInfo->ncolors = 0;
+    tikzInfo->excessWarningPrinted = FALSE;
+  }
+}
 
 /*==============================================================================
                             Core Graphics Routines
@@ -645,19 +665,8 @@ static void TikZ_Close( pDevDesc deviceInfo)
   }
 
   /* write symbolic color names to the corresponding file */
-  if ( tikzInfo->outColorFileName )
-  {
-    tikzInfo->colorFile = fopen(R_ExpandFileName(tikzInfo->outColorFileName), "w");
-    if( tikzInfo->colorFile)
-    {
-      TikZ_WriteColorDefinitions(tikzInfo);
-      fclose(tikzInfo->colorFile);
-    }
-    else
-    {
-      warning( "Color definition file could not be opened and is missing.\n" );
-    }
-  }
+  TikZ_WriteColorFile(tikzInfo);
+
   /* Deallocate pointers */
   free(tikzInfo->outFileName);
   if ( !tikzInfo->onefile )
@@ -696,6 +705,9 @@ static void TikZ_NewPage( const pGEcontext plotParams, pDevDesc deviceInfo )
       if( !tikzInfo->console )
         fclose(tikzInfo->outputFile);
     }
+
+    /* write symbolic color names to the corresponding file */
+    TikZ_WriteColorFile(tikzInfo);
   }
 
   /*
@@ -1730,9 +1742,9 @@ static TikZ_DrawOps TikZ_GetDrawOps(pGEcontext plotParams)
   return ops;
 }
 
-static void TikZ_DefineDrawColor(tikzDevDesc *tikzInfo, int color, const char* colortype)
+static void TikZ_DefineDrawColor(tikzDevDesc *tikzInfo, int color, const char* colortype, Rboolean symbolic)
 {
-  if( tikzInfo->symbolicColors && tikzInfo->ncolors < tikzInfo->maxSymbolicColors )
+  if( symbolic )
   {
     const char *scol = col2name(color);
     if( scol[0] == '#' )
@@ -1763,29 +1775,36 @@ static Rboolean TikZ_CheckColor(tikzDevDesc *tikzInfo, int color)
   return FALSE;
 }
 
-static void TikZ_CheckAndAddColor(tikzDevDesc *tikzInfo, int color)
+static Rboolean TikZ_CheckAndAddColor(tikzDevDesc *tikzInfo, int color)
 {
-  if( !tikzInfo->symbolicColors )
-    return;
+  Rboolean colorfound = FALSE;
 
-  if( !tikzInfo->excessWarningPrinted && tikzInfo->ncolors == tikzInfo->maxSymbolicColors )
+  if( !tikzInfo->symbolicColors )
+    return FALSE;
+
+  colorfound = TikZ_CheckColor(tikzInfo, color);
+
+  if( !colorfound && !tikzInfo->excessWarningPrinted && tikzInfo->ncolors == tikzInfo->maxSymbolicColors )
   {
     warning("Too many colors used, reverting to non-symbolic storage");
     tikzInfo->excessWarningPrinted = TRUE;
-    return;
+    return FALSE;
   }
 
-  if( tikzInfo->ncolors < tikzInfo->maxSymbolicColors && !TikZ_CheckColor(tikzInfo, color) )
+  if( tikzInfo->ncolors < tikzInfo->maxSymbolicColors && !colorfound )
   {
     tikzInfo->colors[tikzInfo->ncolors] = color;
     tikzInfo->ncolors++;
+    colorfound = TRUE;
   }
+
+  return colorfound;
 }
 
 static void TikZ_DefineColors(pGEcontext plotParams, pDevDesc deviceInfo, TikZ_DrawOps ops)
 {
   int color;
-
+  Rboolean symbolic = FALSE;
   tikzDevDesc *tikzInfo = (tikzDevDesc *) deviceInfo->deviceSpecific;
 
   if ( ops & DRAWOP_DRAW ) {
@@ -1793,8 +1812,8 @@ static void TikZ_DefineColors(pGEcontext plotParams, pDevDesc deviceInfo, TikZ_D
 
     if ( color != tikzInfo->oldDrawColor ) {
       tikzInfo->oldDrawColor = color;
-      TikZ_CheckAndAddColor(tikzInfo, color);
-      TikZ_DefineDrawColor(tikzInfo, color, "drawColor");
+      symbolic = TikZ_CheckAndAddColor(tikzInfo, color);
+      TikZ_DefineDrawColor(tikzInfo, color, "drawColor", symbolic);
     }
   }
 
@@ -1802,8 +1821,8 @@ static void TikZ_DefineColors(pGEcontext plotParams, pDevDesc deviceInfo, TikZ_D
     color = plotParams->fill;
     if( color != tikzInfo->oldFillColor ) {
       tikzInfo->oldFillColor = color;
-      TikZ_CheckAndAddColor(tikzInfo, color);
-      TikZ_DefineDrawColor(tikzInfo, color, "fillColor");
+      symbolic = TikZ_CheckAndAddColor(tikzInfo, color);
+      TikZ_DefineDrawColor(tikzInfo, color, "fillColor", symbolic);
     }
   }
 
@@ -2232,11 +2251,8 @@ static void TikZ_CheckState(pDevDesc deviceInfo)
      */
     int color = deviceInfo->startfill;
     tikzInfo->oldFillColor = color;
-    printOutput(tikzInfo,
-      "\\definecolor[named]{fillColor}{rgb}{%4.2f,%4.2f,%4.2f}\n",
-      R_RED(color)/255.0,
-      R_GREEN(color)/255.0,
-      R_BLUE(color)/255.0);
+    Rboolean symbolic = TikZ_CheckAndAddColor(tikzInfo, color);
+    TikZ_DefineDrawColor(tikzInfo, color, "fillColor", symbolic);
 
     printOutput(tikzInfo, "\\path[use as bounding box");
 
