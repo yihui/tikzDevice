@@ -193,6 +193,7 @@ static double ScaleFont( const pGEcontext plotParams, pDevDesc deviceInfo );
 
 /* Utility Routines*/
 static void printOutput(tikzDevDesc *tikzInfo, const char *format, ...);
+static void printColorOutput(tikzDevDesc *tikzInfo, const char *format, ...);
 static void Print_TikZ_Header( tikzDevDesc *tikzInfo );
 static char *Sanitize(const char *str);
 #if 0

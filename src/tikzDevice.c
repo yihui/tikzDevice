@@ -505,27 +505,27 @@ static Rboolean TikZ_Setup(
   return TRUE;
 }
 
-static void TikZ_WriteColorDefinition( tikzDevDesc *tikzInfo, int color, const char* colorname, const char* colorstr )
+static void TikZ_WriteColorDefinition( tikzDevDesc *tikzInfo, void (*printOut)(tikzDevDesc *tikzInfo, const char *format, ...), int color, const char* colorname, const char* colorstr )
 {
   if( colorstr[0] == '#')
   {
     if( colorname[0] == '#' )
       colorname= colorname +1;
 
-    printOutput(tikzInfo,
+    printOut(tikzInfo,
       "\\definecolor{%s}{HTML}{%s}\n",
       colorname, colorstr+1);
   }
-  else if ( strncmp(colorstr, "gray", 4) == 0)
+  else if ( strncmp(colorstr, "gray", 4) == 0 && strlen(colorstr) > 4)
   {
     int perc = atoi(colorstr+4);
-    printOutput(tikzInfo,
+    printOut(tikzInfo,
       "\\definecolor{%s}{gray}{%4.2f}\n",
       colorname,
       perc/100.0);
   }
   else
-    printOutput(tikzInfo,
+    printOut(tikzInfo,
       "\\definecolor{%s}{RGB}{%d,%d,%d}\n",
       colorname,
       R_RED(color),
@@ -535,20 +535,13 @@ static void TikZ_WriteColorDefinition( tikzDevDesc *tikzInfo, int color, const c
 
 static void TikZ_WriteColorDefinitions( tikzDevDesc *tikzInfo )
 {
-  /* save the output because printOutput has the output file name hardcoded */
-  FILE* outfile = tikzInfo->outputFile;
   int i;
-
-  tikzInfo->outputFile = tikzInfo->colorFile;
 
   for( i = 0; i < tikzInfo->ncolors; ++i)
   {
     const char* colorstr = col2name(tikzInfo->colors[i]);
-    TikZ_WriteColorDefinition(tikzInfo, tikzInfo->colors[i], colorstr, colorstr);
+    TikZ_WriteColorDefinition(tikzInfo, printColorOutput, tikzInfo->colors[i], colorstr, colorstr);
   }
-
-  /* restore output */
-  tikzInfo->outputFile = outfile;
 }
 
 static void TikZ_WriteColorFile(tikzDevDesc *tikzInfo)
@@ -1799,7 +1792,7 @@ static void TikZ_DefineDrawColor(tikzDevDesc *tikzInfo, int color, const char* c
     printOutput(tikzInfo, "\\definecolor{%s}{named}{%s}\n", colortype, colorstr);
   }
   else
-    TikZ_WriteColorDefinition(tikzInfo, color, colortype, colorstr);
+    TikZ_WriteColorDefinition(tikzInfo, printOutput, color, colortype, colorstr);
 
 }
 
@@ -2059,6 +2052,20 @@ static void printOutput(tikzDevDesc *tikzInfo, const char *format, ...){
   
   va_end(ap);
   
+}
+
+static void printColorOutput(tikzDevDesc *tikzInfo, const char *format, ...){
+
+  va_list(ap);
+  va_start(ap, format);
+
+  if(tikzInfo->console == TRUE)
+    Rvprintf(format, ap);
+  else
+    vfprintf(tikzInfo->colorFile, format, ap);
+
+  va_end(ap);
+
 }
 
 
