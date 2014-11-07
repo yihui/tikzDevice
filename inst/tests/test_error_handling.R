@@ -120,6 +120,13 @@ test_that('symbolicColors warns about too many colors',{
   )
 })
 
+test_that('maxSymbolicColors is checked nonnegtative',{
+  expect_that(
+      tikz(symbolicColors = T, maxSymbolicColors = -1),
+       throws_error("maxSymbolicColors needs to be nonnegative")
+  )
+})
+
 
 
 testthat:::end_context() # Needs to be done manually due to reporter swap
