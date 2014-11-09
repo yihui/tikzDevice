@@ -2066,7 +2066,7 @@ static void printColorOutput(tikzDevDesc *tikzInfo, const char *format, ...){
   va_list(ap);
   va_start(ap, format);
 
-  if(tikzInfo->console == TRUE)
+  if(tikzInfo->colorFile == NULL)
     Rvprintf(format, ap);
   else
     vfprintf(tikzInfo->colorFile, format, ap);
