@@ -126,8 +126,8 @@ setTikzDefaults <- function( overwrite = TRUE ){
 
     tikzPdftexWarnUTF = TRUE,
 
-    tikzSymbolicColors = FALSE
-
+    tikzSymbolicColors = FALSE,
+    tikzMaxSymbolicColors = 100
   )
 
   if( !overwrite ){

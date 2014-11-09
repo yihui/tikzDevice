@@ -101,7 +101,8 @@
 #'  written.
 #' @param maxSymbolicColors an integer number indicating the maximal number
 #' of distinct colors to write symbolically. Any excess color will be defined
-#' as if \code{symbolicColors} was set to \code{FALSE}.
+#' as if \code{symbolicColors} was set to \code{FALSE}. See also the section 
+#' ``Options That Affect'  Package Behavior'' of \link{tikzDevice-package}.
 #'
 #' @return \code{tikz()} returns no values.
 #'
@@ -211,7 +212,7 @@ function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
   packages,
   footer = getOption("tikzFooter"),
   symbolicColors = getOption("tikzSymbolicColors"), colorFileName = "%s_colors.tex",
-  maxSymbolicColors = 100
+  maxSymbolicColors = getOption("tikzMaxSymbolicColors")
 ){
 
   tryCatch({

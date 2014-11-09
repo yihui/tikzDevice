@@ -11,7 +11,8 @@ tikz(file = ifelse(onefile, "./Rplots.tex", "./Rplot\%03d.tex"), width = 7,
   documentDeclaration = getOption("tikzDocumentDeclaration"), packages,
   footer = getOption("tikzFooter"),
   symbolicColors = getOption("tikzSymbolicColors"),
-  colorFileName = "\%s_colors.tex", maxSymbolicColors = 100)
+  colorFileName = "\%s_colors.tex",
+  maxSymbolicColors = getOption("tikzMaxSymbolicColors"))
 }
 \arguments{
 \item{file}{A character string indicating the desired path to the output
@@ -82,7 +83,8 @@ written.}
 
 \item{maxSymbolicColors}{an integer number indicating the maximal number
 of distinct colors to write symbolically. Any excess color will be defined
-as if \code{symbolicColors} was set to \code{FALSE}.}
+as if \code{symbolicColors} was set to \code{FALSE}. See also the section
+``Options That Affect'  Package Behavior'' of \link{tikzDevice-package}.}
 }
 \value{
 \code{tikz()} returns no values.
