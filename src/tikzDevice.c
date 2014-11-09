@@ -166,7 +166,7 @@ SEXP TikZ_StartDevice ( SEXP args ){
    */
   symbolicColors = asLogical(CAR(args)); args = CDR(args);
   colorFileName = translateChar(asChar(CAR(args))); args = CDR(args);
-  int maxSymbolicColors = asInteger(CAR(args));
+  int maxSymbolicColors = asInteger(CAR(args)); args = CDR(args);
 
   /* Ensure there is an empty slot avaliable for a new device. */
   R_CheckDeviceAvailable();
