@@ -520,11 +520,6 @@ static void TikZ_WriteColorDefinition( tikzDevDesc *tikzInfo, void (*printOut)(t
     printOutput(tikzInfo,
       "\\definecolor{%s}{named}{%s}\n",
       colorname, colorstr);
-  /* define user defined colors without an R alias */
-  else if( colorstr[0] == '#')
-    printOut(tikzInfo,
-      "\\definecolor{%s}{HTML}{%s}\n",
-      colorname, colorstr);
   /* treat gray colors separately */
   else if ( strncmp(colorstr, "gray", 4) == 0 && strlen(colorstr) > 4)
   {
@@ -534,7 +529,7 @@ static void TikZ_WriteColorDefinition( tikzDevDesc *tikzInfo, void (*printOut)(t
       colorname,
       perc/100.0);
   }
-  /* define colors with an R alias */
+  /* define aliased colors with RGB values */
   else
     printOut(tikzInfo,
       "\\definecolor{%s}{RGB}{%d,%d,%d}\n",
