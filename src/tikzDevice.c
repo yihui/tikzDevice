@@ -507,15 +507,25 @@ static Rboolean TikZ_Setup(
 
 static void TikZ_WriteColorDefinition( tikzDevDesc *tikzInfo, void (*printOut)(tikzDevDesc *tikzInfo, const char *format, ...), int color, const char* colorname, const char* colorstr )
 {
-  if( colorstr[0] == '#')
-  {
-    if( colorname[0] == '#' )
-      colorname= colorname +1;
 
+  /* strip # from both strings as they are not necessary nor allowed */
+  if( colorname[0] == '#' )
+    colorname= colorname +1;
+
+  if( colorstr[0] == '#')
+    colorstr = colorstr+1;
+
+  /* define the color as an alias */
+  if( color == -1 )
+    printOutput(tikzInfo,
+      "\\definecolor{%s}{named}{%s}\n",
+      colorname, colorstr);
+  /* define user defined colors without an R alias */
+  else if( colorstr[0] == '#')
     printOut(tikzInfo,
       "\\definecolor{%s}{HTML}{%s}\n",
-      colorname, colorstr+1);
-  }
+      colorname, colorstr);
+  /* treat gray colors separately */
   else if ( strncmp(colorstr, "gray", 4) == 0 && strlen(colorstr) > 4)
   {
     int perc = atoi(colorstr+4);
@@ -524,6 +534,7 @@ static void TikZ_WriteColorDefinition( tikzDevDesc *tikzInfo, void (*printOut)(t
       colorname,
       perc/100.0);
   }
+  /* define colors with an R alias */
   else
     printOut(tikzInfo,
       "\\definecolor{%s}{RGB}{%d,%d,%d}\n",
@@ -1786,11 +1797,7 @@ static void TikZ_DefineDrawColor(tikzDevDesc *tikzInfo, int color, const char* c
   const char *colorstr = col2name(color);
 
   if( TikZ_CheckAndAddColor(tikzInfo, color) )
-  {
-    if( colorstr[0] == '#' )
-      colorstr = colorstr+1;
-    printOutput(tikzInfo, "\\definecolor{%s}{named}{%s}\n", colortype, colorstr);
-  }
+    TikZ_WriteColorDefinition(tikzInfo, printOutput, -1, colortype, colorstr);
   else
     TikZ_WriteColorDefinition(tikzInfo, printOutput, color, colortype, colorstr);
 
