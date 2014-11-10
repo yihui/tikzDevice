@@ -10,7 +10,7 @@
 
 
 <<setup,echo=FALSE,results=hide>>=
-  require(tikzDevice)
+  library(tikzDevice)
   if( !file.exists('figs') ){dir.create( 'figs' )}
 
   # So that prompts and continuation prompts don't show up in the output.
@@ -344,11 +344,10 @@ list.\\[\baselineskip]
 \chapter{Loading the Package}
 
 The functions in the \pkg{tikzDevice} package are made accessible in the
-\lang{R} environment by using either the \code{library()} or \code{require()}
-functions like so:
+\lang{R} environment by using \code{library()}:
 
 \begin{Verbatim}[frame=single]
-require(tikzDevice)
+library(tikzDevice)
 \end{Verbatim}
 
 \noindent Upon loading, the package will search for the following \LaTeX\ compilers:
@@ -828,7 +827,7 @@ following example in \lang{R} will produce a very simple graphic using the
 \code{plot} function:
 
 <<simpleEx,echo=TRUE,results=hide>>=
-require(tikzDevice)
+library(tikzDevice)
 tikz('figs/simpleEx.tex',width=3.5,height=3.5)
 plot(1,main='Hello World!')
 dev.off()
@@ -888,7 +887,7 @@ appear in the output for \LaTeX. The next example demonstrates how to use
   \centering
   \begin{minipage}{0.5\textwidth}
 <<latexEx,echo=TRUE,results=hide,keep.source=TRUE>>=
-require(tikzDevice)
+library(tikzDevice)
 tikz('figs/latexEx.tex',
   width=3.5,height=3.5)
 
@@ -932,8 +931,8 @@ invoked, the wrapping environment is omitted. This option allows output to be
 embedded inside another \code{tikzpicture} of the user's own construction.
 
 <<bareBonesExample,echo=TRUE,results=hide,keep.source=TRUE>>=
-require(tikzDevice)
-require(maps)
+library(tikzDevice)
+library(maps)
 
 tikz('figs/westCoast.tex', bareBones=TRUE)
 
@@ -1030,7 +1029,7 @@ document to the bounding boxes of the plots.  Stand-alone output may be
 produced in the following manner:
 
 <<standAloneExample,echo=TRUE,results=hide,keep.source=TRUE>>=
-require(tikzDevice)
+library(tikzDevice)
 tikz('standAloneExample.tex',standAlone=TRUE)
 plot(sin,-pi,2*pi,main="A Stand Alone TikZ Plot")
 dev.off()
@@ -1039,7 +1038,7 @@ dev.off()
 
 <<standAloneCompileExample, results=hide, eval=FALSE>>=
 
-  require(tools)
+  library(tools)
 
   catch <- system(paste(Sys.which('pdflatex'),
     '-interaction=batchmode -output-directory figs/ figs/standAloneExample.tex'),
@@ -1081,7 +1080,7 @@ versions of \pkg{tikzDevice} prior to 0.7.2.)
      \centering
  <<inline,echo=FALSE,results=tex>>=
 
- require(tikzDevice)
+ library(tikzDevice)
  tikz(console=TRUE,width=5,height=5)
   x <- rnorm(100)
   plot(x)
@@ -1190,7 +1189,7 @@ that can be drawn with \TikZ. Check out the results in
 \autoref{fig:annotation}.
 
 <<annotation,echo=TRUE,results=hide,keep.source=TRUE>>=
-require(tikzDevice)
+library(tikzDevice)
 
 # Load some additional TikZ libraries
 tikz("figs/annotation.tex",width=4,height=4,

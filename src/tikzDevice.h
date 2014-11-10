@@ -61,8 +61,11 @@ typedef enum {
 */
 typedef struct {
   FILE *outputFile;
+  FILE *colorFile;
   char *outFileName;
   char *originalFileName;
+  char *outColorFileName;
+  char *originalColorFileName;
   tikz_engine engine;
   int rasterFileCount;
   int pageNum;
@@ -80,6 +83,11 @@ typedef struct {
   Rboolean sanitize;
   TikZ_ClipState clipState;
   TikZ_PageState pageState;
+  Rboolean symbolicColors;
+  int* colors;
+  int ncolors;
+  int maxSymbolicColors;
+  Rboolean excessWarningPrinted;
 } tikzDevDesc;
 
 
@@ -99,7 +107,9 @@ static Rboolean TikZ_Setup(
     Rboolean standAlone, Rboolean bareBones,
     const char *documentDeclaration,
     const char *packages, const char *footer,
-    Rboolean console, Rboolean sanitize, int engine );
+    Rboolean console, Rboolean sanitize, int engine,
+    Rboolean symbolicColors, const char *colorFileName,
+    int maxSymbolicColors );
 
 
 /* Graphics Engine function hooks. Defined in GraphicsDevice.h . */
@@ -183,6 +193,7 @@ static double ScaleFont( const pGEcontext plotParams, pDevDesc deviceInfo );
 
 /* Utility Routines*/
 static void printOutput(tikzDevDesc *tikzInfo, const char *format, ...);
+static void printColorOutput(tikzDevDesc *tikzInfo, const char *format, ...);
 static void Print_TikZ_Header( tikzDevDesc *tikzInfo );
 static char *Sanitize(const char *str);
 #if 0

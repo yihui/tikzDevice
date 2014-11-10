@@ -99,9 +99,9 @@ function(texString, cex = 1, face = 1, engine = getOption('tikzDefaultEngine'),
   # our dictionary for this string.
   width <- queryMetricsDictionary( TeXMetrics )
 
-  if( width > 0 ){
+  if( width >= 0 ){
 
-    # Positive string width means there was a
+    # Positive (and zero) string width means there was a
     # cached value available. Yay! We're done.
     return( width )
 
@@ -255,9 +255,9 @@ function( TeXMetrics ){
   # Create the TeX file in a temporary directory so
   # it doesn't clutter anything.
   texDir <- tempdir()
-  texLog <- file.path( texDir,'tikzStringWidthCalc.log' )
-  texOut <- file.path( texDir,'tikzMetrics.out' )
-  texFile <- file.path( texDir,'tikzStringWidthCalc.tex' )
+  texLog <- normalizePath(file.path(texDir, 'tikzStringWidthCalc.log'), '/', FALSE)
+  texOut <- file.path(file.path(texDir,'tikzMetrics.out'), '/'. FALSE)
+  texFile <- normalizePath(file.path(texDir, 'tikzStringWidthCalc.tex'), '/', FALSE)
 
   # Write LaTeX code to file.
   writeMeasurementFile(TeXMetrics, texDir, texFile)

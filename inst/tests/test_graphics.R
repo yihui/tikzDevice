@@ -308,7 +308,7 @@ test_graphs <- list(
     ),
     graph_code = quote({
 
-      require(grid)
+      library(grid)
 
       pushViewport(plotViewport())
       pushViewport(dataViewport(1:10, 1:10))
@@ -344,8 +344,8 @@ test_graphs <- list(
     tags = c('ggplot2'),
     graph_code = quote({
       sink(tempfile())
-      suppressPackageStartupMessages(require(mgcv))
-      suppressPackageStartupMessages(require(ggplot2))
+      suppressPackageStartupMessages(library(mgcv))
+      suppressPackageStartupMessages(library(ggplot2))
       sink()
       print(qplot(carat, price, data = diamonds, geom = "smooth",
       colour = color))
@@ -358,7 +358,7 @@ test_graphs <- list(
     tags = c('ggplot2', 'text'),
     graph_code =  quote({
       sink(tempfile())
-      suppressPackageStartupMessages(require(ggplot2))
+      suppressPackageStartupMessages(library(ggplot2))
       sink()
 
       soilSample <- structure(list(`Grain Diameter` = c(8, 5.6, 4, 2.8, 2, 1, 0.5, 0.355, 0.25),
@@ -378,7 +378,7 @@ test_graphs <- list(
           scale_x_log10() + scale_y_probit() + theme_bw()
       } else {
         sink(tempfile())
-        suppressPackageStartupMessages(require(scales))
+        suppressPackageStartupMessages(library(scales))
         sink()
         testPlot <- qplot(log10(`Grain Diameter`), `Percent Finer`, data = soilSample) +
           scale_x_continuous(labels = math_format(10^.x)) +
@@ -473,8 +473,8 @@ test_graphs <- list(
     tags = c('grid', 'raster'),
     graph_code = quote({
 
-      suppressPackageStartupMessages(require(grid))
-      suppressPackageStartupMessages(require(lattice))
+      suppressPackageStartupMessages(library(grid))
+      suppressPackageStartupMessages(library(lattice))
 
       plt <- levelplot(volcano, panel = panel.levelplot.raster,
            col.regions = topo.colors, cuts = 30, interpolate = TRUE)
@@ -496,6 +496,21 @@ test_graphs <- list(
     })
   ),
 
+  list(
+    short_name = 'base_symbolic_simple',
+    description = 'Test symbolic colors for a simple image',
+    tags = c('base', 'symbolic'),
+    graph_options = list(
+      tikzSymbolicColors=TRUE, tikzMaxSymbolicColors=3),
+    graph_code = quote({
+      plot.new()
+      points(0,0)
+      points(0,1, col="red")
+      suppressWarnings(points(1,1, col="green"))
+      points(1,0, col="gray50")
+      points(0.5,0.5, col="#F3346A")
+    })
+  ),
   # New pdfLaTeX tests go here
   #list(
   #  short_name = 'something_suitable_as_a_filename',

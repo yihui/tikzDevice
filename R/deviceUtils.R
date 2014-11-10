@@ -125,8 +125,10 @@ setTikzDefaults <- function( overwrite = TRUE ){
 
     tikzPdftexWarnUTF = TRUE,
 
-    tikzMetricsMethod = "robust"
+    tikzMetricsMethod = "robust",
 
+    tikzSymbolicColors = FALSE,
+    tikzMaxSymbolicColors = 100
   )
 
   if( !overwrite ){
@@ -308,11 +310,11 @@ function(executable)
 # S3 methods have to be exported to the NAMESPACE in order to be effective
 # during .onLoad...
 
-#' @S3method format PATH
+#' @export
 format.PATH <- function(x, ...) { sprintf('the PATH using the command: %s', attr(x, 'origin')) }
-#' @S3method format OPTION
+#' @export
 format.OPTION <- function(x, ...) { sprintf('the global option: %s', attr(x, 'origin')) }
-#' @S3method format ENV_VAR
+#' @export
 format.ENV_VAR <- function(x, ...) { sprintf('the environment variable: %s', attr(x, 'origin')) }
 
 

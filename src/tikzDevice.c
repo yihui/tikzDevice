@@ -75,13 +75,13 @@ SEXP TikZ_StartDevice ( SEXP args ){
   R_GE_checkVersionOrDie(R_GE_version);
 
   /* Declare local variabls for holding the components of the args SEXP */
-  const char *fileName;
+  const char *fileName, *colorFileName;
   const char *bg, *fg;
   double width, height;
   Rboolean standAlone, bareBones;
   const char *documentDeclaration, *packages, *footer;
   double baseSize;
-  Rboolean console, sanitize, onefile;
+  Rboolean console, sanitize, onefile, symbolicColors;
 
   /*
    * pGEDevDesc is a variable provided by the R Graphics Engine
@@ -159,7 +159,14 @@ SEXP TikZ_StartDevice ( SEXP args ){
   /*
    * See the definition of tikz_engine in tikzDevice.h
    */
-  int engine = asInteger(CAR(args));
+  int engine = asInteger(CAR(args)); args = CDR(args);
+
+  /*
+   * Should symbolic names be used (red instead of 1.0, 1.0, 1.0)
+   */
+  symbolicColors = asLogical(CAR(args)); args = CDR(args);
+  colorFileName = translateChar(asChar(CAR(args))); args = CDR(args);
+  int maxSymbolicColors = asInteger(CAR(args)); args = CDR(args);
 
   /* Ensure there is an empty slot avaliable for a new device. */
   R_CheckDeviceAvailable();
@@ -190,7 +197,7 @@ SEXP TikZ_StartDevice ( SEXP args ){
     */
     if( !TikZ_Setup( deviceInfo, fileName, width, height, onefile, bg, fg, baseSize,
         standAlone, bareBones, documentDeclaration, packages,
-        footer, console, sanitize, engine ) ){
+        footer, console, sanitize, engine, symbolicColors, colorFileName, maxSymbolicColors ) ){
       /*
        * If setup was unsuccessful, destroy the device and return
        * an error message.
@@ -234,7 +241,8 @@ static Rboolean TikZ_Setup(
   Rboolean standAlone, Rboolean bareBones,
   const char *documentDeclaration,
   const char *packages, const char *footer,
-  Rboolean console, Rboolean sanitize, int engine ){
+  Rboolean console, Rboolean sanitize, int engine,
+  Rboolean symbolicColors, const char* colorFileName, int maxSymbolicColors){
 
   /*
    * Create tikzInfo, this variable contains information which is
@@ -270,6 +278,14 @@ static Rboolean TikZ_Setup(
   } else {
     tikzInfo->outFileName = calloc_strcpy(fileName);
   }
+  tikzInfo->outputFile= NULL;
+
+  tikzInfo->originalColorFileName = calloc_strcpy(colorFileName);
+  tikzInfo->ncolors = 0;
+  tikzInfo->colorFile = NULL;
+  tikzInfo->maxSymbolicColors = maxSymbolicColors;
+  tikzInfo->colors = calloc(maxSymbolicColors, sizeof(int));
+  tikzInfo->excessWarningPrinted = FALSE;
   tikzInfo->engine = engine;
   tikzInfo->rasterFileCount = 1;
   tikzInfo->debug = DEBUG;
@@ -282,7 +298,7 @@ static Rboolean TikZ_Setup(
   tikzInfo->documentDeclaration = calloc_strcpy(documentDeclaration);
   tikzInfo->packages = calloc_strcpy(packages);
   tikzInfo->footer = calloc_strcpy(footer);
-
+  tikzInfo->symbolicColors = symbolicColors;
   tikzInfo->console = console;
   tikzInfo->sanitize = sanitize;
   tikzInfo->clipState = TIKZ_NO_CLIP;
@@ -489,6 +505,71 @@ static Rboolean TikZ_Setup(
   return TRUE;
 }
 
+static void TikZ_WriteColorDefinition( tikzDevDesc *tikzInfo, void (*printOut)(tikzDevDesc *tikzInfo, const char *format, ...), int color, const char* colorname, const char* colorstr )
+{
+
+  /* strip # from both strings as they are not necessary nor allowed */
+  if( colorname[0] == '#' )
+    colorname= colorname +1;
+
+  if( colorstr[0] == '#')
+    colorstr = colorstr+1;
+
+  /* define the color as an alias */
+  if( color == -1 )
+    printOutput(tikzInfo,
+      "\\definecolor{%s}{named}{%s}\n",
+      colorname, colorstr);
+  /* treat gray colors separately */
+  else if ( strncmp(colorstr, "gray", 4) == 0 && strlen(colorstr) > 4)
+  {
+    int perc = atoi(colorstr+4);
+    printOut(tikzInfo,
+      "\\definecolor{%s}{gray}{%4.2f}\n",
+      colorname,
+      perc/100.0);
+  }
+  /* define aliased colors with RGB values */
+  else
+    printOut(tikzInfo,
+      "\\definecolor{%s}{RGB}{%d,%d,%d}\n",
+      colorname,
+      R_RED(color),
+      R_GREEN(color),
+      R_BLUE(color));
+}
+
+static void TikZ_WriteColorDefinitions( tikzDevDesc *tikzInfo )
+{
+  int i;
+
+  for( i = 0; i < tikzInfo->ncolors; ++i)
+  {
+    const char* colorstr = col2name(tikzInfo->colors[i]);
+    TikZ_WriteColorDefinition(tikzInfo, printColorOutput, tikzInfo->colors[i], colorstr, colorstr);
+  }
+}
+
+static void TikZ_WriteColorFile(tikzDevDesc *tikzInfo)
+{
+  if ( tikzInfo->outColorFileName )
+  {
+    tikzInfo->colorFile = fopen(R_ExpandFileName(tikzInfo->outColorFileName), "w");
+    if( tikzInfo->colorFile)
+    {
+      TikZ_WriteColorDefinitions(tikzInfo);
+      fclose(tikzInfo->colorFile);
+    }
+    else
+    {
+      warning( "Color definition file could not be opened and is missing.\n" );
+    }
+
+    /* delete all colors used up till now */
+    tikzInfo->ncolors = 0;
+    tikzInfo->excessWarningPrinted = FALSE;
+  }
+}
 
 /*==============================================================================
                             Core Graphics Routines
@@ -517,6 +598,27 @@ static Rboolean TikZ_Open( pDevDesc deviceInfo )
   if ( !tikzInfo->onefile )
     sprintf(tikzInfo->outFileName, tikzInfo->originalFileName, tikzInfo->pageNum);
 
+  if( strlen(tikzInfo->originalColorFileName) > 0 )
+    {
+      tikzInfo->outColorFileName = calloc_x_strlen(tikzInfo->originalColorFileName, strlen(tikzInfo->outFileName));
+
+      /* deal with the extension */
+      const char *ext = strrchr(tikzInfo->outFileName, '.');
+
+      if( strcmp(ext, ".tex") == 0)
+      {
+        char *fname = calloc_strcpy(tikzInfo->outFileName);
+        size_t extposition = ext - tikzInfo->outFileName;
+        fname[extposition] = '\0';
+        snprintf(tikzInfo->outColorFileName, strlen(tikzInfo->originalColorFileName)+strlen(tikzInfo->outFileName), tikzInfo->originalColorFileName, fname);
+        free(fname);
+      }
+      else
+        snprintf(tikzInfo->outColorFileName, strlen(tikzInfo->originalColorFileName)+strlen(tikzInfo->outFileName), tikzInfo->originalColorFileName, tikzInfo->outFileName);
+    }
+    else
+      tikzInfo->outColorFileName = NULL;
+
   if ( !tikzInfo->console )
     if ( !(tikzInfo->outputFile = fopen(R_ExpandFileName(tikzInfo->outFileName), "w")) )
       return FALSE;
@@ -525,7 +627,7 @@ static Rboolean TikZ_Open( pDevDesc deviceInfo )
   Print_TikZ_Header( tikzInfo );
 
   /* Header for a standalone LaTeX document*/
-  if(tikzInfo->standAlone == TRUE){
+  if ( tikzInfo->standAlone == TRUE ){
     printOutput(tikzInfo,"%s",tikzInfo->documentDeclaration);
     printOutput(tikzInfo,"%s",tikzInfo->packages);
     printOutput(tikzInfo,"\\begin{document}\n\n");
@@ -534,8 +636,8 @@ static Rboolean TikZ_Open( pDevDesc deviceInfo )
   return TRUE;
 }
 
-static void TikZ_Close( pDevDesc deviceInfo){
-
+static void TikZ_Close( pDevDesc deviceInfo)
+{
   /* Shortcut pointers to variables of interest. */
   tikzDevDesc *tikzInfo = (tikzDevDesc *) deviceInfo->deviceSpecific;
 
@@ -556,25 +658,36 @@ static void TikZ_Close( pDevDesc deviceInfo){
     printOutput(tikzInfo,"\n\\end{document}\n");
   }
 
-  if(tikzInfo->debug == TRUE)
+  if ( tikzInfo->debug == TRUE )
     printOutput(tikzInfo,
       "%% Calculated string width %d times\n",
       tikzInfo->stringWidthCalls);
 
   /* Close the file and destroy the tikzInfo structure. */
   if(tikzInfo->console == FALSE)
+  {
     fclose(tikzInfo->outputFile);
+    tikzInfo->outputFile = NULL;
+  }
+
+  /* write symbolic color names to the corresponding file */
+  TikZ_WriteColorFile(tikzInfo);
 
   /* Deallocate pointers */
   free(tikzInfo->outFileName);
   if ( !tikzInfo->onefile )
     free(tikzInfo->originalFileName);
 
+  free(tikzInfo->colors);
+  free(tikzInfo->outColorFileName);
+  free(tikzInfo->originalColorFileName);
+
   const_free(tikzInfo->documentDeclaration);
   const_free(tikzInfo->packages);
   const_free(tikzInfo->footer);
 
   free(tikzInfo);
+
 }
 
 static void TikZ_NewPage( const pGEcontext plotParams, pDevDesc deviceInfo )
@@ -598,6 +711,9 @@ static void TikZ_NewPage( const pGEcontext plotParams, pDevDesc deviceInfo )
       if( !tikzInfo->console )
         fclose(tikzInfo->outputFile);
     }
+
+    /* write symbolic color names to the corresponding file */
+    TikZ_WriteColorFile(tikzInfo);
   }
 
   /*
@@ -1632,21 +1748,67 @@ static TikZ_DrawOps TikZ_GetDrawOps(pGEcontext plotParams)
   return ops;
 }
 
+static Rboolean TikZ_CheckColor(tikzDevDesc *tikzInfo, int color)
+{
+  int i;
+
+  for (i = 0; i < tikzInfo->ncolors; ++i)
+  {
+    if( tikzInfo->colors[i] == color )
+      return TRUE;
+  }
+
+  return FALSE;
+}
+
+static Rboolean TikZ_CheckAndAddColor(tikzDevDesc *tikzInfo, int color)
+{
+  Rboolean colorfound = FALSE;
+
+  if( !tikzInfo->symbolicColors )
+    return FALSE;
+
+  colorfound = TikZ_CheckColor(tikzInfo, color);
+
+  if( !colorfound && !tikzInfo->excessWarningPrinted && tikzInfo->ncolors == tikzInfo->maxSymbolicColors )
+  {
+    warning("Too many colors used, reverting to non-symbolic storage");
+    tikzInfo->excessWarningPrinted = TRUE;
+    return FALSE;
+  }
+
+  if( tikzInfo->ncolors < tikzInfo->maxSymbolicColors && !colorfound )
+  {
+    tikzInfo->colors[tikzInfo->ncolors] = color;
+    tikzInfo->ncolors++;
+    colorfound = TRUE;
+  }
+
+  return colorfound;
+}
+
+static void TikZ_DefineDrawColor(tikzDevDesc *tikzInfo, int color, const char* colortype)
+{
+  const char *colorstr = col2name(color);
+
+  if( TikZ_CheckAndAddColor(tikzInfo, color) )
+    TikZ_WriteColorDefinition(tikzInfo, printOutput, -1, colortype, colorstr);
+  else
+    TikZ_WriteColorDefinition(tikzInfo, printOutput, color, colortype, colorstr);
+
+}
+
 static void TikZ_DefineColors(pGEcontext plotParams, pDevDesc deviceInfo, TikZ_DrawOps ops)
 {
   int color;
-
   tikzDevDesc *tikzInfo = (tikzDevDesc *) deviceInfo->deviceSpecific;
 
   if ( ops & DRAWOP_DRAW ) {
     color = plotParams->col;
+
     if ( color != tikzInfo->oldDrawColor ) {
       tikzInfo->oldDrawColor = color;
-      printOutput(tikzInfo,
-        "\\definecolor[named]{drawColor}{rgb}{%4.2f,%4.2f,%4.2f}\n",
-        R_RED(color)/255.0,
-        R_GREEN(color)/255.0,
-        R_BLUE(color)/255.0);
+      TikZ_DefineDrawColor(tikzInfo, color, "drawColor");
     }
   }
 
@@ -1654,11 +1816,7 @@ static void TikZ_DefineColors(pGEcontext plotParams, pDevDesc deviceInfo, TikZ_D
     color = plotParams->fill;
     if( color != tikzInfo->oldFillColor ) {
       tikzInfo->oldFillColor = color;
-      printOutput(tikzInfo,
-        "\\definecolor[named]{fillColor}{rgb}{%4.2f,%4.2f,%4.2f}\n",
-        R_RED(color)/255.0,
-        R_GREEN(color)/255.0,
-        R_BLUE(color)/255.0);
+      TikZ_DefineDrawColor(tikzInfo, color, "fillColor");
     }
   }
 
@@ -1898,6 +2056,20 @@ static void printOutput(tikzDevDesc *tikzInfo, const char *format, ...){
 
 }
 
+static void printColorOutput(tikzDevDesc *tikzInfo, const char *format, ...){
+
+  va_list(ap);
+  va_start(ap, format);
+
+  if(tikzInfo->colorFile == NULL)
+    Rvprintf(format, ap);
+  else
+    vfprintf(tikzInfo->colorFile, format, ap);
+
+  va_end(ap);
+
+}
+
 
 /*
  * This function is responsible for writing header information
@@ -2073,8 +2245,12 @@ static void TikZ_CheckState(pDevDesc deviceInfo)
         "%% Beginning new tikzpicture 'page'\n");
 
     if ( tikzInfo->bareBones != TRUE )
+    {
       printOutput(tikzInfo, "\\begin{tikzpicture}[x=1pt,y=1pt]\n");
 
+      if( tikzInfo->symbolicColors && tikzInfo->outColorFileName)
+        printOutput(tikzInfo, "\\InputIfFileExists{%s}{}{}\n", tikzInfo->outColorFileName);
+    }
     /*
      * Emit a path that encloses the entire canvas area in order to ensure that
      * the final typeset plot is the size the user specified. Adding the `use as
@@ -2083,11 +2259,7 @@ static void TikZ_CheckState(pDevDesc deviceInfo)
      */
     int color = deviceInfo->startfill;
     tikzInfo->oldFillColor = color;
-    printOutput(tikzInfo,
-      "\\definecolor[named]{fillColor}{rgb}{%4.2f,%4.2f,%4.2f}\n",
-      R_RED(color)/255.0,
-      R_GREEN(color)/255.0,
-      R_BLUE(color)/255.0);
+    TikZ_DefineDrawColor(tikzInfo, color, "fillColor");
 
     printOutput(tikzInfo, "\\path[use as bounding box");
 

@@ -1,5 +1,25 @@
+---
+
+# Changes in version 0.7.4 (2014-11-10)
+
+---
+
+## Features
+
+- Optionally use symbolic colors defined in a single external file instead of
+  hard-coded colors defined in-place.  New parameters `symbolicColors`,
+  `colorFileName` and `maxSymbolicColors`; new options `tikzSymbolicColors`
+  and `tikzMaxSymbolicColors` (#70, thanks Martin Bergner).
+
+---
+
+# Changes in version 0.7.3 (2014-09-09)
+
+---
+
 ## Bug Fixes
 
+- Performance improvements with zero-width strings (#66, thanks Gvozden Neskovic)
 - Add parameter checkstate to allow adding annotations to a new plot (#52,
   thanks Sam Mason)
 - Allow raster images to be output without resampling by setting
