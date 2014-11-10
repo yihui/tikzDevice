@@ -12,7 +12,7 @@ getDocumentPointsize <- function( docString ){
   # Should cause this function to return 12 as the pointsize.
   # The pointsize is used by the tikzDevice to determine
   # scaling factors and is stored at the C level in the
-  # startps component of the pDevDesc structure. 
+  # startps component of the pDevDesc structure.
 
   # Search the document declaration for the pointsize, and extract it if it is
   # there.  (Split the input by newlines before.)
@@ -56,10 +56,10 @@ getDocumentPointsize <- function( docString ){
 #'
 #' @examples
 #'
-#' 	print( options( 'tikzDocumentDeclaration' ) )
-#' 	options( tikzDocumentDeclaration = 'foo' )
-#' 	setTikzDefaults()
-#' 	print( options( 'tikzDocumentDeclaration' ) )
+#'   print( options( 'tikzDocumentDeclaration' ) )
+#'   options( tikzDocumentDeclaration = 'foo' )
+#'   setTikzDefaults()
+#'   print( options( 'tikzDocumentDeclaration' ) )
 #'
 #' @export
 setTikzDefaults <- function( overwrite = TRUE ){
@@ -69,9 +69,9 @@ setTikzDefaults <- function( overwrite = TRUE ){
     tikzDefaultEngine = 'pdftex',
 
     tikzLatex = getOption( 'tikzLatexDefault' ),
- 
+
     tikzDocumentDeclaration = "\\documentclass[10pt]{article}\n",
- 
+
     tikzLatexPackages = c(
       "\\usepackage{tikz}\n",
       "\\usepackage[active,tightpage,psfixbb]{preview}\n",
@@ -98,7 +98,7 @@ setTikzDefaults <- function( overwrite = TRUE ){
     tikzFooter = "",
 
     tikzMetricPackages = c(
-      # The fontenc package is very important here! 
+      # The fontenc package is very important here!
       # R assumes the output device is uing T1 encoding.
       # LaTeX defaults to OT1. This package makes the
       # symbol codes consistant for both systems.
@@ -116,7 +116,7 @@ setTikzDefaults <- function( overwrite = TRUE ){
       "\\usepackage{fontspec,xunicode}\n"
     ),
 
-    tikzSanitizeCharacters = c('%','$','}','{','^','_','#','&','~'), 
+    tikzSanitizeCharacters = c('%','$','}','{','^','_','#','&','~'),
 
     tikzReplacementCharacters = c('\\%','\\$','\\}','\\{','\\^{}','\\_{}',
       '\\#','\\&','\\char`\\~'),

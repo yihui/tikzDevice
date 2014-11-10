@@ -110,7 +110,7 @@
 #'   method used for computing metrics.  This mostly affects the run time for
 #'   rendering plots with many textual elements and a "cold" metrics cache
 #'   (see above).
-#'   
+#'
 #'      \describe{
 #'         \item{\code{"preamble"}}{ Use a
 #'         \url{http://magic.aladdin.cs.cmu.edu/2007/11/02/precompiled-preamble-for-latex/}{"precompiled preamble"}
@@ -119,14 +119,14 @@
 #'         above) but with a suffix depending on the actual preamble used.
 #'         If the option \code{tikzMetricsDictionary} is not set, the preamble
 #'         is temporary just like the metrics cache; otherwise it is persistent.
-#'         It is probably wise to delete these files after major upgrades to 
+#'         It is probably wise to delete these files after major upgrades to
 #'         your LaTeX installation.
 #'         For technical reasons this method is available only for the
 #'         \code{pdftex} engine.}
-#'         
+#'
 #'         \item{\code{"robust"}}{ (or anything else) uses a slower but
 #'         robust method. }
-#'         
+#'
 #'   Default: \code{"robust"}. }
 #'
 #'   Default values for all options may be viewed or restored using the

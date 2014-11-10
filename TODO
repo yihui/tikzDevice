@@ -1,12 +1,12 @@
 # tikzDevice TODO #
 
-- Fill colors are still shown for polylines and lines; This does not 
-  affect the output but is inefficient.      
-- Line endings are still shown for circles and squares; This does not 
+- Fill colors are still shown for polylines and lines; This does not
+  affect the output but is inefficient.
+- Line endings are still shown for circles and squares; This does not
   affect the output but is inefficient.
 - Output to raw R objects.
 - Support for raster images.
-    
+
 ## FIXED ##
 - Fontsize and ps parameters are not taken into account when calculating scaling factors.
 
@@ -20,48 +20,48 @@
 - Polylines are filled as white
 
     [Solution]
-        Added a parameter tikzInfo->polyLine that is set to TRUE when StyleDef 
+        Added a parameter tikzInfo->polyLine that is set to TRUE when StyleDef
         is called, the fill color is only set if tikzInfo->polyLine == FALSE
-        
-- Shapes are plotted with a default color border of black when it should 
+
+- Shapes are plotted with a default color border of black when it should
       be transparent
 
     [Solution]
         See the solution below.
-  
-- The CheckAndSetAlpha() function provides inconsistent results for 
+
+- The CheckAndSetAlpha() function provides inconsistent results for
       example test3 is completely transparent but test4 is not though.
 
     [Solution]
-        Allowed for the option to set fill and draw transparency separately 
+        Allowed for the option to set fill and draw transparency separately
         with an extra parameter to CheckAndSetAlpha()
-  
-- Fill and draw colors are redefined before every shape is drawn, this 
-      works as a first cut but is VERY inefficient for large numbers of points 
-      which are not changing colors. possibly use \begin{scope}\end{scope} if 
+
+- Fill and draw colors are redefined before every shape is drawn, this
+      works as a first cut but is VERY inefficient for large numbers of points
+      which are not changing colors. possibly use \begin{scope}\end{scope} if
       possible
 
     [Solution]
-        Introduced the parameters oldFillColor and oldDrawColor in the 
-        tikzInfo structure which are checked against the current color and 
-        only redefined if different 
-    
+        Introduced the parameters oldFillColor and oldDrawColor in the
+        tikzInfo structure which are checked against the current color and
+        only redefined if different
+
 - when using plot(1,1), all calls to text result in proper output with one
       exception: the coordinates of the text nodes are nan.
 
     [Solution]
-        This error occurred because TikZ_Setup neglected to set the initial  
-        size of the font by assigning a value to startps inside the device 
-        structure. Additionally, plot characters were not produced because the 
+        This error occurred because TikZ_Setup neglected to set the initial
+        size of the font by assigning a value to startps inside the device
+        structure. Additionally, plot characters were not produced because the
         initial foreground and background colors were not set.
 
-- when using plot(1,1), the bounding box of the plot is almost drawn 
-      correctly. The line travels through the correct points, then returns to 
-      (0,0) which results in the right hand side of the plot having a funky 
+- when using plot(1,1), the bounding box of the plot is almost drawn
+      correctly. The line travels through the correct points, then returns to
+      (0,0) which results in the right hand side of the plot having a funky
       edge.
 
     [Solution]
-        This bug was a result of incorrect handling of C's #&@!&^ 0 array 
+        This bug was a result of incorrect handling of C's #&@!&^ 0 array
         indexing by TikZ_Polyline.
 
 - When using plot(1,1), all text labels are placed incorrectly. This may
@@ -69,29 +69,29 @@
       string width.
 
     [Solution]
-        This was indeed a result of not making an attempt to calculate 
-        the width of LaTeX strings. This has been fixed by a somewhat 
-        elaborate system call to the LaTeX compiler. This would be an 
-        elegent solution except for the fact that we have to call the 
+        This was indeed a result of not making an attempt to calculate
+        the width of LaTeX strings. This has been fixed by a somewhat
+        elaborate system call to the LaTeX compiler. This would be an
+        elegent solution except for the fact that we have to call the
         compiler 100s of times...
 
 - Adding legends to plots results in incorrect sizing and positioning.
       See lengend test for an example of this behavoir.
 
     [Solution]
-        This was caused be not implementing a full metricInfo function. 
-        Basically labels in legends seemd to hang below the symbols they 
-        were plotted next to. This was caused by returning fixed ascents 
-        and descents that were too large. Now LaTeX is called and the 
-        character in question is set into a named TikZ node, say A. The 
+        This was caused be not implementing a full metricInfo function.
+        Basically labels in legends seemd to hang below the symbols they
+        were plotted next to. This was caused by returning fixed ascents
+        and descents that were too large. Now LaTeX is called and the
+        character in question is set into a named TikZ node, say A. The
         ascent is calculated by TikZ as:
-        
+
           A.north - A.base
-        
+
         The descent as:
-        
+
           A.base - A.south
-        
+
         And the width as:
-        
+
           A.east - A.west

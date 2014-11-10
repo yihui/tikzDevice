@@ -181,14 +181,14 @@ tikzAnnotate <-
 function (annotation, checkstate = TRUE)
 {
 
-	if (!isTikzDevice()){
-		stop("The active device is not a tikz device, please start a tikz device to use this function. See ?tikz.")
+  if (!isTikzDevice()){
+    stop("The active device is not a tikz device, please start a tikz device to use this function. See ?tikz.")
   }
 
-	.C(TikZ_Annotate, as.character(annotation),
-		as.integer(length(annotation)), as.logical(checkstate))
+  .C(TikZ_Annotate, as.character(annotation),
+    as.integer(length(annotation)), as.logical(checkstate))
 
-	invisible()
+  invisible()
 }
 
 #' @rdname tikzAnnotate

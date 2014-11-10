@@ -10,7 +10,7 @@
 
 
 <<setup,echo=FALSE,results=hide>>=
-	require(tikzDevice)
+  require(tikzDevice)
   if( !file.exists('figs') ){dir.create( 'figs' )}
 
   # So that prompts and continuation prompts don't show up in the output.
@@ -216,9 +216,9 @@ and \autoref{fig:tikz-example}.
 % R `Type1Font` function vs. how easy it is to set tikzDevice options and let
 % TeX do the heavy lifting.
 \begin{figure}[!hb]
-	\centering
+  \centering
 
-	\begin{minipage}[t]{0.4\linewidth}
+  \begin{minipage}[t]{0.4\linewidth}
     \begin{tikzCodeBlock}[listing style=sweavechunk,
       code body/.append style={codebody color=white}]
 pdf('pdf-example.pdf',
@@ -235,9 +235,9 @@ dev.off()
     \includegraphics{figs/pdf-example}
     \caption{Output from \code{pdf()}}
     \label{fig:pdf-example}
-	\end{minipage}
+  \end{minipage}
   \hspace{0.1\linewidth}
-	\begin{minipage}[t]{0.4\linewidth}
+  \begin{minipage}[t]{0.4\linewidth}
     \begin{tikzCodeBlock}[listing style=sweavechunk,
       code body/.append style={codebody color=white}]
 tikz('tikz-example.tex',
@@ -254,7 +254,7 @@ dev.off()
     \input{figs/tikz-example.tex}
     \caption{Output from \code{tikz()}}
     \label{fig:tikz-example}
-	\end{minipage}
+  \end{minipage}
 \end{figure}
 
 
@@ -390,13 +390,13 @@ to produce output.
 
 The following places were tested for a valid LaTeX compiler:
 
-	the global option: tikzLatex
-	the environment variable: R_LATEXCMD
-	the environment variable: R_PDFLATEXCMD
-	the global option: latexcmd
-	the PATH using the command: pdflatex
-	the PATH using the command: latex
-	the PATH using the command: /usr/texbin/pdflatex
+  the global option: tikzLatex
+  the environment variable: R_LATEXCMD
+  the environment variable: R_PDFLATEXCMD
+  the global option: latexcmd
+  the PATH using the command: pdflatex
+  the PATH using the command: latex
+  the PATH using the command: /usr/texbin/pdflatex
 
 ...
 
@@ -842,9 +842,9 @@ document, the contents of the file \code{simpleEx.tex} are imported using the
 \verb|\include| command.
 
 \begin{figure}[H]
-	\centering
+  \centering
 
-	\begin{minipage}{0.5\textwidth}
+  \begin{minipage}{0.5\textwidth}
     \begin{tikzCodeBlock}[title={Example \LaTeX{} Document},listing style=latexsource,code body/.append style={codebody color=white}]
 \documentclass{article}
 
@@ -866,11 +866,11 @@ document, the contents of the file \code{simpleEx.tex} are imported using the
 \end{document}
     \end{tikzCodeBlock}
   \end{minipage}
-	\hfill
-	\begin{minipage}{0.45\textwidth}
-		\input{figs/simpleEx.tex}
-	\end{minipage}
-	\caption{Example of simple \code{tikz} usage.}
+  \hfill
+  \begin{minipage}{0.45\textwidth}
+    \input{figs/simpleEx.tex}
+  \end{minipage}
+  \caption{Example of simple \code{tikz} usage.}
 \end{figure}
 
 One of the most exciting aspects of the \code{tikz} function is that the
@@ -885,8 +885,8 @@ appear in the output for \LaTeX. The next example demonstrates how to use
 
 
 \begin{figure}[H]
-	\centering
-	\begin{minipage}{0.5\textwidth}
+  \centering
+  \begin{minipage}{0.5\textwidth}
 <<latexEx,echo=TRUE,results=hide,keep.source=TRUE>>=
 require(tikzDevice)
 tikz('figs/latexEx.tex',
@@ -913,12 +913,12 @@ legend('bottomright', legend =
 
 dev.off()
 @
-	\end{minipage}
-	\hfill
-	\begin{minipage}{0.45\textwidth}
-		\input{figs/latexEx.tex}
-	\end{minipage}
-	\caption{A more complicated example of \code{tikz} usage incorporating
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.45\textwidth}
+    \input{figs/latexEx.tex}
+  \end{minipage}
+  \caption{A more complicated example of \code{tikz} usage incorporating
     natively rendered \LaTeX\ commands.}
 \end{figure}
 
@@ -991,9 +991,9 @@ to embed \code{bareBones} output in a \code{tikzpicture}:
 
 \begin{figure}[H]
 
-	\centering
+  \centering
 
-	\begin{tikzpicture}
+  \begin{tikzpicture}
 
     \begin{scope}[x=1pt,y=1pt]
       \input{figs/westCoast}
@@ -1013,9 +1013,9 @@ to embed \code{bareBones} output in a \code{tikzpicture}:
         ] 180 : \name}] at (\port) {};
     }
 
-	\end{tikzpicture}
+  \end{tikzpicture}
 
-	\caption{A \TikZ\ drawing with embedded output from \code{tikz(bareBones=TRUE)}.}
+  \caption{A \TikZ\ drawing with embedded output from \code{tikz(bareBones=TRUE)}.}
 \end{figure}
 
 \subsection{\pkgopt{standAlone} Mode}
@@ -1039,19 +1039,19 @@ dev.off()
 
 <<standAloneCompileExample, results=hide, eval=FALSE>>=
 
-	require(tools)
+  require(tools)
 
-	catch <- system(paste(Sys.which('pdflatex'),
-		'-interaction=batchmode -output-directory figs/ figs/standAloneExample.tex'),
-		ignore.stderr=T)
+  catch <- system(paste(Sys.which('pdflatex'),
+    '-interaction=batchmode -output-directory figs/ figs/standAloneExample.tex'),
+    ignore.stderr=T)
 
-	# If compiling the example failed, we don't want to include a broken link.
-	if( catch == 0 ){
-		pdfLink <- "The file \\\\code{standAloneExample.tex} may then be compiled to produce
-			\\\\href{./figs/standAloneExample.pdf}{standAloneExample.pdf}. "
-	}else{
-		pdfLink <- ""
-	}
+  # If compiling the example failed, we don't want to include a broken link.
+  if( catch == 0 ){
+    pdfLink <- "The file \\\\code{standAloneExample.tex} may then be compiled to produce
+      \\\\href{./figs/standAloneExample.pdf}{standAloneExample.pdf}. "
+  }else{
+    pdfLink <- ""
+  }
     #%\Sexpr{print(pdfLink)}
 @
 
@@ -1831,11 +1831,11 @@ Recovering these numbers from the \LaTeX{} compiler involves the execution of th
 
 \begin{enumerate}
 
-	\item{We must write a \LaTeX{} input file that contains instructions for calculating the metrics.}
-	
-	\item{We call the \LaTeX{} compiler to process that input file.}
-	
-	\item{We must read the compiler's output in order to recover the metrics.}
+  \item{We must write a \LaTeX{} input file that contains instructions for calculating the metrics.}
+
+  \item{We call the \LaTeX{} compiler to process that input file.}
+
+  \item{We must read the compiler's output in order to recover the metrics.}
 
 \end{enumerate}
 
@@ -1862,14 +1862,14 @@ In order to call this function for \lang{C}, we need a vector composed of two \l
 \begin{tikzCodeBlock}[title={Preparing a \lang{R} function call inside \lang{C}}]
 void (metricInfo)(int c, const pGEcontext gc, double* ascent, double* descent,
   double* width, pDevDesc dd){
-  
+
   SEXP RCallBack;
   PROTECT( RCallBack = allocVector(LANGSXP, 2) );
-  
+
   SEXP metricFun = findFun( install("getLatexCharMetrics"), R_Global_Env );
-  
+
   SETCAR( RCallBack, metricFun );
-  
+
   SETCADR( RCallBack, ScalarInteger( c ) );
   SET_TAG( CDR( RCallBack ), install("charCode") );
 
@@ -1919,12 +1919,12 @@ Now we may turn to the actual guts of the \lang{R} function \code{getLatexCharMe
 getLatexCharMetrics <- function( charCode ){
 
   texDir <- tempdir()
-  
+
   texLog <- file.path( texDir,'tikzStringWidthCalc.log' )
   texFile <- file.path( texDir,'tikzStringWidthCalc.tex' )
 
   texIn <- file( texFile, 'w')
-  
+
   # To be continued...
 \end{tikzCodeBlock}
 
@@ -1934,12 +1934,12 @@ Now that we have a place to work, we set up a couple of filenames---one for the 
 
 \begin{tikzCodeBlock}[title={Setting up the preamble of a \LaTeX{} input file},listing style=sweavechunk]
   writeLines("\\documentclass{article}", texIn)
-  
+
   writeLines("\\usepackage[T1]{fontenc}", texIn)
-  
+
   writeLines("\\usepackage{tikz}", texIn)
   writeLines("\\usetikzlibrary{calc}", texIn)
- 
+
   writeLines("\\batchmode", texIn)
 \end{tikzCodeBlock}
 
@@ -1978,15 +1978,15 @@ that was passed in to the function \code{getLatexCharMetrics}.
 
 \node[inner sep=0pt,outer sep=0pt] (char) {\charXXcharCodeXX};
 
-\path let \p1 = ($(char.east) - (char.west)$), 
+\path let \p1 = ($(char.east) - (char.west)$),
   \n1 = {veclen(\x1,\y1)} in (char.east) -- (char.west)
   node{ \typeout{tikzTeXWidth=\n1} };
- 
-\path let \p1 = ($(char.north) - (char.base)$), 
+
+\path let \p1 = ($(char.north) - (char.base)$),
   \n1 = {veclen(\x1,\y1)} in (char.north) -- (char.base)
   node{ \typeout{tikzTeXAscent=\n1} };
-  
-\path let \p1 = ($(char.base) - (char.south)$), 
+
+\path let \p1 = ($(char.base) - (char.south)$),
   \n1 = {veclen(\x1,\y1)} in (char.base) -- (char.south)
   node{ \typeout{tikzTeXDescent=\n1} };
 \end{tikzCodeBlock}
@@ -2002,27 +2002,27 @@ The \code{inner sep} and \code{outer sep} options are set to \code{0pt} in order
 \begin{center}
 \begin{tikzpicture}
 
-	\node[draw=black, very thick,inner sep=0, outer sep=0, text=black!40,scale=14] 
-	  (char) {\char103};
-	  
-	\foreach \anchor/\placement in 
-		{north/above, south/below, base/below, east/right, west/left} {
-		
-		\draw[shift=(char.\anchor),color=red] plot[mark=*] coordinates{(0,0)}
-			node[\placement,text=red] {\small\texttt{(char.\anchor)}};
-	}
-	
-	\node[above= 1em of char.north] {Node Bounding Box}
-		edge[ultra thick,->,>=stealth,out=0,in=0] ($(char.10) + (6pt,12pt)$);
-		
-	
+  \node[draw=black, very thick,inner sep=0, outer sep=0, text=black!40,scale=14]
+    (char) {\char103};
+
+  \foreach \anchor/\placement in
+    {north/above, south/below, base/below, east/right, west/left} {
+
+    \draw[shift=(char.\anchor),color=red] plot[mark=*] coordinates{(0,0)}
+      node[\placement,text=red] {\small\texttt{(char.\anchor)}};
+  }
+
+  \node[above= 1em of char.north] {Node Bounding Box}
+    edge[ultra thick,->,>=stealth,out=0,in=0] ($(char.10) + (6pt,12pt)$);
+
+
 \end{tikzpicture}
 \end{center}
 
 The `base' anchor sits on the baseline of the text---therefore to calculate the ascent of the character `g', all we have to do is figure out the difference in height between the positions \code{char.north} and \code{char.base}. Similarly, for the descent we would calculate the difference in height between \code{char.base} and \code{char.south} and width can be obtained using \code{char.west} and \code{char.east}. This is the purpose of the admittedly cryptic \verb`\path` commands that are inserted in the \LaTeX{} input file. Let's examine one of them:
 
 \begin{tikzCodeBlock}[]
-\path let \p1 = ($(char.north) - (char.base)$), 
+\path let \p1 = ($(char.north) - (char.base)$),
   \n1 = {veclen(\x1,\y1)} in node{ \typeout{tikzTeXAscent=\n1} };
 \end{tikzCodeBlock}
 
@@ -2052,9 +2052,9 @@ cause the phrase `tikzTexAscent=' to appear in the \code{.log} file---followed b
 
 \begin{tikzCodeBlock}[title={Terminating a \LaTeX{} compilation},listing style=sweavechunk]
   writeLines("\\makeatother", texIn)
-  
+
   writeLines("\\@@end", texIn)
-  
+
   close(texIn)
 \end{tikzCodeBlock}
 
@@ -2066,9 +2066,9 @@ Now that the input file has been prepped, we must process it using the \LaTeX{} 
     '-output-directory', texDir, texFile)
 
   silence <- system( latexCmd, intern=T, ignore.stderr=T)
- 
+
   texOut <- file( texLog, 'r' )
- 
+
   logContents <- readLines( texOut )
   close( texOut )
 \end{tikzCodeBlock}
@@ -2081,10 +2081,10 @@ The \LaTeX{} compiler is executed through the \code{system} function which handl
 
   match <- logContents[ grep('tikzTeXAscent=', logContents) ]
   ascent <- gsub('[=A-Za-z]','',match)
- 
+
   match <- logContents[ grep('tikzTeXDescent=', logContents) ]
   descent <- gsub('[=A-Za-z]','',match)
- 
+
   return( as.double( c(ascent,descent,width) ) )
 \end{tikzCodeBlock}
 

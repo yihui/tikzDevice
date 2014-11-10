@@ -34,9 +34,9 @@ This function resets the following options:
 }
 \examples{
 print( options( 'tikzDocumentDeclaration' ) )
-	options( tikzDocumentDeclaration = 'foo' )
-	setTikzDefaults()
-	print( options( 'tikzDocumentDeclaration' ) )
+  options( tikzDocumentDeclaration = 'foo' )
+  setTikzDefaults()
+  print( options( 'tikzDocumentDeclaration' ) )
 }
 \author{
 Cameron Bracken \email{cameron.bracken@gmail.com} and Charlie

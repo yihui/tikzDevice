@@ -150,7 +150,7 @@ setwd(td)
 
 # Minimal plot
 tikz(tf,standAlone=TRUE)
-	plot(1)
+  plot(1)
 dev.off()
 
 # View the output
@@ -168,17 +168,17 @@ setwd(td)
 
 #LaTeX math symbol names
 syms <-c('alpha','theta','tau','beta','vartheta','pi','upsilon',
-   		  'gamma','gamma','varpi','phi','delta','kappa','rho',
-   		  'varphi','epsilon','lambda','varrho','chi','varepsilon',
-   		  'mu','sigma','psi','zeta','nu','varsigma','omega','eta',
-   		  'xi','Gamma','Lambda','Sigma','Psi','Delta','Xi','Upsilon',
-   		  'Omega','Theta','Pi','Phi')
+         'gamma','gamma','varpi','phi','delta','kappa','rho',
+         'varphi','epsilon','lambda','varrho','chi','varepsilon',
+         'mu','sigma','psi','zeta','nu','varsigma','omega','eta',
+         'xi','Gamma','Lambda','Sigma','Psi','Delta','Xi','Upsilon',
+         'Omega','Theta','Pi','Phi')
 x <- rnorm(length(syms))
 y <- rnorm(length(syms))
 
 tikz(tf,standAlone=TRUE)
-	plot(-2:2, -2:2, type = "n", axes=F,
-			xlab='', ylab='', main='TikZ Device Math Example')
+  plot(-2:2, -2:2, type = "n", axes=F,
+      xlab='', ylab='', main='TikZ Device Math Example')
     text(x,y,paste('\\\\\\\\Large$\\\\\\\\',syms,'$',sep=''))
 dev.off()
 
@@ -196,9 +196,9 @@ oldwd <- getwd()
 setwd(td)
 
 tikz(tf,standAlone=TRUE)
-	plot(-2:2, -2:2, type = "n", axes=F, xlab='', ylab='', main='Random Circles')
+  plot(-2:2, -2:2, type = "n", axes=F, xlab='', ylab='', main='Random Circles')
     points(rnorm(50), rnorm(50), pch=21,
-			bg=rainbow(50,alpha=.5), cex=10)
+      bg=rainbow(50,alpha=.5), cex=10)
 dev.off()
 
 #View the output
