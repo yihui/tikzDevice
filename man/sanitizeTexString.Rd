@@ -66,7 +66,7 @@ These defaults may be adjusted using the \code{\link{options}} function.
 # sanitized away with the other default special characters.
 # The string appears in LaTeX exactly as shown.
 \dontrun{
-	sanitizeTexString('10\\\% of 10$ is 10^\\{-1\\}$')
+  sanitizeTexString('10\\\% of 10$ is 10^\\{-1\\}$')
 }
 }
 \author{

@@ -100,16 +100,16 @@ SEXP TikZ_DeviceInfo(SEXP device_num);
 
 
 static Rboolean TikZ_Setup(
-		pDevDesc deviceInfo,
-		const char *fileName,
-		double width, double height, Rboolean onefile,
-		const char *bg, const char *fg, double baseSize,
-		Rboolean standAlone, Rboolean bareBones,
-		const char *documentDeclaration,
-		const char *packages, const char *footer,
-		Rboolean console, Rboolean sanitize, int engine,
-		Rboolean symbolicColors, const char *colorFileName,
-		int maxSymbolicColors );
+    pDevDesc deviceInfo,
+    const char *fileName,
+    double width, double height, Rboolean onefile,
+    const char *bg, const char *fg, double baseSize,
+    Rboolean standAlone, Rboolean bareBones,
+    const char *documentDeclaration,
+    const char *packages, const char *footer,
+    Rboolean console, Rboolean sanitize, int engine,
+    Rboolean symbolicColors, const char *colorFileName,
+    int maxSymbolicColors );
 
 
 /* Graphics Engine function hooks. Defined in GraphicsDevice.h . */
@@ -119,29 +119,29 @@ static Rboolean TikZ_Open( pDevDesc deviceInfo );
 static void TikZ_Close( pDevDesc deviceInfo );
 static void TikZ_NewPage( const pGEcontext plotParams, pDevDesc deviceInfo );
 static void TikZ_Clip( double x0, double x1,
-		double y0, double y1, pDevDesc deviceInfo );
+    double y0, double y1, pDevDesc deviceInfo );
 static void TikZ_Size( double *left, double *right,
-		double *bottom, double *top, pDevDesc deviceInfo);
+    double *bottom, double *top, pDevDesc deviceInfo);
 
 /* Font Metrics*/
 static void TikZ_MetricInfo( int c, const pGEcontext plotParams,
-		double *ascent, double *descent, double *width, pDevDesc deviceInfo );
+    double *ascent, double *descent, double *width, pDevDesc deviceInfo );
 static double TikZ_StrWidth( const char *str,
-		const pGEcontext plotParams, pDevDesc deviceInfo );
+    const pGEcontext plotParams, pDevDesc deviceInfo );
 
 /* Drawing routines. */
 static void TikZ_Text( double x, double y, const char *str,
-		double rot, double hadj, const pGEcontext plotParams, pDevDesc deviceInfo);
+    double rot, double hadj, const pGEcontext plotParams, pDevDesc deviceInfo);
 static void TikZ_Circle( double x, double y, double r,
-		const pGEcontext plotParams, pDevDesc deviceInfo );
-static void TikZ_Rectangle( double x0, double y0, 
-		double x1, double y1, const pGEcontext plotParams, pDevDesc deviceInfo );
+    const pGEcontext plotParams, pDevDesc deviceInfo );
+static void TikZ_Rectangle( double x0, double y0,
+    double x1, double y1, const pGEcontext plotParams, pDevDesc deviceInfo );
 static void TikZ_Line( double x1, double y1,
-		double x2, double y2, const pGEcontext plotParams, pDevDesc deviceInfo );
+    double x2, double y2, const pGEcontext plotParams, pDevDesc deviceInfo );
 static void TikZ_Polyline( int n, double *x, double *y,
-		pGEcontext plotParams, pDevDesc deviceInfo );
+    pGEcontext plotParams, pDevDesc deviceInfo );
 static void TikZ_Polygon( int n, double *x, double *y,
-		pGEcontext plotParams, pDevDesc deviceInfo );
+    pGEcontext plotParams, pDevDesc deviceInfo );
 static void
 TikZ_Path( double *x, double *y,
   int npoly, int *nper,
