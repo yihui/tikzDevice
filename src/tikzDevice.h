@@ -69,6 +69,7 @@ typedef struct {
   tikz_engine engine;
   int rasterFileCount;
   int pageNum;
+  double lwdUnit;
   Rboolean debug;
   Rboolean standAlone;
   Rboolean bareBones;
@@ -103,7 +104,7 @@ static Rboolean TikZ_Setup(
     pDevDesc deviceInfo,
     const char *fileName,
     double width, double height, Rboolean onefile,
-    const char *bg, const char *fg, double baseSize,
+    const char *bg, const char *fg, double baseSize, double lwdUnit,
     Rboolean standAlone, Rboolean bareBones,
     const char *documentDeclaration,
     const char *packages, const char *footer,

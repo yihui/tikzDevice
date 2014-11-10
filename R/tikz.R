@@ -64,6 +64,9 @@
 #'   only used if a valid pointsize cannot be extracted from the value of
 #'   \code{getOption("tikzDocumentDeclaration")}.  See the section ``Font Size
 #'   Calculations'' in \link{tikzDevice-package} for more details.
+#' @param lwdUnit The number of \code{pt}s in LaTeX that \code{lwd=1} in R is
+#'   translated to.  Default to 72.27/96 (96 pixels in R is 1 inch, which is
+#'   72.27 points in TeX); previously hardcoded to 0.4 (LaTeX and TikZ default).
 #' @param standAlone A logical value indicating whether the output file should
 #'   be suitable for direct processing by LaTeX. A value of \code{FALSE}
 #'   indicates that the file is intended for inclusion in a larger document.
@@ -205,8 +208,8 @@
 tikz <-
 function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
   width = 7, height = 7, onefile = TRUE,
-  bg="transparent", fg="black", pointsize = 10, standAlone = FALSE,
-  bareBones = FALSE, console = FALSE, sanitize = FALSE,
+  bg="transparent", fg="black", pointsize = 10, lwdUnit = 72.27 / 96,
+  standAlone = FALSE, bareBones = FALSE, console = FALSE, sanitize = FALSE,
   engine = getOption("tikzDefaultEngine"),
   documentDeclaration = getOption("tikzDocumentDeclaration"),
   packages,
@@ -283,8 +286,8 @@ function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
     stop("maxSymbolicColors needs to be nonnegative")
 
   .External(TikZ_StartDevice, file, width, height, onefile, bg, fg, baseSize,
-    standAlone, bareBones, documentDeclaration, packages, footer, console,
-    sanitize, engine, symbolicColors, colorFileName, maxSymbolicColors)
+    lwdUnit, standAlone, bareBones, documentDeclaration, packages, footer,
+    console, sanitize, engine, symbolicColors, colorFileName, maxSymbolicColors)
 
   invisible()
 
