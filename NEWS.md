@@ -404,8 +404,8 @@ The following people contributed to this release of the tikzDevice:
 
 - In the event that LaTeX crashes during a metric calculation, the LaTeX log
   output is echoed using `message()` instead of `cat()`.  This makes it show up
-  during operations that supperss `cat()` output such as `R CMD build` and 
-  `R CMD Sweave`. 
+  during operations that supperss `cat()` output such as `R CMD build` and
+  `R CMD Sweave`.
 
 
 ---
@@ -424,7 +424,7 @@ The following people contributed to this release of the tikzDevice:
 - Vivianne Vilar for spotting spelling and grammar errors in the
   vignette.
 
-- Gabor Grothendieck for the idea for sending output to the screen 
+- Gabor Grothendieck for the idea for sending output to the screen
   for use with sink() (i.e. the "console" option)
 
 ## New Features
@@ -471,13 +471,13 @@ The following people contributed to this release of the tikzDevice:
 
 - Initial Beta Release
 
-- Support for all essential graphical parameters: colors, line types, 
+- Support for all essential graphical parameters: colors, line types,
   line weights, semi-transparency, line endings and line joining.
 
 - String width and character metrics are calculated by direct calls to a LaTeX
-  compiler. This is an inefficient but robust method. Some of the inefficiency 
-  of this method is compensated for by storing calculated string widths in a 
-  database managed by the filehash package. This way if we pay a computational 
-  price to compute the width of a string, we 
+  compiler. This is an inefficient but robust method. Some of the inefficiency
+  of this method is compensated for by storing calculated string widths in a
+  database managed by the filehash package. This way if we pay a computational
+  price to compute the width of a string, we
   hopefully only pay it once.
 

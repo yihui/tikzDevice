@@ -14,8 +14,8 @@ sha1 <- filehash:::sha1
 queryMetricsDictionary <-
 function( key )
 {
-	# Ensure the dictionary is available.
-	checkDictionaryStatus()
+  # Ensure the dictionary is available.
+  checkDictionaryStatus()
 
   # Check for the string.
   haveMetrics <- evalWithoutInterrupts(dbExists(.tikzInternal[['dictionary']], sha1(key)))
@@ -26,9 +26,9 @@ function( key )
 
   } else {
 
-		# No dice. Return -1 to indicate that metrics for this string
-		# are not present in the dictionary.
-		return( -1 )
+    # No dice. Return -1 to indicate that metrics for this string
+    # are not present in the dictionary.
+    return( -1 )
 
   }
 }
@@ -44,8 +44,8 @@ function( key, metrics )
 {
   evalWithoutInterrupts(dbInsert(.tikzInternal[['dictionary']], sha1(key), metrics))
 
-	# Return nothing.
-	invisible()
+  # Return nothing.
+  invisible()
 }
 
 
@@ -58,36 +58,36 @@ checkDictionaryStatus <-
 function()
 {
 
-	if( !exists('dictionary', envir=.tikzInternal, inherits=F) ){
+  if( !exists('dictionary', envir=.tikzInternal, inherits=F) ){
 
-		# Check for a user specified dictionary.
-		if( !is.null( getOption('tikzMetricsDictionary') ) ){
+    # Check for a user specified dictionary.
+    if( !is.null( getOption('tikzMetricsDictionary') ) ){
 
-			dbFile <- path.expand(
-				getOption('tikzMetricsDictionary') )
+      dbFile <- path.expand(
+        getOption('tikzMetricsDictionary') )
 
-			# Create the database file if it does not exist.
-			if( !file.exists( dbFile ) ){
-				message("Creating new TikZ metrics dictionary in:\n\t",dbFile)
-				dbCreate( dbFile, type='DB1' )
-			}
+      # Create the database file if it does not exist.
+      if( !file.exists( dbFile ) ){
+        message("Creating new TikZ metrics dictionary in:\n\t",dbFile)
+        dbCreate( dbFile, type='DB1' )
+      }
 
 
-		}else{
-			# Create a temporary dictionary- it will disappear after
-			# the R session finishes.
-			dbFile <- file.path( tempdir(), 'tikzMetricsDictionary' )
+    }else{
+      # Create a temporary dictionary- it will disappear after
+      # the R session finishes.
+      dbFile <- file.path( tempdir(), 'tikzMetricsDictionary' )
       message("Creating temporary TikZ metrics dictionary at:\n\t",dbFile)
-			dbCreate( dbFile, type='DB1' )
-		}
+      dbCreate( dbFile, type='DB1' )
+    }
 
-		# Add the dictionary as an object in the .tikzOptions
-		# environment.
-		.tikzInternal[['dictionary']] <- dbInit(dbFile)
+    # Add the dictionary as an object in the .tikzOptions
+    # environment.
+    .tikzInternal[['dictionary']] <- dbInit(dbFile)
 
-	}
+  }
 
-	# Return nothing.
-	invisible()
+  # Return nothing.
+  invisible()
 
 }

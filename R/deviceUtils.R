@@ -56,10 +56,10 @@ getDocumentPointsize <- function( docString ){
 #'
 #' @examples
 #'
-#' 	print( options( 'tikzDocumentDeclaration' ) )
-#' 	options( tikzDocumentDeclaration = 'foo' )
-#' 	setTikzDefaults()
-#' 	print( options( 'tikzDocumentDeclaration' ) )
+#'   print( options( 'tikzDocumentDeclaration' ) )
+#'   options( tikzDocumentDeclaration = 'foo' )
+#'   setTikzDefaults()
+#'   print( options( 'tikzDocumentDeclaration' ) )
 #'
 #' @export
 setTikzDefaults <- function( overwrite = TRUE ){
