@@ -1,3 +1,10 @@
+## Features
+
+- Optionally use symbolic colors defined in a single external file instead of
+  hard-coded colors defined in-place.  New parameters `symbolicColors`,
+  `colorFileName` and `maxSymbolicColors`; new options `tikzSymbolicColors`
+  and `tikzMaxSymbolicColors` (#70, thanks Martin Bergner).
+
 ---
 
 # Changes in version 0.7.3 (2014-09-09)
