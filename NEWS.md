@@ -1,3 +1,9 @@
+---
+
+# Changes in version 0.7.4 (2014-11-10)
+
+---
+
 ## Features
 
 - Optionally use symbolic colors defined in a single external file instead of
