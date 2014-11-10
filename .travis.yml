@@ -1,0 +1,37 @@
+language: c
+# To build on OSX, switch the previous line to
+# language: objective-c
+env:
+  matrix:
+    - TYPE=cran
+    - TYPE=tests
+
+script:
+  - if [ $TYPE == cran ]; then ./travis-tool.sh run_tests; fi
+  - if [ $TYPE == tests ]; then ( cd ..; R CMD build tikzDevice; R CMD INSTALL tikzDevice*.*.tar.gz ); ( cd tests; ./unit_tests.R ); fi
+
+before_install:
+  - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
+  - chmod 755 ./travis-tool.sh
+  - ./travis-tool.sh bootstrap
+  - IsSourceInstall() { [[ -n "${RELEASE}" ]]; }
+  - if [ $TYPE == tests ]; then APT_EXTRA="texlive-xetex imagemagick"; export DISPLAY=:99.0; fi
+  - if IsSourceInstall; then export FORCE_SOURCE_INSTALL=1; fi
+install:
+  - sudo apt-get install --no-install-recommends texinfo texlive-latex-recommended texlive-latex-extra lmodern texlive-fonts-recommended texlive-fonts-extra pgf $APT_EXTRA
+  - if [ $TYPE == tests ]; then (cd /tmp && curl -OL http://mirrors.ctan.org/install/macros/latex/contrib/oberdiek.tds.zip && cd /usr/share/texmf/tex/latex && sudo unzip /tmp/oberdiek.tds.zip && sudo texhash); fi
+  - sh -e /etc/init.d/xvfb start
+  - if IsSourceInstall; then (
+      cd ~ &&
+      svn co -q https://svn.r-project.org/R/${RELEASE}/ r-source &&
+      cd r-source &&
+      tools/rsync-recommended &&
+      ./configure --enable-R-shlib &&
+      make -j2 &&
+      sudo make install
+    ); fi
+  - ./travis-tool.sh r_binary_install filehash testthat evaluate stringr ggplot2 maps
+  - ./travis-tool.sh dump_sysinfo
+after_failure:
+  - cat tikzDevice.Rcheck/00install.out || true
+  - cat tikzDevice.Rcheck/00check.log || true
