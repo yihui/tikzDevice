@@ -631,8 +631,8 @@ the following arguments:
 \begin{Verbatim}[frame=single]
 function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
   width = 7, height = 7, onefile = TRUE,
-  bg="transparent", fg="black", pointsize = 10, standAlone = FALSE,
-  bareBones = FALSE, console = FALSE, sanitize = FALSE,
+  bg="transparent", fg="black", pointsize = 10, lwdUnit = 1,
+  standAlone = FALSE, bareBones = FALSE, console = FALSE, sanitize = FALSE,
   engine = getOption("tikzDefaultEngine"),
   documentDeclaration = getOption("tikzDocumentDeclaration"),
   packages,
@@ -666,6 +666,11 @@ function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
     if a valid pointsize cannot be extracted from the value of
     \code{getOption("tikzDocumentDeclaration")}.  See \autoref{subsec:fontCalc}
     for more details.
+
+  \item[lwdUnit]
+    The number of \code{pt}s in LaTeX that \code{lwd=1} in R is translated to.
+    Default to 72.27/96 (96 pixels in R is 1 inch, which is 72.27 points in
+    TeX); previously hardcoded to 0.4 (LaTeX and TikZ default).
 
   \item[standAlone]
     A logical value indicating whether the resulting file should be suitable
