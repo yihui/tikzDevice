@@ -4,10 +4,10 @@ if (nchar(Sys.getenv('R_TESTS')) == 0){
   library(methods)
   library(tikzDevice)
   library(testthat)
-  require(stringr)
+  library(stringr)
 
-  require(tools)
-  require(evaluate)
+  library(tools)
+  library(evaluate)
 
   test.failed <- FALSE
   report.failure <- function() {

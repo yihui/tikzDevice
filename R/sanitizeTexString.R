@@ -64,7 +64,7 @@
 #' }
 #'
 #' @export
-sanitizeTexString <- function(string, 
+sanitizeTexString <- function(string,
 	strip = getOption('tikzSanitizeCharacters'),
 	replacement = getOption('tikzReplacementCharacters')){
 
@@ -74,11 +74,11 @@ sanitizeTexString <- function(string,
 
 	    # Replace each matching character with its replacement characters
 		for(i in 1:length(explode)){
-			
+
 			matches <- (explode[i] == strip)
 			if(any(matches))
 				explode[i] <- paste('{',replacement[which(matches)],'}',sep='')
-				
+
 		}
 		  # stick the string back together
 		return(paste(explode,collapse=''))

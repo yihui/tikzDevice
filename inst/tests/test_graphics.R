@@ -308,7 +308,7 @@ test_graphs <- list(
     ),
     graph_code = quote({
 
-      require(grid)
+      library(grid)
 
       pushViewport(plotViewport())
       pushViewport(dataViewport(1:10, 1:10))
@@ -326,13 +326,26 @@ test_graphs <- list(
   ),
 
   list(
+    short_name = 'annotation_noflush',
+    description = 'Annotation prior to any graphics output',
+    tags = c('base', 'annotation'),
+    graph_code = quote({
+        plot.new()
+        plot.window(0:1, 0:1)
+        tikzCoord(0, 0, name="ll")
+        tikzCoord(1, 1, name="ur")
+        tikzAnnotate('\\draw (ll) rectangle (ur);');
+    })
+  ),
+
+  list(
     short_name = 'ggplot2_test',
     description = 'Test of ggplot2 graphics',
     tags = c('ggplot2'),
     graph_code = quote({
       sink(tempfile())
-      suppressPackageStartupMessages(require(mgcv))
-      suppressPackageStartupMessages(require(ggplot2))
+      suppressPackageStartupMessages(library(mgcv))
+      suppressPackageStartupMessages(library(ggplot2))
       sink()
       print(qplot(carat, price, data = diamonds, geom = "smooth",
       colour = color))
@@ -345,7 +358,7 @@ test_graphs <- list(
     tags = c('ggplot2', 'text'),
     graph_code =  quote({
       sink(tempfile())
-      suppressPackageStartupMessages(require(ggplot2))
+      suppressPackageStartupMessages(library(ggplot2))
       sink()
 
       soilSample <- structure(list(`Grain Diameter` = c(8, 5.6, 4, 2.8, 2, 1, 0.5, 0.355, 0.25),
@@ -365,7 +378,7 @@ test_graphs <- list(
           scale_x_log10() + scale_y_probit() + theme_bw()
       } else {
         sink(tempfile())
-        suppressPackageStartupMessages(require(scales))
+        suppressPackageStartupMessages(library(scales))
         sink()
         testPlot <- qplot(log10(`Grain Diameter`), `Percent Finer`, data = soilSample) +
           scale_x_continuous(labels = math_format(10^.x)) +
@@ -460,14 +473,26 @@ test_graphs <- list(
     tags = c('grid', 'raster'),
     graph_code = quote({
 
-      suppressPackageStartupMessages(require(grid))
-      suppressPackageStartupMessages(require(lattice))
+      suppressPackageStartupMessages(library(grid))
+      suppressPackageStartupMessages(library(lattice))
 
       plt <- levelplot(volcano, panel = panel.levelplot.raster,
            col.regions = topo.colors, cuts = 30, interpolate = TRUE)
 
       print(plt)
 
+    })
+  ),
+
+  list(
+    short_name = 'base_raster_noresample',
+    description = 'Test noresampling raster support in base graphics',
+    tags = c('base', 'raster'),
+    graph_options = list(
+      tikzRasterResolution = NA),
+    graph_code = quote({
+      plot.new()
+      suppressWarnings(rasterImage(as.raster(matrix(seq(0,1,len=9),3)),0,0,1,1,interpolate=TRUE))
     })
   ),
 
@@ -574,7 +599,7 @@ test_graphs <- list(
     graph_code =  quote({
       n <- 8
       chars <- intToUtf8(seq(187,,1,n*n),multiple=T)
-      
+
       plot(1:n,type='n',xlab='',ylab='',axes=FALSE, main="UTF-8 Characters")
       text(rep(1:n, n), rep(1:n, rep(n, n)), chars)
     })

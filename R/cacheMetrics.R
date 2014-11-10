@@ -76,7 +76,7 @@ function()
 		}else{
 			# Create a temporary dictionary- it will disappear after
 			# the R session finishes.
-			dbFile <- file.path( tempdir(), 'tikzMetricsDictionary' ) 
+			dbFile <- file.path( tempdir(), 'tikzMetricsDictionary' )
       message("Creating temporary TikZ metrics dictionary at:\n\t",dbFile)
 			dbCreate( dbFile, type='DB1' )
 		}

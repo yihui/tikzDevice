@@ -90,6 +90,9 @@ gridToDevice <- function(x = 0, y = 0, units = 'native') {
 #' @param annotation A character vector, one element per line to be added to
 #'   the open tikz device.
 #'
+#' @param checkstate A logical, whether to "flush" the device state prior to
+#'   writing the \code{annotation}.
+#'
 #' @return Nothing returned.
 #'
 #' @author Cameron Bracken <cameron.bracken@@gmail.com> and Charlie Sharpsteen
@@ -140,7 +143,7 @@ gridToDevice <- function(x = 0, y = 0, units = 'native') {
 #'
 #'
 #' ### Example 2: Annotations in Grid Graphics
-#' require(grid)
+#' library(grid)
 #'
 #' tikz("grid_annotation.tex",width=4,height=4,
 #'   packages = c(getOption('tikzLatexPackages'),
@@ -175,7 +178,7 @@ gridToDevice <- function(x = 0, y = 0, units = 'native') {
 #' @useDynLib tikzDevice TikZ_Annotate
 #' @export
 tikzAnnotate <-
-function (annotation)
+function (annotation, checkstate = TRUE)
 {
 
 	if (!isTikzDevice()){
@@ -183,7 +186,7 @@ function (annotation)
   }
 
 	.C(TikZ_Annotate, as.character(annotation),
-		as.integer(length(annotation)))
+		as.integer(length(annotation)), as.logical(checkstate))
 
 	invisible()
 }
@@ -195,7 +198,7 @@ function (annotation)
 #' @param opts A character string that will be used as options for a \code{node}.
 #'   See the "Nodes and Edges" section of the TikZ manual for complete details.
 #' @param name Optional character string that will be used as a name for a
-#'   \code{coordiinate} or \code{node}. Other TikZ commands can use this
+#'   \code{coordinate} or \code{node}. Other TikZ commands can use this
 #'   name to refer to a location in a graphic.
 #' @param content A character string that will be used as the content to be displayed
 #'   inside of a \code{node}. If left as \code{NULL} a \code{coordinate} will be
@@ -375,8 +378,10 @@ grid.tikzCoord <- function(x, y, name, units = 'native', draw = TRUE) {
 # device. They handle the actual "drawing" of the annotations by calling to the
 # base graphics functions.
 
+if ('roxygen2' %in% loadedNamespaces()) do.call(library, list('grid'))
+
 #' @importFrom grid drawDetails
-#' @S3method drawDetails tikz_annotation
+#' @export
 drawDetails.tikz_annotation <- function(x, recording) {
 
   tikzAnnotate(x$annotation)
@@ -385,7 +390,7 @@ drawDetails.tikz_annotation <- function(x, recording) {
 
 
 #' @importFrom grid drawDetails
-#' @S3method drawDetails tikz_node
+#' @export
 drawDetails.tikz_node <- function(x, recording) {
 
   if ( is.null(x$x) && is.null(x$y) ) {
@@ -401,7 +406,7 @@ drawDetails.tikz_node <- function(x, recording) {
 
 
 #' @importFrom grid drawDetails
-#' @S3method drawDetails tikz_coord
+#' @export
 drawDetails.tikz_coord <- function(x, recording) {
 
   coords <- gridToDevice(x$x, x$y, x$units)

@@ -1,7 +1,7 @@
 tikzDevice
 ==========
 
-[![Build Status](https://travis-ci.org/yihui/tikzDevice.png)](https://travis-ci.org/yihui/tikzDevice)
+[![Build Status](https://api.shippable.com/projects/540a9b66be0d276a0e0c2b2c/badge/master)](https://www.shippable.com/projects/540a9b66be0d276a0e0c2b2c)
 
 The tikzDevice package provides a graphics output device for R that records
 plots in a LaTeX-friendly format. The device transforms plotting commands

@@ -1,3 +1,32 @@
+## Bug Fixes
+
+- Performance improvements with zero-width strings (#66, thanks Gvozden Neskovic)
+- Add parameter checkstate to allow adding annotations to a new plot (#52,
+  thanks Sam Mason)
+- Allow raster images to be output without resampling by setting
+  options(tikzRasterResolution = NA) (#54, thanks Sam Mason)
+
+---
+
+# Changes in version 0.7.2 (2014-01-05)
+
+---
+
+## Bug Fixes
+
+- In console mode, print a \relax statement after the comment to allow using
+  tikzDevice in a Sweave code chunk with results=tex, as advertised in the
+  vignette.  (The default is strip.white=TRUE which makes the following
+  \begin{tikzpicture} appear on the same line as the encoding comment in the
+  resulting .tex file.)  (#47, thanks Bill Venables)
+
+- Fixed typos in vignette (#45, thanks Greg Jefferis).
+
+- Vignette now also compiles if the zi4 TeX package is installed instead of
+  inconsolata.  This should fix the CRAN notes and warnings on Windows.
+
+- Loading babel TeX package to avoid printing tilde in references (#49).
+
 ---
 
 # Changes in version 0.7.0 (2013-12-10, CRAN release)
@@ -7,6 +36,9 @@
 ## Contributors
 
 Package maintainers: Kirill Müller and Yihui Xie.
+
+Thanks to Stéphane Laurent for reporting a bug in the detection of the document
+font size.
 
 ---
 
