@@ -107,7 +107,15 @@ annotations}.
 
   \item{\code{tikzPdftexWarnUTF}}{ A \code{TRUE/FALSE} value that controls
   whether warnings are printed if Unicode characters are sent to a device
-  using the \code{pdftex} engine.  } }
+  using the \code{pdftex} engine.  }
+
+  \item{\code{tikzSymbolicColors}}{ A logical value indicating whether colors
+  are written as RGB values or as symbolic names in which case the need to be
+  defined in the LaTeX document. }
+
+  \item{\code{tikzMaxSymbolicColors}}{ an integer number indicating the
+  maximal number of distinct colors to write symbolically. Any excess color
+  will be defined as if \code{symbolicColors} was set to \code{FALSE}.} }
 
   Default values for all options may be viewed or restored using the
   \code{\link{setTikzDefaults}} function.

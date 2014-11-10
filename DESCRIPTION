@@ -6,7 +6,7 @@ Date: 2014-01-05
 Authors@R: c(person("Charlie", "Sharpsteen", role = "aut"), person("Cameron",
     "Bracken", role = "aut"), person("Kirill", "Mueller", role = c("ctb",
     "cre"), email = "mail@kirill-mueller.de"), person("Yihui", "Xie", role =
-    "ctb"))
+    "ctb"), person("Martin", "Bergner", role="ctb"))
 URL: https://github.com/yihui/tikzDevice
 BugReports: https://github.com/yihui/tikzDevice/issues
 Description: The tikzDevice package provides a graphics output device for R
