@@ -670,8 +670,8 @@ function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
 
   \item[lwdUnit]
     The number of \code{pt}s in LaTeX that \code{lwd=1} in R is translated to.
-    Default to 72.27/96 (96 pixels in R is 1 inch, which is 72.27 points in
-    TeX); previously hardcoded to 0.4 (LaTeX and TikZ default).
+    Defaults to 0.4 (LaTeX and TikZ default); for compatibility with R default,
+    please use 72.27/96 (96 pixels in R is 1 inch, which is 72.27 points in TeX).
 
   \item[standAlone]
     A logical value indicating whether the resulting file should be suitable
