@@ -1,3 +1,7 @@
+## Features
+- Remove redefinition of `fillColor` and `drawColor` when symbolic color names
+  are used.
+
 ---
 
 # Changes in version 0.7.4 (2014-11-10)
