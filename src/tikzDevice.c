@@ -512,13 +512,7 @@ static Rboolean TikZ_Setup(
 static void TikZ_WriteColorDefinition( tikzDevDesc *tikzInfo, void (*printOut)(tikzDevDesc *tikzInfo, const char *format, ...), int color, const char* colorname, const char* colorstr )
 {
 
-  /* define the color as an alias */
-  if( color == -1 )
-    printOutput(tikzInfo,
-      "\\definecolor{%s}{named}{%s}\n",
-      colorname, colorstr);
-  /* treat gray colors separately */
-  else if ( strncmp(colorstr, "gray", 4) == 0 && strlen(colorstr) > 4)
+  if ( strncmp(colorstr, "gray", 4) == 0 && strlen(colorstr) > 4)
   {
     int perc = atoi(colorstr+4);
     printOut(tikzInfo,
