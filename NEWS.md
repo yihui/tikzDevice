@@ -1,6 +1,12 @@
 ## Features
+
 - Remove redefinition of `fillColor` and `drawColor` when symbolic color names
   are used.
+
+## Bug Fixes
+
+ - Do not create color file if `tikzSymbolicColors` is off
+ - Fix issue with translating color with representation -1
 
 ---
 
