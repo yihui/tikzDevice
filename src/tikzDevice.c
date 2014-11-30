@@ -547,7 +547,7 @@ static void TikZ_WriteColorDefinitions( tikzDevDesc *tikzInfo )
 
 static void TikZ_WriteColorFile(tikzDevDesc *tikzInfo)
 {
-  if ( tikzInfo->outColorFileName )
+  if ( tikzInfo->outColorFileName && tikzInfo->symbolicColors )
   {
     tikzInfo->colorFile = fopen(R_ExpandFileName(tikzInfo->outColorFileName), "w");
     if( tikzInfo->colorFile)
@@ -1802,11 +1802,11 @@ static void TikZ_DefineDrawColor(tikzDevDesc *tikzInfo, int color, TikZ_DrawOps 
 
   if( TikZ_CheckAndAddColor(tikzInfo, color) )
   {
-    strlcpy(dest, colorstr, strlen(colorstr));
+    strlcpy(dest, colorstr, strlen(colorstr)+1);
   }
   else
   {
-    strlcpy(dest, colors[ops], strlen(colorstr));
+    strlcpy(dest, colors[ops], strlen(colors[ops])+1);
 
     TikZ_WriteColorDefinition(tikzInfo, printOutput, color, colors[ops], colorstr);
   }
@@ -2327,4 +2327,20 @@ static char *calloc_x_strlen(const char *str, size_t extra){
 
 static void const_free(const void *ptr){
   free((void*)ptr);
+}
+
+static size_t strlcpy(char *dst, const char* src, size_t n){
+  size_t size = strlen(src);
+  size_t newsize = n;
+
+  if( newsize == 0)
+    return newsize;
+
+  if( newsize > size )
+    newsize = size;
+
+  strncpy(dst, src, newsize);
+  dst[newsize] = '\0';
+
+  return newsize;
 }
