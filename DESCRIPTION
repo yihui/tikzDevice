@@ -27,6 +27,8 @@ Suggests:
     evaluate,
     stringr,
     ggplot2,
-    maps
+    maps,
+    knitr
 SystemRequirements: pgf (>= 2.00)
 LazyLoad: yes
+VignetteBuilder: knitr
