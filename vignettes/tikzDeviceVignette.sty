@@ -6,7 +6,9 @@
 \RequirePackage[T1]{fontenc}
 \RequirePackage{microtype}
 \RequirePackage{lmodern}
-\RequirePackage[scaled=.85]{inconsolata}
+\IfFileExists{zi4.sty}{%
+  \RequirePackage[scaled=.85]{zi4}}{%
+  \RequirePackage[scaled=.85]{inconsolata}}
 \RequirePackage[colorlinks]{hyperref}
 
 % Various TeX logos---included in the Oberdiek bundle which contains hyperref,
@@ -31,6 +33,7 @@
 % Bibliography
 \RequirePackage{natbib}
 \bibliographystyle{agufull04}
+\RequirePackage[english]{babel}
 
 \RequirePackage{fancyvrb}
 % Extra pretty pretty printing.

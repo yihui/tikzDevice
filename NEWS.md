@@ -1,5 +1,53 @@
 ---
 
+# Changes in version 0.7.4 (2014-11-10)
+
+---
+
+## Features
+
+- Optionally use symbolic colors defined in a single external file instead of
+  hard-coded colors defined in-place.  New parameters `symbolicColors`,
+  `colorFileName` and `maxSymbolicColors`; new options `tikzSymbolicColors`
+  and `tikzMaxSymbolicColors` (#70, thanks Martin Bergner).
+
+---
+
+# Changes in version 0.7.3 (2014-09-09)
+
+---
+
+## Bug Fixes
+
+- Performance improvements with zero-width strings (#66, thanks Gvozden Neskovic)
+- Add parameter checkstate to allow adding annotations to a new plot (#52,
+  thanks Sam Mason)
+- Allow raster images to be output without resampling by setting
+  options(tikzRasterResolution = NA) (#54, thanks Sam Mason)
+
+---
+
+# Changes in version 0.7.2 (2014-01-05)
+
+---
+
+## Bug Fixes
+
+- In console mode, print a \relax statement after the comment to allow using
+  tikzDevice in a Sweave code chunk with results=tex, as advertised in the
+  vignette.  (The default is strip.white=TRUE which makes the following
+  \begin{tikzpicture} appear on the same line as the encoding comment in the
+  resulting .tex file.)  (#47, thanks Bill Venables)
+
+- Fixed typos in vignette (#45, thanks Greg Jefferis).
+
+- Vignette now also compiles if the zi4 TeX package is installed instead of
+  inconsolata.  This should fix the CRAN notes and warnings on Windows.
+
+- Loading babel TeX package to avoid printing tilde in references (#49).
+
+---
+
 # Changes in version 0.7.0 (2013-12-10, CRAN release)
 
 ---
@@ -356,8 +404,8 @@ The following people contributed to this release of the tikzDevice:
 
 - In the event that LaTeX crashes during a metric calculation, the LaTeX log
   output is echoed using `message()` instead of `cat()`.  This makes it show up
-  during operations that supperss `cat()` output such as `R CMD build` and 
-  `R CMD Sweave`. 
+  during operations that supperss `cat()` output such as `R CMD build` and
+  `R CMD Sweave`.
 
 
 ---
@@ -376,7 +424,7 @@ The following people contributed to this release of the tikzDevice:
 - Vivianne Vilar for spotting spelling and grammar errors in the
   vignette.
 
-- Gabor Grothendieck for the idea for sending output to the screen 
+- Gabor Grothendieck for the idea for sending output to the screen
   for use with sink() (i.e. the "console" option)
 
 ## New Features
@@ -423,13 +471,13 @@ The following people contributed to this release of the tikzDevice:
 
 - Initial Beta Release
 
-- Support for all essential graphical parameters: colors, line types, 
+- Support for all essential graphical parameters: colors, line types,
   line weights, semi-transparency, line endings and line joining.
 
 - String width and character metrics are calculated by direct calls to a LaTeX
-  compiler. This is an inefficient but robust method. Some of the inefficiency 
-  of this method is compensated for by storing calculated string widths in a 
-  database managed by the filehash package. This way if we pay a computational 
-  price to compute the width of a string, we 
+  compiler. This is an inefficient but robust method. Some of the inefficiency
+  of this method is compensated for by storing calculated string widths in a
+  database managed by the filehash package. This way if we pay a computational
+  price to compute the width of a string, we
   hopefully only pay it once.
 

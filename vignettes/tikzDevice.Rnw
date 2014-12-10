@@ -300,12 +300,12 @@ always been a liberating experience.
 This package started as a fork of the Pic\TeX\ device created by Valerio Aimale
 which is part of the \lang{R} core graphics system.  Without access to this
 simple, compact example of implementing a graphics device we likely would have
-abandoned the project in it's infancy. We would also like to thank Paul Murrel
+abandoned the project in its infancy. We would also like to thank Paul Murrell
 for all of his work on the \lang{R} graphics system and especially for his
 research and documentation concerning the differences between the font systems
 used by \TeX{} and \lang{R}.
 
-This package also owes it's existence to Friedrich Leisch's work on the
+This package also owes its existence to Friedrich Leisch's work on the
 \pkg{Sweave} system and Roger D. Peng's \pkg{cacheSweave} extension. These
 two tools got us interested in the concept of Literate Programming and
 development of this package was driven by our desire to achieve a more seamless
@@ -352,8 +352,7 @@ list.\\[\baselineskip]
 \chapter{Loading the Package}
 
 The functions in the \pkg{tikzDevice} package are made accessible in the
-\lang{R} environment by using either the \code{library()}
-function like so:
+\lang{R} environment by using \code{library()}:
 
 \begin{Verbatim}[frame=single]
 library(tikzDevice)
@@ -411,7 +410,7 @@ The following places were tested for a valid LaTeX compiler:
 Error: loading failed
 \end{Verbatim}
 
-In this case, \pkg{tikzDevice} has done it's very best to locate a working
+In this case, \pkg{tikzDevice} has done its very best to locate a working
 compiler and came up empty.  If you have a working \LaTeX\ compiler, the next
 section describes how to inform the \pkg{tikzDevice} package of its location.
 For suggestions on how to obtain a \LaTeX\ compiler, see
@@ -600,6 +599,8 @@ options(
 When \code{tikz} is requested to add a raster to a graphic, the raster is
 written to a PNG file which is then included by the \LaTeX\ code. This option
 controls the resolution (dpi) at which the PNG files are created.
+When this options is set to \code{NA} the original raster is written
+directly to a PNG file and isn't resampled.
 
 \begin{tikzCodeBlock}[title={Default},listing style=sweavechunk]
 options(tikzRasterResolution = 300)
@@ -985,8 +986,7 @@ to embed \code{bareBones} output in a \code{tikzpicture}:
   } {
     \node[circle, draw, ultra thick, fill=green!60!brown!40,
       outer sep=6pt,minimum size=12pt,
-      pin={[
-        draw, ultra thick,
+      pin={[draw, ultra thick,
         rounded corners,
         pin edge={black, ultra thick, <-, >=stealth}
       ] 180 : \name}] at (\port) {};
@@ -1014,8 +1014,7 @@ to embed \code{bareBones} output in a \code{tikzpicture}:
     } {
       \node[circle, draw, ultra thick, fill=green!60!brown!40,
         outer sep=6pt,minimum size=12pt,
-        pin={[
-          draw, ultra thick,
+        pin={[draw, ultra thick,
           rounded corners,
           pin edge={black, ultra thick, <-, >=stealth}
         ] 180 : \name}] at (\port) {};
@@ -1076,6 +1075,8 @@ this option, \code{tikz} will send output to \code{stdout} instead of a file.
 This kind of output can be redirected to a file with \code{sink} or spit out
 directly into a \TeX\ document from a \pkg{Sweave} file so that the \TeX\ file
 is self contained and does not include other files via \verb|\input|.
+(Including the chunk option \code{strip.white=FALSE} was necessary for some
+versions of \pkg{tikzDevice} prior to 0.7.2.)
 
 \tikzCodeInput[title={Catching \code{tikz} output inside Sweave},listing style=sweavechunk]{consoleExample}
 
@@ -1805,7 +1806,7 @@ void (metricInfo)(int c, const pGEcontext gc,
   pDevDesc dd);
 \end{tikzCodeBlock}
 
-The most important variables involved in the function are \code{c}, \code{ascent}, \code{descent} and \code{width}. The incoming variable is \code{c}, which contains the character for which \lang{R} is requesting font metrics. Interestingly, \code{c} is passed as an integer, not a character as one might expect. What's up with that? Well, the short answer is that \lang{R} passes the \code{ASCII} or \code{UTF8} {\itshape symbol code} of a character and not the character it's self. How to use that character code to recover a character will be explained later.
+The most important variables involved in the function are \code{c}, \code{ascent}, \code{descent} and \code{width}. The incoming variable is \code{c}, which contains the character for which \lang{R} is requesting font metrics. Interestingly, \code{c} is passed as an integer, not a character as one might expect. What's up with that? Well, the short answer is that \lang{R} passes the \code{ASCII} or \code{UTF8} {\itshape symbol code} of a character and not the character itself. How to use that character code to recover a character will be explained later.
 
 The outgoing variables are \code{ascent}, \code{descent} and \code{width}. The asterisks, `*', in their definitions mean these variables are passed as {\itshape pointers} as opposed to {\itshape values}. A complete discussion of the differences between pointers and values could, and has, filled up several chapters of several programming books. The important distinction in context of the \code{metricInfo} function is that when a number is assigned to a pointer variable, that number is available elsewhere after the function terminates. In contrast, when a number is assigned to a value variable, that number disappears when the function ends unless it is explicitly sent back out to the wide world through the \code{return} statement. So, the main task of the \code{metricInfo} function is to assign values to \code{ascent}, \code{descent} and \code{width}.
 

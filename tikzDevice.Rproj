@@ -13,6 +13,9 @@ RnwWeave: knitr
 LaTeX: pdfLaTeX
 RootDocument: vignettes/tikzDevice.Rnw
 
+AutoAppendNewline: Yes
+StripTrailingWhitespace: Yes
+
 BuildType: Package
 PackageInstallArgs: --no-multiarch --with-keep.source
 PackageBuildArgs: --compact-vignettes=gs+qpdf

@@ -12,4 +12,4 @@ tests/test_output
 ^\.Rproj\.user$
 GNUmakefile
 ^\.travis\.yml$
-^bin$
+^NEWS\.md\.tmpl$
