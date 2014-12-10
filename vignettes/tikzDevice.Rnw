@@ -1,7 +1,7 @@
-% !TEX TS-program = Sweave
-
+% !TEX TS-program = knitr
 % \VignetteIndexEntry{The tikzDevice Package}
 % \VignetteDepends{tikzDevice}
+% \VignetteEngine{knitr::knitr}
 % This comment prevents R from adding its own "\usepackage{Sweave}". I
 % seriously hate overly helpful computer systems.
 
@@ -18,8 +18,8 @@
 
   options(tikzMetricsDictionary='.tikzMetrics')
 
-  opts_chunk$set(echo=F, fig.path='figs/fig', message=F)
-  knit_hooks$set(source = function(x, options) {
+  knitr::opts_chunk$set(echo=F, fig.path='figs/fig', message=F)
+  knitr::knit_hooks$set(source = function(x, options) {
     paste("\\begin{tikzCodeBlock}[listing style=sweavechunk]",
           paste(x, collapse = '\n'),
           "\\end{tikzCodeBlock}", sep = '\n')
@@ -1163,7 +1163,7 @@ not be available on every system.
 
 \begin{figure}[!h]
 \centering
-\includegraphics{figs/xelatexEx.pdf}
+\includegraphics{img/xelatexEx.pdf}
 \caption{Result of \hologo{XeLaTeX} example}\label{fig:xelatex}
 \end{figure}
 
