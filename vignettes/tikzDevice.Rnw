@@ -397,13 +397,13 @@ to produce output.
 
 The following places were tested for a valid LaTeX compiler:
 
-  the global option: tikzLatex
-  the environment variable: R_LATEXCMD
-  the environment variable: R_PDFLATEXCMD
-  the global option: latexcmd
-  the PATH using the command: pdflatex
-  the PATH using the command: latex
-  the PATH using the command: /usr/texbin/pdflatex
+	the global option: tikzLatex
+	the environment variable: R_LATEXCMD
+	the environment variable: R_PDFLATEXCMD
+	the global option: latexcmd
+	the PATH using the command: pdflatex
+	the PATH using the command: latex
+	the PATH using the command: /usr/texbin/pdflatex
 
 ...
 
