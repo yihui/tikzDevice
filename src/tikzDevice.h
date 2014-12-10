@@ -88,6 +88,8 @@ typedef struct {
   int ncolors;
   int maxSymbolicColors;
   Rboolean excessWarningPrinted;
+  char drawColor[128];
+  char fillColor[128];
 } tikzDevDesc;
 
 
@@ -205,5 +207,5 @@ static char *calloc_strcpy(const char *str);
 static char *calloc_x_strcpy(const char *str, size_t extra);
 static char *calloc_x_strlen(const char *str, size_t extra);
 static void const_free(const void *ptr);
-
+static size_t strlcpy(char *dst, const char* src, size_t n);
 #endif // End of Once Only header
