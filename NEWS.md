@@ -3,6 +3,8 @@
 - Add parameter `timestamp` to make the output of the timestamp optional (#28,
   #73).
 
+## Internal
+
 - Tests perform strict image comparison (#18).
 - Use `knitr` as vignette builder (#37).
 
