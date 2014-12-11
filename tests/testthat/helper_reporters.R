@@ -1,5 +1,7 @@
 # This file contains custom test reporters.
 
+library(stringr)
+
 DetailedReporter <- setRefClass('DetailedReporter', where = .GlobalEnv, contains = 'Reporter',
   fields = list(
     'width' = 'integer',
