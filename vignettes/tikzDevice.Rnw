@@ -2,10 +2,9 @@
 % \VignetteIndexEntry{The tikzDevice Package}
 % \VignetteDepends{tikzDevice}
 % \VignetteEngine{knitr::knitr}
-% This comment prevents R from adding its own "\usepackage{Sweave}". I
-% seriously hate overly helpful computer systems.
 
 \documentclass[10pt,oneside,letterpaper,article]{memoir}
+\usepackage[utf8]{inputenc}
 \usepackage{tikzDeviceVignette}
 
 
