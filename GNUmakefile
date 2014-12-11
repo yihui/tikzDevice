@@ -69,7 +69,7 @@ deps:
 
 
 docs:
-	"$(RBIN)/R" --vanilla --slave -e "library(roxygen2); roxygenize(overwrite=TRUE, unlink.target=TRUE)"
+	"$(RBIN)/R" --vanilla --slave -e "devtools::document()"
 
 news:
 	sed -e 's/^-/  -/' -e 's/^## *//' -e 's/^#/\t\t/' <NEWS.md | fmt -80 > NEWS
@@ -84,7 +84,7 @@ vignette:
 
 build: docs
 	cd ..;\
-		"$(RBIN)/R" CMD build --no-vignettes $(PKGSRC).build
+		"$(RBIN)/R" CMD build --no-build-vignettes $(PKGSRC)
 
 
 install: build

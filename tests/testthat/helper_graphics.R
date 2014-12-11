@@ -1,10 +1,6 @@
 # This file contains functions that help set up and run the tikzDevice through
 # test graphs.
 
-# Workaround until testthat 0.7.2 is on CRAN; see also hadley/testthat#102
-get_reporter <- if (exists("get_reporter", envir = asNamespace("testthat")))
-  testthat:::get_reporter else testthat:::test_reporter
-
 do_graphics_test <- function(short_name, description, graph_code,
   engine = 'pdftex', graph_options = NULL, skip_if = NULL, tags = NULL, ...) {
 
@@ -62,7 +58,9 @@ do_graphics_test <- function(short_name, description, graph_code,
     # This test always "passes" as the real result is the number of pixels that
     # were found to be different between the test graph and the standard graph.
     # Such a result must be interpreted by a human.
-    expect_that(compare_graph(short_name, tags), is_true())
+    expect_that(compare_graph(short_name, tags), is_true(),
+                info = short_name,
+                label = "Pixel representation of graph unchanged")
 
   })
 
@@ -111,7 +109,6 @@ compile_graph <- function(graph_file, engine){
 }
 
 compare_graph <- function(graph_name, tags){
-
   if ( is.null(compare_cmd) ) {
     get_reporter()$vis_result('SKIP')
     return(TRUE)
@@ -149,7 +146,7 @@ compare_graph <- function(graph_name, tags){
 
   get_reporter()$vis_result(result)
 
-  return(TRUE)
+  return(result == 0)
 
 }
 

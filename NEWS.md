@@ -1,3 +1,4 @@
+- Tests perform strict image comparison (#18).
 - Use `knitr` as vignette builder (#37).
 
 ---

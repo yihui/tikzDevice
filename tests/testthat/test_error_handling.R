@@ -1,12 +1,12 @@
 # Switch to the detailed reporter implemented in helper_reporters.R
-testthat:::with_reporter(DetailedReporter$new(), {
+with_reporter(DetailedReporter$new(), {
 
 context('Test tikzDevice error and warning messages')
 
 test_that('Null device is not a tikzDevice',{
 
     expect_that(
-      isTikzDevice(),
+      suppressMessages(isTikzDevice()),
       is_false()
     )
 
@@ -15,7 +15,7 @@ test_that('Null device is not a tikzDevice',{
 test_that('Device produces an error for unescaped characters',{
 
   expect_that(
-    getLatexStrWidth('_'),
+    suppressMessages(getLatexStrWidth('_')),
     throws_error('TeX was unable to calculate metrics')
   )
 
@@ -42,7 +42,7 @@ test_that('Device warns about the upper bound of the ASCII table when using pdft
 test_that("Device won't accept non-numeric ASCII codes",{
 
   expect_that(
-    getLatexCharMetrics('a'),
+    suppressMessages(getLatexCharMetrics('a')),
     gives_warning('getLatexCharMetrics only accepts integers!')
   )
 
@@ -69,7 +69,7 @@ test_that('tikzAnnotate refuses to work with a non-tikzDevice',{
 test_that('XeTeX warns about unrecognized UTF8 characters',{
 
   expect_that(
-    getLatexStrWidth('α', engine = 'xetex'),
+    suppressMessages(getLatexStrWidth('α', engine = 'xetex')),
     gives_warning('XeLaTeX was unable to calculate metrics')
   )
 
@@ -123,7 +123,7 @@ test_that('symbolicColors warns about too many colors',{
 test_that('check that maxSymbolicColors is nonnegative',{
   expect_that(
       tikz(symbolicColors = T, maxSymbolicColors = -1),
-       throws_error("maxSymbolicColors needs to be nonnegative")
+      throws_error("maxSymbolicColors needs to be nonnegative")
   )
 })
 
