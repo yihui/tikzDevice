@@ -286,9 +286,9 @@ function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
   if(maxSymbolicColors < 0)
     stop("maxSymbolicColors needs to be nonnegative")
 
-  .External(TikZ_StartDevice, file, width, height, onefile, bg, fg, baseSize,
-    lwdUnit, standAlone, bareBones, documentDeclaration, packages, footer,
-    console, sanitize, engine, symbolicColors, colorFileName, maxSymbolicColors)
+  .External(TikZ_StartDevice, file, width, height, onefile, bg, fg, baseSize, lwdUnit,
+    standAlone, bareBones, documentDeclaration, packages, footer, console,
+    sanitize, engine, symbolicColors, colorFileName, maxSymbolicColors)
 
   invisible()
 

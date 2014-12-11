@@ -198,8 +198,8 @@ SEXP TikZ_StartDevice ( SEXP args ){
      * R graphics function hooks with the appropriate C routines
      * in this file.
     */
-    if( !TikZ_Setup( deviceInfo, fileName, width, height, onefile, bg, fg,
-        baseSize, lwdUnit, standAlone, bareBones, documentDeclaration, packages,
+    if( !TikZ_Setup( deviceInfo, fileName, width, height, onefile, bg, fg, baseSize, lwdUnit,
+        standAlone, bareBones, documentDeclaration, packages,
         footer, console, sanitize, engine, symbolicColors, colorFileName, maxSymbolicColors ) ){
       /*
        * If setup was unsuccessful, destroy the device and return
