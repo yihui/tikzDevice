@@ -6,4 +6,6 @@
 /src/*.dll
 /tests/test_output
 /tests/test_work
+/test_output
+/test_work
 .Rproj.user
