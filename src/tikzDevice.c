@@ -167,6 +167,7 @@ SEXP TikZ_StartDevice ( SEXP args ){
   symbolicColors = asLogical(CAR(args)); args = CDR(args);
   colorFileName = translateChar(asChar(CAR(args))); args = CDR(args);
   int maxSymbolicColors = asInteger(CAR(args)); args = CDR(args);
+  Rboolean timestamp = asLogical(CAR(args)); args = CDR(args);
 
   /* Ensure there is an empty slot avaliable for a new device. */
   R_CheckDeviceAvailable();
@@ -197,7 +198,8 @@ SEXP TikZ_StartDevice ( SEXP args ){
     */
     if( !TikZ_Setup( deviceInfo, fileName, width, height, onefile, bg, fg, baseSize,
         standAlone, bareBones, documentDeclaration, packages,
-        footer, console, sanitize, engine, symbolicColors, colorFileName, maxSymbolicColors ) ){
+        footer, console, sanitize, engine, symbolicColors, colorFileName,
+        maxSymbolicColors, timestamp ) ){
       /*
        * If setup was unsuccessful, destroy the device and return
        * an error message.
@@ -242,7 +244,8 @@ static Rboolean TikZ_Setup(
   const char *documentDeclaration,
   const char *packages, const char *footer,
   Rboolean console, Rboolean sanitize, int engine,
-  Rboolean symbolicColors, const char* colorFileName, int maxSymbolicColors){
+  Rboolean symbolicColors, const char* colorFileName,
+  int maxSymbolicColors, Rboolean timestamp){
 
   /*
    * Create tikzInfo, this variable contains information which is
@@ -305,6 +308,7 @@ static Rboolean TikZ_Setup(
   tikzInfo->pageState = TIKZ_NO_PAGE;
   tikzInfo->onefile = onefile;
   tikzInfo->pageNum = 1;
+  tikzInfo->timestamp = timestamp;
 
   /* Incorporate tikzInfo into deviceInfo. */
   deviceInfo->deviceSpecific = (void *) tikzInfo;
@@ -2103,8 +2107,9 @@ static void Print_TikZ_Header( tikzDevDesc *tikzInfo ){
       namespace )
   );
 
-  printOutput( tikzInfo, "%% Created by tikzDevice version %s on %s\n",
-    CHAR(STRING_ELT(currentVersion,0)), CHAR(STRING_ELT(currentDate,0)) );
+  if( tikzInfo->timestamp )
+    printOutput( tikzInfo, "%% Created by tikzDevice version %s on %s\n",
+      CHAR(STRING_ELT(currentVersion,0)), CHAR(STRING_ELT(currentDate,0)) );
 
   //Specifically for TeXShop, force it to open the file with UTF-8 encoding
   printOutput(tikzInfo, "%% !TEX encoding = UTF-8 Unicode\n");
