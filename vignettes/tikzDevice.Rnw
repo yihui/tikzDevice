@@ -696,7 +696,7 @@ function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
     for which characters are replaced.
 
   \item[engine]
-    A string specifying which TeX engine to use. Possible values are
+    A string specifying which \TeX{} engine to use. Possible values are
     \code{'pdftex'}, \code{'xetex'} and \code{'luatex'}.
 
   \item[documentDeclaration]
@@ -1442,7 +1442,11 @@ also need to install a few more required packages:
 
     \item[pgf]{As mentioned, provides \TikZ.}
     \item[preview]{Used to crop documents in order to produce standalone figures.}
-    \item[ms]{A bundle of internally-used utility functions. Provides \code{everyshi.sty}.}
+    \item[ms]{Martin Schröder's LaTeX packages. \code{everyshi.sty} lets us run commands at every shipped page.}
+    \item[graphics]{\hologo{LaTeX}'s general-purpose graphics inclusion functionality.}
+    \item[pdftex-def]{Device-specific colour and graphics definitions when running \hologo{pdfTeX}/\hologo{pdfLaTeX}.}
+    \item[oberdiek]{\code{infwarerr.sty} provides info/error/warning messages}
+    \item[ec]{(Font metrics for) the default font, European Computer Modern.}
     \item[xcolor]{Used by \TikZ\ to specify colors.}
     \item[fontspec]{Used by \hologo{LuaTeX} and \hologo{XeTeX} to select fonts.}
     \item[xunicode]{Assists \hologo{LuaTeX} and \hologo{XeTeX} with UTF-8 characters.}
