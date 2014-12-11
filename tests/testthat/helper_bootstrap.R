@@ -6,11 +6,6 @@ library(stringr)
 library(tools)
 library(evaluate)
 
-test.failed <- FALSE
-report.failure <- function() {
-  test.failed <<- TRUE
-}
-
 # Process command arguments
 test_args <- commandArgs(TRUE)
 torture_mem <- any(str_detect(test_args, '^--use-gctorture'))

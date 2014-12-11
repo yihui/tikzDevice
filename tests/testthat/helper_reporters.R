@@ -48,7 +48,6 @@ DetailedReporter <- setRefClass('DetailedReporter', where = .GlobalEnv, contains
       } else {
         failed <<- TRUE
         n_failed <<- n_failed + 1L
-        report.failure()
         result$test <- test
         failures[[n_failed]] <<- result
 
@@ -183,7 +182,6 @@ GraphicsReporter <- setRefClass('GraphicsReporter', where = .GlobalEnv, contains
       } else {
         failed <<- TRUE
         n_failed <<- n_failed + 1L
-        report.failure()
         result$test <- test
         failures[[n_failed]] <<- result
 
