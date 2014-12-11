@@ -211,7 +211,7 @@
 tikz <-
 function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
   width = 7, height = 7, onefile = TRUE,
-  bg="transparent", fg="black", pointsize = 10, lwdUnit = 0.4,
+  bg="transparent", fg="black", pointsize = 10, lwdUnit = getOption("tikzLwdUnit"),
   standAlone = FALSE, bareBones = FALSE, console = FALSE, sanitize = FALSE,
   engine = getOption("tikzDefaultEngine"),
   documentDeclaration = getOption("tikzDocumentDeclaration"),
