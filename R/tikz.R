@@ -104,9 +104,11 @@
 #'  where the tikz filename is inserted. If the string is empty, no file is
 #'  written.
 #' @param maxSymbolicColors an integer number indicating the maximal number
-#' of distinct colors to write symbolically. Any excess color will be defined
-#' as if \code{symbolicColors} was set to \code{FALSE}. See also the section
-#' ``Options That Affect'  Package Behavior'' of \link{tikzDevice-package}.
+#'  of distinct colors to write symbolically. Any excess color will be defined
+#'  as if \code{symbolicColors} was set to \code{FALSE}. See also the section
+#'  ``Options That Affect'  Package Behavior'' of \link{tikzDevice-package}.
+#' @param timestamp A logical value indicating whether a timestamp is written
+#'  to the TeX file.
 #'
 #' @return \code{tikz()} returns no values.
 #'
@@ -216,7 +218,8 @@ function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
   packages,
   footer = getOption("tikzFooter"),
   symbolicColors = getOption("tikzSymbolicColors"), colorFileName = "%s_colors.tex",
-  maxSymbolicColors = getOption("tikzMaxSymbolicColors")
+  maxSymbolicColors = getOption("tikzMaxSymbolicColors"),
+  timestamp = TRUE
 ){
 
   tryCatch({
@@ -288,7 +291,8 @@ function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
 
   .External(TikZ_StartDevice, file, width, height, onefile, bg, fg, baseSize, lwdUnit,
     standAlone, bareBones, documentDeclaration, packages, footer, console,
-    sanitize, engine, symbolicColors, colorFileName, maxSymbolicColors)
+    sanitize, engine, symbolicColors, colorFileName, maxSymbolicColors,
+    timestamp)
 
   invisible()
 

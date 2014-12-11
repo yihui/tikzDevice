@@ -13,7 +13,7 @@ tikz(file = ifelse(onefile, "./Rplots.tex", "./Rplot\%03d.tex"), width = 7,
   footer = getOption("tikzFooter"),
   symbolicColors = getOption("tikzSymbolicColors"),
   colorFileName = "\%s_colors.tex",
-  maxSymbolicColors = getOption("tikzMaxSymbolicColors"))
+  maxSymbolicColors = getOption("tikzMaxSymbolicColors"), timestamp = TRUE)
 }
 \arguments{
 \item{file}{A character string indicating the desired path to the output
@@ -86,6 +86,9 @@ written.}
 of distinct colors to write symbolically. Any excess color will be defined
 as if \code{symbolicColors} was set to \code{FALSE}. See also the section
 ``Options That Affect'  Package Behavior'' of \link{tikzDevice-package}.}
+
+\item{timestamp}{A logical value indicating whether a timestamp is written
+ to the TeX file.}
 }
 \value{
 \code{tikz()} returns no values.
