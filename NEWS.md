@@ -1,3 +1,6 @@
+- Tests perform strict image comparison (#18).
+- Use `knitr` as vignette builder (#37).
+
 ---
 
 # Changes in version 0.7.4 (2014-11-10)

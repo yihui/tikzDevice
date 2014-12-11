@@ -1,7 +1,7 @@
-% !TEX TS-program = Sweave
-
+% !TEX TS-program = knitr
 % \VignetteIndexEntry{The tikzDevice Package}
 % \VignetteDepends{tikzDevice}
+% \VignetteEngine{knitr::knitr}
 % This comment prevents R from adding its own "\usepackage{Sweave}". I
 % seriously hate overly helpful computer systems.
 
@@ -9,7 +9,7 @@
 \usepackage{tikzDeviceVignette}
 
 
-<<setup,echo=FALSE,results=hide>>=
+<<setup,echo=FALSE,results='hide'>>=
   library(tikzDevice)
   if( !file.exists('figs') ){dir.create( 'figs' )}
 
@@ -17,8 +17,16 @@
   options(prompt = ' ', continue = ' ')
 
   options(tikzMetricsDictionary='.tikzMetrics')
+
+  knitr::opts_chunk$set(echo=F, fig.path='figs/fig', message=F)
+  knitr::knit_hooks$set(source = function(x, options) {
+    paste("\\begin{tikzCodeBlock}[listing style=sweavechunk]",
+          paste(x, collapse = '\n'),
+          "\\end{tikzCodeBlock}", sep = '\n')
+  },
+                 chunk = function(x, options) x)
 @
-\SweaveOpts{echo=F,prefix.string=figs/fig}
+
 
 
 \title{TikZDevice: LaTeX Graphics for R}
@@ -39,7 +47,7 @@
 % -----------------------------------------------------------------------------
 %                                 Cover Page
 % -----------------------------------------------------------------------------
-<<tikzTitlePlot,results=hide>>=
+<<tikzTitlePlot,results='hide'>>=
   tikz('figs/titlePlot.tex',width=4,height=4)
 
   x <- seq(-4.5,4.5,length.out=100)
@@ -227,7 +235,7 @@ plot(1, 1, main = 'Hello!')
 dev.off()
     \end{tikzCodeBlock}
 
-<<pdf-example,echo=FALSE,results=hide>>=
+<<pdf-example,echo=FALSE,results='hide'>>=
   pdf('figs/pdf-example.pdf', width = 3.25, height = 3.25)
   plot(1, 1, main = 'Hello!', ps = 10)
   dev.off()
@@ -246,7 +254,7 @@ plot(1, 1, main = 'Hello \\TeX !')
 dev.off()
     \end{tikzCodeBlock}
 
-<<tikz-example,echo=FALSE,results=hide>>=
+<<tikz-example,echo=FALSE,results='hide'>>=
   tikz('figs/tikz-example.tex', width = 3.25, height = 3.25)
   plot(1, 1, main = 'Hello \\TeX !')
   dev.off()
@@ -260,7 +268,7 @@ dev.off()
 
 This document is divided into three parts. \autoref{part:usage} describes the
 package functionality and provides example usage. Besides the \lang{R}
-environment, use of the \TikZ\ device device requires the user to have a
+environment, use of the \TikZ\ device requires the user to have a
 working \LaTeX{} compiler along with an installed version of the \TikZ{}
 package---version 2.00 or greater. \autoref{part:installation} of this
 documentation offers suggestions on how to get these dependencies installed and
@@ -389,13 +397,13 @@ to produce output.
 
 The following places were tested for a valid LaTeX compiler:
 
-  the global option: tikzLatex
-  the environment variable: R_LATEXCMD
-  the environment variable: R_PDFLATEXCMD
-  the global option: latexcmd
-  the PATH using the command: pdflatex
-  the PATH using the command: latex
-  the PATH using the command: /usr/texbin/pdflatex
+	the global option: tikzLatex
+	the environment variable: R_LATEXCMD
+	the environment variable: R_PDFLATEXCMD
+	the global option: latexcmd
+	the PATH using the command: pdflatex
+	the PATH using the command: latex
+	the PATH using the command: /usr/texbin/pdflatex
 
 ...
 
@@ -831,7 +839,7 @@ will be included in another \LaTeX\ document, such as a report. Running the
 following example in \lang{R} will produce a very simple graphic using the
 \code{plot} function:
 
-<<simpleEx,echo=TRUE,results=hide>>=
+<<simpleEx,echo=TRUE,results='hide'>>=
 library(tikzDevice)
 tikz('figs/simpleEx.tex',width=3.5,height=3.5)
 plot(1,main='Hello World!')
@@ -891,7 +899,7 @@ appear in the output for \LaTeX. The next example demonstrates how to use
 \begin{figure}[H]
   \centering
   \begin{minipage}{0.5\textwidth}
-<<latexEx,echo=TRUE,results=hide,keep.source=TRUE>>=
+<<latexEx,echo=TRUE,results='hide',tidy=FALSE>>=
 library(tikzDevice)
 tikz('figs/latexEx.tex',
   width=3.5,height=3.5)
@@ -935,7 +943,7 @@ as a self-contained \code{tikzpicture} environment. When \code{bareBones} is
 invoked, the wrapping environment is omitted. This option allows output to be
 embedded inside another \code{tikzpicture} of the user's own construction.
 
-<<bareBonesExample,echo=TRUE,results=hide,keep.source=TRUE>>=
+<<bareBonesExample,echo=TRUE,results='hide',tidy=FALSE>>=
 library(tikzDevice)
 library(maps)
 
@@ -1033,7 +1041,7 @@ used in files produced by \code{standAlone} to crop the pages in the resulting
 document to the bounding boxes of the plots.  Stand-alone output may be
 produced in the following manner:
 
-<<standAloneExample,echo=TRUE,results=hide,keep.source=TRUE>>=
+<<standAloneExample,echo=TRUE,results='hide',tidy=FALSE>>=
 library(tikzDevice)
 tikz('standAloneExample.tex',standAlone=TRUE)
 plot(sin,-pi,2*pi,main="A Stand Alone TikZ Plot")
@@ -1041,7 +1049,7 @@ dev.off()
 @
 
 
-<<standAloneCompileExample, results=hide, eval=FALSE>>=
+<<standAloneCompileExample, results='hide', eval=FALSE>>=
 
   library(tools)
 
@@ -1075,27 +1083,7 @@ is self contained and does not include other files via \verb|\input|.
 (Including the chunk option \code{strip.white=FALSE} was necessary for some
 versions of \pkg{tikzDevice} prior to 0.7.2.)
 
-\begin{tikzCodeBlock}[title={Catching \code{tikz} output inside Sweave},listing style=sweavechunk]
- \documentclass{article}
-   \usepackage{tikz}
-   \usepackage[nogin]{Sweave}
-
- \begin{document}
-   \begin{figure}[ht]
-     \centering
- <<inline,echo=FALSE,results=tex>>=
-
- library(tikzDevice)
- tikz(console=TRUE,width=5,height=5)
-  x <- rnorm(100)
-  plot(x)
- dummy <- dev.off()
- @
-     \caption{caption}
-     \label{fig:inline}
-   \end{figure}
- \end{document}
-\end{tikzCodeBlock}
+\tikzCodeInput[title={Catching \code{tikz} output inside Sweave},listing style=sweavechunk]{consoleExample}
 
 
 \subsection{Using \hologo{XeLaTeX}}
@@ -1107,7 +1095,7 @@ was inspired by Dario Taraborelli and his article
 
 % `eval` normally set to `FALSE` as this example takes a long time to run and the
 % required fonts are only availble by default on OS X.
-<<xelatexFontVariantExample,keep.source=TRUE,echo=TRUE,eval=FALSE,results=hide>>=
+<<xelatexFontVariantExample,tidy=FALSE,echo=TRUE,eval=FALSE,results='hide'>>=
 # Set options for using XeLaTeX font variants.
 options(tikzXelatexPackages = c(
   getOption('tikzXelatexPackages'),
@@ -1193,7 +1181,7 @@ feature---it basically opens up the door for you to draw anything on your plot
 that can be drawn with \TikZ. Check out the results in
 \autoref{fig:annotation}.
 
-<<annotation,echo=TRUE,results=hide,keep.source=TRUE>>=
+<<annotation,echo=TRUE,results='hide',tidy=FALSE>>=
 library(tikzDevice)
 
 # Load some additional TikZ libraries
@@ -1355,7 +1343,7 @@ that descends below the text line. Therefore a non-zero value will be returned
 for the descent of `y'. The character `x', \code{ASCII} code 120, has no
 descenders, so its descent will be returned as zero.
 
-<<charMetricDemo,echo=T,keep.source=T>>=
+<<charMetricDemo,echo=T,tidy=FALSE>>=
 # Get metrics for 'y'
 getLatexCharMetrics(121)
 
@@ -1369,7 +1357,7 @@ be passed to the \nolinebreak\code{getLatexCharMetrics}  function. If for
 some reason a floating point number is passed, it will be floored through
 conversion by \code{as.integer}.
 
-<<charMetricErrors,echo=T,keep.source=T>>=
+<<charMetricErrors,echo=T,tidy=FALSE>>=
 getLatexCharMetrics('y')
 getLatexCharMetrics(20)
 
