@@ -101,6 +101,11 @@ annotations}.
   for special latex characters. These values should correspond to the values
   from the \code{tikzSanitizeCharacters} option.  }
 
+  \item{\code{tikzLwdUnit}}{ A numeric that denotes the number of \code{pt}s in LaTeX that \code{lwd=1} in R is
+  translated to. Defaults to 0.4 (LaTeX and TikZ default); for compatibility
+  with R default, please use 72.27/96 (96 pixels in R is 1 inch, which is 72.27
+  points in TeX).}
+
   \item{\code{tikzRasterResolution}}{ When \code{\link{tikz}} is requested to
   add a raster to a graphic, the raster is written to a PNG file which is
   then included into the LaTeX code. This option controls the resolution
