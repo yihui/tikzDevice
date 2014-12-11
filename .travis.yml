@@ -3,7 +3,7 @@ language: c
 # language: objective-c
 env:
   matrix:
-    - TYPE=cran R_BUILD_ARGS="--no-manual" R_CHECK_ARGS="--no-manual --as-cran" WARNINGS_ARE_ERRORS=1
+    - TYPE=cran R_BUILD_ARGS="--no-manual --compact-vignettes=gs+qpdf" R_CHECK_ARGS="--no-manual --as-cran" WARNINGS_ARE_ERRORS=1
     - TYPE=tests
 
 script:
