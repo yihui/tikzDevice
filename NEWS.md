@@ -2,6 +2,9 @@
 
 - Add parameter `timestamp` to make the output of the timestamp optional (#28,
   #73).
+- Add parameter `lwdUnit` to `tikz` to specify the physical width of a line
+  (in points) that is 1 unit wide in R. By default, the value of option
+  `tikzLwdUnit` is used; this option has a value of 0.4 at startup.
 
 ## Internal
 
