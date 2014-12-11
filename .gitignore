@@ -8,6 +8,7 @@
 /tests/test_work
 /tests/testthat/test_output
 /tests/testthat/test_work
+/tests/testthat/Rplots*.tex
 /test_output
 /test_work
 .Rproj.user
