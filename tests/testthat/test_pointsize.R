@@ -1,3 +1,6 @@
+# Switch to the detailed reporter implemented in helper_reporters.R
+testthat:::with_reporter(DetailedReporter$new(), {
+
 context('Querying of pointsize')
 
 test_that('Pointsize is extracted correctly',{
@@ -11,3 +14,6 @@ test_that('Pointsize is extracted correctly',{
   expect_true(is.na(getDocumentPointsize('\\documentclass{report}\n')))
   expect_equal(getDocumentPointsize('\\PassOptionToPackage{x}{y}\n\\documentclass[11pt]{report}\n'), 11)
 })
+
+testthat:::end_context() # Needs to be done manually due to reporter swap
+}) # End reporter swap
