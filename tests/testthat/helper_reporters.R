@@ -174,20 +174,20 @@ GraphicsReporter <- setRefClass('GraphicsReporter', where = .GlobalEnv, contains
           if (pixel_error > 0)
             cat('   Command for comparison:', "\n", cmp_command, "\n")
         }
-      } else {
-        spacer <- paste(rep(' ', width - nchar(test) - 19),
-          collapse = '')
-        if (result$passed) {
-          cat(spacer, colourise("PASS", fg = "light green"))
-        } else {
-          failed <<- TRUE
-          n_failed <<- n_failed + 1L
-          report.failure()
-          result$test <- test
-          failures[[n_failed]] <<- result
+      }
 
-          cat(spacer, colourise("FAIL", fg = "red"))
-        }
+      spacer <- paste(rep(' ', width - nchar(test) - 19),
+        collapse = '')
+      if (result$passed) {
+        cat(spacer, colourise("PASS", fg = "light green"))
+      } else {
+        failed <<- TRUE
+        n_failed <<- n_failed + 1L
+        report.failure()
+        result$test <- test
+        failures[[n_failed]] <<- result
+
+        cat(spacer, colourise("FAIL", fg = "red"))
       }
     },
 
