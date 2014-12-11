@@ -111,8 +111,6 @@ compile_graph <- function(graph_file, engine){
 }
 
 compare_graph <- function(graph_name, tags){
-  browser()
-
   if ( is.null(compare_cmd) ) {
     get_reporter()$vis_result('SKIP')
     return(TRUE)
