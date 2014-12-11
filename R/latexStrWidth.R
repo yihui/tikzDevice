@@ -63,8 +63,8 @@ function(texString, cex = 1, face = 1, engine = getOption('tikzDefaultEngine'),
 
     xetex = {
       if (is.null(getOption('tikzXelatex'))) {
-        stop("Cannot find XeLaTeX! Please check your system",
-            "configuration or manually provide a value for",
+        stop("Cannot find XeLaTeX! Please check your system ",
+            "configuration or manually provide a value for ",
             "options(tikzXelatex)")
       }
       if (missing(packages)) {packages <- getOption('tikzXelatexPackages')}
@@ -72,8 +72,8 @@ function(texString, cex = 1, face = 1, engine = getOption('tikzDefaultEngine'),
 
     luatex = {
       if (is.null(getOption('tikzLualatex'))) {
-        stop("Cannot find LuaLaTeX! Please check your system",
-            "configuration or manually provide a value for",
+        stop("Cannot find LuaLaTeX! Please check your system ",
+            "configuration or manually provide a value for ",
             "options(tikzLualatex)")
       }
       if (missing(packages)) {packages <- getOption('tikzLualatexPackages')}
@@ -153,8 +153,8 @@ function(charCode, cex = 1, face = 1, engine = getOption('tikzDefaultEngine'),
 
     xetex = {
       if (is.null(getOption('tikzXelatex'))) {
-        stop("Cannot find XeLaTeX! Please check your system",
-            "configuration or manually provide a value for",
+        stop("Cannot find XeLaTeX! Please check your system ",
+            "configuration or manually provide a value for ",
             "options(tikzXelatex)")
       }
       if (missing(packages)) {packages <- getOption('tikzXelatexPackages')}
@@ -162,8 +162,8 @@ function(charCode, cex = 1, face = 1, engine = getOption('tikzDefaultEngine'),
 
     luatex = {
       if (is.null(getOption('tikzLualatex'))) {
-        stop("Cannot find LuaLaTeX! Please check your system",
-            "configuration or manually provide a value for",
+        stop("Cannot find LuaLaTeX! Please check your system ",
+            "configuration or manually provide a value for ",
             "options(tikzLualatex)")
       }
       if (missing(packages)) {packages <- getOption('tikzLualatexPackages')}

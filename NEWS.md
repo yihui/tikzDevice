@@ -3,6 +3,9 @@
 - Add parameter `timestamp` to make the output of the timestamp optional (#28,
   #73).
 
+- Tests perform strict image comparison (#18).
+- Use `knitr` as vignette builder (#37).
+
 ---
 
 # Changes in version 0.7.4 (2014-11-10)

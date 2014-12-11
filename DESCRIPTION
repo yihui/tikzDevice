@@ -23,10 +23,12 @@ Depends:
 Imports:
     filehash
 Suggests:
-    testthat (>= 0.6),
+    testthat (>= 0.8.1),
     evaluate,
     stringr,
     ggplot2,
-    maps
+    maps,
+    knitr
 SystemRequirements: pgf (>= 2.00)
 LazyLoad: yes
+VignetteBuilder: knitr
