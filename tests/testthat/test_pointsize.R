@@ -1,5 +1,5 @@
 # Switch to the detailed reporter implemented in helper_reporters.R
-testthat:::with_reporter(DetailedReporter$new(), {
+with_reporter(DetailedReporter$new(), {
 
 context('Querying of pointsize')
 

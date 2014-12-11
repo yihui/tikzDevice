@@ -1,5 +1,5 @@
 # Switch to the detailed reporter implemented in helper_reporters.R
-testthat:::with_reporter(GraphicsReporter$new(), {
+with_reporter(GraphicsReporter$new(), {
 
 test_graphs <- list(
   list(
