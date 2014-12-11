@@ -14,7 +14,8 @@
 
 % Various TeX logos---included in the Oberdiek bundle which contains hyperref,
 % so there is a good chance it will be installed.
-\IfFileExists{hologo.sty}{\RequirePackage{hologo}}{\newcommand{\hologo}[1]{#1\xspace}}
+\IfFileExists{hologo.sty}{\RequirePackage{hologo}}{}
+\providecommand\hologo[1]{#1\xspace}
 
 % Sexyness
 \RequirePackage{tikz}
