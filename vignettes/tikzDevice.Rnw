@@ -17,13 +17,39 @@
 
   options(tikzMetricsDictionary='.tikzMetrics')
 
-  knitr::opts_chunk$set(echo=F, fig.path='figs/fig', message=F)
-  knitr::knit_hooks$set(source = function(x, options) {
-    paste("\\begin{tikzCodeBlock}[listing style=sweavechunk]",
-          paste(x, collapse = '\n'),
-          "\\end{tikzCodeBlock}", sep = '\n')
-  },
-                 chunk = function(x, options) x)
+  knitr::opts_chunk$set(
+    echo=FALSE,
+    fig.path='figs/fig',
+    message=FALSE,
+    width = 100,
+    comment = NA
+  )
+  knitr::knit_hooks$set(
+    source = function(x, options) {
+      paste("\\vspace{-1ex}",
+            "\\begin{tikzCodeBlock}[listing style=sweavechunk]",
+            paste(x, collapse = '\n'),
+            "\\end{tikzCodeBlock}\n\n", sep = '\n')
+    },
+    output = function(x, options) {
+      paste("\\vspace{-2ex}",
+            "\\begin{Verbatim}[frame=single]",
+            sub("\n+$", "", paste(x, collapse = '\n')),
+            "\\end{Verbatim}",
+            "",
+            sep = '\n')
+    },
+    warning = function(x, options) {
+      paste("\\vspace{-2ex}",
+            "\\begin{Verbatim}[frame=single,formatcom=\\color{warningcolor}]",
+            sub("\n+$", "", paste(strwrap(x, width = options$width),
+                                  collapse = '\n')),
+            "\\end{Verbatim}",
+            "",
+            sep = '\n')
+    },
+    chunk = function(x, options) x
+  )
 @
 
 
@@ -650,16 +676,9 @@ documents using the \verb`\include{}` macro.
 The \code{tikz} function opens a new graphics device and may be called with
 the following arguments:
 
-\begin{Verbatim}[frame=single]
-function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
-  width = 7, height = 7, onefile = TRUE,
-  bg="transparent", fg="black", pointsize = 10, lwdUnit = 1,
-  standAlone = FALSE, bareBones = FALSE, console = FALSE, sanitize = FALSE,
-  engine = getOption("tikzDefaultEngine"),
-  documentDeclaration = getOption("tikzDocumentDeclaration"),
-  packages,
-  footer = getOption("tikzFooter"))
-\end{Verbatim}
+<<tikzArgs,echo=FALSE>>=
+str(args(tikz), width=knitr::opts_chunk$get("width"))
+@
 
 \begin{flexlabelled}{code}{*}{0.5em}{0.5em}{*}{\leftmargin}
   \item[file]
