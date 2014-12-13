@@ -1,5 +1,50 @@
   ---
 
+		 Changes in version 0.7.5 (2014-12-13)
+
+  ---
+
+Features
+
+  - Add parameter `timestamp` to make the output of the timestamp optional
+  (#28, #73).  - Add parameter `lwdUnit` to `tikz` to specify the physical
+  width of a line (in points) that is 1 unit wide in R. By default, the value
+  of option `tikzLwdUnit` is used; this option has a value of 0.4 at startup.
+
+Internal
+
+  - Tests perform strict image comparison (#18).  - Use `knitr` as vignette
+  builder (#37).
+
+  ---
+
+		 Changes in version 0.7.4 (2014-11-10)
+
+  ---
+
+Features
+
+  - Optionally use symbolic colors defined in a single external file instead
+  of hard-coded colors defined in-place.  New parameters `symbolicColors`,
+  `colorFileName` and `maxSymbolicColors`; new options `tikzSymbolicColors`
+  and `tikzMaxSymbolicColors` (#70, thanks Martin Bergner).
+
+  ---
+
+		 Changes in version 0.7.3 (2014-09-09)
+
+  ---
+
+Bug Fixes
+
+  - Performance improvements with zero-width strings (#66, thanks Gvozden
+  Neskovic) - Add parameter checkstate to allow adding annotations to a new
+  plot (#52, thanks Sam Mason) - Allow raster images to be output without
+  resampling by setting options(tikzRasterResolution = NA) (#54, thanks
+  Sam Mason)
+
+  ---
+
 		 Changes in version 0.7.2 (2014-01-05)
 
   ---
