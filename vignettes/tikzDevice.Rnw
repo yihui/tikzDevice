@@ -662,7 +662,7 @@ documents using the \verb`\include{}` macro.
 The \code{tikz} function opens a new graphics device and may be called with
 the following arguments:
 
-<<tikzArgs, code=formatR::usage(tikz)>>=
+<<tikzArgs, code=formatR::usage(tikz), eval=FALSE>>=
 @
 
 \begin{flexlabelled}{code}{*}{0.5em}{0.5em}{*}{\leftmargin}
