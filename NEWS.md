@@ -1,3 +1,9 @@
+---
+
+# Changes in version 0.7.5 (2014-12-13)
+
+---
+
 ## Features
 
 - Add parameter `timestamp` to make the output of the timestamp optional (#28,
