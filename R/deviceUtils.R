@@ -122,6 +122,8 @@ setTikzDefaults <- function( overwrite = TRUE ){
     tikzReplacementCharacters = c('\\%','\\$','\\}','\\{','\\^{}','\\_{}',
       '\\#','\\&','\\char`\\~'),
 
+    tikzLwdUnit = 0.4,
+
     tikzRasterResolution = 300,
 
     tikzPdftexWarnUTF = TRUE,

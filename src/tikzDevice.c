@@ -80,7 +80,7 @@ SEXP TikZ_StartDevice ( SEXP args ){
   double width, height;
   Rboolean standAlone, bareBones;
   const char *documentDeclaration, *packages, *footer;
-  double baseSize;
+  double baseSize, lwdUnit;
   Rboolean console, sanitize, onefile, symbolicColors;
 
   /*
@@ -121,6 +121,9 @@ SEXP TikZ_StartDevice ( SEXP args ){
 
   /* Recover the base fontsize */
   baseSize = asReal(CAR(args)); args = CDR(args);
+
+  /* Recover the lwd-to-pt ratio */
+  lwdUnit = asReal(CAR(args)); args = CDR(args);
 
   /*
    * Set the standAlone parameter which specifies if the TikZ
@@ -196,7 +199,7 @@ SEXP TikZ_StartDevice ( SEXP args ){
      * R graphics function hooks with the appropriate C routines
      * in this file.
     */
-    if( !TikZ_Setup( deviceInfo, fileName, width, height, onefile, bg, fg, baseSize,
+    if( !TikZ_Setup( deviceInfo, fileName, width, height, onefile, bg, fg, baseSize, lwdUnit,
         standAlone, bareBones, documentDeclaration, packages,
         footer, console, sanitize, engine, symbolicColors, colorFileName,
         maxSymbolicColors, timestamp ) ){
@@ -239,7 +242,7 @@ static Rboolean TikZ_Setup(
   pDevDesc deviceInfo,
   const char *fileName,
   double width, double height, Rboolean onefile,
-  const char *bg, const char *fg, double baseSize,
+  const char *bg, const char *fg, double baseSize, double lwdUnit,
   Rboolean standAlone, Rboolean bareBones,
   const char *documentDeclaration,
   const char *packages, const char *footer,
@@ -291,6 +294,8 @@ static Rboolean TikZ_Setup(
   tikzInfo->excessWarningPrinted = FALSE;
   tikzInfo->engine = engine;
   tikzInfo->rasterFileCount = 1;
+  tikzInfo->pageNum = 1;
+  tikzInfo->lwdUnit = lwdUnit;
   tikzInfo->debug = DEBUG;
   tikzInfo->standAlone = standAlone;
   tikzInfo->bareBones = bareBones;
@@ -307,7 +312,6 @@ static Rboolean TikZ_Setup(
   tikzInfo->clipState = TIKZ_NO_CLIP;
   tikzInfo->pageState = TIKZ_NO_PAGE;
   tikzInfo->onefile = onefile;
-  tikzInfo->pageNum = 1;
   tikzInfo->timestamp = timestamp;
 
   /* Incorporate tikzInfo into deviceInfo. */
@@ -1864,11 +1868,8 @@ static void TikZ_WriteDrawOptions(const pGEcontext plotParams, pDevDesc deviceIn
 static void TikZ_WriteLineStyle(pGEcontext plotParams, tikzDevDesc *tikzInfo)
 {
 
-  /*
-   * Set the line width, 0.4pt is the TikZ default so scale lwd=1 relative to
-   * that
-   */
-  printOutput(tikzInfo,",line width=%4.1fpt", 0.4*plotParams->lwd);
+  /* Set the line width */
+  printOutput(tikzInfo,",line width=%4.1fpt", tikzInfo->lwdUnit * plotParams->lwd);
 
   if ( plotParams->lty > 1 ) {
     char dashlist[8];

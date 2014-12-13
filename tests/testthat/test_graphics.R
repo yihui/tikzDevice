@@ -107,6 +107,19 @@ test_graphs <- list(
   ),
 
   list(
+    short_name = 'line_color_width',
+    description = 'Draw colored lines with changed line width',
+    tags = c('base'),
+    graph_options = list(
+      tikzLwdUnit = 72.27/96
+    ),
+    graph_code = quote({
+      plot(c(0,1), c(0,1), type = "l", axes=F,
+           xlab='', ylab='', col='red3')
+    })
+  ),
+
+  list(
     short_name = "character_expansion",
     description = "Test character expansion",
     tags = c('base'),

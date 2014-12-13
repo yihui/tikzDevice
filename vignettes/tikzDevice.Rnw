@@ -619,6 +619,20 @@ options(
 \end{tikzCodeBlock}
 
 
+\subsection{The \pkgopt{tikzLwdUnit} Option}
+
+Originally, 1 unit of line width in \lang{R} was translated to 0.4~pt.
+This results in lines that are thinner than with default graphics
+or with the PDF device.
+This option controls the translation factor~-- use \code{72.27 / 96}
+for compatibility with the \lang{R} default
+(96 pixels in \lang{R} is 1 inch, which is 72.27 points in \TeX{}).
+
+\begin{tikzCodeBlock}[title={Default},listing style=sweavechunk]
+options(tikzLwdUnit = 72.27 / 96)
+\end{tikzCodeBlock}
+
+
 \subsection{The \pkgopt{tikzRasterResolution} Option}
 
 When \code{tikz} is requested to add a raster to a graphic, the raster is
@@ -693,6 +707,12 @@ str(args(tikz), width=knitr::opts_chunk$get("width"))
     if a valid pointsize cannot be extracted from the value of
     \code{getOption("tikzDocumentDeclaration")}.  See \autoref{subsec:fontCalc}
     for more details.
+
+  \item[lwdUnit]
+    The number of \code{pt}s in LaTeX that \code{lwd=1} in R is translated to.
+    Defaults to 0.4 (LaTeX and TikZ default); for compatibility with R default,
+    please use 72.27/96 (96 pixels in R is 1 inch, which is 72.27 points in TeX).
+    See also \autoref{sec:options}, ``Options That Affect Package Behavior.''
 
   \item[standAlone]
     A logical value indicating whether the resulting file should be suitable
