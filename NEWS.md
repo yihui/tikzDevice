@@ -52,11 +52,11 @@
 
 ## Bug Fixes
 
-- In console mode, print a \relax statement after the comment to allow using
-  tikzDevice in a Sweave code chunk with results=tex, as advertised in the
-  vignette.  (The default is strip.white=TRUE which makes the following
-  \begin{tikzpicture} appear on the same line as the encoding comment in the
-  resulting .tex file.)  (#47, thanks Bill Venables)
+- In console mode, print a `\relax` statement after the comment to allow using
+  `tikzDevice` in a Sweave code chunk with `results=tex`, as advertised in the
+  vignette.  (The default is `strip.white=TRUE` which makes the following
+  `\begin{tikzpicture}` appear on the same line as the encoding comment in the
+  resulting `.tex` file.)  (#47, thanks Bill Venables)
 
 - Fixed typos in vignette (#45, thanks Greg Jefferis).
 
@@ -73,76 +73,22 @@
 
 ## Contributors
 
-Package maintainers: Kirill Müller and Yihui Xie.
+New package maintainers: Kirill Müller and Yihui Xie.
 
-Thanks to Stéphane Laurent for reporting a bug in the detection of the document
-font size.
+Thanks to the following people who contributed to this release of the tikzDevice:
 
----
+- Zack Weinberg for suggestions and comments that led to optimizations in the
+  quality and quantity of TikZ output.
 
-# Changes in version 0.6.6 (2013-12-10)
+- Romain Franconville for bugreports that led to the discovery of two bugs in
+  the raster routines.
 
----
+- corecode for fixing the getDocumentPointsize routines for corner cases
 
-## New Features
+- Sietse Brouwer for enumerating the exact list of LaTeX packages
+  `tikzDevice` requires and for vignette spelling/style corrections.
 
-- Updated vignette (yihui/tikzDevice#36).
-
-## Bug Fixes
-
-- Point size of main font in document is now inferred even if the option
-  tikzDocumentDeclaration contains newlines.
-
----
-
-# Changes in version 0.6.5 (2013-12-05)
-
----
-
-## Bug Fixes
-
-- Point size of main font in document is now inferred correctly, again fixed
-  regexp in getDocumentPointsize (yihui/tikzDevice#34).
-
----
-
-# Changes in version 0.6.4 (2013-11-20)
-
----
-
-## Bug Fixes
-
-- Package can be installed in R 3.0.2.
-
-- No C warnings when installing (#68).
-
-- Function `grid.tikzNode` works again, had no effect due to a missing S3
-  export.
-
-- Fixed formatting of documentation.
-
-## Behind the scenes
-
-- The tikzDevice now requires R 2.14.0 or later.
-
-- Semantic versioning will be used from now on
-
-- Package is uploaded to RForge (http://rforge.net)
-
-- Enable continuous integration via craigcitro/r-travis.  All supported R
-  versions are tested.
-
-## Contributors
-
-This release has been prepared by Yihui Xie and Kirill Müller, both plan to
-further maintain this package.
-
-
----
-
-# Changes in version 0.6.3 (2013-04-04, not officially released)
-
----
+- Stéphane Laurent for reporting a bug in the detection of the document font size.
 
 ## New Features
 
@@ -154,6 +100,8 @@ further maintain this package.
 
 - New function `tikzCompilerInfo`, reports information concerning the compilers
   used by the tikzDevice
+
+- Updated vignette (yihui/tikzDevice#36).
 
 ## Bug Fixes
 
@@ -179,13 +127,31 @@ further maintain this package.
   are now used in metric calculations. Previously, only global options were
   consulted.
 
-- getDocumentPointsize: fix regexp to match only digits followed by "pt"
-
 - Properly copy strings containing LaTeX info, avoiding use of freed memory.
+
+- Point size of main font in document is now inferred correctly (even if the option
+  tikzDocumentDeclaration contains newlines), again fixed
+  regexp in getDocumentPointsize (yihui/tikzDevice#34).
+
+- Package can be installed in R 3.0.2.
+
+- No C warnings when installing (#68).
+
+- Function `grid.tikzNode` works again, had no effect due to a missing S3
+  export.
+
+- Fixed formatting of documentation.
 
 ## Behind the scenes
 
-- The tikzDevice now requires R 2.12.0 or later.
+- The tikzDevice now requires R 2.14.0 or later.
+
+- Semantic versioning will be used from now on
+
+- Package is uploaded to RForge (http://rforge.net)
+
+- Enable continuous integration via craigcitro/r-travis.  All supported R
+  versions are tested.
 
 - Upgrade documentation generation from Roxygen to Roxygen2.
 
@@ -214,21 +180,6 @@ further maintain this package.
 - Reduce verbosity of start-up message.
 
 - Support ggplot 0.9.0.
-
-## Contributors
-
-Thanks to the following people who contributed to this release of the tikzDevice:
-
-- Zack Weinberg for suggestions and comments that led to optimizations in the
-  quality and quantity of TikZ output.
-
-- Romain Franconville for bugreports that led to the discovery of two bugs in
-  the raster routines.
-
-- corecode for fixing the getDocumentPointsize routines for corner cases
-
-- Sietse Brouwer for enumerating the exact list of LaTeX packages
-  `tikzDevice` requires and for vignette spelling/style corrections.
 
 ---
 
