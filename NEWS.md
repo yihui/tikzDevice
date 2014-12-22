@@ -1,3 +1,7 @@
+## Bug fixes
+
+ - Ignore fill color for lines to draw them correctly (#63)
+
 ---
 
 # Changes in version 0.7.5 (2014-12-13)
