@@ -1,8 +1,5 @@
----
-
-# Changes in version 0.7.5 (2014-12-13)
-
----
+Changes in version 0.7.5 (2014-12-13)
+===
 
 ## Features
 
@@ -17,11 +14,8 @@
 - Tests perform strict image comparison (#18).
 - Use `knitr` as vignette builder (#37).
 
----
-
-# Changes in version 0.7.4 (2014-11-10)
-
----
+Changes in version 0.7.4 (2014-11-10)
+===
 
 ## Features
 
@@ -30,11 +24,8 @@
   `colorFileName` and `maxSymbolicColors`; new options `tikzSymbolicColors`
   and `tikzMaxSymbolicColors` (#70, thanks Martin Bergner).
 
----
-
-# Changes in version 0.7.3 (2014-09-09)
-
----
+Changes in version 0.7.3 (2014-09-09)
+===
 
 ## Bug Fixes
 
@@ -44,11 +35,8 @@
 - Allow raster images to be output without resampling by setting
   options(tikzRasterResolution = NA) (#54, thanks Sam Mason)
 
----
-
-# Changes in version 0.7.2 (2014-01-05)
-
----
+Changes in version 0.7.2 (2014-01-05)
+===
 
 ## Bug Fixes
 
@@ -65,11 +53,8 @@
 
 - Loading babel TeX package to avoid printing tilde in references (#49).
 
----
-
-# Changes in version 0.7.0 (2013-12-10, CRAN release)
-
----
+Changes in version 0.7.0 (2013-12-10, CRAN release)
+===
 
 ## Contributors
 
@@ -181,11 +166,8 @@ Thanks to the following people who contributed to this release of the tikzDevice
 
 - Support ggplot 0.9.0.
 
----
-
-# Changes in version 0.6.2 (2011-11-13)
-
----
+Changes in version 0.6.2 (2011-11-13)
+===
 
 ## New Features
 
@@ -227,11 +209,8 @@ Thanks to the following people who contributed to this release of the tikzDevice
   that achieve the same result without messing with R.
 
 
----
-
-# Changes in version 0.6.1 (2011-4-14)
-
----
+Changes in version 0.6.1 (2011-4-14)
+===
 
 ## Bug Fixes
 
@@ -242,11 +221,8 @@ Thanks to the following people who contributed to this release of the tikzDevice
   build.
 
 
----
-
-# Changes in version 0.6.0 (2011-4-13)
-
----
+Changes in version 0.6.0 (2011-4-13)
+===
 
 ## New Features
 
@@ -302,11 +278,8 @@ Thanks to the following people who contributed to this release of the tikzDevice
   `test_that` unit testing framework.
 
 
----
-
-# Changes in version 0.5.3
-
----
+Changes in version 0.5.3
+===
 
 ## Bug Fixes
 
@@ -325,11 +298,8 @@ Thanks to the following people who contributed to this release of the tikzDevice
   resulting error message has been improved.
 
 
----
-
-# Changes in version 0.5.2
-
----
+Changes in version 0.5.2
+===
 
 ## Contributors
 The following people contributed to this release of the tikzDevice:
@@ -348,11 +318,8 @@ The following people contributed to this release of the tikzDevice:
 - Reduced the verbosity of the package startup message.
 
 
----
-
-# Changes in version 0.5.1
-
----
+Changes in version 0.5.1
+===
 
 ## Bug Fixes
 
@@ -378,11 +345,8 @@ The following people contributed to this release of the tikzDevice:
   `R CMD Sweave`.
 
 
----
-
-# Changes in version 0.5.0
-
----
+Changes in version 0.5.0
+===
 
 ## Contributors
 The following people contributed to this release of the tikzDevice:
@@ -433,11 +397,8 @@ The following people contributed to this release of the tikzDevice:
   produces error messages instead of fatal crashes in R 2.11.0 and
   above.
 
----
-
-# Changes in version 0.4.0
-
----
+Changes in version 0.4.0
+===
 
 - Initial Beta Release
 
