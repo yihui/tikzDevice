@@ -64,9 +64,7 @@ Changes in version 0.7.0 (2013-12-10, CRAN release)
 Contributors
 ---
 
-New package maintainers: Kirill Müller and Yihui Xie.
-
-Thanks to the following people who contributed to this release of the tikzDevice:
+- New package maintainers: Kirill Müller and Yihui Xie.
 
 - Zack Weinberg for suggestions and comments that led to optimizations in the
   quality and quantity of TikZ output.
@@ -321,7 +319,6 @@ Changes in version 0.5.2
 
 Contributors
 ---
-The following people contributed to this release of the tikzDevice:
 
 - mlt for reporting problems with the Sanitize function that led to the
   discovery of two situations where buffer overflows were occurring.
@@ -371,7 +368,6 @@ Changes in version 0.5.0
 
 Contributors
 ---
-The following people contributed to this release of the tikzDevice:
 
 - Lorenzo Isella contributed bug reports and examples that led to the
   discovery of a bug in fontsize calculations that appeared when
