@@ -1,7 +1,8 @@
 Changes in version 0.7.5 (2014-12-13)
 ===
 
-## Features
+Features
+---
 
 - Add parameter `timestamp` to make the output of the timestamp optional (#28,
   #73).
@@ -9,7 +10,8 @@ Changes in version 0.7.5 (2014-12-13)
   (in points) that is 1 unit wide in R. By default, the value of option
   `tikzLwdUnit` is used; this option has a value of 0.4 at startup.
 
-## Internal
+Internal
+---
 
 - Tests perform strict image comparison (#18).
 - Use `knitr` as vignette builder (#37).
@@ -17,7 +19,8 @@ Changes in version 0.7.5 (2014-12-13)
 Changes in version 0.7.4 (2014-11-10)
 ===
 
-## Features
+Features
+---
 
 - Optionally use symbolic colors defined in a single external file instead of
   hard-coded colors defined in-place.  New parameters `symbolicColors`,
@@ -27,7 +30,8 @@ Changes in version 0.7.4 (2014-11-10)
 Changes in version 0.7.3 (2014-09-09)
 ===
 
-## Bug Fixes
+Bug Fixes
+---
 
 - Performance improvements with zero-width strings (#66, thanks Gvozden Neskovic)
 - Add parameter checkstate to allow adding annotations to a new plot (#52,
@@ -38,7 +42,8 @@ Changes in version 0.7.3 (2014-09-09)
 Changes in version 0.7.2 (2014-01-05)
 ===
 
-## Bug Fixes
+Bug Fixes
+---
 
 - In console mode, print a `\relax` statement after the comment to allow using
   `tikzDevice` in a Sweave code chunk with `results=tex`, as advertised in the
@@ -56,7 +61,8 @@ Changes in version 0.7.2 (2014-01-05)
 Changes in version 0.7.0 (2013-12-10, CRAN release)
 ===
 
-## Contributors
+Contributors
+---
 
 New package maintainers: Kirill Müller and Yihui Xie.
 
@@ -75,7 +81,8 @@ Thanks to the following people who contributed to this release of the tikzDevice
 
 - Stéphane Laurent for reporting a bug in the detection of the document font size.
 
-## New Features
+New Features
+---
 
 - The `tikz` function now has a `onefile` argument that behaves similar to
   the `onefile` argument of the `pdf` device (#40).
@@ -88,7 +95,8 @@ Thanks to the following people who contributed to this release of the tikzDevice
 
 - Updated vignette (yihui/tikzDevice#36).
 
-## Bug Fixes
+Bug Fixes
+---
 
 - Colorized text now obeys transparency settings.
 
@@ -127,7 +135,8 @@ Thanks to the following people who contributed to this release of the tikzDevice
 
 - Fixed formatting of documentation.
 
-## Behind the scenes
+Behind the scenes
+---
 
 - The tikzDevice now requires R 2.14.0 or later.
 
@@ -169,7 +178,8 @@ Thanks to the following people who contributed to this release of the tikzDevice
 Changes in version 0.6.2 (2011-11-13)
 ===
 
-## New Features
+New Features
+---
 
 - The annotation system has been improved. A new function `tikzNode` has been
   added that makes it easy to insert TikZ nodes with custom options and
@@ -186,14 +196,16 @@ Changes in version 0.6.2 (2011-11-13)
 
 - Support has been added for the `dev.capabilities` function in R 2.14.0.
 
-## Bug Fixes
+Bug Fixes
+---
 
 - Fixed a bug where the outline of the background bounding box was being drawn
   with the forground color instead of the background color. This was
   unnoticible except when a non-white background was used. Thanks to Matthieu
   Stigler for reporting.
 
-## Behind the Scenes
+Behind the Scenes
+---
 
 - The tikzDevice is now checked with "visual regression testing" which compares
   the results of graphics tests against a set of standard images using a visual
@@ -212,7 +224,8 @@ Changes in version 0.6.2 (2011-11-13)
 Changes in version 0.6.1 (2011-4-14)
 ===
 
-## Bug Fixes
+Bug Fixes
+---
 
 - Fixed a bug where `tikz` was not applying background color to the plot
   canvas.
@@ -224,7 +237,8 @@ Changes in version 0.6.1 (2011-4-14)
 Changes in version 0.6.0 (2011-4-13)
 ===
 
-## New Features
+New Features
+---
 
 - Unicode Support!!!! XeLaTeX may now be used calculate metrics and widths for
   Unicode characters. PdfLaTeX remains the default LaTeX compiler, but this may
@@ -252,7 +266,8 @@ Changes in version 0.6.0 (2011-4-13)
   functionality is used.
 
 
-## Bug Fixes
+Bug Fixes
+---
 
 - Fixed a bug where the `lwd` parameter used to control line widths was
   declared by tikzDevice to be of type `int` when it is actually a `double`.
@@ -260,13 +275,15 @@ Changes in version 0.6.0 (2011-4-13)
   Baptiste Auguie for reporting this issue.
 
 
-## Depreciation Notices
+Depreciation Notices
+---
 
 - Versions of R < 2.11.0 are no longer supported due to lack of required
   functions for handling Unicode strings.
 
 
-## Behind the Scenes
+Behind the Scenes
+---
 
 - New Makefile for executing common development tasks.
 
@@ -281,7 +298,8 @@ Changes in version 0.6.0 (2011-4-13)
 Changes in version 0.5.3
 ===
 
-## Bug Fixes
+Bug Fixes
+---
 
 - R 2.12.x now throws a warning message when shell commands run via `system()`
   have non-zero exit conditions.  The metric calculation runs LaTeX on a file
@@ -301,14 +319,16 @@ Changes in version 0.5.3
 Changes in version 0.5.2
 ===
 
-## Contributors
+Contributors
+---
 The following people contributed to this release of the tikzDevice:
 
 - mlt for reporting problems with the Sanitize function that led to the
   discovery of two situations where buffer overflows were occurring.
 
 
-## Bug Fixes
+Bug Fixes
+---
 
 - Fixed buffer overflows and memory leaks related to string pointers in
   tikzDevice.c.
@@ -321,7 +341,8 @@ The following people contributed to this release of the tikzDevice:
 Changes in version 0.5.1
 ===
 
-## Bug Fixes
+Bug Fixes
+---
 
 - A stub function has been added so that the `polypath()` function
   introduced in R 2.12.0 won't crash the device.
@@ -348,7 +369,8 @@ Changes in version 0.5.1
 Changes in version 0.5.0
 ===
 
-## Contributors
+Contributors
+---
 The following people contributed to this release of the tikzDevice:
 
 - Lorenzo Isella contributed bug reports and examples that led to the
@@ -361,7 +383,8 @@ The following people contributed to this release of the tikzDevice:
 - Gabor Grothendieck for the idea for sending output to the screen
   for use with sink() (i.e. the "console" option)
 
-## New Features
+New Features
+---
 
 - "console" option for directing tikz() output back into the R console
   instead of to a file.
@@ -377,7 +400,8 @@ The following people contributed to this release of the tikzDevice:
   These locations may be referenced by other TikZ drawing commands.
 
 
-## Bug Fixes
+Bug Fixes
+---
 
 - Removed bad colon in the DESCRIPTION file.
 
