@@ -9,6 +9,34 @@ test_that('Temporary metrics dictionary is created, but only once', {
   rm(list = ls(envir = .tikzInternal), envir = .tikzInternal)
   expect_that(checkDictionaryStatus(), shows_message("Creating"))
   expect_that(checkDictionaryStatus(), not(shows_message()))
+  expect_true(file.exists(.tikzInternal[["db_file"]]))
+})
+
+test_that('Switching metrics dictionary', {
+  expect_equal(getOption('tikzMetricsDictionary'), NULL)
+
+  tempA <- file.path(getwd(), ".tikzTempA")
+  tempB <- file.path(getwd(), ".tikzTempB")
+
+  tryCatch(
+    {
+      options(tikzMetricsDictionary=tempA)
+      expect_that(checkDictionaryStatus(), shows_message("Creating"))
+      options(tikzMetricsDictionary=tempB)
+      expect_that(checkDictionaryStatus(), shows_message("Creating"))
+      options(tikzMetricsDictionary=tempA)
+      expect_that(checkDictionaryStatus(), shows_message("Using"))
+      expect_that(checkDictionaryStatus(), not(shows_message()))
+      options(tikzMetricsDictionary=tempB)
+      expect_that(checkDictionaryStatus(), shows_message("Using"))
+      expect_that(checkDictionaryStatus(), not(shows_message()))
+    },
+    finally = {
+      options(tikzMetricsDictionary=NULL)
+      unlink(tempA, recursive = TRUE)
+      unlink(tempB, recursive = TRUE)
+    }
+  )
 })
 
 }) # End reporter swap
