@@ -11,7 +11,7 @@
 #' created for the current R session. Metrics are calculated via \code{system}
 #' calls to LaTeX compilers. Querying compilers to calculate metrics is
 #' expensive and so we strongly recommend setting
-#' \code{options('tikzMetricsDictionary') <- /path/to/dictionary} to create a
+#' \code{options('tikzMetricsDictionary') <- '/path/to/dictionary'} to create a
 #' global dictionary.
 #'
 #' @param texString An arbitrary string for which the width is to be

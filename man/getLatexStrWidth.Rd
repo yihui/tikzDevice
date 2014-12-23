@@ -56,7 +56,7 @@ from there. If the dictionary does not exist, then a temporary one is
 created for the current R session. Metrics are calculated via \code{system}
 calls to LaTeX compilers. Querying compilers to calculate metrics is
 expensive and so we strongly recommend setting
-\code{options('tikzMetricsDictionary') <- /path/to/dictionary} to create a
+\code{options('tikzMetricsDictionary') <- '/path/to/dictionary'} to create a
 global dictionary.
 }
 \examples{
