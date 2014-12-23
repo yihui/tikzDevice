@@ -12,9 +12,6 @@
   library(tikzDevice)
   if( !file.exists('figs') ){dir.create( 'figs' )}
 
-  # So that prompts and continuation prompts don't show up in the output.
-  options(prompt = ' ', continue = ' ')
-
   options(tikzMetricsDictionary='.tikzMetrics')
 
   knitr::opts_chunk$set(
