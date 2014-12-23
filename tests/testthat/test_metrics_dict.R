@@ -22,8 +22,10 @@ test_that('Switching metrics dictionary', {
     {
       options(tikzMetricsDictionary=tempA)
       expect_that(checkDictionaryStatus(), shows_message("Creating"))
+      expect_that(checkDictionaryStatus(), not(shows_message()))
       options(tikzMetricsDictionary=tempB)
       expect_that(checkDictionaryStatus(), shows_message("Creating"))
+      expect_that(checkDictionaryStatus(), not(shows_message()))
       options(tikzMetricsDictionary=tempA)
       expect_that(checkDictionaryStatus(), shows_message("Using"))
       expect_that(checkDictionaryStatus(), not(shows_message()))
@@ -35,6 +37,33 @@ test_that('Switching metrics dictionary', {
       options(tikzMetricsDictionary=NULL)
       unlink(tempA, recursive = TRUE)
       unlink(tempB, recursive = TRUE)
+    }
+  )
+})
+
+test_that('Turning custom metrics dictionary on and off', {
+  expect_equal(getOption('tikzMetricsDictionary'), NULL)
+
+  temp <- file.path(getwd(), ".tikzTemp")
+
+  tryCatch(
+    {
+      options(tikzMetricsDictionary=temp)
+      expect_that(checkDictionaryStatus(), shows_message("Creating"))
+      expect_that(checkDictionaryStatus(), not(shows_message()))
+      options(tikzMetricsDictionary=NULL)
+      expect_that(checkDictionaryStatus(), shows_message("Creating"))
+      expect_that(checkDictionaryStatus(), not(shows_message()))
+      options(tikzMetricsDictionary=temp)
+      expect_that(checkDictionaryStatus(), shows_message("Using"))
+      expect_that(checkDictionaryStatus(), not(shows_message()))
+      options(tikzMetricsDictionary=NULL)
+      expect_that(checkDictionaryStatus(), shows_message("Creating"))
+      expect_that(checkDictionaryStatus(), not(shows_message()))
+    },
+    finally = {
+      options(tikzMetricsDictionary=NULL)
+      unlink(temp, recursive = TRUE)
     }
   )
 })

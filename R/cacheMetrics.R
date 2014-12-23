@@ -75,7 +75,7 @@ checkDictionaryStatus <- function()
     # Create a temporary dictionary- it will disappear after
     # the R session finishes.
     db_file <- old_db_file
-    if ( is.null(db_file) || !file.exists(db_file) ) {
+    if ( is.null(db_file) || !file.exists(db_file) || !is.null(old_dict_path) ) {
       db_file <- file.path( tempdir(), 'tikzMetricsDictionary' )
       message("Creating temporary TikZ metrics dictionary at:\n\t", db_file)
       need_create <- TRUE
