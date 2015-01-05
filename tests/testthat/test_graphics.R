@@ -1,5 +1,5 @@
 # Switch to the detailed reporter implemented in helper_reporters.R
-with_reporter(GraphicsReporter$new(), {
+with_reporter(MultiReporter$new(reporters = list(get_reporter(), GraphicsReporter$new())), {
 
 test_graphs <- list(
   list(
@@ -665,7 +665,6 @@ test_that('All graphics devices closed',{
 
 })
 
-testthat:::end_context() # Needs to be done manually due to reporter swap
 }) # End reporter swap
 
 

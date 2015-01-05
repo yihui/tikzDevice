@@ -138,13 +138,13 @@ compare_graph <- function(graph_name, tags){
     "2>&1 | awk '{metric=$NF};END{print metric}'"
   )
 
-  get_reporter()$set_cmp_command(command_line)
+  get_reporter()$reporters[[2]]$set_cmp_command(command_line)
   result <- as.double(system(paste(
     # Force the command to be executed through bash
     'bash -c ', shQuote(command_line)),
     intern = TRUE, ignore.stderr = TRUE))
 
-  get_reporter()$vis_result(result)
+  get_reporter()$reporters[[2]]$vis_result(result)
 
   return(result == 0)
 
