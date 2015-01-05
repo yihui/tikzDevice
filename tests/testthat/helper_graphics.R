@@ -1,7 +1,7 @@
 # This file contains functions that help set up and run the tikzDevice through
 # test graphs.
 
-do_graphics_test <- function(short_name, description, graph_code,
+do_graphics_test <- function(short_name, description, graph_code, fuzz = 0,
   engine = 'pdftex', graph_options = NULL, skip_if = NULL, tags = NULL, ...) {
 
   context(description)
@@ -58,7 +58,7 @@ do_graphics_test <- function(short_name, description, graph_code,
     # This test always "passes" as the real result is the number of pixels that
     # were found to be different between the test graph and the standard graph.
     # Such a result must be interpreted by a human.
-    expect_that(compare_graph(short_name, tags), is_true(),
+    expect_less_than(compare_graph(short_name, tags), fuzz + 0.1, is_true(),
                 info = short_name,
                 label = "Pixel representation of graph unchanged")
 
@@ -138,15 +138,14 @@ compare_graph <- function(graph_name, tags){
     "2>&1 | awk '{metric=$NF};END{print metric}'"
   )
 
-  get_reporter()$set_cmp_command(command_line)
+  get_reporter()$reporters[[2]]$set_cmp_command(command_line)
   result <- as.double(system(paste(
     # Force the command to be executed through bash
     'bash -c ', shQuote(command_line)),
     intern = TRUE, ignore.stderr = TRUE))
 
-  get_reporter()$vis_result(result)
+  get_reporter()$reporters[[2]]$vis_result(result)
 
-  return(result == 0)
+  return(as.numeric(result))
 
 }
-

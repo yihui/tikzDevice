@@ -1,5 +1,5 @@
 # Switch to the detailed reporter implemented in helper_reporters.R
-with_reporter(DetailedReporter$new(), {
+with_reporter(MultiReporter$new(reporters = list(get_reporter(), DetailedReporter$new())), {
 
 context('Querying of pointsize')
 
@@ -15,5 +15,4 @@ test_that('Pointsize is extracted correctly',{
   expect_equal(getDocumentPointsize('\\PassOptionToPackage{x}{y}\n\\documentclass[11pt]{report}\n'), 11)
 })
 
-testthat:::end_context() # Needs to be done manually due to reporter swap
 }) # End reporter swap

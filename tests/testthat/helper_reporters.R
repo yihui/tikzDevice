@@ -76,7 +76,7 @@ DetailedReporter <- setRefClass('DetailedReporter', where = .GlobalEnv, contains
         colourise(test_status, 'red')
       )
 
-      cat(test_status, 'tests sucessfully executed in this context.\n' )
+      cat(test_status, 'tests successfully executed in this context.\n' )
 
       if( n_failed > 0L ){
         cat('\nOutput from failed tests:\n\n')
@@ -218,7 +218,7 @@ GraphicsReporter <- setRefClass('GraphicsReporter', where = .GlobalEnv, contains
         colourise(test_status, 'red')
       )
 
-      cat(test_status, 'tests sucessfully executed.\n' )
+      cat(test_status, 'tests successfully executed.\n' )
 
       if( n_failed > 0L ){
         cat('\nOutput from failed tests:\n\n')

@@ -1,5 +1,5 @@
 # Switch to the detailed reporter implemented in helper_reporters.R
-with_reporter(GraphicsReporter$new(), {
+with_reporter(MultiReporter$new(reporters = list(get_reporter(), GraphicsReporter$new())), {
 
 test_graphs <- list(
   list(
@@ -278,6 +278,7 @@ test_graphs <- list(
         "\\usetikzlibrary{shapes.arrows,shapes.symbols}"
       )
     ),
+    fuzz = 130,
     graph_code = quote({
 
       p <- rgamma (300 ,1)
@@ -319,6 +320,7 @@ test_graphs <- list(
         "\\usetikzlibrary{shapes.callouts}"
       )
     ),
+    fuzz = 745,
     graph_code = quote({
 
       library(grid)
@@ -665,7 +667,6 @@ test_that('All graphics devices closed',{
 
 })
 
-testthat:::end_context() # Needs to be done manually due to reporter swap
 }) # End reporter swap
 
 
@@ -704,4 +705,3 @@ if ( !is.null(compare_cmd) && !is.null(convert_cmd) ) {
   message('\nResults of all visual diffs combined into:\n\t', diff_output)
 
 }
-
