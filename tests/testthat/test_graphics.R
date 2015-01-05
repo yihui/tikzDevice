@@ -1,3 +1,6 @@
+if (nchar(Sys.getenv('R_TESTS')) == 0) {
+  # Protects against R CMD check
+
 # Switch to the detailed reporter implemented in helper_reporters.R
 with_reporter(GraphicsReporter$new(), {
 
@@ -705,3 +708,4 @@ if ( !is.null(compare_cmd) && !is.null(convert_cmd) ) {
 
 }
 
+}
