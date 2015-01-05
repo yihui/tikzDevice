@@ -278,6 +278,7 @@ test_graphs <- list(
         "\\usetikzlibrary{shapes.arrows,shapes.symbols}"
       )
     ),
+    fuzz = 130,
     graph_code = quote({
 
       p <- rgamma (300 ,1)
@@ -319,6 +320,7 @@ test_graphs <- list(
         "\\usetikzlibrary{shapes.callouts}"
       )
     ),
+    fuzz = 740,
     graph_code = quote({
 
       library(grid)
