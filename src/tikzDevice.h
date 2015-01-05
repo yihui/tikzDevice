@@ -69,6 +69,7 @@ typedef struct {
   tikz_engine engine;
   int rasterFileCount;
   int pageNum;
+  double lwdUnit;
   Rboolean debug;
   Rboolean standAlone;
   Rboolean bareBones;
@@ -90,6 +91,7 @@ typedef struct {
   Rboolean excessWarningPrinted;
   char drawColor[128];
   char fillColor[128];
+  Rboolean timestamp;
 } tikzDevDesc;
 
 
@@ -105,13 +107,13 @@ static Rboolean TikZ_Setup(
     pDevDesc deviceInfo,
     const char *fileName,
     double width, double height, Rboolean onefile,
-    const char *bg, const char *fg, double baseSize,
+    const char *bg, const char *fg, double baseSize, double lwdUnit,
     Rboolean standAlone, Rboolean bareBones,
     const char *documentDeclaration,
     const char *packages, const char *footer,
     Rboolean console, Rboolean sanitize, int engine,
     Rboolean symbolicColors, const char *colorFileName,
-    int maxSymbolicColors );
+    int maxSymbolicColors, Rboolean timestamp );
 
 
 /* Graphics Engine function hooks. Defined in GraphicsDevice.h . */
