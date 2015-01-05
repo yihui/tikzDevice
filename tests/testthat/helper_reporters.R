@@ -1,5 +1,7 @@
 # This file contains custom test reporters.
 
+library(stringr)
+
 DetailedReporter <- setRefClass('DetailedReporter', where = .GlobalEnv, contains = 'Reporter',
   fields = list(
     'width' = 'integer',
@@ -46,7 +48,6 @@ DetailedReporter <- setRefClass('DetailedReporter', where = .GlobalEnv, contains
       } else {
         failed <<- TRUE
         n_failed <<- n_failed + 1L
-        report.failure()
         result$test <- test
         failures[[n_failed]] <<- result
 
@@ -75,7 +76,7 @@ DetailedReporter <- setRefClass('DetailedReporter', where = .GlobalEnv, contains
         colourise(test_status, 'red')
       )
 
-      cat(test_status, 'tests sucessfully executed in this context.\n' )
+      cat(test_status, 'tests successfully executed in this context.\n' )
 
       if( n_failed > 0L ){
         cat('\nOutput from failed tests:\n\n')
@@ -91,7 +92,7 @@ DetailedReporter <- setRefClass('DetailedReporter', where = .GlobalEnv, contains
           0, getOption("width") - nchar(header))
         line <- charrep("-", linewidth )
 
-        message <- sapply(failures, "[[", "message")
+        message <- sapply(failures, "[[", "failure_msg")
 
         cat(str_c(
           colourise(header, "red"), line, "\n",
@@ -172,20 +173,19 @@ GraphicsReporter <- setRefClass('GraphicsReporter', where = .GlobalEnv, contains
           if (pixel_error > 0)
             cat('   Command for comparison:', "\n", cmp_command, "\n")
         }
-      } else {
-        spacer <- paste(rep(' ', width - nchar(test) - 19),
-          collapse = '')
-        if (result$passed) {
-          cat(spacer, colourise("PASS", fg = "light green"))
-        } else {
-          failed <<- TRUE
-          n_failed <<- n_failed + 1L
-          report.failure()
-          result$test <- test
-          failures[[n_failed]] <<- result
+      }
 
-          cat(spacer, colourise("FAIL", fg = "red"))
-        }
+      spacer <- paste(rep(' ', width - nchar(test) - 19),
+        collapse = '')
+      if (result$passed) {
+        cat(spacer, colourise("PASS", fg = "light green"))
+      } else {
+        failed <<- TRUE
+        n_failed <<- n_failed + 1L
+        result$test <- test
+        failures[[n_failed]] <<- result
+
+        cat(spacer, colourise("FAIL", fg = "red"))
       }
     },
 
@@ -218,7 +218,7 @@ GraphicsReporter <- setRefClass('GraphicsReporter', where = .GlobalEnv, contains
         colourise(test_status, 'red')
       )
 
-      cat(test_status, 'tests sucessfully executed.\n' )
+      cat(test_status, 'tests successfully executed.\n' )
 
       if( n_failed > 0L ){
         cat('\nOutput from failed tests:\n\n')
@@ -234,7 +234,7 @@ GraphicsReporter <- setRefClass('GraphicsReporter', where = .GlobalEnv, contains
           0, getOption("width") - nchar(header))
         line <- charrep("-", linewidth )
 
-        message <- sapply(failures, "[[", "message")
+        message <- sapply(failures, "[[", "failure_msg")
 
         cat(str_c(
           colourise(header, "red"), line, "\n",

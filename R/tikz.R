@@ -64,6 +64,10 @@
 #'   only used if a valid pointsize cannot be extracted from the value of
 #'   \code{getOption("tikzDocumentDeclaration")}.  See the section ``Font Size
 #'   Calculations'' in \link{tikzDevice-package} for more details.
+#' @param lwdUnit The number of \code{pt}s in LaTeX that \code{lwd=1} in R is
+#'   translated to.  Defaults to 0.4 (LaTeX and TikZ default); for compatibility
+#'   with R default, please use 72.27/96 (96 pixels in R is 1 inch, which is 72.27
+#'   points in TeX).
 #' @param standAlone A logical value indicating whether the output file should
 #'   be suitable for direct processing by LaTeX. A value of \code{FALSE}
 #'   indicates that the file is intended for inclusion in a larger document.
@@ -100,9 +104,11 @@
 #'  where the tikz filename is inserted. If the string is empty, no file is
 #'  written.
 #' @param maxSymbolicColors an integer number indicating the maximal number
-#' of distinct colors to write symbolically. Any excess color will be defined
-#' as if \code{symbolicColors} was set to \code{FALSE}. See also the section
-#' ``Options That Affect'  Package Behavior'' of \link{tikzDevice-package}.
+#'  of distinct colors to write symbolically. Any excess color will be defined
+#'  as if \code{symbolicColors} was set to \code{FALSE}. See also the section
+#'  ``Options That Affect'  Package Behavior'' of \link{tikzDevice-package}.
+#' @param timestamp A logical value indicating whether a timestamp is written
+#'  to the TeX file.
 #'
 #' @return \code{tikz()} returns no values.
 #'
@@ -205,14 +211,15 @@
 tikz <-
 function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
   width = 7, height = 7, onefile = TRUE,
-  bg="transparent", fg="black", pointsize = 10, standAlone = FALSE,
-  bareBones = FALSE, console = FALSE, sanitize = FALSE,
+  bg="transparent", fg="black", pointsize = 10, lwdUnit = getOption("tikzLwdUnit"),
+  standAlone = FALSE, bareBones = FALSE, console = FALSE, sanitize = FALSE,
   engine = getOption("tikzDefaultEngine"),
   documentDeclaration = getOption("tikzDocumentDeclaration"),
   packages,
   footer = getOption("tikzFooter"),
   symbolicColors = getOption("tikzSymbolicColors"), colorFileName = "%s_colors.tex",
-  maxSymbolicColors = getOption("tikzMaxSymbolicColors")
+  maxSymbolicColors = getOption("tikzMaxSymbolicColors"),
+  timestamp = TRUE
 ){
 
   tryCatch({
@@ -282,9 +289,10 @@ function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
   if(maxSymbolicColors < 0)
     stop("maxSymbolicColors needs to be nonnegative")
 
-  .External(TikZ_StartDevice, file, width, height, onefile, bg, fg, baseSize,
+  .External(TikZ_StartDevice, file, width, height, onefile, bg, fg, baseSize, lwdUnit,
     standAlone, bareBones, documentDeclaration, packages, footer, console,
-    sanitize, engine, symbolicColors, colorFileName, maxSymbolicColors)
+    sanitize, engine, symbolicColors, colorFileName, maxSymbolicColors,
+    timestamp)
 
   invisible()
 

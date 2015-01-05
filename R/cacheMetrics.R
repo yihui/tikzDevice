@@ -54,38 +54,46 @@ function( key, metrics )
 # specified dictionary or creates a new one in tempdir().
 #
 #' @importFrom filehash dbCreate dbInit
-checkDictionaryStatus <-
-function()
+checkDictionaryStatus <- function()
 {
+  dict_path <- getOption('tikzMetricsDictionary')
+  old_dict_path <- .tikzInternal[['dict_path']]
+  old_dictionary <- .tikzInternal[['dictionary']]
+  need_create <- FALSE
 
-  if( !exists('dictionary', envir=.tikzInternal, inherits=F) ){
+  # Check for a user specified dictionary.
+  if( !is.null( dict_path ) ){
+    dbFile <- path.expand(dict_path)
 
-    # Check for a user specified dictionary.
-    if( !is.null( getOption('tikzMetricsDictionary') ) ){
-
-      dbFile <- path.expand(
-        getOption('tikzMetricsDictionary') )
-
-      # Create the database file if it does not exist.
-      if( !file.exists( dbFile ) ){
-        message("Creating new TikZ metrics dictionary in:\n\t",dbFile)
-        dbCreate( dbFile, type='DB1' )
-      }
-
-
-    }else{
-      # Create a temporary dictionary- it will disappear after
-      # the R session finishes.
-      dbFile <- file.path( tempdir(), 'tikzMetricsDictionary' )
-      message("Creating temporary TikZ metrics dictionary at:\n\t",dbFile)
-      dbCreate( dbFile, type='DB1' )
+    # Create the database file if it does not exist.
+    if( !file.exists( dbFile ) ){
+      message("Creating new TikZ metrics dictionary at:\n\t",dbFile)
+      need_create <- TRUE
     }
-
-    # Add the dictionary as an object in the .tikzOptions
-    # environment.
-    .tikzInternal[['dictionary']] <- dbInit(dbFile)
-
+  } else {
+    # Create a temporary dictionary- it will disappear after
+    # the R session finishes.
+    dbFile <- file.path( tempdir(), 'tikzMetricsDictionary' )
+    message("Creating temporary TikZ metrics dictionary at:\n\t",dbFile)
+    need_create <- TRUE
   }
+
+  # Create the database file if it does not exist.
+  if ( need_create ) {
+    dbCreate( dbFile, type='DB1' )
+
+    # Need to initialize new database
+    old_dictionary <- NULL
+  }
+
+  if ( !is.null(old_dictionary) && identical(dict_path, old_dict_path) )
+    return(invisible())
+
+  # Add the dictionary as an object in the .tikzOptions
+  # environment.
+  message("Using TikZ metrics dictionary at:\n\t",dbFile)
+  .tikzInternal[['dictionary']] <- dbInit(dbFile)
+  .tikzInternal[['dict_path']] <- dict_path
 
   # Return nothing.
   invisible()

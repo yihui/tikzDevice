@@ -1,24 +1,54 @@
-% !TEX TS-program = Sweave
-
+% !TEX TS-program = knitr
 % \VignetteIndexEntry{The tikzDevice Package}
 % \VignetteDepends{tikzDevice}
-% This comment prevents R from adding its own "\usepackage{Sweave}". I
-% seriously hate overly helpful computer systems.
+% \VignetteEngine{knitr::knitr}
 
 \documentclass[10pt,oneside,letterpaper,article]{memoir}
+\usepackage[utf8]{inputenc}
 \usepackage{tikzDeviceVignette}
 
 
-<<setup,echo=FALSE,results=hide>>=
+<<setup,echo=FALSE,results='hide'>>=
   library(tikzDevice)
   if( !file.exists('figs') ){dir.create( 'figs' )}
 
-  # So that prompts and continuation prompts don't show up in the output.
-  options(prompt = ' ', continue = ' ')
-
   options(tikzMetricsDictionary='.tikzMetrics')
+
+  knitr::opts_chunk$set(
+    echo=FALSE,
+    fig.path='figs/fig',
+    message=FALSE,
+    width = 100,
+    comment = NA
+  )
+  knitr::knit_hooks$set(
+    source = function(x, options) {
+      paste("\\vspace{-1ex}",
+            "\\begin{tikzCodeBlock}[listing style=sweavechunk]",
+            paste(x, collapse = '\n'),
+            "\\end{tikzCodeBlock}\n\n", sep = '\n')
+    },
+    output = function(x, options) {
+      paste("\\vspace{-2ex}",
+            "\\begin{Verbatim}[frame=single]",
+            sub("\n+$", "", paste(x, collapse = '\n')),
+            "\\end{Verbatim}",
+            "",
+            sep = '\n')
+    },
+    warning = function(x, options) {
+      paste("\\vspace{-2ex}",
+            "\\begin{Verbatim}[frame=single,formatcom=\\color{warningcolor}]",
+            sub("\n+$", "", paste(strwrap(x, width = options$width),
+                                  collapse = '\n')),
+            "\\end{Verbatim}",
+            "",
+            sep = '\n')
+    },
+    chunk = function(x, options) x
+  )
 @
-\SweaveOpts{echo=F,prefix.string=figs/fig}
+
 
 
 \title{TikZDevice: LaTeX Graphics for R}
@@ -39,7 +69,7 @@
 % -----------------------------------------------------------------------------
 %                                 Cover Page
 % -----------------------------------------------------------------------------
-<<tikzTitlePlot,results=hide>>=
+<<tikzTitlePlot,results='hide'>>=
   tikz('figs/titlePlot.tex',width=4,height=4)
 
   x <- seq(-4.5,4.5,length.out=100)
@@ -227,7 +257,7 @@ plot(1, 1, main = 'Hello!')
 dev.off()
     \end{tikzCodeBlock}
 
-<<pdf-example,echo=FALSE,results=hide>>=
+<<pdf-example,echo=FALSE,results='hide'>>=
   pdf('figs/pdf-example.pdf', width = 3.25, height = 3.25)
   plot(1, 1, main = 'Hello!', ps = 10)
   dev.off()
@@ -246,7 +276,7 @@ plot(1, 1, main = 'Hello \\TeX !')
 dev.off()
     \end{tikzCodeBlock}
 
-<<tikz-example,echo=FALSE,results=hide>>=
+<<tikz-example,echo=FALSE,results='hide'>>=
   tikz('figs/tikz-example.tex', width = 3.25, height = 3.25)
   plot(1, 1, main = 'Hello \\TeX !')
   dev.off()
@@ -260,7 +290,7 @@ dev.off()
 
 This document is divided into three parts. \autoref{part:usage} describes the
 package functionality and provides example usage. Besides the \lang{R}
-environment, use of the \TikZ\ device device requires the user to have a
+environment, use of the \TikZ\ device requires the user to have a
 working \LaTeX{} compiler along with an installed version of the \TikZ{}
 package---version 2.00 or greater. \autoref{part:installation} of this
 documentation offers suggestions on how to get these dependencies installed and
@@ -389,13 +419,13 @@ to produce output.
 
 The following places were tested for a valid LaTeX compiler:
 
-  the global option: tikzLatex
-  the environment variable: R_LATEXCMD
-  the environment variable: R_PDFLATEXCMD
-  the global option: latexcmd
-  the PATH using the command: pdflatex
-  the PATH using the command: latex
-  the PATH using the command: /usr/texbin/pdflatex
+	the global option: tikzLatex
+	the environment variable: R_LATEXCMD
+	the environment variable: R_PDFLATEXCMD
+	the global option: latexcmd
+	the PATH using the command: pdflatex
+	the PATH using the command: latex
+	the PATH using the command: /usr/texbin/pdflatex
 
 ...
 
@@ -586,6 +616,20 @@ options(
 \end{tikzCodeBlock}
 
 
+\subsection{The \pkgopt{tikzLwdUnit} Option}
+
+Originally, 1 unit of line width in \lang{R} was translated to 0.4~pt.
+This results in lines that are thinner than with default graphics
+or with the PDF device.
+This option controls the translation factor~-- use \code{72.27 / 96}
+for compatibility with the \lang{R} default
+(96 pixels in \lang{R} is 1 inch, which is 72.27 points in \TeX{}).
+
+\begin{tikzCodeBlock}[title={Default},listing style=sweavechunk]
+options(tikzLwdUnit = 72.27 / 96)
+\end{tikzCodeBlock}
+
+
 \subsection{The \pkgopt{tikzRasterResolution} Option}
 
 When \code{tikz} is requested to add a raster to a graphic, the raster is
@@ -629,16 +673,8 @@ documents using the \verb`\include{}` macro.
 The \code{tikz} function opens a new graphics device and may be called with
 the following arguments:
 
-\begin{Verbatim}[frame=single]
-function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
-  width = 7, height = 7, onefile = TRUE,
-  bg="transparent", fg="black", pointsize = 10, standAlone = FALSE,
-  bareBones = FALSE, console = FALSE, sanitize = FALSE,
-  engine = getOption("tikzDefaultEngine"),
-  documentDeclaration = getOption("tikzDocumentDeclaration"),
-  packages,
-  footer = getOption("tikzFooter"))
-\end{Verbatim}
+<<tikzArgs, code=formatR::usage(tikz), eval=FALSE>>=
+@
 
 \begin{flexlabelled}{code}{*}{0.5em}{0.5em}{*}{\leftmargin}
   \item[file]
@@ -668,6 +704,12 @@ function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
     \code{getOption("tikzDocumentDeclaration")}.  See \autoref{subsec:fontCalc}
     for more details.
 
+  \item[lwdUnit]
+    The number of \code{pt}s in LaTeX that \code{lwd=1} in R is translated to.
+    Defaults to 0.4 (LaTeX and TikZ default); for compatibility with R default,
+    please use 72.27/96 (96 pixels in R is 1 inch, which is 72.27 points in TeX).
+    See also \autoref{sec:options}, ``Options That Affect Package Behavior.''
+
   \item[standAlone]
     A logical value indicating whether the resulting file should be suitable
     for direct processing by \LaTeX.
@@ -688,7 +730,7 @@ function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
     for which characters are replaced.
 
   \item[engine]
-    A string specifying which TeX engine to use. Possible values are
+    A string specifying which \TeX{} engine to use. Possible values are
     \code{'pdftex'}, \code{'xetex'} and \code{'luatex'}.
 
   \item[documentDeclaration]
@@ -826,7 +868,7 @@ will be included in another \LaTeX\ document, such as a report. Running the
 following example in \lang{R} will produce a very simple graphic using the
 \code{plot} function:
 
-<<simpleEx,echo=TRUE,results=hide>>=
+<<simpleEx,echo=TRUE,results='hide'>>=
 library(tikzDevice)
 tikz('figs/simpleEx.tex',width=3.5,height=3.5)
 plot(1,main='Hello World!')
@@ -886,7 +928,7 @@ appear in the output for \LaTeX. The next example demonstrates how to use
 \begin{figure}[H]
   \centering
   \begin{minipage}{0.5\textwidth}
-<<latexEx,echo=TRUE,results=hide,keep.source=TRUE>>=
+<<latexEx,echo=TRUE,results='hide',tidy=FALSE>>=
 library(tikzDevice)
 tikz('figs/latexEx.tex',
   width=3.5,height=3.5)
@@ -930,7 +972,7 @@ as a self-contained \code{tikzpicture} environment. When \code{bareBones} is
 invoked, the wrapping environment is omitted. This option allows output to be
 embedded inside another \code{tikzpicture} of the user's own construction.
 
-<<bareBonesExample,echo=TRUE,results=hide,keep.source=TRUE>>=
+<<bareBonesExample,echo=TRUE,results='hide',tidy=FALSE>>=
 library(tikzDevice)
 library(maps)
 
@@ -1028,7 +1070,7 @@ used in files produced by \code{standAlone} to crop the pages in the resulting
 document to the bounding boxes of the plots.  Stand-alone output may be
 produced in the following manner:
 
-<<standAloneExample,echo=TRUE,results=hide,keep.source=TRUE>>=
+<<standAloneExample,echo=TRUE,results='hide',tidy=FALSE>>=
 library(tikzDevice)
 tikz('standAloneExample.tex',standAlone=TRUE)
 plot(sin,-pi,2*pi,main="A Stand Alone TikZ Plot")
@@ -1036,7 +1078,7 @@ dev.off()
 @
 
 
-<<standAloneCompileExample, results=hide, eval=FALSE>>=
+<<standAloneCompileExample, results='hide', eval=FALSE>>=
 
   library(tools)
 
@@ -1070,27 +1112,7 @@ is self contained and does not include other files via \verb|\input|.
 (Including the chunk option \code{strip.white=FALSE} was necessary for some
 versions of \pkg{tikzDevice} prior to 0.7.2.)
 
-\begin{tikzCodeBlock}[title={Catching \code{tikz} output inside Sweave},listing style=sweavechunk]
- \documentclass{article}
-   \usepackage{tikz}
-   \usepackage[nogin]{Sweave}
-
- \begin{document}
-   \begin{figure}[ht]
-     \centering
- <<inline,echo=FALSE,results=tex>>=
-
- library(tikzDevice)
- tikz(console=TRUE,width=5,height=5)
-  x <- rnorm(100)
-  plot(x)
- dummy <- dev.off()
- @
-     \caption{caption}
-     \label{fig:inline}
-   \end{figure}
- \end{document}
-\end{tikzCodeBlock}
+\tikzCodeInput[title={Catching \code{tikz} output inside Sweave},listing style=sweavechunk]{consoleExample}
 
 
 \subsection{Using \hologo{XeLaTeX}}
@@ -1102,7 +1124,7 @@ was inspired by Dario Taraborelli and his article
 
 % `eval` normally set to `FALSE` as this example takes a long time to run and the
 % required fonts are only availble by default on OS X.
-<<xelatexFontVariantExample,keep.source=TRUE,echo=TRUE,eval=FALSE,results=hide>>=
+<<xelatexFontVariantExample,tidy=FALSE,echo=TRUE,eval=FALSE,results='hide'>>=
 # Set options for using XeLaTeX font variants.
 options(tikzXelatexPackages = c(
   getOption('tikzXelatexPackages'),
@@ -1188,7 +1210,7 @@ feature---it basically opens up the door for you to draw anything on your plot
 that can be drawn with \TikZ. Check out the results in
 \autoref{fig:annotation}.
 
-<<annotation,echo=TRUE,results=hide,keep.source=TRUE>>=
+<<annotation,echo=TRUE,results='hide',tidy=FALSE>>=
 library(tikzDevice)
 
 # Load some additional TikZ libraries
@@ -1350,7 +1372,7 @@ that descends below the text line. Therefore a non-zero value will be returned
 for the descent of `y'. The character `x', \code{ASCII} code 120, has no
 descenders, so its descent will be returned as zero.
 
-<<charMetricDemo,echo=T,keep.source=T>>=
+<<charMetricDemo,echo=T,tidy=FALSE>>=
 # Get metrics for 'y'
 getLatexCharMetrics(121)
 
@@ -1364,7 +1386,7 @@ be passed to the \nolinebreak\code{getLatexCharMetrics}  function. If for
 some reason a floating point number is passed, it will be floored through
 conversion by \code{as.integer}.
 
-<<charMetricErrors,echo=T,keep.source=T>>=
+<<charMetricErrors,echo=T,tidy=FALSE>>=
 getLatexCharMetrics('y')
 getLatexCharMetrics(20)
 
@@ -1454,7 +1476,11 @@ also need to install a few more required packages:
 
     \item[pgf]{As mentioned, provides \TikZ.}
     \item[preview]{Used to crop documents in order to produce standalone figures.}
-    \item[ms]{A bundle of internally-used utility functions. Provides \code{everyshi.sty}.}
+    \item[ms]{Martin Schröder's LaTeX packages. \code{everyshi.sty} lets us run commands at every shipped page.}
+    \item[graphics]{\hologo{LaTeX}'s general-purpose graphics inclusion functionality.}
+    \item[pdftex-def]{Device-specific colour and graphics definitions when running \hologo{pdfTeX}/\hologo{pdfLaTeX}.}
+    \item[oberdiek]{\code{infwarerr.sty} provides info/error/warning messages}
+    \item[ec]{(Font metrics for) the default font, European Computer Modern.}
     \item[xcolor]{Used by \TikZ\ to specify colors.}
     \item[fontspec]{Used by \hologo{LuaTeX} and \hologo{XeTeX} to select fonts.}
     \item[xunicode]{Assists \hologo{LuaTeX} and \hologo{XeTeX} with UTF-8 characters.}
