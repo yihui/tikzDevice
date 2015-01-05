@@ -320,7 +320,7 @@ test_graphs <- list(
         "\\usetikzlibrary{shapes.callouts}"
       )
     ),
-    fuzz = 740,
+    fuzz = 745,
     graph_code = quote({
 
       library(grid)
