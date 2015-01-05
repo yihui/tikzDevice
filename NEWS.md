@@ -6,6 +6,7 @@ Bug fixes
   already has been initialized, a message is printed the first time a dictionary
   is used (in addition to the message that is printed when the dictionary is
   created).  A missing dictionary file is recreated.
+- Failing tests are reported on Travis again (#92).
 
 Changes in version 0.7.5 (2014-12-13)
 ===
