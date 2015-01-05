@@ -1,22 +1,25 @@
 #!/usr/bin/env Rscript
-library(testthat)
-library(methods)
-FailureReporter <- setRefClass(
-  "FailureReporter", contains = "Reporter",
-  methods = list(
-    start_reporter = function() {},
+if (nchar(Sys.getenv('R_TESTS')) == 0) {
+  # Protects against R CMD check
+  library(testthat)
+  library(methods)
+  FailureReporter <- setRefClass(
+    "FailureReporter", contains = "Reporter",
+    methods = list(
+      start_reporter = function() {},
 
-    add_result = function(result) {
-      if (result$skipped) {
-        return()
-      }
-      if (result$passed) {
-        return()
-      }
+      add_result = function(result) {
+        if (result$skipped) {
+          return()
+        }
+        if (result$passed) {
+          return()
+        }
 
-      failed <<- TRUE
-    }
+        failed <<- TRUE
+      }
+    )
   )
-)
 
-test_check('tikzDevice', reporter = FailureReporter$new())
+  test_check('tikzDevice', reporter = FailureReporter$new())
+} # if (nchar(Sys.getenv('R_TESTS')) == 0) {

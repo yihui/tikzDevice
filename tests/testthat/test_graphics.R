@@ -1,6 +1,3 @@
-if (nchar(Sys.getenv('R_TESTS')) == 0) {
-  # Protects against R CMD check
-
 # Switch to the detailed reporter implemented in helper_reporters.R
 with_reporter(MultiReporter$new(reporters = list(get_reporter(), GraphicsReporter$new())), {
 
@@ -704,7 +701,5 @@ if ( !is.null(compare_cmd) && !is.null(convert_cmd) ) {
     intern = TRUE, ignore.stderr = TRUE)
 
   message('\nResults of all visual diffs combined into:\n\t', diff_output)
-
-}
 
 }
