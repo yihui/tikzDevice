@@ -89,8 +89,8 @@ typedef struct {
   int ncolors;
   int maxSymbolicColors;
   Rboolean excessWarningPrinted;
-  char drawColor[128];
-  char fillColor[128];
+  char drawColor[32];
+  char fillColor[32];
   Rboolean timestamp;
 } tikzDevDesc;
 
