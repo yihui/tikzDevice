@@ -1,6 +1,28 @@
 \name{NEWS}
 \title{News for Package 'tikzDevice'}
 \encoding{UTF-8}
+\section{Changes in tikzDevice version 0.7.6 (2015-01-06)}{
+  \subsection{Features}{
+    \itemize{
+      \item Remove redefinition of \code{fillColor} and \code{drawColor} when symbolic color names
+        are used.
+    }
+  }
+  \subsection{Bug Fixes}{
+    \itemize{
+      \item Ignore fill color for lines to remove thin line (1 pixel wide) that was shown
+        with dashed or dotted lines on some viewers (#63, @mbergner).
+      \item More robust handling of metrics dictionary.  Changes to the
+        \code{tikzMetricsDictionary} option are recognized even if a metrics dictionary
+        already has been initialized, a message is printed the first time a dictionary
+        is used (in addition to the message that is printed when the dictionary is
+        created).  A missing dictionary file is recreated.
+      \item Failing tests are reported on Travis again (#92).
+      \item Do not create color file if \code{tikzSymbolicColors} is off
+      \item Fix issue with translating color with representation -1
+    }
+  }
+}
 \section{Changes in tikzDevice version 0.7.5 (2014-12-13)}{
   \subsection{Features}{
     \itemize{
