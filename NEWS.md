@@ -1,3 +1,6 @@
+Changes in version 0.8 (2015-01-07)
+===
+
 Contributors
 ---
 

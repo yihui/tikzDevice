@@ -2,8 +2,8 @@ Encoding: UTF-8
 Package: tikzDevice
 Type: Package
 Title: R Graphics Output in LaTeX Format
-Version: 0.7.6
-Date: 2015-01-06
+Version: 0.8
+Date: 2015-01-07
 Authors@R: c(
     person("Charlie", "Sharpsteen", role = "aut"),
     person("Cameron", "Bracken", role = "aut"),
