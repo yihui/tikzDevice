@@ -1794,29 +1794,29 @@ static void TikZ_DefineDrawColor(tikzDevDesc *tikzInfo, int color, TikZ_DrawOps 
 {
   const char *colorstr = col2name(color);
   const char* colors[] = {"", "drawColor", "fillColor"};
-  char* dest;
+  char (*pdest)[sizeof tikzInfo->drawColor / sizeof* tikzInfo->drawColor];
 
   if( colorstr[0] == '#' )
     colorstr = colorstr+1;
 
   if( ops == DRAWOP_DRAW)
   {
-    dest = tikzInfo->drawColor;
+    pdest = &tikzInfo->drawColor;
   }
   else if( ops == DRAWOP_FILL )
   {
-    dest = tikzInfo->fillColor;
+    pdest = &tikzInfo->fillColor;
   }
 
   if( TikZ_CheckAndAddColor(tikzInfo, color) )
   {
-    strscpy(dest, colorstr);
+    strscpy(*pdest, colorstr);
   }
   else
   {
-    strscpy(dest, colors[ops]);
+    strscpy(*pdest, colors[ops]);
 
-    TikZ_WriteColorDefinition(tikzInfo, printOutput, color, dest, colorstr);
+    TikZ_WriteColorDefinition(tikzInfo, printOutput, color, *pdest, colorstr);
   }
 
 
