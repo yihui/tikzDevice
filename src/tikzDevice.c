@@ -1274,7 +1274,7 @@ static void TikZ_Line( double x1, double y1,
 
   /* Shortcut pointers to variables of interest. */
   tikzDevDesc *tikzInfo = (tikzDevDesc *) deviceInfo->deviceSpecific;
-  TikZ_DrawOps ops = TikZ_GetDrawOps(plotParams);
+  TikZ_DrawOps ops = TikZ_GetDrawOps(plotParams) & DRAWOP_DRAW;
 
   /*Show only for debugging*/
   if(tikzInfo->debug == TRUE)

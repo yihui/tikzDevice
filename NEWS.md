@@ -8,6 +8,11 @@
  - Do not create color file if `tikzSymbolicColors` is off
  - Fix issue with translating color with representation -1
 
+## Bug fixes
+
+- Ignore fill color for lines to remove thin line (1 pixel wide) that was shown
+  with dashed or dotted lines on some viewers (#63, @mbergner).
+
 Bug fixes
 ---
 

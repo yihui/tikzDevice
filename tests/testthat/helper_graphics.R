@@ -1,6 +1,10 @@
 # This file contains functions that help set up and run the tikzDevice through
 # test graphs.
 
+get_graphics_reporter <- function() {
+  get_reporter()$reporters[[2]]
+}
+
 do_graphics_test <- function(short_name, description, graph_code, fuzz = 0,
   engine = 'pdftex', graph_options = NULL, skip_if = NULL, tags = NULL, ...) {
 
@@ -110,7 +114,7 @@ compile_graph <- function(graph_file, engine){
 
 compare_graph <- function(graph_name, tags){
   if ( is.null(compare_cmd) ) {
-    get_reporter()$vis_result('SKIP')
+    get_graphics_reporter()$vis_result('SKIP')
     return(TRUE)
   }
 
@@ -125,7 +129,7 @@ compare_graph <- function(graph_name, tags){
   }
 
   if ( !file.exists(test_output) || !file.exists(standard_graph) ) {
-    get_reporter()$vis_result('SKIP')
+    get_graphics_reporter()$vis_result('SKIP')
     return(TRUE)
   }
 
@@ -138,13 +142,13 @@ compare_graph <- function(graph_name, tags){
     "2>&1 | awk '{metric=$NF};END{print metric}'"
   )
 
-  get_reporter()$reporters[[2]]$set_cmp_command(command_line)
+  get_graphics_reporter()$set_cmp_command(command_line)
   result <- as.double(system(paste(
     # Force the command to be executed through bash
     'bash -c ', shQuote(command_line)),
     intern = TRUE, ignore.stderr = TRUE))
 
-  get_reporter()$reporters[[2]]$vis_result(result)
+  get_graphics_reporter()$vis_result(result)
 
   return(as.numeric(result))
 
