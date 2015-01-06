@@ -1,3 +1,9 @@
+Contributors
+---
+
+- Thanks to Greg Jefferis, Bill Venables, Sam Mason, Gvozden Neskovic,
+  Martin Bergner and Casper Ti. Vector for contributing to this release.
+
 Features
 ---
 
