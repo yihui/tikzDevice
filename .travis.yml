@@ -3,9 +3,17 @@ language: c
 # language: objective-c
 env:
   matrix:
-    - TYPE=cran RELEASE=trunk
-    - TYPE=cran RELEASE=tags/R-3-0-2
+    - TYPE=cran RELEASE=trunk R_BUILD_ARGS="--no-manual --compact-vignettes=gs+qpdf" R_CHECK_ARGS="--no-manual --as-cran" WARNINGS_ARE_ERRORS=1
+    - TYPE=cran RELEASE=tags/R-3-1-2 R_BUILD_ARGS="--no-manual --compact-vignettes=gs+qpdf" R_CHECK_ARGS="--no-manual --as-cran" WARNINGS_ARE_ERRORS=1
+    - TYPE=cran RELEASE=tags/R-3-1-1 R_BUILD_ARGS="--no-manual --compact-vignettes=gs+qpdf" R_CHECK_ARGS="--no-manual --as-cran" WARNINGS_ARE_ERRORS=1
+    - TYPE=cran RELEASE=tags/R-3-1-0 R_BUILD_ARGS="--no-manual --compact-vignettes=gs+qpdf" R_CHECK_ARGS="--no-manual --as-cran" WARNINGS_ARE_ERRORS=1
+    - TYPE=cran RELEASE=tags/R-3-0-3 R_BUILD_ARGS="--no-manual --compact-vignettes=gs+qpdf" R_CHECK_ARGS="--no-manual --as-cran" WARNINGS_ARE_ERRORS=1
+    - TYPE=cran RELEASE=tags/R-3-0-2 R_BUILD_ARGS="--no-manual --compact-vignettes=gs+qpdf" R_CHECK_ARGS="--no-manual --as-cran" WARNINGS_ARE_ERRORS=1
     - TYPE=tests RELEASE=trunk
+    - TYPE=tests RELEASE=tags/R-3-1-2
+    - TYPE=tests RELEASE=tags/R-3-1-1
+    - TYPE=tests RELEASE=tags/R-3-1-0
+    - TYPE=tests RELEASE=tags/R-3-0-3
     - TYPE=tests RELEASE=tags/R-3-0-2
     - TYPE=tests RELEASE=tags/R-3-0-1
     - TYPE=tests RELEASE=tags/R-3-0-0
@@ -57,7 +65,7 @@ install:
       make -j2 &&
       sudo make install
     ); fi
-  - ./travis-tool.sh r_binary_install filehash testthat evaluate stringr ggplot2 maps
+  - ./travis-tool.sh r_binary_install filehash testthat evaluate stringr ggplot2 maps knitr
   - ./travis-tool.sh dump_sysinfo
 after_failure:
   - cat ~/r-source/config.log || true

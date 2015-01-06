@@ -1,7 +1,7 @@
 tikzDevice
 ==========
 
-[![Build Status](https://travis-ci.org/yihui/tikzDevice.png)](https://travis-ci.org/yihui/tikzDevice)
+[![Build Status](https://travis-ci.org/yihui/tikzDevice.svg)](https://travis-ci.org/yihui/tikzDevice)
 
 The tikzDevice package provides a graphics output device for R that records
 plots in a LaTeX-friendly format. The device transforms plotting commands
@@ -45,15 +45,9 @@ Bleeding-edge source code is available from GitHub, too:
 
     git clone git://github.com/yihui/tikzDevice.git
 
-Source code checked out from GitHub cannot be installed directly by
-`R CMD INSTALL`. There are some tasks that need to be executed to prepare the
-source for installation. A makefile is provided that can execute these tasks.
-To work with source code checked out from GitHub, ensure you are using GNU Make
-and execute the following:
+After cloning, install via
 
-    make
-
-That will print out a list of tasks available, including installation.
+    devtools::install()
 
 
 Reporting Bugs and Getting Help

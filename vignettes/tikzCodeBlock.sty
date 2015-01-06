@@ -60,7 +60,7 @@
 % Inherits everything from rectangle except the behind background path.
 %
 % Adapted from Texample:
-%		http://www.texample.net/tikz/examples/rectangle-node-with-diagonal-fill/
+%    http://www.texample.net/tikz/examples/rectangle-node-with-diagonal-fill/
 %
 % Contributed by Mark Wibrow- the guy who designed the PGF math engine
 % and made most of the stock node shapes.
@@ -91,7 +91,7 @@
     \inheritbehindforegroundpath[from=rectangle]
     \inheritforegroundpath[from=rectangle]
     \inheritbeforeforegroundpath[from=rectangle]
-    
+
    % Now do the background filling.
     \behindbackgroundpath{%
         % \southwest and \northeast defined by rectangle, but
@@ -101,36 +101,36 @@
         \pgfextracty{\pgf@ya}{\southwest}%
         \pgfextractx{\pgf@xb}{\northeast}%
         \pgfextracty{\pgf@yb}{\northeast}%
-		
-		% New code here. We want to draw a bar 4 ex wide to lie
-		% under the line numbers. So we define two points that 
-		% are 7 ex to the left of the southwest and northwest corners.
-		\def\pgf@numberstripe@southwest{%
-			\pgfpointadd{\southwest}%
-			{\pgfpoint{\pgf@codestripe@width}{0}}%
-		}
-		\def\pgf@numberstripe@northwest{%
-			\pgfpointadd{\pgfpoint{\pgf@xa}{\pgf@yb}}%
-			{\pgfpoint{\pgf@codestripe@width}{0}}%
-		}
-		% Now we draw the code bar.
-		\pgfpathmoveto{\southwest}%
-		\pgfpathlineto{\pgf@numberstripe@southwest}%
-		\pgfpathlineto{\pgf@numberstripe@northwest}%
-		\pgfpathlineto{\pgfpoint{\pgf@xa}{\pgf@yb}}%
-		\pgfpathclose		
-		% Now fill it with a nice light grey.
-		\color{\pgf@codestripe@color}%
-		\pgfusepath{fill}%
-		% Now for the rest of the node.
-		\pgfpathmoveto{\pgf@numberstripe@southwest}%
-		\pgfpathlineto{\pgfpoint{\pgf@xb}{\pgf@ya}}%
-		\pgfpathlineto{\northeast}%
-		\pgfpathlineto{\pgf@numberstripe@northwest}%
-		\pgfpathclose
-		%
-		\color{\pgf@codebody@color}%
-		\pgfusepath{fill}
+
+    % New code here. We want to draw a bar 4 ex wide to lie
+    % under the line numbers. So we define two points that
+    % are 7 ex to the left of the southwest and northwest corners.
+    \def\pgf@numberstripe@southwest{%
+      \pgfpointadd{\southwest}%
+      {\pgfpoint{\pgf@codestripe@width}{0}}%
+    }
+    \def\pgf@numberstripe@northwest{%
+      \pgfpointadd{\pgfpoint{\pgf@xa}{\pgf@yb}}%
+      {\pgfpoint{\pgf@codestripe@width}{0}}%
+    }
+    % Now we draw the code bar.
+    \pgfpathmoveto{\southwest}%
+    \pgfpathlineto{\pgf@numberstripe@southwest}%
+    \pgfpathlineto{\pgf@numberstripe@northwest}%
+    \pgfpathlineto{\pgfpoint{\pgf@xa}{\pgf@yb}}%
+    \pgfpathclose
+    % Now fill it with a nice light grey.
+    \color{\pgf@codestripe@color}%
+    \pgfusepath{fill}%
+    % Now for the rest of the node.
+    \pgfpathmoveto{\pgf@numberstripe@southwest}%
+    \pgfpathlineto{\pgfpoint{\pgf@xb}{\pgf@ya}}%
+    \pgfpathlineto{\northeast}%
+    \pgfpathlineto{\pgf@numberstripe@northwest}%
+    \pgfpathclose
+    %
+    \color{\pgf@codebody@color}%
+    \pgfusepath{fill}
     }
 }
 
@@ -160,17 +160,17 @@
 %--------------------- Begin Internal Package Macros ------------------
 
 \newcommand\tikzCode@setupKeys{%
-	% This command leverages the pgfkeys package,
-	% included by tikz, to set up handling for options
-	% of the form [key=value]
-	\pgfkeys{/tikzCode/title/.store in=\tikzCode@codeNodeTitle,
-		/tikzCode/footer/.store in=\tikzCode@codeNodeFooter,
-		/tikzCode/listing style/.store in=\tikzCode@listingStyle,
-		/tikzCode/code body/.style={/tikzCode/defaults/code body},
-		/tikzCode/code title body/.style={/tikzCode/defaults/code title body},
-		/tikzCode/code title outline/.style={/tikzCode/defaults/code title outline},
-		/tikzCode/code footer/.style={/tikzCode/defaults/code footer},
-	}
+  % This command leverages the pgfkeys package,
+  % included by tikz, to set up handling for options
+  % of the form [key=value]
+  \pgfkeys{/tikzCode/title/.store in=\tikzCode@codeNodeTitle,
+    /tikzCode/footer/.store in=\tikzCode@codeNodeFooter,
+    /tikzCode/listing style/.store in=\tikzCode@listingStyle,
+    /tikzCode/code body/.style={/tikzCode/defaults/code body},
+    /tikzCode/code title body/.style={/tikzCode/defaults/code title body},
+    /tikzCode/code title outline/.style={/tikzCode/defaults/code title outline},
+    /tikzCode/code footer/.style={/tikzCode/defaults/code footer},
+  }
 }
 
 
@@ -271,46 +271,46 @@
 
 % Default Code Node Style definitions.
 \tikzset{
-	/tikzCode/defaults/code body/.style={
-		% The code node is a homebrewed shape- several things can
-		% possibly go pear shaped with it- for example, adding rounded
-		% corners causes things to go whacky. Also- don't use the fill
-		% command :P
-		shape = code node,
-		draw = blue!50,
-		thick,
-		codebody color = blue!10,
-		outer sep = 0pt,
-		inner sep = 1ex,
+  /tikzCode/defaults/code body/.style={
+    % The code node is a homebrewed shape- several things can
+    % possibly go pear shaped with it- for example, adding rounded
+    % corners causes things to go whacky. Also- don't use the fill
+    % command :P
+    shape = code node,
+    draw = blue!50,
+    thick,
+    codebody color = blue!10,
+    outer sep = 0pt,
+    inner sep = 1ex,
     % Subtract off 2 * inner sep and line width
-		text width = {\linewidth - 2ex - 1.6pt}
-	},
-	/tikzCode/defaults/code title body/.style={
-		fill = white,
-		inner sep = 1ex,
-		outer sep = 0pt,
+    text width = {\linewidth - 2ex - 1.6pt}
+  },
+  /tikzCode/defaults/code title body/.style={
+    fill = white,
+    inner sep = 1ex,
+    outer sep = 0pt,
     % Explicitly unset the text width for the title node so that it always fits
     % its self to the width of the title.
     text width = ,
-		right = 0pt of code node body.north west,
-		anchor = base west
-	},
-	/tikzCode/defaults/code title outline/.style={
-		draw = blue!50,
-		thick
-	},
-	/tikzCode/defaults/code footer/.style={
-		draw = blue!50,
-		thick,
-		fill = white,
-		inner sep = 1ex,
-		outer sep = 0pt,
+    right = 0pt of code node body.north west,
+    anchor = base west
+  },
+  /tikzCode/defaults/code title outline/.style={
+    draw = blue!50,
+    thick
+  },
+  /tikzCode/defaults/code footer/.style={
+    draw = blue!50,
+    thick,
+    fill = white,
+    inner sep = 1ex,
+    outer sep = 0pt,
     % Explicitly unset the text width for the footer node so that it always fits
     % its self to the width of the title.
     text width = ,
-		above = 0pt of code node body.south,
-		anchor = base
-	}
+    above = 0pt of code node body.south,
+    anchor = base
+  }
 }
 
 
