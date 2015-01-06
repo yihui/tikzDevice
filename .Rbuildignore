@@ -13,3 +13,4 @@ tests/test_output
 GNUmakefile
 ^\.travis\.yml$
 ^NEWS\.md\.tmpl$
+^cran-comments\.md$
