@@ -1810,13 +1810,13 @@ static void TikZ_DefineDrawColor(tikzDevDesc *tikzInfo, int color, TikZ_DrawOps 
 
   if( TikZ_CheckAndAddColor(tikzInfo, color) )
   {
-    strlcpy(dest, colorstr, strlen(colorstr)+1);
+    strlcpy(dest, colorstr, sizeof dest / sizeof *dest);
   }
   else
   {
-    strlcpy(dest, colors[ops], strlen(colors[ops])+1);
+    strlcpy(dest, colors[ops], sizeof dest / sizeof *dest);
 
-    TikZ_WriteColorDefinition(tikzInfo, printOutput, color, colors[ops], colorstr);
+    TikZ_WriteColorDefinition(tikzInfo, printOutput, color, dest, colorstr);
   }
 
 
@@ -2335,18 +2335,8 @@ static void const_free(const void *ptr){
   free((void*)ptr);
 }
 
-static size_t strlcpy(char *dst, const char* src, size_t n){
-  size_t size = strlen(src);
-  size_t newsize = n;
-
-  if( newsize == 0)
-    return newsize;
-
-  if( newsize > size )
-    newsize = size;
-
-  strncpy(dst, src, newsize);
-  dst[newsize] = '\0';
-
-  return newsize;
+static void strlcpy(char *dst, const char* src, size_t n){
+  if (n <= 0) return;
+  strncpy(dst, src, n - 1);
+  dst[n - 1] = '\0';
 }
