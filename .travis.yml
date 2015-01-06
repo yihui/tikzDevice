@@ -5,6 +5,8 @@ env:
   matrix:
     - TYPE=cran RELEASE=tags/R-3-0-3 R_BUILD_ARGS="--no-manual --compact-vignettes=gs+qpdf" R_CHECK_ARGS="--no-manual --as-cran" WARNINGS_ARE_ERRORS=1
     - TYPE=tests RELEASE=tags/R-3-0-3
+  global:
+    - EXTRA_PACKAGES="filehash testthat evaluate stringr ggplot2 maps knitr"
 
 script:
   - if [ $TYPE == cran ]; then ./travis-tool.sh run_tests; fi
@@ -46,7 +48,7 @@ install:
       make -j2 &&
       sudo make install
     ); fi
-  - ./travis-tool.sh r_binary_install filehash testthat evaluate stringr ggplot2 maps knitr
+  - ./travis-tool.sh r_binary_install $EXTRA_PACKAGES
   - ./travis-tool.sh dump_sysinfo
 after_failure:
   - cat ~/r-source/config.log || true
