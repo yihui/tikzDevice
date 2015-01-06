@@ -14,7 +14,7 @@ Authors@R: c(
     person("Sam", "Mason", role="ctb"),
     person("Gvozden", "Neskovic", role="ctb"),
     person("Martin", "Bergner", role="ctb"),
-    person("Casper Ti.", "Vector", role="ctb"),
+    person("Casper Ti.", "Vector", role="ctb")
     )
 URL: https://github.com/yihui/tikzDevice
 BugReports: https://github.com/yihui/tikzDevice/issues
