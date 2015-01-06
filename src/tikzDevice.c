@@ -315,8 +315,10 @@ static Rboolean TikZ_Setup(
   tikzInfo->timestamp = timestamp;
 
   /* initialize strings, just to be on the safe side */
-  strcpy(tikzInfo->drawColor, "drawColor");
-  strcpy(tikzInfo->fillColor, "fillColor");
+  strlcpy(tikzInfo->drawColor, "drawColor",
+    sizeof tikzInfo->drawColor / sizeof *tikzInfo->drawColor);
+  strlcpy(tikzInfo->fillColor, "fillColor",
+    sizeof tikzInfo->fillColor / sizeof *tikzInfo->fillColor);
 
   /* Incorporate tikzInfo into deviceInfo. */
   deviceInfo->deviceSpecific = (void *) tikzInfo;
