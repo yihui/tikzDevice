@@ -9,6 +9,10 @@ Authors@R: c(
     person("Cameron", "Bracken", role = "aut"),
     person("Kirill", "Müller", role = c("ctb", "cre"), email = "krlmlr+r@mailbox.org"),
     person("Yihui", "Xie", role = "ctb"),
+    person("Greg", "Jefferis", role="ctb"),
+    person("Bill", "Venables", role="ctb"),
+    person("Sam", "Mason", role="ctb"),
+    person("Gvozden", "Neskovic", role="ctb"),
     person("Martin", "Bergner", role="ctb"),
     person("Casper Ti.", "Vector", role="ctb"),
     )
