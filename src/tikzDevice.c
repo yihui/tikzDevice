@@ -315,10 +315,8 @@ static Rboolean TikZ_Setup(
   tikzInfo->timestamp = timestamp;
 
   /* initialize strings, just to be on the safe side */
-  strlcpy(tikzInfo->drawColor, "drawColor",
-    sizeof tikzInfo->drawColor / sizeof *tikzInfo->drawColor);
-  strlcpy(tikzInfo->fillColor, "fillColor",
-    sizeof tikzInfo->fillColor / sizeof *tikzInfo->fillColor);
+  strscpy(tikzInfo->drawColor, "drawColor");
+  strscpy(tikzInfo->fillColor, "fillColor");
 
   /* Incorporate tikzInfo into deviceInfo. */
   deviceInfo->deviceSpecific = (void *) tikzInfo;
@@ -1812,11 +1810,11 @@ static void TikZ_DefineDrawColor(tikzDevDesc *tikzInfo, int color, TikZ_DrawOps 
 
   if( TikZ_CheckAndAddColor(tikzInfo, color) )
   {
-    strlcpy(dest, colorstr, sizeof dest / sizeof *dest);
+    strscpy(dest, colorstr);
   }
   else
   {
-    strlcpy(dest, colors[ops], sizeof dest / sizeof *dest);
+    strscpy(dest, colors[ops]);
 
     TikZ_WriteColorDefinition(tikzInfo, printOutput, color, dest, colorstr);
   }
