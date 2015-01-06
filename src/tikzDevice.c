@@ -314,6 +314,10 @@ static Rboolean TikZ_Setup(
   tikzInfo->onefile = onefile;
   tikzInfo->timestamp = timestamp;
 
+  /* initialize strings, just to be on the safe side */
+  strscpy(tikzInfo->drawColor, "drawColor");
+  strscpy(tikzInfo->fillColor, "fillColor");
+
   /* Incorporate tikzInfo into deviceInfo. */
   deviceInfo->deviceSpecific = (void *) tikzInfo;
 
@@ -516,20 +520,7 @@ static Rboolean TikZ_Setup(
 static void TikZ_WriteColorDefinition( tikzDevDesc *tikzInfo, void (*printOut)(tikzDevDesc *tikzInfo, const char *format, ...), int color, const char* colorname, const char* colorstr )
 {
 
-  /* strip # from both strings as they are not necessary nor allowed */
-  if( colorname[0] == '#' )
-    colorname= colorname +1;
-
-  if( colorstr[0] == '#')
-    colorstr = colorstr+1;
-
-  /* define the color as an alias */
-  if( color == -1 )
-    printOutput(tikzInfo,
-      "\\definecolor{%s}{named}{%s}\n",
-      colorname, colorstr);
-  /* treat gray colors separately */
-  else if ( strncmp(colorstr, "gray", 4) == 0 && strlen(colorstr) > 4)
+  if ( strncmp(colorstr, "gray", 4) == 0 && strlen(colorstr) > 4)
   {
     int perc = atoi(colorstr+4);
     printOut(tikzInfo,
@@ -554,13 +545,17 @@ static void TikZ_WriteColorDefinitions( tikzDevDesc *tikzInfo )
   for( i = 0; i < tikzInfo->ncolors; ++i)
   {
     const char* colorstr = col2name(tikzInfo->colors[i]);
+
+    if(colorstr[0] == '#')
+      colorstr = colorstr+1;
+
     TikZ_WriteColorDefinition(tikzInfo, printColorOutput, tikzInfo->colors[i], colorstr, colorstr);
   }
 }
 
 static void TikZ_WriteColorFile(tikzDevDesc *tikzInfo)
 {
-  if ( tikzInfo->outColorFileName )
+  if ( tikzInfo->outColorFileName && tikzInfo->symbolicColors )
   {
     tikzInfo->colorFile = fopen(R_ExpandFileName(tikzInfo->outColorFileName), "w");
     if( tikzInfo->colorFile)
@@ -1161,7 +1156,7 @@ static void TikZ_Text( double x, double y, const char *str,
   TikZ_DefineColors(plotParams, deviceInfo, DRAWOP_DRAW);
 
   /* Start a node for the text, open an options bracket. */
-  printOutput(tikzInfo,"\n\\node[text=drawColor");
+  printOutput(tikzInfo,"\n\\node[text=%s", tikzInfo->drawColor);
   /* FIXME: Should bail out of this function early if text is fully transparent */
   if( !R_OPAQUE(plotParams->col) )
     printOutput(tikzInfo, ",text opacity=%4.2f", R_ALPHA(plotParams->col)/255.0);
@@ -1795,14 +1790,35 @@ static Rboolean TikZ_CheckAndAddColor(tikzDevDesc *tikzInfo, int color)
   return colorfound;
 }
 
-static void TikZ_DefineDrawColor(tikzDevDesc *tikzInfo, int color, const char* colortype)
+static void TikZ_DefineDrawColor(tikzDevDesc *tikzInfo, int color, TikZ_DrawOps ops)
 {
   const char *colorstr = col2name(color);
+  const char* colors[] = {"", "drawColor", "fillColor"};
+  char (*pdest)[sizeof tikzInfo->drawColor / sizeof* tikzInfo->drawColor];
+
+  if( colorstr[0] == '#' )
+    colorstr = colorstr+1;
+
+  if( ops == DRAWOP_DRAW)
+  {
+    pdest = &tikzInfo->drawColor;
+  }
+  else if( ops == DRAWOP_FILL )
+  {
+    pdest = &tikzInfo->fillColor;
+  }
 
   if( TikZ_CheckAndAddColor(tikzInfo, color) )
-    TikZ_WriteColorDefinition(tikzInfo, printOutput, -1, colortype, colorstr);
+  {
+    strscpy(*pdest, colorstr);
+  }
   else
-    TikZ_WriteColorDefinition(tikzInfo, printOutput, color, colortype, colorstr);
+  {
+    strscpy(*pdest, colors[ops]);
+
+    TikZ_WriteColorDefinition(tikzInfo, printOutput, color, *pdest, colorstr);
+  }
+
 
 }
 
@@ -1813,10 +1829,9 @@ static void TikZ_DefineColors(pGEcontext plotParams, pDevDesc deviceInfo, TikZ_D
 
   if ( ops & DRAWOP_DRAW ) {
     color = plotParams->col;
-
     if ( color != tikzInfo->oldDrawColor ) {
       tikzInfo->oldDrawColor = color;
-      TikZ_DefineDrawColor(tikzInfo, color, "drawColor");
+      TikZ_DefineDrawColor(tikzInfo, color, DRAWOP_DRAW);
     }
   }
 
@@ -1824,7 +1839,7 @@ static void TikZ_DefineColors(pGEcontext plotParams, pDevDesc deviceInfo, TikZ_D
     color = plotParams->fill;
     if( color != tikzInfo->oldFillColor ) {
       tikzInfo->oldFillColor = color;
-      TikZ_DefineDrawColor(tikzInfo, color, "fillColor");
+      TikZ_DefineDrawColor(tikzInfo, color, DRAWOP_FILL);
     }
   }
 
@@ -1846,7 +1861,7 @@ static void TikZ_WriteDrawOptions(const pGEcontext plotParams, pDevDesc deviceIn
   tikzDevDesc *tikzInfo = (tikzDevDesc *) deviceInfo->deviceSpecific;
 
   if ( ops & DRAWOP_DRAW ) {
-    printOutput(tikzInfo, "draw=drawColor");
+    printOutput(tikzInfo, "draw=%s", tikzInfo->drawColor);
     if( !R_OPAQUE(plotParams->col) )
       printOutput(tikzInfo, ",draw opacity=%4.2f", R_ALPHA(plotParams->col)/255.0);
 
@@ -1858,7 +1873,7 @@ static void TikZ_WriteDrawOptions(const pGEcontext plotParams, pDevDesc deviceIn
     if ( ops & DRAWOP_DRAW )
       printOutput(tikzInfo, ",");
 
-    printOutput(tikzInfo, "fill=fillColor");
+    printOutput(tikzInfo, "fill=%s", tikzInfo->fillColor);
     if( !R_OPAQUE(plotParams->fill) )
       printOutput(tikzInfo, ",fill opacity=%4.2f", R_ALPHA(plotParams->fill)/255.0);
   }
@@ -2265,12 +2280,12 @@ static void TikZ_CheckState(pDevDesc deviceInfo)
      */
     int color = deviceInfo->startfill;
     tikzInfo->oldFillColor = color;
-    TikZ_DefineDrawColor(tikzInfo, color, "fillColor");
+    TikZ_DefineDrawColor(tikzInfo, color, DRAWOP_FILL);
 
     printOutput(tikzInfo, "\\path[use as bounding box");
 
     /* TODO: Consider only filling when the color is not transparent. */
-    printOutput(tikzInfo, ",fill=fillColor");
+    printOutput(tikzInfo, ",fill=%s", tikzInfo->fillColor);
     if( !R_OPAQUE(color) )
       printOutput(tikzInfo, ",fill opacity=%4.2f", R_ALPHA(color)/255.0);
 
@@ -2318,4 +2333,10 @@ static char *calloc_x_strlen(const char *str, size_t extra){
 
 static void const_free(const void *ptr){
   free((void*)ptr);
+}
+
+static void strlcpy(char *dst, const char* src, size_t n){
+  if (n <= 0) return;
+  strncpy(dst, src, n - 1);
+  dst[n - 1] = '\0';
 }
