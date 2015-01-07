@@ -5,6 +5,7 @@
   \subsection{Bug Fixes}{
     \itemize{
       \item Renamed \code{strlcpy} to \code{strlcpy_} to avoid name clashes on OS X and Solaris (#97).
+      \item Reduced size of archive on CRAN.
     }
   }
 }
