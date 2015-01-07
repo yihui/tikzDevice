@@ -60,26 +60,38 @@ typedef enum {
  * Device routines.
 */
 typedef struct {
-	FILE *outputFile;
+  FILE *outputFile;
+  FILE *colorFile;
   char *outFileName;
   char *originalFileName;
+  char *outColorFileName;
+  char *originalColorFileName;
   tikz_engine engine;
   int rasterFileCount;
   int pageNum;
-	Rboolean debug;
-	Rboolean standAlone;
-	Rboolean bareBones;
+  double lwdUnit;
+  Rboolean debug;
+  Rboolean standAlone;
+  Rboolean bareBones;
   Rboolean onefile;
-	int oldFillColor;
-	int oldDrawColor;
-	int stringWidthCalls;
-	const char *documentDeclaration;
-	const char *packages;
-	const char *footer;
-	Rboolean console;
-	Rboolean sanitize;
+  int oldFillColor;
+  int oldDrawColor;
+  int stringWidthCalls;
+  const char *documentDeclaration;
+  const char *packages;
+  const char *footer;
+  Rboolean console;
+  Rboolean sanitize;
   TikZ_ClipState clipState;
   TikZ_PageState pageState;
+  Rboolean symbolicColors;
+  int* colors;
+  int ncolors;
+  int maxSymbolicColors;
+  Rboolean excessWarningPrinted;
+  char drawColor[32];
+  char fillColor[32];
+  Rboolean timestamp;
 } tikzDevDesc;
 
 
@@ -87,19 +99,21 @@ typedef struct {
 
 /* Public Functions */
 SEXP TikZ_StartDevice(SEXP args);
-void TikZ_Annotate(const char **annotation, int *size);
+void TikZ_Annotate(const char **annotation, int *size, int *checkstate);
 SEXP TikZ_DeviceInfo(SEXP device_num);
 
 
 static Rboolean TikZ_Setup(
-		pDevDesc deviceInfo,
-		const char *fileName,
-		double width, double height, Rboolean onefile,
-		const char *bg, const char *fg, double baseSize,
-		Rboolean standAlone, Rboolean bareBones,
-		const char *documentDeclaration,
-		const char *packages, const char *footer,
-		Rboolean console, Rboolean sanitize, int engine );
+    pDevDesc deviceInfo,
+    const char *fileName,
+    double width, double height, Rboolean onefile,
+    const char *bg, const char *fg, double baseSize, double lwdUnit,
+    Rboolean standAlone, Rboolean bareBones,
+    const char *documentDeclaration,
+    const char *packages, const char *footer,
+    Rboolean console, Rboolean sanitize, int engine,
+    Rboolean symbolicColors, const char *colorFileName,
+    int maxSymbolicColors, Rboolean timestamp );
 
 
 /* Graphics Engine function hooks. Defined in GraphicsDevice.h . */
@@ -109,29 +123,29 @@ static Rboolean TikZ_Open( pDevDesc deviceInfo );
 static void TikZ_Close( pDevDesc deviceInfo );
 static void TikZ_NewPage( const pGEcontext plotParams, pDevDesc deviceInfo );
 static void TikZ_Clip( double x0, double x1,
-		double y0, double y1, pDevDesc deviceInfo );
+    double y0, double y1, pDevDesc deviceInfo );
 static void TikZ_Size( double *left, double *right,
-		double *bottom, double *top, pDevDesc deviceInfo);
+    double *bottom, double *top, pDevDesc deviceInfo);
 
 /* Font Metrics*/
 static void TikZ_MetricInfo( int c, const pGEcontext plotParams,
-		double *ascent, double *descent, double *width, pDevDesc deviceInfo );
+    double *ascent, double *descent, double *width, pDevDesc deviceInfo );
 static double TikZ_StrWidth( const char *str,
-		const pGEcontext plotParams, pDevDesc deviceInfo );
+    const pGEcontext plotParams, pDevDesc deviceInfo );
 
 /* Drawing routines. */
 static void TikZ_Text( double x, double y, const char *str,
-		double rot, double hadj, const pGEcontext plotParams, pDevDesc deviceInfo);
+    double rot, double hadj, const pGEcontext plotParams, pDevDesc deviceInfo);
 static void TikZ_Circle( double x, double y, double r,
-		const pGEcontext plotParams, pDevDesc deviceInfo );
-static void TikZ_Rectangle( double x0, double y0, 
-		double x1, double y1, const pGEcontext plotParams, pDevDesc deviceInfo );
+    const pGEcontext plotParams, pDevDesc deviceInfo );
+static void TikZ_Rectangle( double x0, double y0,
+    double x1, double y1, const pGEcontext plotParams, pDevDesc deviceInfo );
 static void TikZ_Line( double x1, double y1,
-		double x2, double y2, const pGEcontext plotParams, pDevDesc deviceInfo );
+    double x2, double y2, const pGEcontext plotParams, pDevDesc deviceInfo );
 static void TikZ_Polyline( int n, double *x, double *y,
-		pGEcontext plotParams, pDevDesc deviceInfo );
+    pGEcontext plotParams, pDevDesc deviceInfo );
 static void TikZ_Polygon( int n, double *x, double *y,
-		pGEcontext plotParams, pDevDesc deviceInfo );
+    pGEcontext plotParams, pDevDesc deviceInfo );
 static void
 TikZ_Path( double *x, double *y,
   int npoly, int *nper,
@@ -183,14 +197,18 @@ static double ScaleFont( const pGEcontext plotParams, pDevDesc deviceInfo );
 
 /* Utility Routines*/
 static void printOutput(tikzDevDesc *tikzInfo, const char *format, ...);
+static void printColorOutput(tikzDevDesc *tikzInfo, const char *format, ...);
 static void Print_TikZ_Header( tikzDevDesc *tikzInfo );
 static char *Sanitize(const char *str);
+#if 0
 static Rboolean contains_multibyte_chars(const char *str);
+#endif
 static double dim2dev( double length );
 static void TikZ_CheckState(pDevDesc deviceInfo);
 static char *calloc_strcpy(const char *str);
 static char *calloc_x_strcpy(const char *str, size_t extra);
 static char *calloc_x_strlen(const char *str, size_t extra);
 static void const_free(const void *ptr);
-
+static void strlcpy(char *dst, const char* src, size_t n);
+#define strscpy(dst, src) strlcpy(dst, src, sizeof(dst) / sizeof(*(dst)))
 #endif // End of Once Only header

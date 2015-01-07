@@ -1,5 +1,5 @@
 # Switch to the detailed reporter implemented in helper_reporters.R
-testthat:::with_reporter(GraphicsReporter$new(), {
+with_reporter(MultiReporter$new(reporters = list(get_reporter(), GraphicsReporter$new())), {
 
 test_graphs <- list(
   list(
@@ -103,6 +103,19 @@ test_graphs <- list(
     graph_code = quote({
       plot(c(0,1), c(0,1), type = "l", axes=F,
               xlab='', ylab='', col='red3')
+    })
+  ),
+
+  list(
+    short_name = 'line_color_width',
+    description = 'Draw colored lines with changed line width',
+    tags = c('base'),
+    graph_options = list(
+      tikzLwdUnit = 72.27/96
+    ),
+    graph_code = quote({
+      plot(c(0,1), c(0,1), type = "l", axes=F,
+           xlab='', ylab='', col='red3')
     })
   ),
 
@@ -265,6 +278,7 @@ test_graphs <- list(
         "\\usetikzlibrary{shapes.arrows,shapes.symbols}"
       )
     ),
+    fuzz = 130,
     graph_code = quote({
 
       p <- rgamma (300 ,1)
@@ -306,9 +320,10 @@ test_graphs <- list(
         "\\usetikzlibrary{shapes.callouts}"
       )
     ),
+    fuzz = 745,
     graph_code = quote({
 
-      require(grid)
+      library(grid)
 
       pushViewport(plotViewport())
       pushViewport(dataViewport(1:10, 1:10))
@@ -326,13 +341,26 @@ test_graphs <- list(
   ),
 
   list(
+    short_name = 'annotation_noflush',
+    description = 'Annotation prior to any graphics output',
+    tags = c('base', 'annotation'),
+    graph_code = quote({
+        plot.new()
+        plot.window(0:1, 0:1)
+        tikzCoord(0, 0, name="ll")
+        tikzCoord(1, 1, name="ur")
+        tikzAnnotate('\\draw (ll) rectangle (ur);');
+    })
+  ),
+
+  list(
     short_name = 'ggplot2_test',
     description = 'Test of ggplot2 graphics',
     tags = c('ggplot2'),
     graph_code = quote({
       sink(tempfile())
-      suppressPackageStartupMessages(require(mgcv))
-      suppressPackageStartupMessages(require(ggplot2))
+      suppressPackageStartupMessages(library(mgcv))
+      suppressPackageStartupMessages(library(ggplot2))
       sink()
       print(qplot(carat, price, data = diamonds, geom = "smooth",
       colour = color))
@@ -345,7 +373,7 @@ test_graphs <- list(
     tags = c('ggplot2', 'text'),
     graph_code =  quote({
       sink(tempfile())
-      suppressPackageStartupMessages(require(ggplot2))
+      suppressPackageStartupMessages(library(ggplot2))
       sink()
 
       soilSample <- structure(list(`Grain Diameter` = c(8, 5.6, 4, 2.8, 2, 1, 0.5, 0.355, 0.25),
@@ -365,7 +393,7 @@ test_graphs <- list(
           scale_x_log10() + scale_y_probit() + theme_bw()
       } else {
         sink(tempfile())
-        suppressPackageStartupMessages(require(scales))
+        suppressPackageStartupMessages(library(scales))
         sink()
         testPlot <- qplot(log10(`Grain Diameter`), `Percent Finer`, data = soilSample) +
           scale_x_continuous(labels = math_format(10^.x)) +
@@ -460,8 +488,8 @@ test_graphs <- list(
     tags = c('grid', 'raster'),
     graph_code = quote({
 
-      suppressPackageStartupMessages(require(grid))
-      suppressPackageStartupMessages(require(lattice))
+      suppressPackageStartupMessages(library(grid))
+      suppressPackageStartupMessages(library(lattice))
 
       plt <- levelplot(volcano, panel = panel.levelplot.raster,
            col.regions = topo.colors, cuts = 30, interpolate = TRUE)
@@ -471,6 +499,33 @@ test_graphs <- list(
     })
   ),
 
+  list(
+    short_name = 'base_raster_noresample',
+    description = 'Test noresampling raster support in base graphics',
+    tags = c('base', 'raster'),
+    graph_options = list(
+      tikzRasterResolution = NA),
+    graph_code = quote({
+      plot.new()
+      suppressWarnings(rasterImage(as.raster(matrix(seq(0,1,len=9),3)),0,0,1,1,interpolate=TRUE))
+    })
+  ),
+
+  list(
+    short_name = 'base_symbolic_simple',
+    description = 'Test symbolic colors for a simple image',
+    tags = c('base', 'symbolic'),
+    graph_options = list(
+      tikzSymbolicColors=TRUE, tikzMaxSymbolicColors=3),
+    graph_code = quote({
+      plot.new()
+      points(0,0)
+      points(0,1, col="red")
+      suppressWarnings(points(1,1, col="green"))
+      points(1,0, col="gray50")
+      points(0.5,0.5, col="#F3346A")
+    })
+  ),
   # New pdfLaTeX tests go here
   #list(
   #  short_name = 'something_suitable_as_a_filename',
@@ -574,7 +629,7 @@ test_graphs <- list(
     graph_code =  quote({
       n <- 8
       chars <- intToUtf8(seq(187,,1,n*n),multiple=T)
-      
+
       plot(1:n,type='n',xlab='',ylab='',axes=FALSE, main="UTF-8 Characters")
       text(rep(1:n, n), rep(1:n, rep(n, n)), chars)
     })
@@ -612,7 +667,6 @@ test_that('All graphics devices closed',{
 
 })
 
-testthat:::end_context() # Needs to be done manually due to reporter swap
 }) # End reporter swap
 
 
@@ -651,4 +705,3 @@ if ( !is.null(compare_cmd) && !is.null(convert_cmd) ) {
   message('\nResults of all visual diffs combined into:\n\t', diff_output)
 
 }
-

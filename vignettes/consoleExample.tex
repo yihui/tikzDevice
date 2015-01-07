@@ -1,0 +1,19 @@
+ \documentclass{article}
+ \usepackage{tikz}
+ 
+ 
+ \begin{document}
+   \begin{figure}[ht]
+     \centering
+ <<inline,echo=FALSE,results='tex'>>=
+ 
+ require(tikzDevice)
+ tikz(console=TRUE,width=5,height=5)
+   x <- rnorm(100)
+   plot(x)
+ dummy <- dev.off()
+ @
+     \caption{caption}
+     \label{fig:inline}
+   \end{figure}
+ \end{document}

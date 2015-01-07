@@ -5,12 +5,12 @@ env:
   global:
     - BOOTSTRAP_LATEX=1
   matrix:
-    - TYPE=cran
+    - TYPE=cran R_BUILD_ARGS="--no-manual --compact-vignettes=gs+qpdf" R_CHECK_ARGS="--no-manual --as-cran" WARNINGS_ARE_ERRORS=1
     - TYPE=tests
 
 script:
-  - if [ $TYPE == cran ]; then ( cd ..; R CMD check tikzDevice*.*.tar.gz --as-cran --no-build-vignettes --no-manual ); fi
-  - if [ $TYPE == tests ]; then ( cd tests; ./unit_tests.R ); fi
+  - if [ $TYPE == cran ]; then ./travis-tool.sh run_tests; fi
+  - if [ $TYPE == tests ]; then ( cd ..; R CMD build tikzDevice; R CMD INSTALL tikzDevice*.*.tar.gz ); ( cd tests; ./unit_tests.R ); fi
 
 before_install:
   - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
@@ -23,6 +23,7 @@ before_install:
   - if IsSourceInstall; then export FORCE_SOURCE_INSTALL=1; fi
 install:
   - if IsLinux; then sudo apt-get install --no-install-recommends $APT_EXTRA; fi
+  - if [ $TYPE == tests ] && IsLinux; then (cd /tmp && curl -OL http://mirrors.ctan.org/install/macros/latex/contrib/oberdiek.tds.zip && cd /usr/share/texmf/tex/latex && sudo unzip /tmp/oberdiek.tds.zip && sudo texhash); fi
   - sh -e /etc/init.d/xvfb start
   - if IsSourceInstall; then (
       cd ~ &&
@@ -33,8 +34,7 @@ install:
       make -j2 &&
       sudo make install
     ); fi
-  - ./travis-tool.sh r_binary_install colorspace zoo RColorBrewer dichromat munsell labeling Formula sp mvtnorm TH.data sandwich gtable reshape2 scales proto quantreg Hmisc mapproj hexbin maptools multcomp filehash ggplot2 testthat
-  - ( cd ..; R CMD build tikzDevice --no-build-vignettes --no-manual; R CMD INSTALL tikzDevice*.*.tar.gz )
+  - ./travis-tool.sh r_binary_install filehash testthat evaluate stringr ggplot2 maps knitr
   - ./travis-tool.sh dump_sysinfo
 after_failure:
   - cat tikzDevice.Rcheck/00install.out || true

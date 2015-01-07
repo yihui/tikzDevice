@@ -42,6 +42,14 @@
 #' In cases where both \code{standAlone} and \code{bareBones} have been set to
 #' \code{TRUE}, the \code{standAlone} option will take precedence.
 #'
+#' When the option \code{symbolicColors} is set to \code{TRUE}, the colors will
+#' be written as symbolic names, e.g. \code{red, gray90} and similar. If the
+#' color is not mapped to a symbolic name in R, the color will be named
+#' \code{XXXXX} when \code{#XXXXXX} is its hexadecimal color. All the color
+#' names will have to be defined in the enclosing document, which is
+#' automatically written if the path of a color file \code{colorFileName} is
+#' set.
+#'
 #' @param file A character string indicating the desired path to the output
 #'   file.
 #' @param width The width of the output figure, in \bold{inches}.
@@ -56,6 +64,10 @@
 #'   only used if a valid pointsize cannot be extracted from the value of
 #'   \code{getOption("tikzDocumentDeclaration")}.  See the section ``Font Size
 #'   Calculations'' in \link{tikzDevice-package} for more details.
+#' @param lwdUnit The number of \code{pt}s in LaTeX that \code{lwd=1} in R is
+#'   translated to.  Defaults to 0.4 (LaTeX and TikZ default); for compatibility
+#'   with R default, please use 72.27/96 (96 pixels in R is 1 inch, which is 72.27
+#'   points in TeX).
 #' @param standAlone A logical value indicating whether the output file should
 #'   be suitable for direct processing by LaTeX. A value of \code{FALSE}
 #'   indicates that the file is intended for inclusion in a larger document.
@@ -82,7 +94,21 @@
 #'   \link{tikzDevice-package}.
 #' @param footer See the section ``Options That Affect Package Behavior'' of
 #'   \link{tikzDevice-package}.
-#'
+#' @param symbolicColors A logical value indicating whether colors are written
+#'  as RGB values or as symbolic names in which case the need to be defined in
+#'  the LaTeX document. These definitions can be generated with the following
+#'  \code{colorFileName} parameter. See also the section ``Options That Affect
+#'  Package Behavior'' of \link{tikzDevice-package}.
+#' @param colorFileName a character string indicating where the color map for
+#'  symbolic colors is to be stored. It can contain a placeholder \code{\%s}
+#'  where the tikz filename is inserted. If the string is empty, no file is
+#'  written.
+#' @param maxSymbolicColors an integer number indicating the maximal number
+#'  of distinct colors to write symbolically. Any excess color will be defined
+#'  as if \code{symbolicColors} was set to \code{FALSE}. See also the section
+#'  ``Options That Affect'  Package Behavior'' of \link{tikzDevice-package}.
+#' @param timestamp A logical value indicating whether a timestamp is written
+#'  to the TeX file.
 #'
 #' @return \code{tikz()} returns no values.
 #'
@@ -122,7 +148,7 @@
 #'
 #' # Minimal plot
 #' tikz(tf,standAlone=TRUE)
-#' 	plot(1)
+#'   plot(1)
 #' dev.off()
 #'
 #' # View the output
@@ -140,17 +166,17 @@
 #'
 #' #LaTeX math symbol names
 #' syms <-c('alpha','theta','tau','beta','vartheta','pi','upsilon',
-#'    		  'gamma','gamma','varpi','phi','delta','kappa','rho',
-#'    		  'varphi','epsilon','lambda','varrho','chi','varepsilon',
-#'    		  'mu','sigma','psi','zeta','nu','varsigma','omega','eta',
-#'    		  'xi','Gamma','Lambda','Sigma','Psi','Delta','Xi','Upsilon',
-#'    		  'Omega','Theta','Pi','Phi')
+#'          'gamma','gamma','varpi','phi','delta','kappa','rho',
+#'          'varphi','epsilon','lambda','varrho','chi','varepsilon',
+#'          'mu','sigma','psi','zeta','nu','varsigma','omega','eta',
+#'          'xi','Gamma','Lambda','Sigma','Psi','Delta','Xi','Upsilon',
+#'          'Omega','Theta','Pi','Phi')
 #' x <- rnorm(length(syms))
 #' y <- rnorm(length(syms))
 #'
 #' tikz(tf,standAlone=TRUE)
-#' 	plot(-2:2, -2:2, type = "n", axes=F,
-#' 			xlab='', ylab='', main='TikZ Device Math Example')
+#'   plot(-2:2, -2:2, type = "n", axes=F,
+#'       xlab='', ylab='', main='TikZ Device Math Example')
 #'     text(x,y,paste('\\\\Large$\\\\',syms,'$',sep=''))
 #' dev.off()
 #'
@@ -168,9 +194,9 @@
 #' setwd(td)
 #'
 #' tikz(tf,standAlone=TRUE)
-#' 	plot(-2:2, -2:2, type = "n", axes=F, xlab='', ylab='', main='Random Circles')
+#'   plot(-2:2, -2:2, type = "n", axes=F, xlab='', ylab='', main='Random Circles')
 #'     points(rnorm(50), rnorm(50), pch=21,
-#' 			bg=rainbow(50,alpha=.5), cex=10)
+#'       bg=rainbow(50,alpha=.5), cex=10)
 #' dev.off()
 #'
 #' #View the output
@@ -185,12 +211,15 @@
 tikz <-
 function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
   width = 7, height = 7, onefile = TRUE,
-  bg="transparent", fg="black", pointsize = 10, standAlone = FALSE,
-  bareBones = FALSE, console = FALSE, sanitize = FALSE,
+  bg="transparent", fg="black", pointsize = 10, lwdUnit = getOption("tikzLwdUnit"),
+  standAlone = FALSE, bareBones = FALSE, console = FALSE, sanitize = FALSE,
   engine = getOption("tikzDefaultEngine"),
   documentDeclaration = getOption("tikzDocumentDeclaration"),
   packages,
-  footer = getOption("tikzFooter")
+  footer = getOption("tikzFooter"),
+  symbolicColors = getOption("tikzSymbolicColors"), colorFileName = "%s_colors.tex",
+  maxSymbolicColors = getOption("tikzMaxSymbolicColors"),
+  timestamp = TRUE
 ){
 
   tryCatch({
@@ -257,10 +286,13 @@ function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
     paste( paste(documentDeclaration, collapse='\n'), collapse='\n')
   packages <- paste( paste( packages, collapse='\n'), collapse='\n')
   footer <- paste( paste( footer,collapse='\n'), collapse='\n')
+  if(maxSymbolicColors < 0)
+    stop("maxSymbolicColors needs to be nonnegative")
 
-  .External(TikZ_StartDevice, file, width, height, onefile, bg, fg, baseSize,
+  .External(TikZ_StartDevice, file, width, height, onefile, bg, fg, baseSize, lwdUnit,
     standAlone, bareBones, documentDeclaration, packages, footer, console,
-    sanitize, engine)
+    sanitize, engine, symbolicColors, colorFileName, maxSymbolicColors,
+    timestamp)
 
   invisible()
 
