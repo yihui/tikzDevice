@@ -3,14 +3,13 @@ Bug Fixes
 
 - Renamed `strlcpy` to `strlcpy_` to avoid name clashes on OS X and Solaris (#97).
 
-
 Changes in version 0.8 (2015-01-07)
 ===
 
 Compatibility
 ---
 
-This release doesn't work on OS X and Solaris. This will be resolved soon.
+- This release doesn't work on OS X and Solaris. This will be resolved soon.
 
 Contributors
 ---
