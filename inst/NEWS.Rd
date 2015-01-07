@@ -1,78 +1,63 @@
 \name{NEWS}
 \title{News for Package 'tikzDevice'}
 \encoding{UTF-8}
-\section{Changes in tikzDevice version 0.7.6 (2015-01-06)}{
+\section{Changes in tikzDevice version 0.8 (2015-01-07)}{
+  \subsection{Contributors}{
+    \itemize{
+      \item Thanks to Greg Jefferis, Bill Venables, Sam Mason, Gvozden Neskovic,
+        Martin Bergner and Casper Ti. Vector for contributing to this release.
+    }
+  }
   \subsection{Features}{
     \itemize{
-      \item Remove redefinition of \code{fillColor} and \code{drawColor} when symbolic color names
-        are used.
+      \item Add parameter \code{timestamp} to \code{tikz} to make the output of the timestamp optional (#28,
+        #73, thanks Martin Bergner).
+      \item Add parameter \code{lwdUnit} to \code{tikz} to specify the physical width of a line
+        (in points) that is 1 unit wide in R. By default, the value of option
+        \code{tikzLwdUnit} is used; this option has a value of 0.4 at startup (#68,
+        thanks Casper Ti. Vector).
+      \item Optionally use symbolic colors defined in a single external file instead of
+        hard-coded colors defined in-place.  New parameters \code{symbolicColors},
+        \code{colorFileName} and \code{maxSymbolicColors}; new options \code{tikzSymbolicColors}
+        and \code{tikzMaxSymbolicColors}. The external file is only created if requested;
+        in this case, symbolic color names are used instead of \code{fillColor} and
+        \code{drawColor} (#70, thanks Martin Bergner).
     }
   }
   \subsection{Bug Fixes}{
     \itemize{
       \item Ignore fill color for lines to remove thin line (1 pixel wide) that was shown
-        with dashed or dotted lines on some viewers (#63, @mbergner).
+        with dashed or dotted lines on some viewers (#63, thanks Martin Bergner).
       \item More robust handling of metrics dictionary.  Changes to the
         \code{tikzMetricsDictionary} option are recognized even if a metrics dictionary
         already has been initialized, a message is printed the first time a dictionary
         is used (in addition to the message that is printed when the dictionary is
-        created).  A missing dictionary file is recreated.
-      \item Failing tests are reported on Travis again (#92).
-      \item Do not create color file if \code{tikzSymbolicColors} is off
-      \item Fix issue with translating color with representation -1
-    }
-  }
-}
-\section{Changes in tikzDevice version 0.7.5 (2014-12-13)}{
-  \subsection{Features}{
-    \itemize{
-      \item Add parameter \code{timestamp} to make the output of the timestamp optional (#28,
-        #73).
-      \item Add parameter \code{lwdUnit} to \code{tikz} to specify the physical width of a line
-        (in points) that is 1 unit wide in R. By default, the value of option
-        \code{tikzLwdUnit} is used; this option has a value of 0.4 at startup.
-    }
-  }
-  \subsection{Internal}{
-    \itemize{
-      \item Tests perform strict image comparison (#18).
-      \item Use \code{knitr} as vignette builder (#37).
-    }
-  }
-}
-\section{Changes in tikzDevice version 0.7.4 (2014-11-10)}{
-  \subsection{Features}{
-    \itemize{
-      \item Optionally use symbolic colors defined in a single external file instead of
-        hard-coded colors defined in-place.  New parameters \code{symbolicColors},
-        \code{colorFileName} and \code{maxSymbolicColors}; new options \code{tikzSymbolicColors}
-        and \code{tikzMaxSymbolicColors} (#70, thanks Martin Bergner).
-    }
-  }
-}
-\section{Changes in tikzDevice version 0.7.3 (2014-09-09)}{
-  \subsection{Bug Fixes}{
-    \itemize{
+        created).  A missing dictionary file is recreated (#21).
       \item Performance improvements with zero-width strings (#66, thanks Gvozden Neskovic)
-      \item Add parameter checkstate to allow adding annotations to a new plot (#52,
+      \item Add parameter \code{checkstate} to allow adding annotations to a new plot (#52,
         thanks Sam Mason)
       \item Allow raster images to be output without resampling by setting
-        options(tikzRasterResolution = NA) (#54, thanks Sam Mason)
-    }
-  }
-}
-\section{Changes in tikzDevice version 0.7.2 (2014-01-05)}{
-  \subsection{Bug Fixes}{
-    \itemize{
+        \code{options(tikzRasterResolution = NA)} (#54, thanks Sam Mason)
       \item In console mode, print a \code{\\relax} statement after the comment to allow using
         \code{tikzDevice} in a Sweave code chunk with \code{results=tex}, as advertised in the
         vignette.  (The default is \code{strip.white=TRUE} which makes the following
         \code{\\begin\{tikzpicture\}} appear on the same line as the encoding comment in the
         resulting \code{.tex} file.)  (#47, thanks Bill Venables)
-      \item Fixed typos in vignette (#45, thanks Greg Jefferis).
-      \item Vignette now also compiles if the zi4 TeX package is installed instead of
-        inconsolata.  This should fix the CRAN notes and warnings on Windows.
-      \item Loading babel TeX package to avoid printing tilde in references (#49).
+    }
+  }
+  \subsection{Vignette}{
+    \itemize{
+      \item Use \code{knitr} as vignette builder (#37).
+      \item Fixed typos (#45, thanks Greg Jefferis).
+      \item Vignette now also compiles if the \code{zi4} TeX package is installed instead of
+        \code{inconsolata}.  This should fix the CRAN notes and warnings on Windows.
+      \item Loading \code{babel} TeX package to avoid printing tilde in references (#49).
+    }
+  }
+  \subsection{Internal}{
+    \itemize{
+      \item Tests perform strict image comparison (#18).
+      \item Testing now also works in RStudio.
     }
   }
 }
