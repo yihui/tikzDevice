@@ -1807,6 +1807,8 @@ static void TikZ_DefineDrawColor(tikzDevDesc *tikzInfo, int color, TikZ_DrawOps 
   {
     pdest = &tikzInfo->fillColor;
   }
+  else
+    return; // shouldn't happen, just to satisfy the compiler
 
   if( TikZ_CheckAndAddColor(tikzInfo, color) )
   {
