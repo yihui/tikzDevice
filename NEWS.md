@@ -2,6 +2,7 @@ Bug Fixes
 ---
 
 - Renamed `strlcpy` to `strlcpy_` to avoid name clashes on OS X and Solaris (#97).
+- Reduced size of archive on CRAN.
 
 Changes in version 0.8 (2015-01-07)
 ===
