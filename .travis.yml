@@ -1,6 +1,6 @@
-language: c
+# language: c
 # To build on OSX, switch the previous line to
-# language: objective-c
+language: objective-c
 env:
   global:
     - BOOTSTRAP_LATEX=1
