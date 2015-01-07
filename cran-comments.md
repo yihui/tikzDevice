@@ -1,3 +1,7 @@
+## Reasons
+* Failing installation on OS X and Solaris
+* Archive unnecessarily large
+
 ## Test environments
 * local Ubuntu 14.10 install, R 3.1.2
 * Ubuntu 12.04 (on travis-ci), R-devel, 3.1.2 to 3.1.0
