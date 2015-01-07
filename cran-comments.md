@@ -9,7 +9,9 @@
 * win-builder (devel and release)
 
 ## R CMD check results
-There were no ERRORs or WARNINGs. 
+There were no ERRORs or WARNINGs, just a NOTE mentioning 0 days
+since last update. (A bogus WARNING appeared on winbuilder
+due to the "u umlaut" in my name.)
 
 ## Downstream dependencies
 I have also run R CMD check on the one downstream dependency, dplR.
