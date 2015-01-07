@@ -1,5 +1,6 @@
-## Reason
-Failing installation on OS X and Solaris
+## Reasons
+* Failing installation on OS X and Solaris
+* Archive unnecessarily large
 
 ## Test environments
 * local Ubuntu 14.10 install, R 3.1.2
