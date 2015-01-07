@@ -7,23 +7,10 @@ env:
     - TYPE=cran RELEASE=tags/R-3-1-2 R_BUILD_ARGS="--no-manual --compact-vignettes=gs+qpdf" R_CHECK_ARGS="--no-manual --as-cran" WARNINGS_ARE_ERRORS=1
     - TYPE=cran RELEASE=tags/R-3-1-1 R_BUILD_ARGS="--no-manual --compact-vignettes=gs+qpdf" R_CHECK_ARGS="--no-manual --as-cran" WARNINGS_ARE_ERRORS=1
     - TYPE=cran RELEASE=tags/R-3-1-0 R_BUILD_ARGS="--no-manual --compact-vignettes=gs+qpdf" R_CHECK_ARGS="--no-manual --as-cran" WARNINGS_ARE_ERRORS=1
-    - TYPE=cran RELEASE=tags/R-3-0-3 R_BUILD_ARGS="--no-manual --compact-vignettes=gs+qpdf" R_CHECK_ARGS="--no-manual --as-cran" WARNINGS_ARE_ERRORS=1
-    - TYPE=cran RELEASE=tags/R-3-0-2 R_BUILD_ARGS="--no-manual --compact-vignettes=gs+qpdf" R_CHECK_ARGS="--no-manual --as-cran" WARNINGS_ARE_ERRORS=1
     - TYPE=tests RELEASE=trunk
     - TYPE=tests RELEASE=tags/R-3-1-2
     - TYPE=tests RELEASE=tags/R-3-1-1
     - TYPE=tests RELEASE=tags/R-3-1-0
-    - TYPE=tests RELEASE=tags/R-3-0-3
-    - TYPE=tests RELEASE=tags/R-3-0-2
-    - TYPE=tests RELEASE=tags/R-3-0-1
-    - TYPE=tests RELEASE=tags/R-3-0-0
-    - TYPE=tests RELEASE=tags/R-2-15-3
-    - TYPE=tests RELEASE=tags/R-2-15-2
-    - TYPE=tests RELEASE=tags/R-2-15-1
-    - TYPE=tests RELEASE=tags/R-2-15-0
-    - TYPE=tests RELEASE=tags/R-2-14-2
-    - TYPE=tests RELEASE=tags/R-2-14-1
-    - TYPE=tests RELEASE=tags/R-2-14-0
 
 script:
   - if [ $TYPE == cran ]; then ./travis-tool.sh run_tests; fi
