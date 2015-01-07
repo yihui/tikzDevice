@@ -24,17 +24,17 @@ tag:
 	(echo Release v$$(sed -n -r '/^Version: / {s/.* ([0-9.-]+)$$/\1/;p}' DESCRIPTION); echo; sed -n '/^===/,/^===/{:a;N;/\n===/!ba;p;q}' NEWS.md | head -n -3 | tail -n +3) | git tag -a -F /dev/stdin v$$(sed -n -r '/^Version: / {s/.* ([0-9.-]+)$$/\1/;p}' DESCRIPTION)
 
 bump-cran-desc: master rd
-	crant -u 2 -C
+	crant -u 2 -MVC
 
 bump-gh-desc: master rd
-	crant -u 3 -C
+	crant -u 3 -MVC
 
 bump-desc: master rd
 	test "$$(git status --porcelain | wc -c)" = "0"
 	sed -i -r '/^Version: / s/( [0-9.]+)$$/\1-0.0/' DESCRIPTION
 	git add DESCRIPTION
 	test "$$(git status --porcelain | wc -c)" = "0" || git commit -m "add suffix -0.0 to version"
-	crant -u 4 -C
+	crant -u 4 -MVC
 
 bump-cran: bump-cran-desc inst/NEWS.Rd tag
 
