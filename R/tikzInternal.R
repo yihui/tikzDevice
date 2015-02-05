@@ -3,9 +3,8 @@
 
 enc1251toUTF8 <- function(fileName){
     if (grepl("1251",Sys.getlocale("LC_CTYPE"))) {
-       fileEncoded <- scan(fileName,what=character(),encoding="CP1251",sep="\n")
-       fileReEncoded <- iconv(fileEncoded,from="CP1251",to="UTF8")
-       writeLines(fileReEncoded,fileName)
+        fileEncoded <- scan(fileName,what=character(),encoding="CP1251",sep="\n")
+        write.table(fileEncoded,file=fileName,fileEncoding="UTF-8",row.names=FALSE,col.names=FALSE,quote=FALSE)
     }
 }
 
