@@ -670,6 +670,14 @@ static void TikZ_Close( pDevDesc deviceInfo)
   if(tikzInfo->console == FALSE)
   {
     fclose(tikzInfo->outputFile);
+    SEXP e, tmp, ret,myNamespace;
+    PROTECT( myNamespace = TIKZ_NAMESPACE );
+    PROTECT(e = allocVector(LANGSXP, 2));
+    tmp = findFun(install("encodingConvert"), myNamespace);
+    SETCAR(e, tmp);
+    SETCADR(e, mkString(tikzInfo->outFileName));
+    PROTECT(ret = R_tryEval(e, myNamespace, NULL));
+    UNPROTECT(3);
     tikzInfo->outputFile = NULL;
   }
 
@@ -713,6 +721,13 @@ static void TikZ_NewPage( const pGEcontext plotParams, pDevDesc deviceInfo )
 
       if( !tikzInfo->console )
         fclose(tikzInfo->outputFile);
+        PROTECT( myNamespace = TIKZ_NAMESPACE );
+        PROTECT(e = allocVector(LANGSXP, 2));
+        tmp = findFun(install("encodingConvert"), myNamespace);
+        SETCAR(e, tmp);
+        SETCADR(e, mkString(tikzInfo->outFileName));
+        PROTECT(ret = R_tryEval(e, myNamespace, NULL));
+        UNPROTECT(3);
     }
 
     /* write symbolic color names to the corresponding file */
