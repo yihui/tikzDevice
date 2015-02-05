@@ -673,7 +673,7 @@ static void TikZ_Close( pDevDesc deviceInfo)
     SEXP e, tmp, ret,myNamespace;
     PROTECT( myNamespace = TIKZ_NAMESPACE );
     PROTECT(e = allocVector(LANGSXP, 2));
-    tmp = findFun(install("encodingConvert"), myNamespace);
+    tmp = findFun(install("enc1251toUTF8"), myNamespace);
     SETCAR(e, tmp);
     SETCADR(e, mkString(tikzInfo->outFileName));
     PROTECT(ret = R_tryEval(e, myNamespace, NULL));
@@ -723,7 +723,7 @@ static void TikZ_NewPage( const pGEcontext plotParams, pDevDesc deviceInfo )
         fclose(tikzInfo->outputFile);
         PROTECT( myNamespace = TIKZ_NAMESPACE );
         PROTECT(e = allocVector(LANGSXP, 2));
-        tmp = findFun(install("encodingConvert"), myNamespace);
+        tmp = findFun(install("enc1251toUTF8"), myNamespace);
         SETCAR(e, tmp);
         SETCADR(e, mkString(tikzInfo->outFileName));
         PROTECT(ret = R_tryEval(e, myNamespace, NULL));
