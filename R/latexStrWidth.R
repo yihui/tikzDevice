@@ -393,9 +393,8 @@ function( TeXMetrics ){
   close( texIn )
   
   if (grepl("1251",Sys.getlocale("LC_CTYPE"))) {
-    fileEncoded <- scan(texFile,what=character(),encoding="CP1251",sep="\n")
-    fileReEncoded <- iconv(fileEncoded,from="CP1251",to="UTF8")
-    writeLines(fileReEncoded,texFile)
+    texIn <- scan(texFile,what=character(),encoding="CP1251",sep="\n")
+    write.table(texIn,file=texFile,fileEncoding="UTF-8",row.names=FALSE,col.names=FALSE,quote=FALSE)
   }
 
   # Recover the latex command. Use XeLaTeX if the character is not ASCII
