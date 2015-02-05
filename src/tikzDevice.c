@@ -670,7 +670,7 @@ static void TikZ_Close( pDevDesc deviceInfo)
   if(tikzInfo->console == FALSE)
   {
     fclose(tikzInfo->outputFile);
-    SEXP e, tmp, ret,myNamespace;
+    SEXP e, tmp, ret, myNamespace;
     PROTECT( myNamespace = TIKZ_NAMESPACE );
     PROTECT(e = allocVector(LANGSXP, 2));
     tmp = findFun(install("enc1251toUTF8"), myNamespace);
@@ -721,6 +721,7 @@ static void TikZ_NewPage( const pGEcontext plotParams, pDevDesc deviceInfo )
 
       if( !tikzInfo->console )
         fclose(tikzInfo->outputFile);
+        SEXP e, tmp, ret, myNamespace;
         PROTECT( myNamespace = TIKZ_NAMESPACE );
         PROTECT(e = allocVector(LANGSXP, 2));
         tmp = findFun(install("enc1251toUTF8"), myNamespace);
