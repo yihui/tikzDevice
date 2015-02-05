@@ -391,6 +391,12 @@ function( TeXMetrics ){
 
   # Close the LaTeX file, ready to compile
   close( texIn )
+  
+  if (grepl("1251",Sys.getlocale("LC_CTYPE"))) {
+    fileEncoded <- scan(texFile,what=character(),encoding="CP1251",sep="\n")
+    fileReEncoded <- iconv(fileEncoded,from="CP1251",to="UTF8")
+    writeLines(fileReEncoded,texFile)
+  }
 
   # Recover the latex command. Use XeLaTeX if the character is not ASCII
   latexCmd <- switch(TeXMetrics$engine,
