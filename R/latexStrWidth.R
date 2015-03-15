@@ -401,7 +401,7 @@ function( TeXMetrics ){
 
   # Append the batchmode flag to increase LaTeX
   # efficiency.
-  latexCmd <- paste( latexCmd, '-interaction=batchmode', '-halt-on-error',
+  latexCmd <- paste(shQuote(latexCmd), '-interaction=batchmode', '-halt-on-error',
     '-output-directory', shQuote(texDir), shQuote(texFile))
 
   # avoid warnings about non-zero exit status, we know tex exited abnormally
