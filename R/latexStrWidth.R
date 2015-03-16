@@ -410,12 +410,8 @@ function( TeXMetrics ){
   # it was designed that way for speed
   suppressWarnings(silence <- system( latexCmd, intern=T, ignore.stderr=T))
 
-  # Open the log file.
-  texOut <- file( texLog, 'r' )
-
   # Read the contents of the log file.
-  logContents <- readLines( texOut )
-  close( texOut )
+  logContents <- readLines( texLog )
 
   if (TeXMetrics$engine == 'xetex') {
     # Check to see if XeLaTeX was unable to typeset any Unicode characters.
