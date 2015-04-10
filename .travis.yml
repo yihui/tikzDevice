@@ -30,8 +30,11 @@ install:
       make -j2 &&
       sudo make install
     ); fi
-  - ./travis-tool.sh r_binary_install filehash testthat evaluate stringr ggplot2 maps knitr
+  - ./travis-tool.sh install_r_binary filehash testthat evaluate stringr ggplot2 maps knitr
+  - ./travis-tool.sh install_github jimhester/covr
   - ./travis-tool.sh dump_sysinfo
 after_failure:
   - cat tikzDevice.Rcheck/00install.out || true
   - cat tikzDevice.Rcheck/00check.log || true
+after_success:
+  - Rscript -e 'library(covr); coveralls()'
