@@ -1,7 +1,5 @@
-Bug Fixes
----
-
-- fix segfault when no file extension is provided (#101)
+- Fix segfault when no file extension is provided (#101)
+- Fix quoting issue with spaces in the tempdir name (#105, #106)
 
 Changes in version 0.8.1 (2015-01-07)
 ===
