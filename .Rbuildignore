@@ -18,3 +18,5 @@ GNUmakefile
 ^cran-comments\.md$
 /Makefile
 /makeR
+/Makefile
+/makeR
