@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>sanitizeTexString. tikzDevice 0.8.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="
+Cameron Bracken &lt;a href='mailto:cameron.bracken@gmail.com'&gt;cameron.bracken@gmail.com&lt;/a&gt;
+">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">tikzDevice 0.8.1</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Replace LaTeX Special Characters in a String</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><div>sanitizeTexString(string, strip&nbsp;=&nbsp;getOption("tikzSanitizeCharacters"), replacement&nbsp;=&nbsp;getOption("tikzReplacementCharacters"))</div></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>string</dt>
+      <dd>A character vector of length 1 (a string).</dd>
+      <dt>strip</dt>
+      <dd>A character vector of single characters to search for.</dd>
+      <dt>replacement</dt>
+      <dd>A character vector of replacement values.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+<dt>sanitizedString</dt><dd>A character vector of length 1 with all
+  special characters replaced.</dd></p>
+  
+      <p></dl></p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>This function is used by tikzDevice when <code>sanitize=TRUE</code> to replace
+special LaTeX characters (such as the comment character 
+where the user does not have direct control over the generated text.</p>
+  
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+
+      <p><code>sanitizeTexString</code> searches character by character through a string
+replacing each occurrence of a special character contained in
+<code>strip[i]</code> with the corresponding replacement value in
+<code>replacement[i]</code>.  tikzDevice calls back this function for every piece
+of text when the sanitize option is TRUE. See <code><a href='tikz.html'>tikz</a></code> for more
+information on the default special characters and replacement values.</p>
+  
+      <p>By default, `tikzSanitizeCharacters` replaces the following characters:</p>
+  
+      <p><ul>
+<li> <code>%</code>
+  </li>
+<li> <code>$</code>
+  </li>
+<li> <code>}</code>
+  </li>
+<li> <code>{</code>
+  </li>
+<li> <code>^</code>
+  </li>
+<li> <code>_</code>
+  </li>
+<li> <code>#</code>
+  </li>
+<li> <code>&</code>
+  </li>
+<li> <code>~</code>
+</li>
+</ul></p>
+  
+      <p>With the contents of `tikzReplacementCharacters`:</p>
+  
+      <p><ul>
+<li> <code>\%</code>
+  </li>
+<li> <code>\$</code>
+  </li>
+<li> <code>\}</code>
+  </li>
+<li> <code>\{</code>
+  </li>
+<li> <code>\^{}</code>
+  </li>
+<li> <code>\_{}</code>
+  </li>
+<li> <code>\#</code>
+  </li>
+<li> <code>\&</code>
+  </li>
+<li> <code>\char`\~</code>
+ </li>
+</ul></p>
+  
+      <p>These defaults may be adjusted using the <code><a href='http://www.inside-r.org/r-doc/base/options'>options</a></code> function.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'># Be careful with sanitizing, it may lead to unexpected behavior.
+# For example, we may want -1 to be a superscript it gets
+# sanitized away with the other default special characters.
+# The string appears in LaTeX exactly as shown.
+## &lt;strong&gt;Not run&lt;/strong&gt;: 
+#   sanitizeTexString(&#39;10\% of 10$ is 10^\{-1\}$&#39;)
+# ## &lt;strong&gt;End(Not run)&lt;/strong&gt;
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>sanitizeTexString</li>
+    </ul>
+    <ul>
+      <li>character</li>
+    </ul> -->
+      
+    <h2>See also</h2>
+    
+<code><a href='tikz.html'>tikz</a></code>
+
+    
+    <h2>Author</h2>
+    
+Cameron Bracken <a href='mailto:cameron.bracken@gmail.com'>cameron.bracken@gmail.com</a>
+
+    
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

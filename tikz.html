@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>tikz. tikzDevice 0.8.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="
+Charlie Sharpsteen &lt;a href='mailto:source@sharpsteen.net'&gt;source@sharpsteen.net&lt;/a&gt; and Cameron
+  Bracken &lt;a href='mailto:cameron.bracken@gmail.com'&gt;cameron.bracken@gmail.com&lt;/a&gt;
+">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">tikzDevice 0.8.1</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>TikZ Graphics Device</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><div>tikz(file&nbsp;=&nbsp;ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"), width&nbsp;=&nbsp;7, height&nbsp;=&nbsp;7, onefile&nbsp;=&nbsp;TRUE, bg&nbsp;=&nbsp;"transparent", fg&nbsp;=&nbsp;"black", pointsize&nbsp;=&nbsp;10, lwdUnit&nbsp;=&nbsp;getOption("tikzLwdUnit"), standAlone&nbsp;=&nbsp;FALSE, bareBones&nbsp;=&nbsp;FALSE, console&nbsp;=&nbsp;FALSE, sanitize&nbsp;=&nbsp;FALSE, engine&nbsp;=&nbsp;getOption("tikzDefaultEngine"), documentDeclaration&nbsp;=&nbsp;getOption("tikzDocumentDeclaration"), packages, footer&nbsp;=&nbsp;getOption("tikzFooter"), symbolicColors&nbsp;=&nbsp;getOption("tikzSymbolicColors"), colorFileName&nbsp;=&nbsp;"%s_colors.tex", maxSymbolicColors&nbsp;=&nbsp;getOption("tikzMaxSymbolicColors"), timestamp&nbsp;=&nbsp;TRUE)</div></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>file</dt>
+      <dd>A character string indicating the desired path to the output
+file.</dd>
+      <dt>width</dt>
+      <dd>The width of the output figure, in <b>inches</b>.</dd>
+      <dt>height</dt>
+      <dd>The height of the output figure, in <b>inches</b>.</dd>
+      <dt>onefile</dt>
+      <dd>Should output be directed to separate environments in a
+single file (default <code>TRUE</code>). If <code>FALSE</code> this option works
+exactly like the argument of the same name to <code><a href='http://www.inside-r.org/r-doc/grDevices/pdf'>pdf</a></code>
+(see there for more details).</dd>
+      <dt>bg</dt>
+      <dd>The starting background color for the plot.</dd>
+      <dt>fg</dt>
+      <dd>The starting foreground color for the plot.</dd>
+      <dt>pointsize</dt>
+      <dd>Base pointsize used in the LaTeX document.  This option is
+only used if a valid pointsize cannot be extracted from the value of
+<code>getOption("tikzDocumentDeclaration")</code>.  See the section ``Font Size
+Calculations'' in <a href='tikzDevice-package.html'>tikzDevice-package</a> for more details.</dd>
+      <dt>lwdUnit</dt>
+      <dd>The number of <code>pt</code>s in LaTeX that <code>lwd=1</code> in R is
+translated to.  Defaults to 0.4 (LaTeX and TikZ default); for compatibility
+with R default, please use 72.27/96 (96 pixels in R is 1 inch, which is 72.27
+points in TeX).</dd>
+      <dt>standAlone</dt>
+      <dd>A logical value indicating whether the output file should
+be suitable for direct processing by LaTeX. A value of <code>FALSE</code>
+indicates that the file is intended for inclusion in a larger document.
+See &#145;Details&#146;.</dd>
+      <dt>bareBones</dt>
+      <dd>A logical value.  When <code>TRUE</code> the figure will not be
+wrapped in a <code>tikzpicture</code> environment.  This option is useful for
+embedding one TikZ picture within another. When <code>TRUE</code> multipage
+output will be drawn on a single page.</dd>
+      <dt>console</dt>
+      <dd>Should the output of tikzDevice be directed to the R console
+(default <code>FALSE</code>). This is useful for dumping tikz output directly into a
+LaTeX document via <code><a href='http://www.inside-r.org/r-doc/base/sink'>sink</a></code>.  If TRUE, the <code>file</code> argument
+is ignored. Setting <code>file=''</code> is equivalent to setting
+<code>console=TRUE</code>.</dd>
+      <dt>sanitize</dt>
+      <dd>Should special latex characters be replaced (Default FALSE).
+See the section ``Options That Affect Package Behavior'' for which
+characters are replaced.</dd>
+      <dt>engine</dt>
+      <dd>a string specifying which TeX engine to use. Possible values
+are 'pdftex', 'xetex' and 'luatex'. See the Unicode section of
+<a href='tikzDevice-package.html'>tikzDevice-package</a> for details.</dd>
+      <dt>documentDeclaration</dt>
+      <dd>See the sections ``Options That Affect Package
+Behavior'' and ``Font Size Calculations'' of <a href='tikzDevice-package.html'>tikzDevice-package</a>
+for more details.</dd>
+      <dt>packages</dt>
+      <dd>See the section ``Options That Affect Package Behavior'' of
+<a href='tikzDevice-package.html'>tikzDevice-package</a>.</dd>
+      <dt>footer</dt>
+      <dd>See the section ``Options That Affect Package Behavior'' of
+<a href='tikzDevice-package.html'>tikzDevice-package</a>.</dd>
+      <dt>symbolicColors</dt>
+      <dd>A logical value indicating whether colors are written
+as RGB values or as symbolic names in which case the need to be defined in
+the LaTeX document. These definitions can be generated with the following
+<code>colorFileName</code> parameter. See also the section ``Options That Affect
+Package Behavior'' of <a href='tikzDevice-package.html'>tikzDevice-package</a>.</dd>
+      <dt>colorFileName</dt>
+      <dd>a character string indicating where the color map for
+symbolic colors is to be stored. It can contain a placeholder <code>%s</code>
+where the tikz filename is inserted. If the string is empty, no file is
+written.</dd>
+      <dt>maxSymbolicColors</dt>
+      <dd>an integer number indicating the maximal number
+of distinct colors to write symbolically. Any excess color will be defined
+as if <code>symbolicColors</code> was set to <code>FALSE</code>. See also the section
+``Options That Affect'  Package Behavior'' of <a href='tikzDevice-package.html'>tikzDevice-package</a>.</dd>
+      <dt>timestamp</dt>
+      <dd>A logical value indicating whether a timestamp is written
+ to the TeX file.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+<code>tikz()</code> returns no values.
+</dl></p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p><code>tikz</code> is used to open a R graphics device which supports output in the
+TikZ graphics language. TikZ code may be included inside a LaTeX document by
+specifying <code>\usepackage{tikz}</code> in the document header.</p>
+  
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+
+      <p>The TikZ device enables LaTeX-ready output from graphics functions. This is
+done by encoding graphics commands using TikZ markup.  All text in a graphic
+output with <code>tikz</code> will be typeset by LaTeX and therefore will match
+whatever fonts are currently used in the document. This also means that
+<strong>LaTeX mathematics can be typeset directly into labels and
+annotations</strong>.</p>
+  
+      <p>The TikZ device currently supports three modes of output depending on the
+value of the parameter <code>standAlone</code> and <code>bareBones</code>.  If
+<code>standAlone</code> and <code>bareBones</code> are set to the default value of
+<code>FALSE</code>, the resulting file will only contain graphics output wrapped
+in a LaTeX <code>tikzpicture</code> environment.  Since this file is not a
+complete LaTeX document, it will need to be included in another LaTeX
+document using the <code>\input</code> command. For example:
+<pre>
+  \documentclass{article}
+  \usepackage{tikz}
+  \begin{document}
+  \begin{figure}
+    \centering
+    \input{Rplots.tex}
+    \caption{}
+  \end{figure}
+  \end{document}
+</pre></p>
+  
+      <p>When <code>standAlone</code> is set to <code>TRUE</code>, the device wraps the
+<code>tikzpicture</code> environment in a complete LaTeX document suitable for
+direct compilation. In this mode the <code>preview</code> package is used to crop
+the resulting output to the bounding box of the graphic.</p>
+  
+      <p>When <code>bareBones</code> is set to <code>TRUE</code>, the output is not wrapped in a
+document or a <code>tikzpicture</code> environment.  This is useful for embedding
+an generated graphic within an existing TikZ picture.</p>
+  
+      <p>In cases where both <code>standAlone</code> and <code>bareBones</code> have been set to
+<code>TRUE</code>, the <code>standAlone</code> option will take precedence.</p>
+  
+      <p>When the option <code>symbolicColors</code> is set to <code>TRUE</code>, the colors will
+be written as symbolic names, e.g. <code>red, gray90</code> and similar. If the
+color is not mapped to a symbolic name in R, the color will be named
+<code>XXXXX</code> when <code>#XXXXXX</code> is its hexadecimal color. All the color
+names will have to be defined in the enclosing document, which is
+automatically written if the path of a color file <code>colorFileName</code> is
+set.</p>
+  
+    </div>
+
+    <div class="Note">
+      <h2>Note</h2>
+
+      <p>To compile the output of <code>tikz</code> a working installation of LaTeX
+  and PGF is needed.  Current releases of the TikZ package are available
+  from <a href = 'http://www.ctan.org'>http://www.ctan.org</a>. The package may also be installed through
+  the MikTeX package manager on Windows or using the TeX Live package
+  manager, <code>tlmgr</code>, on Unix/Linux/OS X. The TeX Live package manager
+  will only be installed by default for TeX Live distributions dated 2008
+  and later. Both bleeding-edge and release versions of TikZ may be obtained
+  from the project website hosted at
+  <a href = 'http://sourceforge.net/projects/pgf/'>http://sourceforge.net/projects/pgf/</a>.</p>
+  
+      <p>Multiple plots will be placed as separate environments in the output file.</p>
+  
+    </div>
+
+    <div class="References">
+      <h2>References</h2>
+
+      <p>The TikZ and PGF Packages: Manual for version 2.00
+  <a href = 'http://sourceforge.net/projects/pgf'>http://sourceforge.net/projects/pgf</a> Till Tantau, February 20,
+  2008</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>## &lt;strong&gt;Not run&lt;/strong&gt;: 
+# 
+# ## Example 1 ###################################
+# #Set up temporary work directory
+# td &lt;- tempdir()
+# tf &lt;- file.path(td,&#39;example1.tex&#39;)
+# oldwd &lt;- getwd()
+# setwd(td)
+# 
+# # Minimal plot
+# tikz(tf,standAlone=TRUE)
+#   plot(1)
+# dev.off()
+# 
+# # View the output
+# tools::texi2dvi(tf,pdf=T)
+# system(paste(getOption(&#39;pdfviewer&#39;),file.path(td,&#39;example1.pdf&#39;)))
+# setwd(oldwd)
+# ################################################
+# 
+# ## Example 2 ###################################
+# #Set up temporary work directory
+# td &lt;- tempdir()
+# tf &lt;- file.path(td,&#39;example2.tex&#39;)
+# oldwd &lt;- getwd()
+# setwd(td)
+# 
+# #LaTeX math symbol names
+# syms &lt;-c(&#39;alpha&#39;,&#39;theta&#39;,&#39;tau&#39;,&#39;beta&#39;,&#39;vartheta&#39;,&#39;pi&#39;,&#39;upsilon&#39;,
+#          &#39;gamma&#39;,&#39;gamma&#39;,&#39;varpi&#39;,&#39;phi&#39;,&#39;delta&#39;,&#39;kappa&#39;,&#39;rho&#39;,
+#          &#39;varphi&#39;,&#39;epsilon&#39;,&#39;lambda&#39;,&#39;varrho&#39;,&#39;chi&#39;,&#39;varepsilon&#39;,
+#          &#39;mu&#39;,&#39;sigma&#39;,&#39;psi&#39;,&#39;zeta&#39;,&#39;nu&#39;,&#39;varsigma&#39;,&#39;omega&#39;,&#39;eta&#39;,
+#          &#39;xi&#39;,&#39;Gamma&#39;,&#39;Lambda&#39;,&#39;Sigma&#39;,&#39;Psi&#39;,&#39;Delta&#39;,&#39;Xi&#39;,&#39;Upsilon&#39;,
+#          &#39;Omega&#39;,&#39;Theta&#39;,&#39;Pi&#39;,&#39;Phi&#39;)
+# x &lt;- rnorm(length(syms))
+# y &lt;- rnorm(length(syms))
+# 
+# tikz(tf,standAlone=TRUE)
+#   plot(-2:2, -2:2, type = &quot;n&quot;, axes=F,
+#       xlab=&#39;&#39;, ylab=&#39;&#39;, main=&#39;TikZ Device Math Example&#39;)
+#     text(x,y,paste(&#39;\\\\Large$\\\\&#39;,syms,&#39;$&#39;,sep=&#39;&#39;))
+# dev.off()
+# 
+# #View the output
+# tools::texi2dvi(tf,pdf=TRUE)
+# system(paste(getOption(&#39;pdfviewer&#39;),file.path(td,&#39;example2.pdf&#39;)))
+# setwd(oldwd)
+# ################################################
+# 
+# ## Example 3 ###################################
+# #Set up temporary work directory
+# td &lt;- tempdir()
+# tf &lt;- file.path(td,&#39;example3.tex&#39;)
+# oldwd &lt;- getwd()
+# setwd(td)
+# 
+# tikz(tf,standAlone=TRUE)
+#   plot(-2:2, -2:2, type = &quot;n&quot;, axes=F, xlab=&#39;&#39;, ylab=&#39;&#39;, main=&#39;Random Circles&#39;)
+#     points(rnorm(50), rnorm(50), pch=21,
+#       bg=rainbow(50,alpha=.5), cex=10)
+# dev.off()
+# 
+# #View the output
+# tools::texi2dvi(tf,pdf=TRUE)
+# system(paste(getOption(&#39;pdfviewer&#39;),file.path(td,&#39;example3.pdf&#39;)))
+# setwd(oldwd)
+# ################################################
+# ## &lt;strong&gt;End(Not run)&lt;/strong&gt;
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>tikz</li>
+    </ul>
+    <ul>
+      <li>device</li>
+    </ul> -->
+      
+    <h2>See also</h2>
+    
+<code><a href='http://www.inside-r.org/r-doc/grDevices/pictex'>pictex</a></code>, <code><a href='getLatexStrWidth.html'>getLatexCharMetrics</a></code>,
+  <code><a href='getLatexStrWidth.html'>getLatexStrWidth</a></code>, <code><a href='setTikzDefaults.html'>setTikzDefaults</a></code>,
+  <code><a href='tikzAnnotate.html'>tikzAnnotate</a></code>, <code><a href='sanitizeTexString.html'>sanitizeTexString</a></code>
+
+    
+    <h2>Author</h2>
+    
+Charlie Sharpsteen <a href='mailto:source@sharpsteen.net'>source@sharpsteen.net</a> and Cameron
+  Bracken <a href='mailto:cameron.bracken@gmail.com'>cameron.bracken@gmail.com</a>
+
+    
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

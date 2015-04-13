@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>getLatexStrWidth. tikzDevice 0.8.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="
+Charlie Sharpsteen &lt;a href='mailto:source@sharpsteen.net'&gt;source@sharpsteen.net&lt;/a&gt; and Cameron
+  Bracken &lt;a href='mailto:cameron.bracken@gmail.com'&gt;cameron.bracken@gmail.com&lt;/a&gt;
+">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">tikzDevice 0.8.1</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Obtain Font Metrics from LaTeX</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><div>getLatexStrWidth(texString, cex&nbsp;=&nbsp;1, face&nbsp;=&nbsp;1, engine&nbsp;=&nbsp;getOption("tikzDefaultEngine"), documentDeclaration&nbsp;=&nbsp;getOption("tikzDocumentDeclaration"), packages)</div>
+<div>getLatexCharMetrics(charCode, cex&nbsp;=&nbsp;1, face&nbsp;=&nbsp;1, engine&nbsp;=&nbsp;getOption("tikzDefaultEngine"), documentDeclaration&nbsp;=&nbsp;getOption("tikzDocumentDeclaration"), packages)</div></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>texString</dt>
+      <dd>An arbitrary string for which the width is to be
+calculated.  May contain LaTeX markup.</dd>
+      <dt>cex</dt>
+      <dd>a real number that specifies a scaling factor that is to be
+applied to device output.</dd>
+      <dt>face</dt>
+      <dd>an integer in the range [1-5] that specifies the font face to
+use. See <a href='http://www.inside-r.org/r-doc/graphics/par'>par</a> for details.</dd>
+      <dt>engine</dt>
+      <dd>a string specifying which TeX engine to use. Possible values
+are 'pdftex', 'xetex' and 'luatex'. See the Unicode section of <a href='tikzDevice-package.html'>tikzDevice</a> for
+details.</dd>
+      <dt>documentDeclaration</dt>
+      <dd>See the sections ``Options That Affect Package
+Behavior'' and ``Font Size Calculations'' of <a href='tikzDevice-package.html'>tikzDevice-package</a>
+for more details.</dd>
+      <dt>packages</dt>
+      <dd>See the section ``Options That Affect Package Behavior'' of
+  <a href='tikzDevice-package.html'>tikzDevice-package</a>.</dd>
+      <dt>charCode</dt>
+      <dd>an integer that corresponds to a symbol in the ASCII
+  character table under the Type 1 font encoding. All numeric values are
+  coerced using <code>as.integer</code>. Non-numeric values will not be accepted.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+<dt>getLatexStrWidth</dt><dd>The width of <code>texString</code> in points.</dd></p>
+  
+      <p><dt>getLatexCharMetrics</dt><dd>A numeric vector holding ascent, descent
+    and width. Values should all be nonnegative.</dd></p>
+  
+      <p></dl></p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>These functions calculate the width of a character or string as it would
+appear after being compiled by LaTeX.</p>
+  
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+
+      <p>These functions are used internally by the <code>tikz</code> device for proper
+string placement in graphics.  Both functions check to see if metrics exist
+in a global or temporary dictionary (as defined in
+<code>options('tikzMetricsDictionary')</code>) and if so will pull the metrics
+from there. If the dictionary does not exist, then a temporary one is
+created for the current R session. Metrics are calculated via <code>system</code>
+calls to LaTeX compilers. Querying compilers to calculate metrics is
+expensive and so we strongly recommend setting
+<code>options('tikzMetricsDictionary') <- '/path/to/dictionary'</code> to create a
+global dictionary.</p>
+  
+    </div>
+
+    <div class="References">
+      <h2>References</h2>
+
+      <p>PGF Manual</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>getLatexStrWidth(&#39;{\\\\tiny Hello \\\\LaTeX!}&#39;)
+</div>
+<strong class='message'>Creating temporary TikZ metrics dictionary at:
+	/tmp/RtmpZl5nid/tikzMetricsDictionary</strong>
+<strong class='message'>Using TikZ metrics dictionary at:
+	/tmp/RtmpZl5nid/tikzMetricsDictionary</strong>
+<div class='output'>[1] 75.39825
+</div>
+<div class='input'># Calculate ascent, descent and width for &quot;A&quot;
+  getLatexCharMetrics(65)
+</div>
+<div class='output'>[1] 6.88720 0.00000 7.49817
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>getLatexCharMetrics</li><li>getLatexStrWidth</li>
+    </ul>
+    <ul>
+      <li>character</li><li>metrics</li><li>string</li>
+    </ul> -->
+      
+    
+    <h2>Author</h2>
+    
+Charlie Sharpsteen <a href='mailto:source@sharpsteen.net'>source@sharpsteen.net</a> and Cameron
+  Bracken <a href='mailto:cameron.bracken@gmail.com'>cameron.bracken@gmail.com</a>
+
+    
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

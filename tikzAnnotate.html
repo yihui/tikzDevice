@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>tikzAnnotate. tikzDevice 0.8.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="
+Cameron Bracken &lt;cameron.bracken@gmail.com&gt; and Charlie Sharpsteen
+  &lt;a href='mailto:source@sharpsteen.net'&gt;source@sharpsteen.net&lt;/a&gt;
+">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">tikzDevice 0.8.1</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Add Custom TikZ Code to an Active Device</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><div>tikzAnnotate(annotation, checkstate&nbsp;=&nbsp;TRUE)</div>
+<div>tikzNode(x&nbsp;=&nbsp;NULL, y&nbsp;=&nbsp;NULL, opts&nbsp;=&nbsp;NULL, name&nbsp;=&nbsp;NULL, content&nbsp;=&nbsp;NULL, units&nbsp;=&nbsp;"user")</div>
+<div>tikzCoord(x, y, name, units&nbsp;=&nbsp;"user")</div>
+<div>tikzAnnotateGrob(annotation)</div>
+<div>tikzNodeGrob(x&nbsp;=&nbsp;NULL, y&nbsp;=&nbsp;NULL, opts&nbsp;=&nbsp;NULL, name&nbsp;=&nbsp;NULL, content&nbsp;=&nbsp;NULL, units&nbsp;=&nbsp;"native")</div>
+<div>tikzCoordGrob(x, y, name, units&nbsp;=&nbsp;"native")</div>
+<div>grid.tikzAnnotate(annotation, draw&nbsp;=&nbsp;TRUE)</div>
+<div>grid.tikzNode(x&nbsp;=&nbsp;NULL, y&nbsp;=&nbsp;NULL, opts&nbsp;=&nbsp;NULL, name&nbsp;=&nbsp;NULL, content&nbsp;=&nbsp;NULL, units&nbsp;=&nbsp;"native", draw&nbsp;=&nbsp;TRUE)</div>
+<div>grid.tikzCoord(x, y, name, units&nbsp;=&nbsp;"native", draw&nbsp;=&nbsp;TRUE)</div></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>annotation</dt>
+      <dd>A character vector, one element per line to be added to
+  the open tikz device.</dd>
+      <dt>checkstate</dt>
+      <dd>A logical, whether to "flush" the device state prior to
+  writing the <code>annotation</code>.</dd>
+      <dt>x</dt>
+      <dd>numeric, x location for a named coordinate in user coordinates</dd>
+      <dt>y</dt>
+      <dd>numeric, y location for a named coordinate in user coordinates</dd>
+      <dt>opts</dt>
+      <dd>A character string that will be used as options for a <code>node</code>.
+See the "Nodes and Edges" section of the TikZ manual for complete details.</dd>
+      <dt>name</dt>
+      <dd>Optional character string that will be used as a name for a
+<code>coordinate</code> or <code>node</code>. Other TikZ commands can use this
+name to refer to a location in a graphic.</dd>
+      <dt>content</dt>
+      <dd>A character string that will be used as the content to be displayed
+inside of a <code>node</code>. If left as <code>NULL</code> a <code>coordinate</code> will be
+created instead of a <code>node</code>. If a <code>node</code> with empty content is truely
+desired, pass an empty string <code>""</code>.</dd>
+      <dt>units</dt>
+      <dd>Character string specifying the unit system associated with
+  <code>x</code> and <code>y</code>. See <code><a href='http://www.inside-r.org/r-doc/graphics/convertXY'>grconvertX</a></code> for acceptable
+  units in base graphics and <code><a href='http://www.inside-r.org/r-doc/grid/unit'>unit</a></code> for acceptable
+  units in grid graphics.</dd>
+      <dt>draw</dt>
+      <dd>A logical value indicating whether graphics output should be
+  produced.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+Nothing returned.
+</dl></p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>These functions allow custom (LaTeX) commands to be added to the output of an
+active tikzDevice.</p>
+  
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+
+      <p><code>tikzAnnotate</code> is intended to allow the insertion of arbitrary TikZ
+commands into the output stream of a graphic. For LaTeX commands that
+reference specific locations in an R plot, coordinates must be specified in
+"device units" which for <code>tikz</code> output are TeX points relative to the
+lower left corner of the device canvas. Functions such as
+<code><a href='http://www.inside-r.org/r-doc/graphics/convertXY'>grconvertX</a></code> and <code><a href='gridToDevice.html'>gridToDevice</a></code> can help make the
+necessary conversions for base and grid graphics. The <code>tikzNode</code> and
+<code>tikzCoord</code> functions automatically perform unit conversions acording
+the the value of their <code>units</code> parameters.</p>
+  
+      <p><code>tikzNode</code> is a wrapper for <code>tikzAnnotate</code> that inserts TikZ
+<code>\node</code> or <code>\coordinates</code> commands into the output. The
+difference between a node and a coordinate is the presence of a
+<code>content</code> section that can contain arbitrary LaTeX text. This is
+useful for adding textual annotations at specific locations in a TikZ
+graphic. The <code>tikzCoord</code> function is a wrapper for <code>tikzNode</code>
+that simplifies the task of inserting named coordinates.</p>
+  
+      <p>Additionally, the <code>tikzAnnotateGrob</code>, <code>tikzNodeGrob</code> and
+<code>tikzCoordGrob</code> functions are supplied for creating grid objects
+or "<code><a href='http://www.inside-r.org/r-doc/grid/grid.grob'>grob</a></code>s" that can be used in Grid graphics. High level
+wrapper functions <code>grid.tikzAnnotate</code>, <code>grid.tikzNode</code> and
+<code>grid.tikzCoord</code> are also supplied which creat and render a <code>grob</code>
+in one step.</p>
+  
+      <p>See the TikZ Device vignette for more information and examples and the
+TikZ manual for the definitive reference on what is possible with nodes.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>## &lt;strong&gt;Not run&lt;/strong&gt;: 
+# 
+# ### Example 1: Annotations in Base Graphics
+# # Load some additional TikZ libraries
+# tikz(&quot;annotation.tex&quot;,width=4,height=4,
+#   packages = c(getOption(&#39;tikzLatexPackages&#39;),
+#     &quot;\\usetikzlibrary{decorations.pathreplacing}&quot;,
+#     &quot;\\usetikzlibrary{positioning}&quot;,
+#     &quot;\\usetikzlibrary{shapes.arrows,shapes.symbols}&quot;)
+# )
+# 
+# p &lt;- rgamma (300 ,1)
+# outliers &lt;- which( p &gt; quantile(p,.75)+1.5*IQR(p) )
+# boxplot(p)
+# 
+# # Add named coordinates that other TikZ commands can hook onto
+# tikzCoord(1, min(p[outliers]), &#39;min outlier&#39;)
+# tikzCoord(1, max(p[outliers]), &#39;max outlier&#39;)
+# 
+# # Use tikzAnnotate to insert arbitrary code, such as drawing a
+# # fancy path between min outlier and max outlier.
+# tikzAnnotate(c(&quot;\\draw[very thick,red,&quot;,
+#   # Turn the path into a brace.
+#   &#39;decorate,decoration={brace,amplitude=12pt},&#39;,
+#   # Shift it 1em to the left of the coordinates
+#   &#39;transform canvas={xshift=-1em}]&#39;,
+#   &#39;(min outlier) --&#39;,
+#   # Add a node with some text in the middle of the path
+#   &#39;node[single arrow,anchor=tip,fill=white,draw=green,&#39;,
+#   &#39;left=14pt,text width=0.70in,align=center]&#39;,
+#   &#39;{Holy Outliers Batman!}&#39;, &#39;(max outlier);&#39;))
+# 
+# # tikzNode can be used to place nodes with customized options and content
+# tikzNode(
+#   opts=&#39;starburst,fill=green,draw=blue,very thick,right=of max outlier&#39;,
+#   content=&#39;Wow!&#39;
+# )
+# 
+# dev.off()
+# 
+# 
+# ### Example 2: Annotations in Grid Graphics
+# library(grid)
+# 
+# tikz(&quot;grid_annotation.tex&quot;,width=4,height=4,
+#   packages = c(getOption(&#39;tikzLatexPackages&#39;),
+#     &quot;\\usetikzlibrary{shapes.callouts}&quot;)
+# )
+# 
+# pushViewport(plotViewport())
+# pushViewport(dataViewport(1:10, 1:10))
+# 
+# grid.rect()
+# grid.xaxis()
+# grid.yaxis()
+# grid.points(1:10, 1:10)
+# 
+# for ( i in seq(2,8,2) ){
+#   grid.tikzNode(i,i,opts=&#39;ellipse callout,draw,anchor=pointer&#39;,content=i)
+# }
+# 
+# dev.off()
+# 
+# ## &lt;strong&gt;End(Not run)&lt;/strong&gt;
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>grid.tikzAnnotate</li><li>grid.tikzCoord</li><li>grid.tikzNode</li><li>tikzAnnotate</li><li>tikzAnnotateGrob</li><li>tikzCoord</li><li>tikzCoordGrob</li><li>tikzNode</li><li>tikzNodeGrob</li>
+    </ul>
+    <ul>
+      <li>annotation</li><li>device</li><li>tikz</li>
+    </ul> -->
+      
+    <h2>See also</h2>
+    
+<code><a href='http://www.inside-r.org/r-doc/graphics/convertXY'>grconvertX</a></code>
+  <code><a href='http://www.inside-r.org/r-doc/graphics/convertXY'>grconvertY</a></code>
+  <code><a href='gridToDevice.html'>gridToDevice</a></code>
+  <code><a href='http://www.inside-r.org/r-doc/grid/unit'>unit</a></code>
+  <code><a href='tikz.html'>tikz</a></code>
+
+    
+    <h2>Author</h2>
+    
+Cameron Bracken <cameron.bracken@gmail.com> and Charlie Sharpsteen
+  <a href='mailto:source@sharpsteen.net'>source@sharpsteen.net</a>
+
+    
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

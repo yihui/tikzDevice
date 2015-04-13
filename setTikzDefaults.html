@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>setTikzDefaults. tikzDevice 0.8.1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="
+Cameron Bracken &lt;a href='mailto:cameron.bracken@gmail.com'&gt;cameron.bracken@gmail.com&lt;/a&gt; and Charlie
+  Sharpsteen &lt;a href='mailto:source@sharpsteen.net'&gt;source@sharpsteen.net&lt;/a&gt;
+">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="#">tikzDevice 0.8.1</a>
+      <div class="nav">
+        <ul class="nav">
+          <li><a href="index.html"><i class="icon-home icon-white"></i> Index</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Reset tikzDevice options to default values.</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><div>setTikzDefaults(overwrite&nbsp;=&nbsp;TRUE)</div></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>overwrite</dt>
+      <dd>Should values that are allready set in <code>options()</code> be
+overwritten?</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+Nothing returned.
+</dl></p>
+  
+    </div>
+
+    <div class="Description">
+      <h2>Description</h2>
+
+      <p>This function resets the following options:</p>
+  
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+
+      <p><ul>
+<li> <code>tikzDefaultEngine</code>
+  </li>
+<li> <code>tikzLatex</code>
+  </li>
+<li> <code>tikzDocumentDeclaration</code>
+  </li>
+<li> <code>tikzFooter</code>
+  </li>
+<li> <code>tikzLatexPackages</code>
+  </li>
+<li> <code>tikzXelatexPackages</code>
+  </li>
+<li> <code>tikzLualatexPackages</code>
+  </li>
+<li> <code>tikzMetricPackages</code>
+  </li>
+<li> <code>tikzUnicodeMetricPackages</code>
+  </li>
+<li> <code>tikzSanitizeCharacters</code>
+  </li>
+<li> <code>tikzReplacementCharacters</code>
+  </li>
+<li> <code>tikzRasterResolution</code>
+  </li>
+<li> <code>tikzPdftexWarnUTF</code>
+</li>
+</ul></p>
+  
+      <p></p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>print( options( &#39;tikzDocumentDeclaration&#39; ) )
+</div>
+<div class='output'>$tikzDocumentDeclaration
+[1] &quot;\\documentclass[10pt]{article}\n&quot;
+
+</div>
+<div class='input'>  options( tikzDocumentDeclaration = &#39;foo&#39; )
+  setTikzDefaults()
+  print( options( &#39;tikzDocumentDeclaration&#39; ) )
+</div>
+<div class='output'>$tikzDocumentDeclaration
+[1] &quot;\\documentclass[10pt]{article}\n&quot;
+
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>setTikzDefaults</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+    <h2>See also</h2>
+    
+<code><a href='tikz.html'>tikz</a></code>
+
+    
+    <h2>Author</h2>
+    
+Cameron Bracken <a href='mailto:cameron.bracken@gmail.com'>cameron.bracken@gmail.com</a> and Charlie
+  Sharpsteen <a href='mailto:source@sharpsteen.net'>source@sharpsteen.net</a>
+
+    
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>
