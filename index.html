@@ -37,7 +37,32 @@
       
       <div class="row">
   <div class="span8">
-    
+    <h1>tikzDevice</h1>
+
+<p><a href="https://travis-ci.org/yihui/tikzDevice"><img src="https://travis-ci.org/yihui/tikzDevice.svg" alt="Build Status"/></a> <a href="https://coveralls.io/r/yihui/tikzDevice"><img src="https://coveralls.io/repos/yihui/tikzDevice/badge.svg" alt="Coverage Status"/></a></p>
+
+<p>The tikzDevice package provides a graphics output device for R that records
+plots in a LaTeX-friendly format. The device transforms plotting commands
+issued by R functions into LaTeX code blocks. When included in a paper typeset
+by LaTeX, these blocks are interpreted with the help of TikZ&mdash;a graphics
+package for TeX and friends written by Till Tantau.</p>
+
+<p>Using the tikzDevice, the text of R plots can contain LaTeX commands such as
+mathematical formula. The device also allows arbitrary LaTeX code to be
+inserted into the output stream.</p>
+
+<p>The tikzDevice supports three main modes of output:</p>
+
+<ul>
+<li><p>Figure chunks: placed in .tex files and suitable for inclusion in LaTeX
+documents via the \input{} command.</p></li>
+<li><p>Stand alone figures: Complete LaTeX documents containing figure code that
+can be compiled into stand-alone images. Pages are cropped to the size of
+the figure using the LaTeX preview package.</p></li>
+<li><p>Console output: TikZ code is returned directly to the R console as a
+character vector for further manipulation.</p></li>
+</ul>
+
 
     <h2>Help topics</h2>
 
