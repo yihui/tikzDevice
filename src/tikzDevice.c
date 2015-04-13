@@ -608,7 +608,7 @@ static Rboolean TikZ_Open( pDevDesc deviceInfo )
       /* deal with the extension */
       const char *ext = strrchr(tikzInfo->outFileName, '.');
 
-      if( strcmp(ext, ".tex") == 0)
+      if( ext != NULL && strcmp(ext, ".tex") == 0)
       {
         char *fname = calloc_strcpy(tikzInfo->outFileName);
         size_t extposition = ext - tikzInfo->outFileName;
