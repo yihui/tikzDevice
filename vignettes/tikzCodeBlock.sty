@@ -1,0 +1,395 @@
+% Copyright (c) 2009-2012 by Charlie Sharpsteen
+% Some rights reserved.
+%
+% Redistribution and use in source and binary forms of the software as well
+% as documentation, with or without modification, are permitted provided
+% that the following conditions are met:
+%
+% * Redistributions of source code must retain the above copyright
+%   notice, this list of conditions and the following disclaimer.
+%
+% * Redistributions in binary form must reproduce the above
+%   copyright notice, this list of conditions and the following
+%   disclaimer in the documentation and/or other materials provided
+%   with the distribution.
+%
+% * The names of the contributors may not be used to endorse or
+%   promote products derived from this software without specific
+%   prior written permission.
+%
+% THIS SOFTWARE AND DOCUMENTATION IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+% CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT
+% NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+% A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+% OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+% EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+% PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+% PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+% LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+% NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+% SOFTWARE AND DOCUMENTATION, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
+% DAMAGE.
+
+
+% =============================================================================
+%
+%                              tikzCodeBlock.sty
+%
+% =============================================================================
+% A nicely styled container for multipage code listings. Look and feel inspired
+% by SyntaxHighlighter (although this is just a pale imitation):
+%
+%    http://alexgorbatchev.com/SyntaxHighlighter
+%
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{tikzCodeBlock}[2012/02/09 v0.3  Multipage listings set inside TikZ nodes]
+
+\RequirePackage{tikz}
+\usetikzlibrary{positioning}
+
+\RequirePackage{framed}
+\RequirePackage{listings}
+
+
+% We start off defining a new node shape to hold our code chunks.
+% It has a couple of extra options when it comes to background color
+% and such.
+
+% Shape 'code node'
+%
+% Inherits everything from rectangle except the behind background path.
+%
+% Adapted from Texample:
+%    http://www.texample.net/tikz/examples/rectangle-node-with-diagonal-fill/
+%
+% Contributed by Mark Wibrow- the guy who designed the PGF math engine
+% and made most of the stock node shapes.
+%
+\pgfdeclareshape{code node}
+{
+    % This bit from \pgflibarayshapes.code.tex
+    \inheritsavedanchors[from=rectangle]
+    \inheritanchorborder[from=rectangle]
+    \inheritanchor[from=rectangle]{north}
+    \inheritanchor[from=rectangle]{north west}
+    \inheritanchor[from=rectangle]{north east}
+    \inheritanchor[from=rectangle]{center}
+    \inheritanchor[from=rectangle]{west}
+    \inheritanchor[from=rectangle]{east}
+    \inheritanchor[from=rectangle]{mid}
+    \inheritanchor[from=rectangle]{mid west}
+    \inheritanchor[from=rectangle]{mid east}
+    \inheritanchor[from=rectangle]{base}
+    \inheritanchor[from=rectangle]{base west}
+    \inheritanchor[from=rectangle]{base east}
+    \inheritanchor[from=rectangle]{south}
+    \inheritanchor[from=rectangle]{south west}
+    \inheritanchor[from=rectangle]{south east}
+
+    \inheritbackgroundpath[from=rectangle]
+    \inheritbeforebackgroundpath[from=rectangle]
+    \inheritbehindforegroundpath[from=rectangle]
+    \inheritforegroundpath[from=rectangle]
+    \inheritbeforeforegroundpath[from=rectangle]
+
+   % Now do the background filling.
+    \behindbackgroundpath{%
+        % \southwest and \northeast defined by rectangle, but
+        % (somewhat annoyingly) not \southeast and \northwest
+        % so use this workaround.
+        \pgfextractx{\pgf@xa}{\southwest}%
+        \pgfextracty{\pgf@ya}{\southwest}%
+        \pgfextractx{\pgf@xb}{\northeast}%
+        \pgfextracty{\pgf@yb}{\northeast}%
+
+    % New code here. We want to draw a bar 4 ex wide to lie
+    % under the line numbers. So we define two points that
+    % are 7 ex to the left of the southwest and northwest corners.
+    \def\pgf@numberstripe@southwest{%
+      \pgfpointadd{\southwest}%
+      {\pgfpoint{\pgf@codestripe@width}{0}}%
+    }
+    \def\pgf@numberstripe@northwest{%
+      \pgfpointadd{\pgfpoint{\pgf@xa}{\pgf@yb}}%
+      {\pgfpoint{\pgf@codestripe@width}{0}}%
+    }
+    % Now we draw the code bar.
+    \pgfpathmoveto{\southwest}%
+    \pgfpathlineto{\pgf@numberstripe@southwest}%
+    \pgfpathlineto{\pgf@numberstripe@northwest}%
+    \pgfpathlineto{\pgfpoint{\pgf@xa}{\pgf@yb}}%
+    \pgfpathclose
+    % Now fill it with a nice light grey.
+    \color{\pgf@codestripe@color}%
+    \pgfusepath{fill}%
+    % Now for the rest of the node.
+    \pgfpathmoveto{\pgf@numberstripe@southwest}%
+    \pgfpathlineto{\pgfpoint{\pgf@xb}{\pgf@ya}}%
+    \pgfpathlineto{\northeast}%
+    \pgfpathlineto{\pgf@numberstripe@northwest}%
+    \pgfpathclose
+    %
+    \color{\pgf@codebody@color}%
+    \pgfusepath{fill}
+    }
+}
+
+%---------------------  Begin  User Level Shape Options -----------------
+
+% Default widths.
+\def\pgf@codestripe@width{0pt}
+
+% Default color values
+\def\pgf@codebody@color{white}
+\def\pgf@codestripe@color{gray!30}
+
+% Use these with PGF
+\def\pgfsetcodestripecolor#1{\def\pgf@codestripe@color{#1}}%
+\def\pgfsetcodestripewidth#1{\def\pgf@codestripe@width{#1}}%
+\def\pgfsetcodebodycolor#1{\def\pgf@codebody@color{#1}}%
+
+% Use these with TikZ
+\tikzoption{codestripe color}{\pgfsetcodestripecolor{#1}}
+\tikzoption{codestripe width}{\pgfsetcodestripewidth{#1}}
+\tikzoption{codebody color}{\pgfsetcodebodycolor{#1}}
+
+%--------------------- End User Level Shape Options -------------------
+
+%===============================================
+
+%--------------------- Begin Internal Package Macros ------------------
+
+\newcommand\tikzCode@setupKeys{%
+  % This command leverages the pgfkeys package,
+  % included by tikz, to set up handling for options
+  % of the form [key=value]
+  \pgfkeys{/tikzCode/title/.store in=\tikzCode@codeNodeTitle,
+    /tikzCode/footer/.store in=\tikzCode@codeNodeFooter,
+    /tikzCode/listing style/.store in=\tikzCode@listingStyle,
+    /tikzCode/code body/.style={/tikzCode/defaults/code body},
+    /tikzCode/code title body/.style={/tikzCode/defaults/code title body},
+    /tikzCode/code title outline/.style={/tikzCode/defaults/code title outline},
+    /tikzCode/code footer/.style={/tikzCode/defaults/code footer},
+  }
+}
+
+
+% This macro sets a chunk of text inside a specialized node.
+\newcommand{\tikzCode@place@codenodebody}[1]{%
+  \node[/tikzCode/code body] (code node body) {#1};
+}
+
+% This macro adds a header.
+\newcommand{\tikzCode@place@codenodetitle}{%
+  \node[/tikzCode/code title body] (code node title) {\tikzCode@codeNodeTitle};
+  \draw[/tikzCode/code title outline] (code node title.south west) --
+    (code node title.south east) --
+    (code node title.north east) --
+    (code node title.north west) --
+    cycle;
+}
+
+% And this one adds a footer.
+\newcommand{\tikzCode@place@codenodefooter}{%
+  \node[/tikzCode/code footer] {\tikzCode@codeNodeFooter};
+}
+
+
+% This macro outputs a singleton frame.
+\newcommand{\tikzCode@place@singleframe}[1]{%
+  \begin{tikzpicture}%
+
+    \tikzCode@place@codenodebody{#1}
+
+    \ifx \tikzCode@codeNodeTitle \undefined
+      % Nothin' to do.
+      \relax
+    \else
+      \tikzCode@place@codenodetitle
+    \fi
+
+    \ifx \tikzCode@codeNodeFooter \undefined
+      \relax
+    \else
+      \tikzCode@place@codenodefooter
+    \fi
+
+  \end{tikzpicture}%
+}
+
+
+% This macro outputs the first of a series of frames.
+\newcommand{\tikzCode@place@firstframe}[1]{%
+  \begin{tikzpicture}%
+
+    \tikzCode@place@codenodebody{#1}
+
+    \ifx \tikzCode@codeNodeTitle \undefined
+      % Nothin' to do.
+      \relax
+    \else
+      \tikzCode@place@codenodetitle
+    \fi
+
+  \end{tikzpicture}%
+}
+
+% This macro outputs the middle portions of a series of frames.
+\newcommand{\tikzCode@place@middleframe}[1]{%
+  \begin{tikzpicture}%
+
+    \tikzCode@place@codenodebody{#1}
+
+  \end{tikzpicture}%
+}
+
+% This macro outputs the last of a series of frames.
+\newcommand{\tikzCode@place@lastframe}[1]{%
+  \begin{tikzpicture}%
+
+    \tikzCode@place@codenodebody{#1}
+
+    \ifx \tikzCode@codeNodeFooter \undefined
+      \relax
+    \else
+      \tikzCode@place@codenodefooter
+    \fi
+
+  \end{tikzpicture}%
+}
+
+% This macro patches our code into the framed package.
+\newcommand{\tikzCode@set@framedcommands}{%
+  \def\FrameCommand{\tikzCode@place@singleframe}%
+  \def\FirstFrameCommand{\tikzCode@place@firstframe}%
+  \def\MidFrameCommand{\tikzCode@place@middleframe}%
+  \def\LastFrameCommand{\tikzCode@place@lastframe}%
+}
+
+
+%--------------------- End Internal Package Macros -----------------------
+
+% Default Code Node Style definitions.
+\tikzset{
+  /tikzCode/defaults/code body/.style={
+    % The code node is a homebrewed shape- several things can
+    % possibly go pear shaped with it- for example, adding rounded
+    % corners causes things to go whacky. Also- don't use the fill
+    % command :P
+    shape = code node,
+    draw = blue!50,
+    thick,
+    codebody color = blue!10,
+    outer sep = 0pt,
+    inner sep = 1ex,
+    % Subtract off 2 * inner sep and line width
+    text width = {\linewidth - 2ex - 1.6pt}
+  },
+  /tikzCode/defaults/code title body/.style={
+    fill = white,
+    inner sep = 1ex,
+    outer sep = 0pt,
+    % Explicitly unset the text width for the title node so that it always fits
+    % its self to the width of the title.
+    text width = ,
+    right = 0pt of code node body.north west,
+    anchor = base west
+  },
+  /tikzCode/defaults/code title outline/.style={
+    draw = blue!50,
+    thick
+  },
+  /tikzCode/defaults/code footer/.style={
+    draw = blue!50,
+    thick,
+    fill = white,
+    inner sep = 1ex,
+    outer sep = 0pt,
+    % Explicitly unset the text width for the footer node so that it always fits
+    % its self to the width of the title.
+    text width = ,
+    above = 0pt of code node body.south,
+    anchor = base
+  }
+}
+
+
+% -----------------------------------------------------------------------------
+%                             User-Level Commands
+% -----------------------------------------------------------------------------
+
+% tikzCodeBlock
+% =============
+% This environment captures contents verbatim, processes the text with the
+% listings package, pagebreaks the results into chunks using the framed
+% package, then sets each chunk in a TikZ node.
+%
+% Defined using `\lstnewenvironment` so that the listings package knows when to
+% stop capturing input verbatim.
+\lstnewenvironment{tikzCodeBlock}[1][]{%
+  % Process environment options.
+  \tikzCode@setupKeys
+  % Shift the key directory to our namespace.
+  \pgfkeys{ /tikzCode/.cd, #1 }%
+  \ifx \tikzCode@listingStyle \undefined
+    \lstset{resetmargins = true}%
+  \else
+    \lstset{style = \tikzCode@listingStyle, resetmargins = true}%
+  \fi
+  % Start the framed environment.
+  \tikzCode@set@framedcommands
+  \MakeFramed{\FrameRestore}%
+}%
+{\endMakeFramed}
+
+
+% tikzCodeNode
+% ============
+% This is like the tikzCodeBlock environment except that it does use any
+% functionality from the framed package to produce multiple chunks that break
+% accross pages. Useful for creating listings that do not break and that can be
+% embedded inside another tikzPicture.
+%
+% If this environment is embedded inside another TikZ node, the text width
+% __MUST BE SET__ for that node. This is due to the use of `\vskip\topsep`.
+\lstnewenvironment{tikzCodeNode}[1][]{%
+  % Process environment options.
+  \tikzCode@setupKeys
+  % Shift the key directory to our namespace.
+  \pgfkeys{ /tikzCode/.cd, #1 }%
+  \ifx \tikzCode@listingStyle \undefined
+    \lstset{resetmargins = true}%
+  \else
+    \lstset{style = \tikzCode@listingStyle, resetmargins = true}%
+  \fi
+  % Collect listings output into a box for insertion into a TikZ picture
+  \setbox\@tempboxa=\vbox\bgroup\color@setgroup
+}%
+{\color@endgroup\egroup\vskip\topsep\noindent\tikzCode@place@singleframe{\box\@tempboxa}}
+
+
+% tikzCodeInput
+% =============
+% This is like the tikzCodeBlock environment except that it reads input from a
+% file.
+\newcommand{\tikzCodeInput}[2][]{%
+ {% use a separate namespace
+  % Process environment options.
+  \tikzCode@setupKeys
+  % Shift the key directory to our namespace.
+  \pgfkeys{ /tikzCode/.cd, #1 }%
+  \tikzCode@set@framedcommands
+  % Start the framed environment.
+  \MakeFramed{\FrameRestore}%
+  \ifx \tikzCode@listingStyle \undefined
+    \lstinputlisting[resetmargins = true]{#2}%
+  \else
+    \lstinputlisting[style = \tikzCode@listingStyle, resetmargins = true]{#2}%
+  \fi
+  \endMakeFramed
+ }
+}
+
+
+% Make sure LaTeX knows we're done here.
+\endinput

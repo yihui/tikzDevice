@@ -1,0 +1,132 @@
+\RequirePackage{verbatim}
+\RequirePackage{xstring}
+\RequirePackage{listings}
+% Source code formatting macros
+\lstloadlanguages{R}
+\lstset{columns=fullflexible}
+
+\lstdefinestyle{sweavechunk}{
+  language = R,
+  basicstyle=\ttfamily,
+  % The hacked version of the Sweave output function inserts these tags
+  % around each output portion- we can grab them and apply formatting
+  % to everything inside.
+  moredelim=[is][\color{gray}]
+    {Swe@veBeginOutput}
+    {Swe@veEndOutput},
+  moredelim=[is][]
+    {Swe@veBeginInput}
+    {Swe@veEndInput},
+  showstringspaces = false,
+  upquote = false,
+  commentstyle = {\color{blue!70}\itshape}
+}
+
+
+% Re-define and customize the Schunk environment. Tasks to perform:
+%
+%   * Capture all output using a verbatim environment and pipe it to a
+%     temporary file.
+%
+%   * Re-define Schunk to execute the above to steps and then read in the
+%     final result using lstinputlisting.
+
+% We need to allocate some TeX variables
+\newwrite\sweave@tmpout % For writing output
+\newif\ifsweave@skipline % For skipping line processing after reading a delimiter
+\newif\ifsweave@outputready % For determining when a line is ready to be written
+\newtoks\sweave@linebuffer % For holding output lines before they are written
+
+% These macros help fill and manage the output buffer.
+\def\sweave@addtobuffer#1{% For appending to the contents of a token list.
+  % Taken from TeX by Topic
+  \toks0={#1} % Store the string to be added in a temporary buffer
+  % Construct a command that sets the line buffer equal to the contents of it's
+  % self plus the temporary buffer.
+  \edef\act{\noexpand\sweave@linebuffer={\the\sweave@linebuffer \the\toks0}}%
+  % Execute that command.
+  \act%
+}
+
+% This macro will add a line of code read from a temp file to the buffer.
+\def\sweave@addoutput#1{%
+  % expandafter is necessary to ensure #1 gets expanded before being appended to
+  % the buffer. Otherwise we get the name of the macros storing the line of
+  % code instead of the line of code.
+  \expandafter\sweave@addtobuffer\expandafter{#1}%
+  \sweave@outputreadytrue % The buffer now has code inside it for writing.
+}
+
+% This macro will write out the contents of the buffer and reset it. The
+% parameter #1 contains the file that should be written to.
+\def\sweave@flushbuffer#1{%
+  \immediate\write#1{\the\sweave@linebuffer}%
+  \sweave@linebuffer={}%
+  \sweave@outputreadyfalse%
+}
+
+% Verbatim redefines the catcodes of common LaTeX special characters so that it
+% can capture them. However, this means we can't match against patterns like
+% \begin{Sinput} that are defined outside of a environment where Verbatim has
+% altered catcodes. For some reason use of indentation will throw a wrench into
+% the definitions below.
+\begingroup
+\let\do\@makeother
+\catcode`\|=0 \catcode`[=1 \catcode`]=2
+|dospecials
+|gdef|sweave@beginsinput[\begin{Sinput}]
+|gdef|sweave@endsinput[\end{Sinput}]
+|gdef|sweave@beginsoutput[\begin{Soutput}]
+|gdef|sweave@endsoutput[\end{Soutput}]
+|endgroup
+
+% This macro initiates a verbatim environment that writes it's contents
+% to a temporary file.
+\def\sweave@startcapture{%
+  \immediate\openout\sweave@tmpout=\jobname.lstin\relax%
+  \begingroup%
+    \def\verbatim@nolig@list{}%
+    \def\verbatim@processline{%
+      \edef\sweave@codeline{\the\verbatim@line}%
+      \IfBeginWith{\sweave@codeline}{\sweave@beginsinput}%
+        {\sweave@addtobuffer{Swe@veBeginInput}\sweave@skiplinetrue}%
+        {}%
+      \IfBeginWith{\sweave@codeline}{\sweave@endsinput}%
+        {\sweave@addtobuffer{Swe@veEndInput}\sweave@skiplinetrue}%
+        {}%
+      \IfBeginWith{\sweave@codeline}{\sweave@beginsoutput}%
+        {\sweave@addtobuffer{Swe@veBeginOutput}\sweave@skiplinetrue}%
+        {}%
+      \IfBeginWith{\sweave@codeline}{\sweave@endsoutput}%
+        {\sweave@addtobuffer{Swe@veEndOutput}\sweave@skiplinetrue}%
+        {}%
+      % Now process the line
+      \ifsweave@skipline%
+        \sweave@skiplinefalse%
+      \else%
+        \ifsweave@outputready%
+          \sweave@flushbuffer{\sweave@tmpout}%
+        \fi%
+        \sweave@addoutput{\sweave@codeline}%
+      \fi%
+    }%
+    \let\do\@makeother\dospecials\catcode`\^^M\active
+    \verbatim@start%
+}
+
+% This macro stops the verbatim environment closes the temporary file.
+\def\sweave@stopcapture{%
+    \sweave@flushbuffer{\sweave@tmpout}% Write out last line
+  \endgroup%
+  \immediate\closeout\sweave@tmpout%
+}
+
+% Here we re-define the Schunk environment declared by Sweave.sty
+\def\Schunk{\sweave@startcapture}
+\def\endSchunk{%
+  \sweave@stopcapture%
+  \tikzCodeInput[listing style=sweavechunk]{\jobname.lstin}%
+}
+
+\endinput
+
