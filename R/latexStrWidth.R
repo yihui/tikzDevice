@@ -299,7 +299,7 @@ function( TeXMetrics ){
 
   # Insert the value of cex into the node options.
   nodeOpts <- paste('\\node[inner sep=0pt, outer sep=0pt, scale=',
-    TeXMetrics$scale,']', sep='')
+    formatC(TeXMetrics$scale, decimal.mark = '.'), ']', sep = '')
 
   # Create the node contents depending on the type of metrics
   # we are after.
