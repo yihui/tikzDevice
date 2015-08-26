@@ -43,7 +43,7 @@ tikz_writeRaster <- function(fileName, rasterCount, rasterData,
       dpi = res
   }
 
-  png_type = 'Xlib'
+  png_type = 'cairo'
   if (Sys.info()['sysname'] == 'Windows')
       png_type = getOption("bitmapType")
 
@@ -63,7 +63,7 @@ tikz_writeRaster <- function(fileName, rasterCount, rasterData,
       png(filename = raster_file,
           width = width, height = height,
           units = units, res = dpi,
-          type = png_type, antialias = 'none' )
+          type = png_type, antialias = 'none', bg = 'transparent' )
   }
 
   par(mar=c(0,0,0,0))
