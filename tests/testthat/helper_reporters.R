@@ -71,8 +71,9 @@ DetailedReporter <- setRefClass('DetailedReporter', where = .GlobalEnv, contains
 
       test_status <- paste(n_success, '/', n_tests,
         ' (', success_per, '%)', sep = '')
-      test_status_mod <- ifelse(n_failed == 0L, crayon::green, crayon::red)
-      test_status <- test_status_mod(test_status)
+      test_status <- ifelse(n_failed == 0L,
+                            crayon::green(test_status),
+                            crayon::red(test_status))
 
       cat(test_status, 'tests successfully executed in this context.\n' )
 
@@ -211,8 +212,9 @@ GraphicsReporter <- setRefClass('GraphicsReporter', where = .GlobalEnv, contains
 
       test_status <- paste(n_success, '/', n_tests,
         ' (', success_per, '%)', sep = '')
-      test_status_mod <- ifelse(n_ctx_failed == 0L, crayon::green, crayon::red)
-      test_status <- test_status_mod(test_status)
+      test_status <- ifelse(n_ctx_failed == 0L,
+                            crayon::green(test_status),
+                            crayon::red(test_status))
 
       cat(test_status, 'tests successfully executed.\n' )
 
