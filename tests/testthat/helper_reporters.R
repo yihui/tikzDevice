@@ -44,14 +44,14 @@ DetailedReporter <- setRefClass('DetailedReporter', where = .GlobalEnv, contains
       spacer <- paste(rep(' ',width - nchar(test) - 5),
         collapse = '')
       if (result$passed) {
-        cat(spacer, colourise("PASS\n", fg = "light green"))
+        cat(spacer, crayon::green("PASS\n"))
       } else {
         failed <<- TRUE
         n_failed <<- n_failed + 1L
         result$test <- test
         failures[[n_failed]] <<- result
 
-        cat(spacer, colourise("FAIL\n", fg = "red"))
+        cat(spacer, crayon::red("FAIL\n"))
       }
     },
 
@@ -71,10 +71,8 @@ DetailedReporter <- setRefClass('DetailedReporter', where = .GlobalEnv, contains
 
       test_status <- paste(n_success, '/', n_tests,
         ' (', success_per, '%)', sep = '')
-      test_status <- ifelse(n_failed == 0L,
-        colourise(test_status, 'light green'),
-        colourise(test_status, 'red')
-      )
+      test_status_mod <- ifelse(n_failed == 0L, crayon::green, crayon::red)
+      test_status <- test_status_mod(test_status)
 
       cat(test_status, 'tests successfully executed in this context.\n' )
 
@@ -95,7 +93,7 @@ DetailedReporter <- setRefClass('DetailedReporter', where = .GlobalEnv, contains
         message <- sapply(failures, "[[", "failure_msg")
 
         cat(str_c(
-          colourise(header, "red"), line, "\n",
+          crayon::red(header), line, "\n",
           message, "\n", collapse = "\n"))
 
       }
@@ -158,16 +156,16 @@ GraphicsReporter <- setRefClass('GraphicsReporter', where = .GlobalEnv, contains
         if ( is.na(pixel_error) ) {
           spacer <- paste(rep(' ', width - nchar(test) - 19),
             collapse = '')
-          cat(spacer, colourise("UNKNOWN", fg = "yellow"), "\n")
+          cat(spacer, crayon::yellow("UNKNOWN"), "\n")
         } else if ( pixel_error == 'SKIP' ) {
           spacer <- paste(rep(' ', width - nchar(test) - 19),
             collapse = '')
-          cat(spacer, colourise("SKIP", fg = "yellow"), "\n")
+          cat(spacer, crayon::yellow("SKIP"), "\n")
         } else {
           spacer <- paste(rep(' ', width - nchar(test) - 29),
             collapse = '')
           cat(spacer, 'Error of:',
-            colourise(sprintf("%8.2g pixels", pixel_error), fg = "yellow"),
+            crayon::yellow(sprintf("%8.2g pixels", pixel_error)),
             "\n"
           )
           if (pixel_error > 0)
@@ -178,14 +176,14 @@ GraphicsReporter <- setRefClass('GraphicsReporter', where = .GlobalEnv, contains
       spacer <- paste(rep(' ', width - nchar(test) - 19),
         collapse = '')
       if (result$passed) {
-        cat(spacer, colourise("PASS", fg = "light green"))
+        cat(spacer, crayon::green("PASS"))
       } else {
         failed <<- TRUE
         n_failed <<- n_failed + 1L
         result$test <- test
         failures[[n_failed]] <<- result
 
-        cat(spacer, colourise("FAIL", fg = "red"))
+        cat(spacer, crayon::red("FAIL"))
       }
     },
 
@@ -213,10 +211,8 @@ GraphicsReporter <- setRefClass('GraphicsReporter', where = .GlobalEnv, contains
 
       test_status <- paste(n_success, '/', n_tests,
         ' (', success_per, '%)', sep = '')
-      test_status <- ifelse(n_ctx_failed == 0L,
-        colourise(test_status, 'light green'),
-        colourise(test_status, 'red')
-      )
+      test_status_mod <- ifelse(n_ctx_failed == 0L, crayon::green, crayon::red)
+      test_status <- test_status_mod(test_status)
 
       cat(test_status, 'tests successfully executed.\n' )
 
@@ -237,7 +233,7 @@ GraphicsReporter <- setRefClass('GraphicsReporter', where = .GlobalEnv, contains
         message <- sapply(failures, "[[", "failure_msg")
 
         cat(str_c(
-          colourise(header, "red"), line, "\n",
+          crayon::red(header), line, "\n",
           message, "\n", collapse = "\n"))
 
       }
@@ -246,4 +242,3 @@ GraphicsReporter <- setRefClass('GraphicsReporter', where = .GlobalEnv, contains
 
   ) # End methods list
 ) # End GraphicsReporter
-

@@ -31,7 +31,8 @@ Suggests:
     stringr,
     ggplot2,
     maps,
-    knitr
+    knitr,
+    crayon
 SystemRequirements: pgf (>= 2.00)
 LazyLoad: yes
 VignetteBuilder: knitr
