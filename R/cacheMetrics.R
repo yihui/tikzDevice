@@ -56,6 +56,10 @@ function( key, metrics )
 #' @importFrom filehash dbCreate dbInit
 checkDictionaryStatus <- function(verbose)
 {
+  if (!verbose) {
+    message <- function(...) invisible()
+  }
+
   dict_path <- getOption('tikzMetricsDictionary')
   old_dict_path <- .tikzInternal[['dict_path']]
   old_dictionary <- .tikzInternal[['dictionary']]
