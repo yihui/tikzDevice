@@ -12,7 +12,7 @@ sha1 <- filehash:::sha1
 #
 #' @importFrom filehash dbExists dbFetch
 queryMetricsDictionary <-
-function( key )
+function( key, verbose )
 {
   # Ensure the dictionary is available.
   checkDictionaryStatus()

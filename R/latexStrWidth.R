@@ -97,7 +97,7 @@ function(texString, cex = 1, face = 1, engine = getOption('tikzDefaultEngine'),
 
   # Check to see if we have a width stored in
   # our dictionary for this string.
-  width <- queryMetricsDictionary( TeXMetrics )
+  width <- queryMetricsDictionary( TeXMetrics, verbose = verbose )
 
   if( width >= 0 ){
 
@@ -109,7 +109,7 @@ function(texString, cex = 1, face = 1, engine = getOption('tikzDefaultEngine'),
 
     # Bummer. No width on record for this string.
     # Call LaTeX and get one.
-    width <- getMetricsFromLatex( TeXMetrics )
+    width <- getMetricsFromLatex( TeXMetrics, verbose = verbose )
 
     if (is.null(width)) {
       # Something went wrong. Return 0
@@ -208,7 +208,7 @@ function(charCode, cex = 1, face = 1, engine = getOption('tikzDefaultEngine'),
 
   # Check to see if we have metrics stored in
   # our dictionary for this character.
-  metrics <- queryMetricsDictionary( TeXMetrics )
+  metrics <- queryMetricsDictionary( TeXMetrics, verbose = verbose )
 
   if( all(metrics >= 0) ){
 
@@ -220,7 +220,7 @@ function(charCode, cex = 1, face = 1, engine = getOption('tikzDefaultEngine'),
 
     # Bummer. No metrics on record for this character.
     # Call LaTeX to obtain them.
-    metrics <- getMetricsFromLatex( TeXMetrics )
+    metrics <- getMetricsFromLatex( TeXMetrics, verbose = verbose )
 
     if (is.null(metrics)) {
       # Couldn't get metrics for some reason, return 0
@@ -237,7 +237,7 @@ function(charCode, cex = 1, face = 1, engine = getOption('tikzDefaultEngine'),
 }
 
 getMetricsFromLatex <-
-function( TeXMetrics ){
+function( TeXMetrics, verbose = verbose ){
 
   # Reimplementation of the original C function since
   # the C function causes all kinds of gibberish to
