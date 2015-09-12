@@ -219,7 +219,8 @@ function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
   footer = getOption("tikzFooter"),
   symbolicColors = getOption("tikzSymbolicColors"), colorFileName = "%s_colors.tex",
   maxSymbolicColors = getOption("tikzMaxSymbolicColors"),
-  timestamp = TRUE
+  timestamp = TRUE,
+  verbose = interactive()
 ){
 
   tryCatch({
@@ -292,7 +293,7 @@ function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
   .External(TikZ_StartDevice, file, width, height, onefile, bg, fg, baseSize, lwdUnit,
     standAlone, bareBones, documentDeclaration, packages, footer, console,
     sanitize, engine, symbolicColors, colorFileName, maxSymbolicColors,
-    timestamp)
+    timestamp, verbose)
 
   invisible()
 
