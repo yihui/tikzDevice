@@ -15,7 +15,7 @@ queryMetricsDictionary <-
 function( key, verbose )
 {
   # Ensure the dictionary is available.
-  checkDictionaryStatus()
+  checkDictionaryStatus(verbose = verbose)
 
   # Check for the string.
   haveMetrics <- evalWithoutInterrupts(dbExists(.tikzInternal[['dictionary']], sha1(key)))
@@ -54,7 +54,7 @@ function( key, metrics )
 # specified dictionary or creates a new one in tempdir().
 #
 #' @importFrom filehash dbCreate dbInit
-checkDictionaryStatus <- function()
+checkDictionaryStatus <- function(verbose)
 {
   dict_path <- getOption('tikzMetricsDictionary')
   old_dict_path <- .tikzInternal[['dict_path']]
