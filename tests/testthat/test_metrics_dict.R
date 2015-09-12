@@ -12,6 +12,15 @@ test_that('Temporary metrics dictionary is created, but only once', {
   expect_true(file.exists(.tikzInternal[["db_file"]]))
 })
 
+test_that('No messages about creating temporary metrics dictionary with verbose = FALSE', {
+  expect_equal(getOption('tikzMetricsDictionary'), NULL)
+
+  rm(list = ls(envir = .tikzInternal), envir = .tikzInternal)
+  expect_that(checkDictionaryStatus(verbose = FALSE), not(shows_message()))
+  expect_that(checkDictionaryStatus(verbose = FALSE), not(shows_message()))
+  expect_true(file.exists(.tikzInternal[["db_file"]]))
+})
+
 test_that('Switching metrics dictionary', {
   expect_equal(getOption('tikzMetricsDictionary'), NULL)
 
@@ -32,6 +41,12 @@ test_that('Switching metrics dictionary', {
       options(tikzMetricsDictionary=tempB)
       expect_that(checkDictionaryStatus(verbose = TRUE), shows_message("Using"))
       expect_that(checkDictionaryStatus(verbose = TRUE), not(shows_message()))
+      options(tikzMetricsDictionary=tempA)
+      expect_that(checkDictionaryStatus(verbose = FALSE), not(shows_message()))
+      expect_that(checkDictionaryStatus(verbose = FALSE), not(shows_message()))
+      options(tikzMetricsDictionary=tempB)
+      expect_that(checkDictionaryStatus(verbose = FALSE), not(shows_message()))
+      expect_that(checkDictionaryStatus(verbose = FALSE), not(shows_message()))
     },
     finally = {
       options(tikzMetricsDictionary=NULL)
