@@ -43,28 +43,14 @@ tikz_writeRaster <- function(fileName, rasterCount, rasterData,
       dpi = res
   }
 
+  # Cairo should be ubiquitous now.
   png_type = 'cairo'
-  if (Sys.info()['sysname'] == 'Windows')
-      png_type = getOption("bitmapType")
 
   # Write the image to a PNG file.
-
-  # On OS X there is a problem with png() not respecting antialiasing options.
-  # So, we have to use quartz instead.  Also, we cannot count on X11 or Cairo
-  # being compiled into OS X binaries.  Technically, cannot count on Aqua/Quartz
-  # either but you would have to be a special kind of special to leave it out.
-  # Using type='Xlib' also causes a segfault for me on OS X 10.6.4
-  if ( Sys.info()['sysname'] == 'Darwin' && capabilities('aqua') ) {
-      grDevices::quartz(
-          file = raster_file, type = 'png',
-          width = width, height = height,
-          antialias = FALSE, dpi = dpi )
-  } else {
-      png(filename = raster_file,
-          width = width, height = height,
-          units = units, res = dpi,
-          type = png_type, antialias = 'none', bg = 'transparent' )
-  }
+  png(filename = raster_file,
+      width = width, height = height,
+      units = units, res = dpi,
+      type = png_type, antialias = 'none', bg = 'transparent' )
 
   par(mar=c(0,0,0,0))
   plot.new()
