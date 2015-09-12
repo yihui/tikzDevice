@@ -109,6 +109,9 @@
 #'  ``Options That Affect'  Package Behavior'' of \link{tikzDevice-package}.
 #' @param timestamp A logical value indicating whether a timestamp is written
 #'  to the TeX file.
+#' @param verbose A logical value indicating whether diagnostic messages are
+#'  printed when measuring dimensions of strings. Defaults to \code{TRUE} in
+#'  interactive mode only, to \code{FALSE} otherwise.
 #'
 #' @return \code{tikz()} returns no values.
 #'

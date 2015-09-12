@@ -28,6 +28,9 @@
 #'   for more details.
 #' @param packages See the section ``Options That Affect Package Behavior'' of
 #'   \link{tikzDevice-package}.
+#' @param verbose A logical value indicating whether diagnostic messages are
+#'  printed when measuring dimensions of strings. Defaults to \code{TRUE} in
+#'  interactive mode only, to \code{FALSE} otherwise.
 #'
 #'
 #' @return
@@ -48,7 +51,8 @@
 #' @export
 getLatexStrWidth <-
 function(texString, cex = 1, face = 1, engine = getOption('tikzDefaultEngine'),
-   documentDeclaration = getOption("tikzDocumentDeclaration"), packages, verbose)
+  documentDeclaration = getOption("tikzDocumentDeclaration"), packages,
+  verbose = interactive())
 {
 
   switch(engine,
