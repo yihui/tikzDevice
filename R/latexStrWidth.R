@@ -48,7 +48,7 @@
 #' @export
 getLatexStrWidth <-
 function(texString, cex = 1, face = 1, engine = getOption('tikzDefaultEngine'),
-   documentDeclaration = getOption("tikzDocumentDeclaration"), packages)
+   documentDeclaration = getOption("tikzDocumentDeclaration"), packages, verbose)
 {
 
   switch(engine,
@@ -141,7 +141,7 @@ function(texString, cex = 1, face = 1, engine = getOption('tikzDefaultEngine'),
 #' @export
 getLatexCharMetrics <-
 function(charCode, cex = 1, face = 1, engine = getOption('tikzDefaultEngine'),
-  documentDeclaration = getOption("tikzDocumentDeclaration"), packages)
+  documentDeclaration = getOption("tikzDocumentDeclaration"), packages, verbose)
 {
 
   # This function is pretty much an exact duplicate of getLatexStrWidth, these

@@ -833,7 +833,7 @@ static void TikZ_MetricInfo(int c, const pGEcontext plotParams,
   SEXP metricFun = findFun(install("getLatexCharMetrics"), namespace);
 
   SEXP RCallBack;
-  PROTECT( RCallBack = allocVector(LANGSXP,7) );
+  PROTECT( RCallBack = allocVector(LANGSXP, 8) );
 
   // Place the function into the first slot of the SEXP.
   SETCAR( RCallBack, metricFun );
@@ -869,6 +869,9 @@ static void TikZ_MetricInfo(int c, const pGEcontext plotParams,
 
   SETCAD4R(CDDR(RCallBack), mkString(tikzInfo->packages));
   SET_TAG(CDDR(CDDR(CDDR(RCallBack))), install("packages"));
+
+  SETCAD4R(CDR(CDDR(RCallBack)), ScalarLogical(tikzInfo->verbose));
+  SET_TAG(CDR(CDDR(CDDR(CDDR(RCallBack)))), install("verbose"));
 
   SEXP RMetrics;
   PROTECT( RMetrics = eval(RCallBack, namespace) );
@@ -980,7 +983,7 @@ static double TikZ_StrWidth( const char *str,
    * so I guess I will nuke it."
   */
   SEXP RCallBack;
-  PROTECT( RCallBack = allocVector(LANGSXP, 7) );
+  PROTECT( RCallBack = allocVector(LANGSXP, 8) );
 
   // Place the function into the first slot of the SEXP.
   SETCAR( RCallBack, widthFun );
@@ -1029,6 +1032,9 @@ static double TikZ_StrWidth( const char *str,
 
   SETCAD4R(CDDR(RCallBack), mkString(tikzInfo->packages));
   SET_TAG(CDDR(CDDR(CDDR(RCallBack))), install("packages"));
+
+  SETCAD4R(CDR(CDDR(RCallBack)), ScalarLogical(tikzInfo->verbose));
+  SET_TAG(CDR(CDDR(CDDR(CDDR(RCallBack)))), install("verbose"));
 
   /*
    * Call the R function, capture the result.
