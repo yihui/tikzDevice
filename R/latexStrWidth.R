@@ -239,6 +239,10 @@ function(charCode, cex = 1, face = 1, engine = getOption('tikzDefaultEngine'),
 getMetricsFromLatex <-
 function( TeXMetrics, verbose = verbose ){
 
+  if (!verbose) {
+    message <- function(...) invisible()
+  }
+
   # Reimplementation of the original C function since
   # the C function causes all kinds of gibberish to
   # hit the screen when called under Windows and
@@ -364,6 +368,8 @@ function( TeXMetrics, verbose = verbose ){
     }
 
   )# End switch for  metric type.
+
+  message("Measuring dimensions of: ", nodeContent);
 
   writeLines( paste( nodeOpts, ' (TeX) {', nodeContent, "};", sep=''), texIn)
 
