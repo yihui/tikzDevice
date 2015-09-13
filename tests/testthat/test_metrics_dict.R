@@ -12,7 +12,7 @@ test_that('Temporary metrics dictionary is created, but only once', {
   expect_true(file.exists(.tikzInternal[["db_file"]]))
 })
 
-test_that('No messages about creating temporary metrics dictionary with verbose = FALSE', {
+test_that('Silent creation of temporary metrics dictionary', {
   expect_equal(getOption('tikzMetricsDictionary'), NULL)
 
   rm(list = ls(envir = .tikzInternal), envir = .tikzInternal)
