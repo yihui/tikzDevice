@@ -88,6 +88,7 @@ checkDictionaryStatus <- function(verbose)
 
   # Create the database file if it does not exist.
   if ( need_create ) {
+    unlink( db_file, recursive = TRUE )
     dbCreate( db_file, type='DB1' )
 
     # Need to initialize new database
