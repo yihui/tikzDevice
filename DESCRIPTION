@@ -2,7 +2,7 @@ Encoding: UTF-8
 Package: tikzDevice
 Type: Package
 Title: R Graphics Output in LaTeX Format
-Version: 0.8
+Version: 0.8.1
 Date: 2015-01-07
 Authors@R: c(
     person("Charlie", "Sharpsteen", role = "aut"),
@@ -24,14 +24,16 @@ License: GPL (>= 2)
 Depends:
     R (>= 2.14.0)
 Imports:
-    filehash
+    filehash (>= 2.3),
+    memoise
 Suggests:
     testthat (>= 0.8.1),
     evaluate,
     stringr,
     ggplot2,
     maps,
-    knitr
+    knitr,
+    crayon
 SystemRequirements: pgf (>= 2.00)
 LazyLoad: yes
 VignetteBuilder: knitr

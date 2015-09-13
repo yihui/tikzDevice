@@ -1,7 +1,20 @@
 \name{NEWS}
 \title{News for Package 'tikzDevice'}
 \encoding{UTF-8}
+\section{Changes in tikzDevice version 0.8.1 (2015-01-07)}{
+  \subsection{Bug Fixes}{
+    \itemize{
+      \item Renamed \code{strlcpy} to \code{strlcpy_} to avoid name clashes on OS X and Solaris (#97).
+      \item Reduced size of archive on CRAN.
+    }
+  }
+}
 \section{Changes in tikzDevice version 0.8 (2015-01-07)}{
+  \subsection{Compatibility}{
+    \itemize{
+      \item This release doesn't work on OS X and Solaris. This will be resolved soon.
+    }
+  }
   \subsection{Contributors}{
     \itemize{
       \item Thanks to Greg Jefferis, Bill Venables, Sam Mason, Gvozden Neskovic,

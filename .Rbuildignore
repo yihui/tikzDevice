@@ -8,9 +8,12 @@ md2news.hs
 Makefile
 tests/test_work
 tests/test_output
+tests/testthat/test_work
+tests/testthat/test_output
 ^.*\.Rproj$
 ^\.Rproj\.user$
 GNUmakefile
 ^\.travis\.yml$
 ^NEWS\.md\.tmpl$
 ^cran-comments\.md$
+^appveyor\.yml$

@@ -255,8 +255,10 @@ function( TeXMetrics ){
   # Create the TeX file in a temporary directory so
   # it doesn't clutter anything.
   texDir <- tempdir()
-  texLog <- normalizePath(file.path(texDir, 'tikzStringWidthCalc.log'), '/', FALSE)
-  texFile <- normalizePath(file.path(texDir, 'tikzStringWidthCalc.tex'), '/', FALSE)
+  texLog <- file.path(texDir, 'tikzStringWidthCalc.log')
+  texFile <- file.path(texDir, 'tikzStringWidthCalc.tex')
+  if (!file.exists(texFile)) file.create(texFile)
+  texFile <- normalizePath(texFile, '/')
 
   # Open the TeX file for writing.
   texIn <- file(texFile, 'w')
@@ -297,7 +299,7 @@ function( TeXMetrics ){
 
   # Insert the value of cex into the node options.
   nodeOpts <- paste('\\node[inner sep=0pt, outer sep=0pt, scale=',
-    TeXMetrics$scale,']', sep='')
+    formatC(TeXMetrics$scale, decimal.mark = '.'), ']', sep = '')
 
   # Create the node contents depending on the type of metrics
   # we are after.
@@ -401,19 +403,15 @@ function( TeXMetrics ){
 
   # Append the batchmode flag to increase LaTeX
   # efficiency.
-  latexCmd <- paste( latexCmd, '-interaction=batchmode', '-halt-on-error',
-    '-output-directory', texDir, texFile)
+  latexCmd <- paste(shQuote(latexCmd), '-interaction=batchmode', '-halt-on-error',
+    '-output-directory', shQuote(texDir), shQuote(texFile))
 
   # avoid warnings about non-zero exit status, we know tex exited abnormally
   # it was designed that way for speed
   suppressWarnings(silence <- system( latexCmd, intern=T, ignore.stderr=T))
 
-  # Open the log file.
-  texOut <- file( texLog, 'r' )
-
   # Read the contents of the log file.
-  logContents <- readLines( texOut )
-  close( texOut )
+  logContents <- readLines( texLog )
 
   if (TeXMetrics$engine == 'xetex') {
     # Check to see if XeLaTeX was unable to typeset any Unicode characters.

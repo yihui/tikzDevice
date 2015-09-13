@@ -209,6 +209,6 @@ static char *calloc_strcpy(const char *str);
 static char *calloc_x_strcpy(const char *str, size_t extra);
 static char *calloc_x_strlen(const char *str, size_t extra);
 static void const_free(const void *ptr);
-static void strlcpy(char *dst, const char* src, size_t n);
-#define strscpy(dst, src) strlcpy(dst, src, sizeof(dst) / sizeof(*(dst)))
+static void strlcpy_(char *dst, const char* src, size_t n);
+#define strscpy(dst, src) strlcpy_(dst, src, sizeof(dst) / sizeof(*(dst)))
 #endif // End of Once Only header

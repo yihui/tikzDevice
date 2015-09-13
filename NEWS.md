@@ -1,5 +1,23 @@
+- Fix segfault when no file extension is provided (#101)
+- Fix quoting issue with spaces in the tempdir name (#105, #106)
+- Fix the error from getMetricsFromLatex() when options(OutDec) is set to "," (#57)
+
+Changes in version 0.8.1 (2015-01-07)
+===
+
+Bug Fixes
+---
+
+- Renamed `strlcpy` to `strlcpy_` to avoid name clashes on OS X and Solaris (#97).
+- Reduced size of archive on CRAN.
+
 Changes in version 0.8 (2015-01-07)
 ===
+
+Compatibility
+---
+
+- This release doesn't work on OS X and Solaris. This will be resolved soon.
 
 Contributors
 ---
