@@ -1,4 +1,5 @@
-init <- function() {
+.onLoad <-
+function(libname, pkgname) {
 
   # Ensure options are set.
   setTikzDefaults( overwrite = FALSE )
@@ -89,8 +90,6 @@ init <- function() {
   }
 
 }
-
-init_once <- memoise::memoise(init)
 
 # Any variables defined in here will be hidden
 # from normal users.
