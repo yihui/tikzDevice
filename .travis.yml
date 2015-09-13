@@ -2,6 +2,8 @@ language: c
 # To build on OSX, switch the previous line to
 # language: objective-c
 env:
+  global:
+    - BOOTSTRAP_LATEX=1
   matrix:
     - TYPE=cran R_BUILD_ARGS="--no-manual --compact-vignettes=gs+qpdf" R_CHECK_ARGS="--no-manual --as-cran" WARNINGS_ARE_ERRORS=1
     - TYPE=tests
@@ -13,13 +15,15 @@ script:
 before_install:
   - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
   - chmod 755 ./travis-tool.sh
+  - OS=$(uname -s)
+  - IsLinux() { [[ "$OS" == "Linux" ]]; }
   - ./travis-tool.sh bootstrap
   - IsSourceInstall() { [[ -n "${RELEASE}" ]]; }
   - if [ $TYPE == tests ]; then APT_EXTRA="texlive-xetex imagemagick"; export DISPLAY=:99.0; fi
   - if IsSourceInstall; then export FORCE_SOURCE_INSTALL=1; fi
 install:
-  - sudo apt-get install --no-install-recommends texinfo texlive-latex-recommended texlive-latex-extra lmodern texlive-fonts-recommended texlive-fonts-extra pgf $APT_EXTRA
-  - if [ $TYPE == tests ]; then (cd /tmp && curl -OL http://mirrors.ctan.org/install/macros/latex/contrib/oberdiek.tds.zip && cd /usr/share/texmf/tex/latex && sudo unzip /tmp/oberdiek.tds.zip && sudo texhash); fi
+  - if IsLinux; then sudo apt-get install --no-install-recommends $APT_EXTRA; fi
+  - if [ $TYPE == tests ] && IsLinux; then (cd /tmp && curl -OL http://mirrors.ctan.org/install/macros/latex/contrib/oberdiek.tds.zip && cd /usr/share/texmf/tex/latex && sudo unzip /tmp/oberdiek.tds.zip && sudo texhash); fi
   - sh -e /etc/init.d/xvfb start
   - if IsSourceInstall; then (
       cd ~ &&
