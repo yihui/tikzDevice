@@ -28,6 +28,9 @@
 #'   for more details.
 #' @param packages See the section ``Options That Affect Package Behavior'' of
 #'   \link{tikzDevice-package}.
+#' @param verbose A logical value indicating whether diagnostic messages are
+#'  printed when measuring dimensions of strings. Defaults to \code{TRUE} in
+#'  interactive mode only, to \code{FALSE} otherwise.
 #'
 #'
 #' @return
@@ -48,7 +51,8 @@
 #' @export
 getLatexStrWidth <-
 function(texString, cex = 1, face = 1, engine = getOption('tikzDefaultEngine'),
-   documentDeclaration = getOption("tikzDocumentDeclaration"), packages)
+  documentDeclaration = getOption("tikzDocumentDeclaration"), packages,
+  verbose = interactive())
 {
 
   switch(engine,
@@ -97,7 +101,7 @@ function(texString, cex = 1, face = 1, engine = getOption('tikzDefaultEngine'),
 
   # Check to see if we have a width stored in
   # our dictionary for this string.
-  width <- queryMetricsDictionary( TeXMetrics )
+  width <- queryMetricsDictionary( TeXMetrics, verbose = verbose )
 
   if( width >= 0 ){
 
@@ -109,7 +113,7 @@ function(texString, cex = 1, face = 1, engine = getOption('tikzDefaultEngine'),
 
     # Bummer. No width on record for this string.
     # Call LaTeX and get one.
-    width <- getMetricsFromLatex( TeXMetrics )
+    width <- getMetricsFromLatex( TeXMetrics, verbose = verbose )
 
     if (is.null(width)) {
       # Something went wrong. Return 0
@@ -141,7 +145,8 @@ function(texString, cex = 1, face = 1, engine = getOption('tikzDefaultEngine'),
 #' @export
 getLatexCharMetrics <-
 function(charCode, cex = 1, face = 1, engine = getOption('tikzDefaultEngine'),
-  documentDeclaration = getOption("tikzDocumentDeclaration"), packages)
+  documentDeclaration = getOption("tikzDocumentDeclaration"), packages,
+  verbose = interactive())
 {
 
   # This function is pretty much an exact duplicate of getLatexStrWidth, these
@@ -208,7 +213,7 @@ function(charCode, cex = 1, face = 1, engine = getOption('tikzDefaultEngine'),
 
   # Check to see if we have metrics stored in
   # our dictionary for this character.
-  metrics <- queryMetricsDictionary( TeXMetrics )
+  metrics <- queryMetricsDictionary( TeXMetrics, verbose = verbose )
 
   if( all(metrics >= 0) ){
 
@@ -220,7 +225,7 @@ function(charCode, cex = 1, face = 1, engine = getOption('tikzDefaultEngine'),
 
     # Bummer. No metrics on record for this character.
     # Call LaTeX to obtain them.
-    metrics <- getMetricsFromLatex( TeXMetrics )
+    metrics <- getMetricsFromLatex( TeXMetrics, verbose = verbose )
 
     if (is.null(metrics)) {
       # Couldn't get metrics for some reason, return 0
@@ -237,7 +242,11 @@ function(charCode, cex = 1, face = 1, engine = getOption('tikzDefaultEngine'),
 }
 
 getMetricsFromLatex <-
-function( TeXMetrics ){
+function( TeXMetrics, verbose = verbose ){
+
+  if (!verbose) {
+    message <- function(...) invisible()
+  }
 
   # Reimplementation of the original C function since
   # the C function causes all kinds of gibberish to
@@ -364,6 +373,8 @@ function( TeXMetrics ){
     }
 
   )# End switch for  metric type.
+
+  message("Measuring dimensions of: ", nodeContent);
 
   writeLines( paste( nodeOpts, ' (TeX) {', nodeContent, "};", sep=''), texIn)
 
