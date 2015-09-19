@@ -226,8 +226,6 @@ function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
   verbose = interactive()
 ){
 
-  init_once()
-
   tryCatch({
     # Ok, this sucks. We copied the function signature of pdf() and got `file`
     # as an argument to our function. We should have copied png() and used

@@ -1,4 +1,5 @@
-init <- function() {
+.onLoad <-
+function(libname, pkgname) {
 
   # Ensure options are set.
   setTikzDefaults( overwrite = FALSE )
@@ -70,7 +71,7 @@ init <- function() {
   }
 
   if (!foundLatex ) {
-    stop("\n\nAn appropriate LaTeX compiler could not be found.\n",
+    warning("\n\ntikzDevice: No appropriate LaTeX compiler could be found.\n",
       "Access to LaTeX is required in order for the TikZ device\n",
       "to produce output.\n\n",
       "The following places were tested for a valid LaTeX compiler:\n\n\t",
@@ -89,8 +90,6 @@ init <- function() {
   }
 
 }
-
-init_once <- memoise::memoise(init)
 
 # Any variables defined in here will be hidden
 # from normal users.
