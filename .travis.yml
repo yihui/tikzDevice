@@ -10,7 +10,7 @@ env:
 
 script:
   - if [ $TYPE == cran ]; then ./travis-tool.sh run_tests; fi
-  - if [ $TYPE == tests ]; then ( cd ..; R CMD build tikzDevice; R CMD INSTALL tikzDevice*.*.tar.gz ); ( cd tests; ./unit_tests.R ); fi
+  - if [ $TYPE == tests ]; then ( cd ..; R CMD build --no-build-vignettes tikzDevice; R CMD INSTALL tikzDevice*.*.tar.gz ); ( cd tests; ./unit_tests.R ); fi
 
 before_install:
   - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
