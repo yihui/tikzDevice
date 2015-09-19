@@ -12,10 +12,10 @@ sha1 <- filehash:::sha1
 #
 #' @importFrom filehash dbExists dbFetch
 queryMetricsDictionary <-
-function( key )
+function( key, verbose )
 {
   # Ensure the dictionary is available.
-  checkDictionaryStatus()
+  checkDictionaryStatus(verbose = verbose)
 
   # Check for the string.
   haveMetrics <- evalWithoutInterrupts(dbExists(.tikzInternal[['dictionary']], sha1(key)))
@@ -54,8 +54,12 @@ function( key, metrics )
 # specified dictionary or creates a new one in tempdir().
 #
 #' @importFrom filehash dbCreate dbInit
-checkDictionaryStatus <- function()
+checkDictionaryStatus <- function(verbose)
 {
+  if (!verbose) {
+    message <- function(...) invisible()
+  }
+
   dict_path <- getOption('tikzMetricsDictionary')
   old_dict_path <- .tikzInternal[['dict_path']]
   old_dictionary <- .tikzInternal[['dictionary']]
@@ -84,6 +88,7 @@ checkDictionaryStatus <- function()
 
   # Create the database file if it does not exist.
   if ( need_create ) {
+    unlink( db_file, recursive = TRUE )
     dbCreate( db_file, type='DB1' )
 
     # Need to initialize new database

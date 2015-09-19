@@ -171,6 +171,7 @@ SEXP TikZ_StartDevice ( SEXP args ){
   colorFileName = translateChar(asChar(CAR(args))); args = CDR(args);
   int maxSymbolicColors = asInteger(CAR(args)); args = CDR(args);
   Rboolean timestamp = asLogical(CAR(args)); args = CDR(args);
+  Rboolean verbose = asLogical(CAR(args)); args = CDR(args);
 
   /* Ensure there is an empty slot avaliable for a new device. */
   R_CheckDeviceAvailable();
@@ -202,7 +203,7 @@ SEXP TikZ_StartDevice ( SEXP args ){
     if( !TikZ_Setup( deviceInfo, fileName, width, height, onefile, bg, fg, baseSize, lwdUnit,
         standAlone, bareBones, documentDeclaration, packages,
         footer, console, sanitize, engine, symbolicColors, colorFileName,
-        maxSymbolicColors, timestamp ) ){
+        maxSymbolicColors, timestamp, verbose ) ){
       /*
        * If setup was unsuccessful, destroy the device and return
        * an error message.
@@ -248,7 +249,7 @@ static Rboolean TikZ_Setup(
   const char *packages, const char *footer,
   Rboolean console, Rboolean sanitize, int engine,
   Rboolean symbolicColors, const char* colorFileName,
-  int maxSymbolicColors, Rboolean timestamp){
+  int maxSymbolicColors, Rboolean timestamp, Rboolean verbose){
 
   /*
    * Create tikzInfo, this variable contains information which is
@@ -313,6 +314,7 @@ static Rboolean TikZ_Setup(
   tikzInfo->pageState = TIKZ_NO_PAGE;
   tikzInfo->onefile = onefile;
   tikzInfo->timestamp = timestamp;
+  tikzInfo->verbose = verbose;
 
   /* initialize strings, just to be on the safe side */
   strscpy(tikzInfo->drawColor, "drawColor");
@@ -831,7 +833,7 @@ static void TikZ_MetricInfo(int c, const pGEcontext plotParams,
   SEXP metricFun = findFun(install("getLatexCharMetrics"), namespace);
 
   SEXP RCallBack;
-  PROTECT( RCallBack = allocVector(LANGSXP,7) );
+  PROTECT( RCallBack = allocVector(LANGSXP, 8) );
 
   // Place the function into the first slot of the SEXP.
   SETCAR( RCallBack, metricFun );
@@ -867,6 +869,9 @@ static void TikZ_MetricInfo(int c, const pGEcontext plotParams,
 
   SETCAD4R(CDDR(RCallBack), mkString(tikzInfo->packages));
   SET_TAG(CDDR(CDDR(CDDR(RCallBack))), install("packages"));
+
+  SETCAD4R(CDR(CDDR(RCallBack)), ScalarLogical(tikzInfo->verbose));
+  SET_TAG(CDR(CDDR(CDDR(CDDR(RCallBack)))), install("verbose"));
 
   SEXP RMetrics;
   PROTECT( RMetrics = eval(RCallBack, namespace) );
@@ -978,7 +983,7 @@ static double TikZ_StrWidth( const char *str,
    * so I guess I will nuke it."
   */
   SEXP RCallBack;
-  PROTECT( RCallBack = allocVector(LANGSXP, 7) );
+  PROTECT( RCallBack = allocVector(LANGSXP, 8) );
 
   // Place the function into the first slot of the SEXP.
   SETCAR( RCallBack, widthFun );
@@ -1027,6 +1032,9 @@ static double TikZ_StrWidth( const char *str,
 
   SETCAD4R(CDDR(RCallBack), mkString(tikzInfo->packages));
   SET_TAG(CDDR(CDDR(CDDR(RCallBack))), install("packages"));
+
+  SETCAD4R(CDR(CDDR(RCallBack)), ScalarLogical(tikzInfo->verbose));
+  SET_TAG(CDR(CDDR(CDDR(CDDR(RCallBack)))), install("verbose"));
 
   /*
    * Call the R function, capture the result.

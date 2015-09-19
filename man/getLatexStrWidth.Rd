@@ -7,11 +7,13 @@
 \usage{
 getLatexStrWidth(texString, cex = 1, face = 1,
   engine = getOption("tikzDefaultEngine"),
-  documentDeclaration = getOption("tikzDocumentDeclaration"), packages)
+  documentDeclaration = getOption("tikzDocumentDeclaration"), packages,
+  verbose = interactive())
 
 getLatexCharMetrics(charCode, cex = 1, face = 1,
   engine = getOption("tikzDefaultEngine"),
-  documentDeclaration = getOption("tikzDocumentDeclaration"), packages)
+  documentDeclaration = getOption("tikzDocumentDeclaration"), packages,
+  verbose)
 }
 \arguments{
 \item{texString}{An arbitrary string for which the width is to be
@@ -32,7 +34,11 @@ Behavior'' and ``Font Size Calculations'' of \link{tikzDevice-package}
 for more details.}
 
 \item{packages}{See the section ``Options That Affect Package Behavior'' of
-  \link{tikzDevice-package}.}
+\link{tikzDevice-package}.}
+
+\item{verbose}{A logical value indicating whether diagnostic messages are
+ printed when measuring dimensions of strings. Defaults to \code{TRUE} in
+ interactive mode only, to \code{FALSE} otherwise.}
 
 \item{charCode}{an integer that corresponds to a symbol in the ASCII
   character table under the Type 1 font encoding. All numeric values are

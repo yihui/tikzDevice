@@ -12,6 +12,10 @@ install:
 
 # Adapt as necessary starting from here
 
+environment:
+  WARNINGS_ARE_ERRORS: 1
+  R_CHECK_ARGS: --ignore-vignettes --no-manual --no-examples --as-cran
+
 build_script:
   - travis-tool.sh install_deps
 
