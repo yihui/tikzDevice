@@ -44,4 +44,5 @@ after_failure:
 after_success:
   - Rscript -e 'library(covr); coveralls()'
   - export R_PKG="$(basename $TRAVIS_REPO_SLUG)"
+  - cd ..; R CMD build $R_PKG; cd $R_PKG;
   - "[ $TYPE = cran ] && (wget -q -O - http://yihui.name/xran/r-xran | bash)"
