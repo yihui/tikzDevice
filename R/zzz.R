@@ -71,7 +71,7 @@ function(libname, pkgname) {
   }
 
   if (!foundLatex ) {
-    stop("\n\nAn appropriate LaTeX compiler could not be found.\n",
+    warning("\n\ntikzDevice: No appropriate LaTeX compiler could be found.\n",
       "Access to LaTeX is required in order for the TikZ device\n",
       "to produce output.\n\n",
       "The following places were tested for a valid LaTeX compiler:\n\n\t",

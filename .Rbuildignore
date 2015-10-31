@@ -16,3 +16,5 @@ GNUmakefile
 ^\.travis\.yml$
 ^NEWS\.md\.tmpl$
 ^cran-comments\.md$
+^appveyor\.yml$
+^revdep$

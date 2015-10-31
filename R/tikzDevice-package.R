@@ -129,3 +129,9 @@
 #'   \url{http://sourceforge.net/projects/pgf}\cr Till Tanatu, February 20, 2008
 #' @keywords package
 NULL
+
+#' @importFrom grDevices as.raster dev.cur dev.list dev.off png
+#' @importFrom graphics grconvertX grconvertY par plot.new rasterImage
+#' @importFrom stats complete.cases
+#' @importFrom utils packageVersion
+NULL

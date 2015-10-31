@@ -453,6 +453,7 @@ test_graphs <- list(
     short_name = 'base_raster',
     description = 'Test raster support in base graphics',
     tags = c('base', 'raster'),
+    fuzz = 642,
     graph_code = quote({
 
       plot(c(100, 250), c(300, 450), type = "n", xlab="", ylab="")
