@@ -36,3 +36,4 @@ Suggests:
 SystemRequirements: pgf (>= 2.00)
 LazyLoad: yes
 VignetteBuilder: knitr
+RoxygenNote: 5.0.1
