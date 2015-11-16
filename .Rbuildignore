@@ -18,3 +18,4 @@ GNUmakefile
 ^cran-comments\.md$
 ^appveyor\.yml$
 ^revdep$
+inst/staticdocs
