@@ -1,6 +1,27 @@
+Changes in version 0.9 (2015-11-16)
+===
+
+Features
+---
+
+- PNG images now use `png(type = "cairo")` on all platforms (#121)
+- New argument `verbose` to `tikz()` function (#117, #124)
+
+Bug Fixes
+---
+
 - Fix segfault when no file extension is provided (#101)
-- Fix quoting issue with spaces in the tempdir name (#105, #106)
+- Fix quoting issue with spaces in the tempdir name (#99, #105, #106)
 - Fix the error from getMetricsFromLatex() when options(OutDec) is set to "," (#57)
+- Allow loading package even if LaTeX is not available, with a warning instead of a fatal error (#112, 125)
+- Bump dependency for `filehash` (#109)
+
+Internal
+---
+
+- R compatibility update: Explicit imports from recommended pacakges (#116)
+- Use `crayon` for coloring test output (#112)
+
 
 Changes in version 0.8.1 (2015-01-07)
 ===
