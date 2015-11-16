@@ -3,7 +3,7 @@ Package: tikzDevice
 Type: Package
 Title: R Graphics Output in LaTeX Format
 Version: 0.9
-Date: 2015-11-01
+Date: 2015-11-17
 Authors@R: c(
     person("Charlie", "Sharpsteen", role = "aut"),
     person("Cameron", "Bracken", role = "aut"),
