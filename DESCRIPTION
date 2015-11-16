@@ -16,8 +16,8 @@ Description: Provides a graphics output device for R
     that records plots in a LaTeX-friendly format. The device transforms
     plotting commands issued by R functions into LaTeX code blocks. When
     included in a LaTeX document, these blocks are interpreted with the
-    help of "TikZ"---a graphics package for TeX and friends written by Till
-    Tantau. Using the "tikzDevice", the text of R plots can contain LaTeX
+    help of 'TikZ'---a graphics package for TeX and friends written by Till
+    Tantau. Using the 'tikzDevice', the text of R plots can contain LaTeX
     commands such as mathematical formula. The device also allows arbitrary
     LaTeX code to be inserted into the output stream.
 License: GPL (>= 2)
