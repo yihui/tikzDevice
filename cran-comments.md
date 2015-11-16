@@ -3,7 +3,7 @@
 
 ## Test environments
 * local Ubuntu 14.10 install, R 3.2.2
-* win-builder (devel and release)
+* win-builder (release; devel passed before but didn't work at all today, tried twice)
 
 ## R CMD check results
 There were no ERRORs or WARNINGs, just a spell checker NOTE
