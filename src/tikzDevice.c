@@ -2149,11 +2149,13 @@ static void Print_TikZ_Header( tikzDevDesc *tikzInfo ){
 
 static char *Sanitize(const char *str){
 
+  SEXP namespace;
+  PROTECT( namespace = TIKZ_NAMESPACE );
 
   //Splice in escaped charaters via a callback to R
 
   //Call out to R to retrieve the sanitizeTexString function.
-  SEXP sanitizeFun = findFun( install("sanitizeTexString"), R_GlobalEnv );
+  SEXP sanitizeFun = findFun( install("sanitizeTexString"), namespace );
 
   /*
    * Create a SEXP that will be the R function call. The SEXP will
@@ -2193,9 +2195,9 @@ static char *Sanitize(const char *str){
   */
   char *cleanStringCP = calloc_strcpy(cleanString);
 
-  // Since we called PROTECT twice, we must call UNPROTECT
-  // and pass the number 2.
-  UNPROTECT(2);
+  // Since we called PROTECT three times, we must call UNPROTECT
+  // and pass the number 3.
+  UNPROTECT(3);
 
   return cleanStringCP;
 }
