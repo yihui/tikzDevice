@@ -1539,23 +1539,21 @@ static void TikZ_Raster(
   PROTECT( namespace = TIKZ_NAMESPACE );
 
   /*
-   * Prepare callback to R for creation of a PNG from raster data.  Seven
+   * Prepare callback to R for creation of a PNG from raster data.  Three
    * parameters will be passed:
    *
    * - The name of the current output file.
    *
    * - The number of rasters that have been output so far.
    *
-   * - The raster data.
+   * - The raster data (as nativeRaster object).
    *
-   * - The number of rows and columns in the raster data.
+   * - The width (for calculating reflection).
    *
-   * - The desired dimensions of the final image, in inches.
-   *
-   * - The value of the interpolate variable.
-  */
+   * - The height (for calculating reflection).
+   */
   SEXP RCallBack;
-  PROTECT( RCallBack = allocVector(LANGSXP, 9) );
+  PROTECT( RCallBack = allocVector(LANGSXP, 6) );
   SETCAR( RCallBack, install("tikz_writeRaster") );
 
   SETCADR( RCallBack, mkString( tikzInfo->outFileName ) );
@@ -1565,42 +1563,13 @@ static void TikZ_Raster(
   SET_TAG( CDDR(RCallBack), install("rasterCount") );
 
   /*
-   * The raster values are stored as a 32 bit unsigned integer.  Every 8 bits
-   * contains an red, green, blue or alpha value (actual order is ABGR).  This
-   * is the tricky bit of dealing with the raster-- there is no easy way to send
-   * unsigned integers back into the R environment.  So... I gues we'll split
-   * things back to RBGA values, send back a list of four vectors and regenrate
-   * the whole shbang on the R side... there should be an easier way to deal
-   * with this.
+   * The raster values are stored as a 32 bit unsigned integer, effectively the
+   * data part of a "nativeRaster" object.  From these, a proper "nativeRaster"
+   * object is created.  Reflection will be done as necessary.
   */
-  SEXP red_vec, blue_vec, green_vec, alpha_vec;
-  PROTECT( red_vec = allocVector( INTSXP, w * h ) );
-  PROTECT( blue_vec = allocVector( INTSXP, w * h ) );
-  PROTECT( green_vec = allocVector( INTSXP, w * h ) );
-  PROTECT( alpha_vec = allocVector( INTSXP, w * h ) );
+  SEXP nativeRaster;
+  PROTECT( nativeRaster =  allocVector(INTSXP, w * h) );
 
-  /*
-   * Use the R_<color component> macros defined in GraphicsDevice.h to generate
-   * RGBA components from the raster data.  These macros are basically shorthand
-   * notation for C bitwise operators that extract 8 bit chunks from the 32 bit
-   * unsigned integers contained in the raster vector.
-   *
-   * NOTE:
-   *
-   * There is some funny business that happens below.
-   *
-   * In the definition of device_Raster from GraphicsDevice.h, the byte order
-   * of the colors entering this routine in the `raster` argument are specified
-   * to be ABGR. The color extraction macros assume the order is RGBA.
-   *
-   * In practice, it appears the byte order in `raster` is RBGA--hence the use
-   * of R_GREEN and R_BLUE are swapped below.
-   *
-   * If the width or height arguments to this function are negative, we
-   * interpret this as a sign that the raster should be flipped along the x or
-   * y matrix. For efficiency, these transformations are done in the extraction
-   * loop so that the data only has to be transformed once.
-   */
   int i, j, index, target, row_offset = 0, col_offset = 0, row_trans = 1, col_trans = 1;
   if ( height < 0 ) {
     /* Using these parameters, one can cause a loop to "count backwards" */
@@ -1627,69 +1596,11 @@ static void TikZ_Raster(
       target = i*w + j;
       index = (row_trans*i + row_offset)*w + (col_trans*j + col_offset);
 
-      INTEGER(red_vec)[target] = R_RED(raster[index]);
-      INTEGER(green_vec)[target] = R_BLUE(raster[index]);
-      INTEGER(blue_vec)[target] = R_GREEN(raster[index]);
-      INTEGER(alpha_vec)[target] = R_ALPHA(raster[index]);
+      INTEGER(nativeRaster)[target] = raster[index];
     }
   }
 
-  /*
-   * We will store all the vectors generated above in an R list named colors,
-   * this will make it easier to pass back into the R environment as an argument
-   * to an R function
-  */
-  SEXP colors;
-  PROTECT( colors =  allocVector( VECSXP, 4 ) );
-  SET_VECTOR_ELT( colors, 0, red_vec  );
-  SET_VECTOR_ELT( colors, 1, blue_vec );
-  SET_VECTOR_ELT( colors, 2, green_vec );
-  SET_VECTOR_ELT( colors, 3, alpha_vec );
-
-  /* We will also make this a named list. */
-  SEXP color_names;
-  PROTECT( color_names = allocVector( STRSXP, 4 ) );
-  SET_STRING_ELT( color_names, 0, mkChar("red") );
-  SET_STRING_ELT( color_names, 1, mkChar("green") );
-  SET_STRING_ELT( color_names, 2, mkChar("blue") );
-  SET_STRING_ELT( color_names, 3, mkChar("alpha") );
-
-  /* Apply the names to the list. */
-  setAttrib( colors, R_NamesSymbol, color_names );
-
-
-  SETCADDDR( RCallBack, colors );
-  SET_TAG( CDR(CDDR(RCallBack)), install("rasterData") );
-
-  SETCAD4R( RCallBack, ScalarInteger(h) );
-  SET_TAG( CDDR(CDDR(RCallBack)), install("nrows") );
-
-  SETCAD4R( CDR(RCallBack), ScalarInteger(w) );
-  SET_TAG( CDR(CDDR(CDDR(RCallBack))), install("ncols") );
-
-  /* Create a list containing the final width and height of the image */
-  SEXP final_dims, dim_names;
-
-  PROTECT( final_dims = allocVector(VECSXP, 2) );
-  SET_VECTOR_ELT(final_dims, 0, ScalarReal(width/dim2dev(1.0)));
-  SET_VECTOR_ELT(final_dims, 1, ScalarReal(height/dim2dev(1.0)));
-
-  PROTECT( dim_names = allocVector(STRSXP, 2) );
-  SET_STRING_ELT(dim_names, 0, mkChar("width"));
-  SET_STRING_ELT(dim_names, 1, mkChar("height"));
-
-  setAttrib(final_dims, R_NamesSymbol, dim_names);
-
-  SETCAD4R(CDDR(RCallBack), final_dims);
-  SET_TAG(CDDR(CDDR(CDDR(RCallBack))), install("finalDims"));
-
-  SETCAD4R(CDR(CDDR(RCallBack)), ScalarLogical(interpolate));
-  SET_TAG(CDR(CDDR(CDDR(CDDR(RCallBack)))), install("interpolate"));
-
-  SEXP nativeRaster;
-  PROTECT( nativeRaster =  allocVector(INTSXP, w * h) );
-  memcpy(INTEGER(nativeRaster), raster, sizeof(int) * (w * h));
-
+  /* Turning the integer vector into a full-fledged nativeRaster object. */
   SEXP dim = allocVector(INTSXP, 2);
   INTEGER(dim)[0] = h;
   INTEGER(dim)[1] = w;
@@ -1697,8 +1608,14 @@ static void TikZ_Raster(
   setAttrib(nativeRaster, R_ClassSymbol, mkString("nativeRaster"));
   setAttrib(nativeRaster, install("channels"), ScalarInteger(4));
 
-  SETCAD4R( CDDR(CDDR(RCallBack)), nativeRaster );
-  SET_TAG(CDDR(CDDR(CDDR(CDDR(RCallBack)))), install("nativeRaster"));
+  SETCADDDR( RCallBack, nativeRaster );
+  SET_TAG(CDDDR(RCallBack), install("nativeRaster"));
+
+  SETCAD4R( RCallBack, ScalarReal( width ) );
+  SET_TAG( CDR(CDDDR(RCallBack)), install("width") );
+
+  SETCAD4R( CDR(RCallBack), ScalarReal( height ) );
+  SET_TAG( CDDR(CDDDR(RCallBack)), install("height") );
 
   SEXP rasterFile;
   PROTECT( rasterFile = eval(RCallBack, namespace) );
@@ -1729,8 +1646,7 @@ static void TikZ_Raster(
   */
   tikzInfo->rasterFileCount++;
 
-  // UNPROTECT(12);
-  UNPROTECT(12);
+  UNPROTECT(4);
   return;
 
 }
