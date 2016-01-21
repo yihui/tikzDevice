@@ -462,7 +462,7 @@ test_graphs <- list(
       rasterImage(image, 100, 400, 150, 450)
       rasterImage(image, 200, 300, 200 + xinch(.5), 300 + yinch(.3),
                interpolate=FALSE)
-             rasterImage(image, 200, 400, 250, 450, angle=15,
+      rasterImage(image, 200, 400, 250, 450, angle=15,
                interpolate=FALSE)
 
     })
