@@ -461,9 +461,15 @@ test_graphs <- list(
       rasterImage(image, 100, 300, 150, 350, interpolate=FALSE)
       rasterImage(image, 100, 400, 150, 450)
       rasterImage(image, 200, 300, 200 + xinch(.5), 300 + yinch(.3),
-               interpolate=FALSE)
+                  interpolate=FALSE)
       rasterImage(image, 200, 400, 250, 450, angle=15,
-               interpolate=FALSE)
+                  interpolate=FALSE)
+      rasterImage(image, 175 + xinch(.5), 350, 175, 350 + yinch(.3), angle=-30,
+                  interpolate=FALSE)
+      rasterImage(image, 200 + xinch(.5), 350 + yinch(.3), 200, 350, angle=-45,
+                  interpolate=FALSE)
+      rasterImage(image, 225, 350 + yinch(.3), 225 + xinch(.5), 350, angle=-60,
+                  interpolate=FALSE)
 
     })
   ),
