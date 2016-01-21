@@ -457,7 +457,7 @@ test_graphs <- list(
     graph_code = quote({
 
       plot(c(100, 250), c(300, 450), type = "n", xlab="", ylab="")
-      image <- as.raster(matrix(rep(0:1,5*3), ncol=5, nrow=3))
+      image <- as.raster(matrix(rep(c(rep(0:1, 4), rep(1:0, 4)), each = 3), ncol=6, nrow=4))
       rasterImage(image, 100, 300, 150, 350, interpolate=FALSE)
       rasterImage(image, 100, 400, 150, 450)
       rasterImage(image, 200, 300, 200 + xinch(.5), 300 + yinch(.3),
