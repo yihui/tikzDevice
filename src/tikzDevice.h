@@ -212,4 +212,13 @@ static char *calloc_x_strlen(const char *str, size_t extra);
 static void const_free(const void *ptr);
 static void strlcpy_(char *dst, const char* src, size_t n);
 #define strscpy(dst, src) strlcpy_(dst, src, sizeof(dst) / sizeof(*(dst)))
+
+
+// From http://stackoverflow.com/a/1644898/946850:
+#define debug_print(fmt, ...) \
+  do { if (DEBUG) fprintf(stderr, "%s:%d:%s(): " fmt "\n", __FILE__, __LINE__, __func__, __VA_ARGS__); } while (0)
+
+#define debug_print_empty() \
+  do { if (DEBUG) fprintf(stderr, "%s:%d:%s()\n", __FILE__, __LINE__, __func__); } while (0)
+
 #endif // End of Once Only header

@@ -522,6 +522,8 @@ static Rboolean TikZ_Setup(
 static void TikZ_WriteColorDefinition( tikzDevDesc *tikzInfo, void (*printOut)(tikzDevDesc *tikzInfo, const char *format, ...), int color, const char* colorname, const char* colorstr )
 {
 
+  debug_print_empty();
+
   if ( strncmp(colorstr, "gray", 4) == 0 && strlen(colorstr) > 4)
   {
     int perc = atoi(colorstr+4);
@@ -542,6 +544,9 @@ static void TikZ_WriteColorDefinition( tikzDevDesc *tikzInfo, void (*printOut)(t
 
 static void TikZ_WriteColorDefinitions( tikzDevDesc *tikzInfo )
 {
+
+  debug_print_empty();
+
   int i;
 
   for( i = 0; i < tikzInfo->ncolors; ++i)
@@ -557,6 +562,9 @@ static void TikZ_WriteColorDefinitions( tikzDevDesc *tikzInfo )
 
 static void TikZ_WriteColorFile(tikzDevDesc *tikzInfo)
 {
+
+  debug_print_empty();
+
   if ( tikzInfo->outColorFileName && tikzInfo->symbolicColors )
   {
     tikzInfo->colorFile = fopen(R_ExpandFileName(tikzInfo->outColorFileName), "w");
@@ -593,6 +601,9 @@ static void TikZ_WriteColorFile(tikzDevDesc *tikzInfo)
  */
 static Rboolean TikZ_Open( pDevDesc deviceInfo )
 {
+
+  debug_print_empty();
+
   /*
    * Shortcut pointers to variables of interest.  It seems like there HAS to be
    * a more elegent way of accesing these...
@@ -643,6 +654,9 @@ static Rboolean TikZ_Open( pDevDesc deviceInfo )
 
 static void TikZ_Close( pDevDesc deviceInfo)
 {
+
+  debug_print_empty();
+
   /* Shortcut pointers to variables of interest. */
   tikzDevDesc *tikzInfo = (tikzDevDesc *) deviceInfo->deviceSpecific;
 
@@ -697,6 +711,9 @@ static void TikZ_Close( pDevDesc deviceInfo)
 
 static void TikZ_NewPage( const pGEcontext plotParams, pDevDesc deviceInfo )
 {
+
+  debug_print_empty();
+
   /* Shortcut pointers to variables of interest. */
   tikzDevDesc *tikzInfo = (tikzDevDesc *) deviceInfo->deviceSpecific;
 
@@ -740,6 +757,9 @@ static void TikZ_NewPage( const pGEcontext plotParams, pDevDesc deviceInfo )
 static void TikZ_Clip( double x0, double x1,
     double y0, double y1, pDevDesc deviceInfo )
 {
+
+  debug_print_empty();
+
   /* Shortcut pointers to variables of interest. */
   tikzDevDesc *tikzInfo = (tikzDevDesc *) deviceInfo->deviceSpecific;
 
@@ -770,6 +790,8 @@ static void TikZ_Clip( double x0, double x1,
 static void TikZ_Size( double *left, double *right,
     double *bottom, double *top, pDevDesc deviceInfo){
 
+  debug_print_empty();
+
   /* Return canvas size. */
   *bottom = deviceInfo->bottom;
   *left = deviceInfo->left;
@@ -799,6 +821,8 @@ static void TikZ_Size( double *left, double *right,
 */
 static void TikZ_MetricInfo(int c, const pGEcontext plotParams,
     double *ascent, double *descent, double *width, pDevDesc deviceInfo ){
+
+  debug_print_empty();
 
 
   /* Shortcut pointers to variables of interest. */
@@ -921,6 +945,8 @@ static void TikZ_MetricInfo(int c, const pGEcontext plotParams,
 */
 static double TikZ_StrWidth( const char *str,
     const pGEcontext plotParams, pDevDesc deviceInfo ){
+
+  debug_print_empty();
 
   /* Shortcut pointers to variables of interest. */
   tikzDevDesc *tikzInfo = (tikzDevDesc *) deviceInfo->deviceSpecific;
@@ -1121,6 +1147,8 @@ static void TikZ_Text( double x, double y, const char *str,
     double rot, double hadj, const pGEcontext plotParams,
     pDevDesc deviceInfo){
 
+  debug_print_empty();
+
   /* Shortcut pointers to variables of interest. */
   tikzDevDesc *tikzInfo = (tikzDevDesc *) deviceInfo->deviceSpecific;
 
@@ -1227,6 +1255,8 @@ static void TikZ_Text( double x, double y, const char *str,
 static void TikZ_Circle( double x, double y, double r,
     const pGEcontext plotParams, pDevDesc deviceInfo){
 
+  debug_print_empty();
+
   /* Shortcut pointers to variables of interest. */
   tikzDevDesc *tikzInfo = (tikzDevDesc *) deviceInfo->deviceSpecific;
   TikZ_DrawOps ops = TikZ_GetDrawOps(plotParams);
@@ -1251,6 +1281,8 @@ static void TikZ_Circle( double x, double y, double r,
 
 static void TikZ_Rectangle( double x0, double y0,
     double x1, double y1, const pGEcontext plotParams, pDevDesc deviceInfo){
+
+  debug_print_empty();
 
   /* Shortcut pointers to variables of interest. */
   tikzDevDesc *tikzInfo = (tikzDevDesc *) deviceInfo->deviceSpecific;
@@ -1280,6 +1312,8 @@ static void TikZ_Rectangle( double x0, double y0,
 static void TikZ_Line( double x1, double y1,
     double x2, double y2, const pGEcontext plotParams, pDevDesc deviceInfo){
 
+  debug_print_empty();
+
   /* Shortcut pointers to variables of interest. */
   tikzDevDesc *tikzInfo = (tikzDevDesc *) deviceInfo->deviceSpecific;
   TikZ_DrawOps ops = TikZ_GetDrawOps(plotParams) & DRAWOP_DRAW;
@@ -1306,6 +1340,8 @@ static void TikZ_Line( double x1, double y1,
 
 static void TikZ_Polyline( int n, double *x, double *y,
     pGEcontext plotParams, pDevDesc deviceInfo ){
+
+  debug_print_empty();
 
   /* Shortcut pointers to variables of interest. */
   tikzDevDesc *tikzInfo = (tikzDevDesc *) deviceInfo->deviceSpecific;
@@ -1359,6 +1395,8 @@ static void TikZ_Polyline( int n, double *x, double *y,
 static void TikZ_Polygon( int n, double *x, double *y,
     pGEcontext plotParams, pDevDesc deviceInfo ){
 
+  debug_print_empty();
+
   /* Shortcut pointers to variables of interest. */
   tikzDevDesc *tikzInfo = (tikzDevDesc *) deviceInfo->deviceSpecific;
   TikZ_DrawOps ops = TikZ_GetDrawOps(plotParams);
@@ -1405,6 +1443,8 @@ TikZ_Path( double *x, double *y,
   Rboolean winding,
   const pGEcontext plotParams, pDevDesc deviceInfo
 ){
+
+  debug_print_empty();
 
   int i, j, index;
   tikzDevDesc *tikzInfo = (tikzDevDesc *) deviceInfo->deviceSpecific;
@@ -1485,6 +1525,8 @@ static void TikZ_Raster(
   Rboolean interpolate,
   const pGEcontext plotParams, pDevDesc deviceInfo
 ){
+
+  debug_print_empty();
 
   /* Shortcut pointer to device information. */
   tikzDevDesc *tikzInfo = (tikzDevDesc *) deviceInfo->deviceSpecific;
@@ -1694,6 +1736,8 @@ static void TikZ_Raster(
 */
 static SEXP TikZ_Cap( pDevDesc deviceInfo ){
 
+  debug_print_empty();
+
   warning( "The tikzDevice does not currently support capturing device output to a raster image." );
   return R_NilValue;
 
@@ -1708,9 +1752,18 @@ static SEXP TikZ_Cap( pDevDesc deviceInfo ){
  * to a mouse click. For devices plotting to files these functions can be left
  * as dummy routines.
 */
-static void TikZ_Activate( pDevDesc deviceInfo ){}
-static void TikZ_Deactivate( pDevDesc deviceInfo ){}
+static void TikZ_Activate( pDevDesc deviceInfo ){
+  debug_print_empty();
+}
+
+static void TikZ_Deactivate( pDevDesc deviceInfo ){
+  debug_print_empty();
+}
+
 static Rboolean TikZ_Locator( double *x, double *y, pDevDesc deviceInfo ){
+
+  debug_print_empty();
+
   return FALSE;
 }
 
@@ -1720,7 +1773,10 @@ static Rboolean TikZ_Locator( double *x, double *y, pDevDesc deviceInfo ){
  * so this function is a dummy routine. Conciveably this function could be
  * used to wrap TikZ graphics in \begin{scope} and \end{scope} directives.
 */
-static void TikZ_Mode( int mode, pDevDesc deviceInfo ){}
+static void TikZ_Mode( int mode, pDevDesc deviceInfo ){
+
+  debug_print_empty();
+}
 
 /*==============================================================================
 
@@ -1742,6 +1798,9 @@ static void TikZ_Mode( int mode, pDevDesc deviceInfo ){}
  */
 static TikZ_DrawOps TikZ_GetDrawOps(pGEcontext plotParams)
 {
+
+  debug_print_empty();
+
   TikZ_DrawOps ops = DRAWOP_NOOP;
 
   /*
@@ -1761,6 +1820,9 @@ static TikZ_DrawOps TikZ_GetDrawOps(pGEcontext plotParams)
 
 static Rboolean TikZ_CheckColor(tikzDevDesc *tikzInfo, int color)
 {
+
+  debug_print_empty();
+
   int i;
 
   for (i = 0; i < tikzInfo->ncolors; ++i)
@@ -1774,6 +1836,9 @@ static Rboolean TikZ_CheckColor(tikzDevDesc *tikzInfo, int color)
 
 static Rboolean TikZ_CheckAndAddColor(tikzDevDesc *tikzInfo, int color)
 {
+
+  debug_print_empty();
+
   Rboolean colorfound = FALSE;
 
   if( !tikzInfo->symbolicColors )
@@ -1800,6 +1865,9 @@ static Rboolean TikZ_CheckAndAddColor(tikzDevDesc *tikzInfo, int color)
 
 static void TikZ_DefineDrawColor(tikzDevDesc *tikzInfo, int color, TikZ_DrawOps ops)
 {
+
+  debug_print_empty();
+
   const char *colorstr = col2name(color);
   const char* colors[] = {"", "drawColor", "fillColor"};
   char (*pdest)[sizeof tikzInfo->drawColor / sizeof* tikzInfo->drawColor];
@@ -1834,6 +1902,9 @@ static void TikZ_DefineDrawColor(tikzDevDesc *tikzInfo, int color, TikZ_DrawOps 
 
 static void TikZ_DefineColors(pGEcontext plotParams, pDevDesc deviceInfo, TikZ_DrawOps ops)
 {
+
+  debug_print_empty();
+
   int color;
   tikzDevDesc *tikzInfo = (tikzDevDesc *) deviceInfo->deviceSpecific;
 
@@ -1864,6 +1935,9 @@ static void TikZ_DefineColors(pGEcontext plotParams, pDevDesc deviceInfo, TikZ_D
 static void TikZ_WriteDrawOptions(const pGEcontext plotParams, pDevDesc deviceInfo,
     TikZ_DrawOps ops)
 {
+
+  debug_print_empty();
+
   /* Bail out if there is nothing to do */
   if ( ops == DRAWOP_NOOP )
     return;
@@ -1892,6 +1966,8 @@ static void TikZ_WriteDrawOptions(const pGEcontext plotParams, pDevDesc deviceIn
 
 static void TikZ_WriteLineStyle(pGEcontext plotParams, tikzDevDesc *tikzInfo)
 {
+
+  debug_print_empty();
 
   /* Set the line width */
   printOutput(tikzInfo,",line width=%4.1fpt", tikzInfo->lwdUnit * plotParams->lwd);
@@ -1976,6 +2052,8 @@ static void TikZ_WriteLineStyle(pGEcontext plotParams, tikzDevDesc *tikzInfo)
 static double
 ScaleFont( const pGEcontext plotParams, pDevDesc deviceInfo ){
 
+  debug_print_empty();
+
   // These parameters all affect the font size.
   double baseSize = deviceInfo->startps;
   double fontSize = plotParams->ps;
@@ -1995,6 +2073,8 @@ ScaleFont( const pGEcontext plotParams, pDevDesc deviceInfo ){
 ==============================================================================*/
 
 void TikZ_Annotate(const char **annotation, int *size, int *checkstate){
+
+  debug_print_empty();
 
   //1. Get values of tikzInfo and deviceInfo
   //2. Print out annotation
@@ -2020,6 +2100,8 @@ void TikZ_Annotate(const char **annotation, int *size, int *checkstate){
  * Returns information stored in the tikzDevDesc structure of a given device.
  */
 SEXP TikZ_DeviceInfo(SEXP device_num){
+
+  debug_print_empty();
 
   int dev_index = asInteger(device_num);
   pDevDesc deviceInfo = GEgetDevice(dev_index - 1)->dev;
@@ -2056,6 +2138,9 @@ SEXP TikZ_DeviceInfo(SEXP device_num){
 
 /* Run R evaluations inside a context protected from things like CTRL-C */
 SEXP TikZ_EvalWithoutInterrupts(SEXP expr, SEXP envir){
+
+  debug_print_empty();
+
   SEXP result;
 
   BEGIN_SUSPEND_INTERRUPTS{
@@ -2111,6 +2196,8 @@ static void printColorOutput(tikzDevDesc *tikzInfo, const char *format, ...){
 */
 static void Print_TikZ_Header( tikzDevDesc *tikzInfo ){
 
+  debug_print_empty();
+
   /* Call back to R to retrieve current date and version num*/
 
   /*
@@ -2148,6 +2235,8 @@ static void Print_TikZ_Header( tikzDevDesc *tikzInfo ){
 }
 
 static char *Sanitize(const char *str){
+
+  debug_print_empty();
 
 
   //Splice in escaped charaters via a callback to R
