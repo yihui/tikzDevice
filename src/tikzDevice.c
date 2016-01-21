@@ -1546,7 +1546,7 @@ static void TikZ_Raster(
    *
    * - The number of rasters that have been output so far.
    *
-   * - The raster data (as nativeRaster object).
+   * - The raster data (as "nativeRaster" object).
    */
   SEXP RCallBack;
   PROTECT( RCallBack = allocVector(LANGSXP, 4) );
