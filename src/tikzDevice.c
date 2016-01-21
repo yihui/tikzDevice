@@ -1555,7 +1555,7 @@ static void TikZ_Raster(
    * - The value of the interpolate variable.
   */
   SEXP RCallBack;
-  PROTECT( RCallBack = allocVector(LANGSXP, 8) );
+  PROTECT( RCallBack = allocVector(LANGSXP, 9) );
   SETCAR( RCallBack, install("tikz_writeRaster") );
 
   SETCADR( RCallBack, mkString( tikzInfo->outFileName ) );
@@ -1686,6 +1686,19 @@ static void TikZ_Raster(
   SETCAD4R(CDR(CDDR(RCallBack)), ScalarLogical(interpolate));
   SET_TAG(CDR(CDDR(CDDR(CDDR(RCallBack)))), install("interpolate"));
 
+  SEXP nativeRaster;
+  PROTECT( nativeRaster =  allocVector(INTSXP, w * h) );
+  memcpy(INTEGER(nativeRaster), raster, sizeof(int) * (w * h));
+
+  SEXP dim = allocVector(INTSXP, 2);
+  INTEGER(dim)[0] = h;
+  INTEGER(dim)[1] = w;
+  setAttrib(nativeRaster, R_DimSymbol, dim);
+  setAttrib(nativeRaster, R_ClassSymbol, mkString("nativeRaster"));
+  setAttrib(nativeRaster, install("channels"), ScalarInteger(4));
+
+  SETCAD4R( CDDR(CDDR(RCallBack)), nativeRaster );
+  SET_TAG(CDDR(CDDR(CDDR(CDDR(RCallBack)))), install("nativeRaster"));
 
   SEXP rasterFile;
   PROTECT( rasterFile = eval(RCallBack, namespace) );
@@ -1716,7 +1729,8 @@ static void TikZ_Raster(
   */
   tikzInfo->rasterFileCount++;
 
-  UNPROTECT(11);
+  // UNPROTECT(12);
+  UNPROTECT(12);
   return;
 
 }

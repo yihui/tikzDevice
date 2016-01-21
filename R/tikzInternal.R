@@ -17,7 +17,20 @@ getTikzDeviceVersion <- function() {
 }
 
 tikz_writeRaster <- function(fileName, rasterCount, rasterData,
-                             nrows, ncols, finalDims, interpolate) {
+                             nrows, ncols, finalDims, interpolate,
+                             nativeRaster) {
+  raster_file <- paste0(
+    tools::file_path_sans_ext(fileName),
+    '_ras', rasterCount, '.png')
+
+  dpi = getOption('tikzRasterResolution', 1)
+
+  png::writePNG(nativeRaster, raster_file, dpi)
+
+  return(
+    basename(tools::file_path_sans_ext(raster_file))
+  )
+
   # Convert the 4 vectors of RGBA data contained in rasterData to a raster
   # image.
   rasterData[['maxColorValue']] = 255
