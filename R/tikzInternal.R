@@ -23,9 +23,7 @@ tikz_writeRaster <- function(fileName, rasterCount, rasterData,
     tools::file_path_sans_ext(fileName),
     '_ras', rasterCount, '.png')
 
-  dpi = getOption('tikzRasterResolution', 1)
-
-  png::writePNG(nativeRaster, raster_file, dpi)
+  png::writePNG(nativeRaster, raster_file)
 
   return(
     basename(tools::file_path_sans_ext(raster_file))

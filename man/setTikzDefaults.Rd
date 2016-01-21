@@ -29,7 +29,6 @@ This function resets the following options:
   \item \code{tikzUnicodeMetricPackages}
   \item \code{tikzSanitizeCharacters}
   \item \code{tikzReplacementCharacters}
-  \item \code{tikzRasterResolution}
   \item \code{tikzPdftexWarnUTF}
 }
 }

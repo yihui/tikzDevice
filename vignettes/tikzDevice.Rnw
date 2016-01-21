@@ -630,17 +630,14 @@ options(tikzLwdUnit = 72.27 / 96)
 \end{tikzCodeBlock}
 
 
-\subsection{The \pkgopt{tikzRasterResolution} Option}
+\subsection{The deprecated \pkgopt{tikzRasterResolution} Option}
 
 When \code{tikz} is requested to add a raster to a graphic, the raster is
-written to a PNG file which is then included by the \LaTeX\ code. This option
-controls the resolution (dpi) at which the PNG files are created.
-When this options is set to \code{NA} the original raster is written
-directly to a PNG file and isn't resampled.
-
-\begin{tikzCodeBlock}[title={Default},listing style=sweavechunk]
-options(tikzRasterResolution = 300)
-\end{tikzCodeBlock}
+written to a PNG file which is then included by the \LaTeX\ code.
+In the current version, the raster is always written ``as is'',
+using \code{png::writePNG}.
+No resampling or transformation of any kind are applied, rotation and reflection
+are carried out by \TikZ.
 
 
 \subsection{The \pkgopt{tikzPdftexWarnUTF} Option}
