@@ -634,7 +634,7 @@ test_graphs <- list(
       plot(1:n,type='n',xlab='',ylab='',axes=FALSE, main="UTF-8 Characters")
       text(rep(1:n, n), rep(1:n, rep(n, n)), chars)
     })
-  )
+  ),
 
   # New UTF8/XeLaTeX/LuaLatex tests go here
   #list(
@@ -648,7 +648,11 @@ test_graphs <- list(
   #  })
   #)
 
+  NULL
+
 )
+
+test_graphs <- test_graphs[!vapply(test_graphs, is.null, logical(1L))]
 
 if ( length(tags_to_run) ) {
   test_graphs <- Filter(
