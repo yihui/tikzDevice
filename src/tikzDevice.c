@@ -1547,13 +1547,9 @@ static void TikZ_Raster(
    * - The number of rasters that have been output so far.
    *
    * - The raster data (as nativeRaster object).
-   *
-   * - The width (for calculating reflection).
-   *
-   * - The height (for calculating reflection).
    */
   SEXP RCallBack;
-  PROTECT( RCallBack = allocVector(LANGSXP, 6) );
+  PROTECT( RCallBack = allocVector(LANGSXP, 4) );
   SETCAR( RCallBack, install("tikz_writeRaster") );
 
   SETCADR( RCallBack, mkString( tikzInfo->outFileName ) );
@@ -1610,12 +1606,6 @@ static void TikZ_Raster(
 
   SETCADDDR( RCallBack, nativeRaster );
   SET_TAG(CDDDR(RCallBack), install("nativeRaster"));
-
-  SETCAD4R( RCallBack, ScalarReal( width ) );
-  SET_TAG( CDR(CDDDR(RCallBack)), install("width") );
-
-  SETCAD4R( CDR(RCallBack), ScalarReal( height ) );
-  SET_TAG( CDDR(CDDDR(RCallBack)), install("height") );
 
   SEXP rasterFile;
   PROTECT( rasterFile = eval(RCallBack, namespace) );

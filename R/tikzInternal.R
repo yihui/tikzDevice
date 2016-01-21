@@ -16,7 +16,7 @@ getTikzDeviceVersion <- function() {
   as.character(packageVersion('tikzDevice'))
 }
 
-tikz_writeRaster <- function(fileName, rasterCount, nativeRaster, width, height) {
+tikz_writeRaster <- function(fileName, rasterCount, nativeRaster) {
   raster_file <- paste0(
     tools::file_path_sans_ext(fileName),
     '_ras', rasterCount, '.png')
