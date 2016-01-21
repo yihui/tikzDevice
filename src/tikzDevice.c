@@ -1561,7 +1561,7 @@ static void TikZ_Raster(
   /*
    * The raster values are stored as a 32 bit unsigned integer, effectively the
    * data part of a "nativeRaster" object.  From these, a proper "nativeRaster"
-   * object is created.  Reflection will be done as necessary.
+   * object is created.  Mirroring will be done as necessary.
   */
   SEXP nativeRaster;
   PROTECT( nativeRaster =  allocVector(INTSXP, w * h) );
