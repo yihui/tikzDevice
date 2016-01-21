@@ -452,18 +452,24 @@ test_graphs <- list(
   list(
     short_name = 'base_raster',
     description = 'Test raster support in base graphics',
-    tags = c('base', 'raster'),
+    tags = c('base', 'raster', 'reflection'),
     fuzz = 642,
     graph_code = quote({
 
       plot(c(100, 250), c(300, 450), type = "n", xlab="", ylab="")
-      image <- as.raster(matrix(rep(0:1,5*3), ncol=5, nrow=3))
+      image <- as.raster(matrix(rep(c(rep(0:1, 4), rep(1:0, 4)), each = 3), ncol=6, nrow=4))
       rasterImage(image, 100, 300, 150, 350, interpolate=FALSE)
       rasterImage(image, 100, 400, 150, 450)
       rasterImage(image, 200, 300, 200 + xinch(.5), 300 + yinch(.3),
-               interpolate=FALSE)
-             rasterImage(image, 200, 400, 250, 450, angle=15,
-               interpolate=FALSE)
+                  interpolate=FALSE)
+      rasterImage(image, 200, 400, 250, 450, angle=15,
+                  interpolate=FALSE)
+      rasterImage(image, 175 + xinch(.5), 350, 175, 350 + yinch(.3), angle=-30,
+                  interpolate=FALSE)
+      rasterImage(image, 200 + xinch(.5), 350 + yinch(.3), 200, 350, angle=-45,
+                  interpolate=FALSE)
+      rasterImage(image, 225, 350 + yinch(.3), 225 + xinch(.5), 350, angle=-60,
+                  interpolate=FALSE)
 
     })
   ),
@@ -471,7 +477,7 @@ test_graphs <- list(
   list(
     short_name = 'raster_reflection',
     description = 'Test raster handling in graphics with reflected axes',
-    tags = c('base', 'raster'),
+    tags = c('base', 'raster', 'reflection'),
     graph_code = quote({
 
       par(mfrow = c(2,2))
@@ -634,7 +640,7 @@ test_graphs <- list(
       plot(1:n,type='n',xlab='',ylab='',axes=FALSE, main="UTF-8 Characters")
       text(rep(1:n, n), rep(1:n, rep(n, n)), chars)
     })
-  )
+  ),
 
   # New UTF8/XeLaTeX/LuaLatex tests go here
   #list(
@@ -648,7 +654,11 @@ test_graphs <- list(
   #  })
   #)
 
+  NULL
+
 )
+
+test_graphs <- test_graphs[!vapply(test_graphs, is.null, logical(1L))]
 
 if ( length(tags_to_run) ) {
   test_graphs <- Filter(
