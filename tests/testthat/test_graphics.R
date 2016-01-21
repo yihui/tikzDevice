@@ -452,7 +452,7 @@ test_graphs <- list(
   list(
     short_name = 'base_raster',
     description = 'Test raster support in base graphics',
-    tags = c('base', 'raster'),
+    tags = c('base', 'raster', 'reflection'),
     fuzz = 642,
     graph_code = quote({
 
@@ -471,7 +471,7 @@ test_graphs <- list(
   list(
     short_name = 'raster_reflection',
     description = 'Test raster handling in graphics with reflected axes',
-    tags = c('base', 'raster'),
+    tags = c('base', 'raster', 'reflection'),
     graph_code = quote({
 
       par(mfrow = c(2,2))
