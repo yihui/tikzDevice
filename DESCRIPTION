@@ -24,7 +24,8 @@ License: GPL (>= 2)
 Depends:
     R (>= 2.14.0)
 Imports:
-    filehash (>= 2.3)
+    filehash (>= 2.3),
+    png
 Suggests:
     testthat (>= 0.8.1),
     evaluate,
