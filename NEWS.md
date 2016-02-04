@@ -1,3 +1,12 @@
+Version 0.9-1 (2016-02-04)
+===
+
+- Use `png::writePNG()` to output raster images to avoid reentrancy issues with capturing and playback and to reduce size of raster images. The `tikzRasterResolution` option is now obsolete (#132).
+- Update `ggplot2` results to account for minor differences due to the package's update (#131).
+- Add test for combined rotation and reflection of raster images.
+- Add tracing code to the beginning of almost every C function.
+
+
 Changes in version 0.9 (2015-11-16)
 ===
 
