@@ -1,6 +1,36 @@
+Version 0.9-1 (2016-02-04)
+===
+
+- Use `png::writePNG()` to output raster images to avoid reentrancy issues with capturing and playback and to reduce size of raster images. The `tikzRasterResolution` option is now obsolete (#132).
+- Update `ggplot2` results to account for minor differences due to the package's update (#131).
+- Add test for combined rotation and reflection of raster images.
+- Add tracing code to the beginning of almost every C function.
+
+
+Changes in version 0.9 (2015-11-16)
+===
+
+Features
+---
+
+- PNG images now use `png(type = "cairo")` on all platforms (#121)
+- New argument `verbose` to `tikz()` function (#117, #124)
+
+Bug Fixes
+---
+
 - Fix segfault when no file extension is provided (#101)
-- Fix quoting issue with spaces in the tempdir name (#105, #106)
+- Fix quoting issue with spaces in the tempdir name (#99, #105, #106)
 - Fix the error from getMetricsFromLatex() when options(OutDec) is set to "," (#57)
+- Allow loading package even if LaTeX is not available, with a warning instead of a fatal error (#112, 125)
+- Bump dependency for `filehash` (#109)
+
+Internal
+---
+
+- R compatibility update: Explicit imports from recommended pacakges (#116)
+- Use `crayon` for coloring test output (#112)
+
 
 Changes in version 0.8.1 (2015-01-07)
 ===

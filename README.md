@@ -1,7 +1,7 @@
 tikzDevice
 ==========
 
-[![Build Status](https://travis-ci.org/yihui/tikzDevice.svg)](https://travis-ci.org/yihui/tikzDevice) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/yihui/tikzDevice?branch=master&svg=true)](https://ci.appveyor.com/project/yihui/tikzDevice) [![Coverage Status](https://coveralls.io/repos/yihui/tikzDevice/badge.svg)](https://coveralls.io/r/yihui/tikzDevice)
+[![Build Status](https://travis-ci.org/yihui/tikzDevice.svg?branch=master)](https://travis-ci.org/yihui/tikzDevice) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/yihui/tikzDevice?branch=master&svg=true)](https://ci.appveyor.com/project/yihui/tikzDevice) [![Coverage Status](https://coveralls.io/repos/yihui/tikzDevice/badge.svg)](https://coveralls.io/r/yihui/tikzDevice) [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/tikzDevice)](http://cran.r-project.org/package=tikzDevice)
 
 The tikzDevice package provides a graphics output device for R that records
 plots in a LaTeX-friendly format. The device transforms plotting commands

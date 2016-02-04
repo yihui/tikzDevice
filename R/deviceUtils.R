@@ -41,7 +41,6 @@ getDocumentPointsize <- function( docString ){
 #'   \item \code{tikzUnicodeMetricPackages}
 #'   \item \code{tikzSanitizeCharacters}
 #'   \item \code{tikzReplacementCharacters}
-#'   \item \code{tikzRasterResolution}
 #'   \item \code{tikzPdftexWarnUTF}
 #' }
 #'
@@ -123,8 +122,6 @@ setTikzDefaults <- function( overwrite = TRUE ){
       '\\#','\\&','\\char`\\~'),
 
     tikzLwdUnit = 0.4,
-
-    tikzRasterResolution = 300,
 
     tikzPdftexWarnUTF = TRUE,
 
