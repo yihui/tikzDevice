@@ -102,11 +102,6 @@
 #'   with R default, please use 72.27/96 (96 pixels in R is 1 inch, which is 72.27
 #'   points in TeX).}
 #'
-#'   \item{\code{tikzRasterResolution}}{ When \code{\link{tikz}} is requested to
-#'   add a raster to a graphic, the raster is written to a PNG file which is
-#'   then included into the LaTeX code. This option controls the resolution
-#'   (dpi) at which the PNG files are created.  }
-#'
 #'   \item{\code{tikzPdftexWarnUTF}}{ A \code{TRUE/FALSE} value that controls
 #'   whether warnings are printed if Unicode characters are sent to a device
 #'   using the \code{pdftex} engine.  }
