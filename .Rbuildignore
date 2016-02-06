@@ -1,5 +1,4 @@
 \.git.*$
-NEWS.md
 NEWS.pdf
 README.md
 TODO
@@ -14,7 +13,6 @@ tests/testthat/test_output
 ^\.Rproj\.user$
 GNUmakefile
 ^\.travis\.yml$
-^NEWS\.md\.tmpl$
 ^cran-comments\.md$
 ^appveyor\.yml$
 ^revdep$
