@@ -2,38 +2,28 @@ Encoding: UTF-8
 Package: tikzDevice
 Type: Package
 Title: R Graphics Output in LaTeX Format
-Version: 0.9
-Date: 2015-11-17
-Authors@R: c(
-    person("Charlie", "Sharpsteen", role = "aut"),
-    person("Cameron", "Bracken", role = "aut"),
-    person("Kirill", "Müller", role = c("ctb", "cre"), email = "krlmlr+r@mailbox.org"),
-    person("Yihui", "Xie", role = "ctb")
-    )
+Version: 0.10
+Date: 2016-02-04
+Authors@R: c( person("Charlie", "Sharpsteen", role = "aut"),
+        person("Cameron", "Bracken", role = "aut"), person("Kirill",
+        "Müller", role = c("ctb", "cre"), email =
+        "krlmlr+r@mailbox.org"), person("Yihui", "Xie", role = "ctb") )
 URL: https://github.com/yihui/tikzDevice
 BugReports: https://github.com/yihui/tikzDevice/issues
-Description: Provides a graphics output device for R
-    that records plots in a LaTeX-friendly format. The device transforms
-    plotting commands issued by R functions into LaTeX code blocks. When
-    included in a LaTeX document, these blocks are interpreted with the
-    help of 'TikZ'---a graphics package for TeX and friends written by Till
-    Tantau. Using the 'tikzDevice', the text of R plots can contain LaTeX
-    commands such as mathematical formula. The device also allows arbitrary
-    LaTeX code to be inserted into the output stream.
+Description: Provides a graphics output device for R that records plots
+        in a LaTeX-friendly format. The device transforms plotting
+        commands issued by R functions into LaTeX code blocks. When
+        included in a LaTeX document, these blocks are interpreted with
+        the help of 'TikZ'---a graphics package for TeX and friends
+        written by Till Tantau. Using the 'tikzDevice', the text of R
+        plots can contain LaTeX commands such as mathematical formula.
+        The device also allows arbitrary LaTeX code to be inserted into
+        the output stream.
 License: GPL (>= 2)
-Depends:
-    R (>= 2.14.0)
-Imports:
-    filehash (>= 2.3),
-    png
-Suggests:
-    testthat (>= 0.8.1),
-    evaluate,
-    stringr,
-    ggplot2,
-    maps,
-    knitr,
-    crayon
+Depends: R (>= 2.14.0)
+Imports: filehash (>= 2.3), png
+Suggests: testthat (>= 0.8.1), evaluate, stringr, ggplot2, maps, knitr,
+        crayon
 SystemRequirements: pgf (>= 2.00)
 LazyLoad: yes
 VignetteBuilder: knitr
