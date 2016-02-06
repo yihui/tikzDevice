@@ -10,5 +10,5 @@ There were no ERRORs or WARNINGs, just a spell checker NOTE
 about the name "Tantau" and about "LaTeX".
 
 ## Downstream dependencies
-I have also run R CMD check on the nine downstream dependencies.
-The checks passed, see http://bit.ly/1PwG6s5 for details.
+I have also run R CMD check on the three downstream dependencies.
+The checks passed.
