@@ -1,3 +1,9 @@
+Version 0.10-1 (2016-02-09)
+===
+
+- Use `CDR(CDDR())` instead of `CDDDR()`, the latter is available only in R 3.2.0 (#136).
+
+
 Changes in version 0.10 (2016-02-04)
 ===
 
