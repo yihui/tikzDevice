@@ -1605,7 +1605,7 @@ static void TikZ_Raster(
   setAttrib(nativeRaster, install("channels"), ScalarInteger(4));
 
   SETCADDDR( RCallBack, nativeRaster );
-  SET_TAG(CDDDR(RCallBack), install("nativeRaster"));
+  SET_TAG(CDR(CDDR(RCallBack)), install("nativeRaster"));
 
   SEXP rasterFile;
   PROTECT( rasterFile = eval(RCallBack, namespace) );

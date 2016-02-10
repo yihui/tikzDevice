@@ -1,8 +1,8 @@
 ## Reasons
-* Improving handling of raster images
+* Compatibility fix for R 3.1.3.
 
 ## Test environments
-* local Ubuntu 15.10 install, R 3.2.3
+* Travis CI, Ubuntu 12.04, R 3.2.3
 * win-builder (release and devel)
 
 ## R CMD check results
