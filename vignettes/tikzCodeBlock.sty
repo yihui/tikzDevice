@@ -332,9 +332,9 @@
   % Shift the key directory to our namespace.
   \pgfkeys{ /tikzCode/.cd, #1 }%
   \ifx \tikzCode@listingStyle \undefined
-    \lstset{resetmargins = true}%
+    \lstset{resetmargins = true, upquote = true}%
   \else
-    \lstset{style = \tikzCode@listingStyle, resetmargins = true}%
+    \lstset{style = \tikzCode@listingStyle, resetmargins = true, upquote = true}%
   \fi
   % Start the framed environment.
   \tikzCode@set@framedcommands
@@ -358,9 +358,9 @@
   % Shift the key directory to our namespace.
   \pgfkeys{ /tikzCode/.cd, #1 }%
   \ifx \tikzCode@listingStyle \undefined
-    \lstset{resetmargins = true}%
+    \lstset{resetmargins = true, upquote = true}%
   \else
-    \lstset{style = \tikzCode@listingStyle, resetmargins = true}%
+    \lstset{style = \tikzCode@listingStyle, resetmargins = true, upquote = true}%
   \fi
   % Collect listings output into a box for insertion into a TikZ picture
   \setbox\@tempboxa=\vbox\bgroup\color@setgroup
@@ -382,9 +382,9 @@
   % Start the framed environment.
   \MakeFramed{\FrameRestore}%
   \ifx \tikzCode@listingStyle \undefined
-    \lstinputlisting[resetmargins = true]{#2}%
+    \lstinputlisting[resetmargins = true, upquote = true]{#2}%
   \else
-    \lstinputlisting[style = \tikzCode@listingStyle, resetmargins = true]{#2}%
+    \lstinputlisting[style = \tikzCode@listingStyle, resetmargins = true, upquote = true]{#2}%
   \fi
   \endMakeFramed
  }
