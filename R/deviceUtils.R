@@ -240,7 +240,7 @@ anyMultibyteUTF8Characters <- function(string, encoding = "UTF-8"){
 
   # Check if any of the characters are Multibyte
   explode <- strsplit(string,'')[[1]]
-  for(i in 1:length(explode)){
+  for(i in seq_along(explode)){
 
     if(length(charToRaw(explode[i])) > 1){
       mb <- TRUE
