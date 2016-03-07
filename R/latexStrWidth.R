@@ -446,12 +446,19 @@ function( TeXMetrics, verbose = verbose ){
   # number.
   width <- gsub('[=A-Za-z]','',match)
 
+  # For a character, we want ascent and descent too.
+  match <- logContents[ grep('tikzTeXAscent=', logContents) ]
+  ascent <- gsub('[=A-Za-z]','',match)
+
+  match <- logContents[ grep('tikzTeXDescent=', logContents) ]
+  descent <- gsub('[=A-Za-z]','',match)
+
   # complete.cases() checks for NULLs, NAs and NaNs
   if( length(width) == 0 | any(!complete.cases(width)) ){
 
     message(paste(readLines(texFile),collapse='\n'))
     message(paste(readLines(texLog),collapse='\n'))
-    stop('\nTeX was unable to calculate metrics for the following string\n',
+    warning('\nTeX was unable to calculate metrics for the following string\n',
       'or character:\n\n\t',
       TeXMetrics$value, '\n\n',
       'Common reasons for failure include:\n',
@@ -463,6 +470,10 @@ function( TeXMetrics, verbose = verbose ){
       'it may contain additional details as to why the metric calculation failed.\n'
     )
 
+    width <- 0
+    ascent <- 0
+    descent <- 0
+
   }
 
   # If we're dealing with a string, we're done.
@@ -471,13 +482,6 @@ function( TeXMetrics, verbose = verbose ){
     return( as.double( width ) )
 
   }else{
-
-    # For a character, we want ascent and descent too.
-    match <- logContents[ grep('tikzTeXAscent=', logContents) ]
-    ascent <- gsub('[=A-Za-z]','',match)
-
-    match <- logContents[ grep('tikzTeXDescent=', logContents) ]
-    descent <- gsub('[=A-Za-z]','',match)
 
     return( as.double( c(ascent,descent,width) ) )
 
