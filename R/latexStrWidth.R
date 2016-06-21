@@ -449,18 +449,18 @@ function( TeXMetrics, verbose = verbose ){
   # complete.cases() checks for NULLs, NAs and NaNs
   if( length(width) == 0 | any(!complete.cases(width)) ){
 
-    message(paste(readLines(texFile),collapse='\n'))
-    message(paste(readLines(texLog),collapse='\n'))
-    stop('\nTeX was unable to calculate metrics for the following string\n',
-      'or character:\n\n\t',
+    stop('\nTeX was unable to calculate metrics for:\n\n\t',
       TeXMetrics$value, '\n\n',
       'Common reasons for failure include:\n',
       '  * The string contains a character which is special to LaTeX unless\n',
       '    escaped properly, such as % or $.\n',
       '  * The string makes use of LaTeX commands provided by a package and\n',
       '    the tikzDevice was not told to load the package.\n\n',
-      'The contents of the LaTeX log of the aborted run have been printed above,\n',
-      'it may contain additional details as to why the metric calculation failed.\n'
+      'The TeX and log files used for the calculation can help diagnose the\n',
+      'problem. If these files are missing, rerun the plot and make sure to\n',
+      'keep the R session open.\n',
+      'TeX file: ', texFile, '\n',
+      'Log file: ', texLog, '\n'
     )
 
   }
