@@ -1,6 +1,13 @@
 # These are unexported functions that are called by the C routines of the tikz
 # device to execute tasks that are difficult to do at the C level.
 
+enc1251toUTF8 <- function(fileName){
+    if (grepl("1251",Sys.getlocale("LC_CTYPE"))) {
+        fileEncoded <- scan(fileName,what=character(),encoding="CP1251",sep="\n")
+        write.table(fileEncoded,file=fileName,fileEncoding="UTF-8",row.names=FALSE,col.names=FALSE,quote=FALSE)
+    }
+}
+
 getDateStampForTikz <- function(){
 
   # This function retrieves the current date stamp using
