@@ -112,6 +112,8 @@
 #' @param verbose A logical value indicating whether diagnostic messages are
 #'  printed when measuring dimensions of strings. Defaults to `TRUE` in
 #'  interactive mode only, to `FALSE` otherwise.
+#' @param pictureOptions A character string that contains additional options 
+#'  provided to the tikzpicture environment. Defaults to the empty string.
 #'
 #' @return `tikz()` returns no values.
 #'
@@ -221,7 +223,8 @@ tikz <- function(file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
                  symbolicColors = getOption("tikzSymbolicColors"), colorFileName = "%s_colors.tex",
                  maxSymbolicColors = getOption("tikzMaxSymbolicColors"),
                  timestamp = TRUE,
-                 verbose = interactive()) {
+                 verbose = interactive(),
+                 pictureOptions = "") {
   tryCatch(
     {
       # Ok, this sucks. We copied the function signature of pdf() and got `file`
@@ -308,7 +311,7 @@ tikz <- function(file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
     TikZ_StartDevice, file, width, height, onefile, bg, fg, baseSize, lwdUnit,
     standAlone, bareBones, documentDeclaration, packages, footer, console,
     sanitize, engine, symbolicColors, colorFileName, maxSymbolicColors,
-    timestamp, verbose
+    timestamp, verbose, pictureOptions
   )
 
   invisible()

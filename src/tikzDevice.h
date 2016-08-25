@@ -93,6 +93,7 @@ typedef struct {
   char fillColor[32];
   Rboolean timestamp;
   Rboolean verbose;
+  char *pictureOptions;
 } tikzDevDesc;
 
 
@@ -114,7 +115,8 @@ static Rboolean TikZ_Setup(
     const char *packages, const char *footer,
     Rboolean console, Rboolean sanitize, int engine,
     Rboolean symbolicColors, const char *colorFileName,
-    int maxSymbolicColors, Rboolean timestamp, Rboolean verbose );
+    int maxSymbolicColors, Rboolean timestamp, Rboolean verbose,
+    const char *pictureOptions );
 
 
 /* Graphics Engine function hooks. Defined in GraphicsDevice.h . */
