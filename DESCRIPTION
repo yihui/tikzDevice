@@ -27,4 +27,4 @@ Suggests: testthat (>= 0.8.1), evaluate, stringr, ggplot2, maps, knitr,
 SystemRequirements: pgf (>= 2.00)
 LazyLoad: yes
 VignetteBuilder: knitr
-RoxygenNote: 5.0.1
+RoxygenNote: 5.0.1.9000

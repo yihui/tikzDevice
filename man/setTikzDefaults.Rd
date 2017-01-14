@@ -40,11 +40,10 @@ This function resets the following options:
   print( options( 'tikzDocumentDeclaration' ) )
 
 }
+\seealso{
+\code{\link{tikz}}
+}
 \author{
 Cameron Bracken \email{cameron.bracken@gmail.com} and Charlie
   Sharpsteen \email{source@sharpsteen.net}
 }
-\seealso{
-\code{\link{tikz}}
-}
-
