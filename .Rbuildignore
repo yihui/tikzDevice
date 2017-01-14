@@ -17,3 +17,4 @@ GNUmakefile
 ^appveyor\.yml$
 ^revdep$
 inst/staticdocs
+^tests/testthat/\.tikzMetrics$

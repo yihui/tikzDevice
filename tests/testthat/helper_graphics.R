@@ -41,9 +41,15 @@ do_graphics_test <- function(short_name, description, graph_code, fuzz = 0,
     # reproducible
     set.seed(4) # As specified by RFC 1149.5 ;)
 
-    expect_that(
-      create_graph(graph_code, graph_file, engine),
-      runs_cleanly()
+    # Keep dictionaries for one day only
+    dict_path <- file.path(".tikzMetrics", short_name)
+    if (file.exists(dict_path) && (Sys.time() - file.info(dict_path)$mtime) > 86400) {
+      unlink(dict_path)
+    }
+
+    withr::with_options(
+      list(tikzMetricsDictionary = dict_path),
+      expect_warning(create_graph(graph_code, graph_file, engine), NA)
     )
 
   })
