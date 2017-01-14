@@ -38,11 +38,10 @@ anyMultibyteUTF8Characters('R is GNU ©, but not ®')
 anyMultibyteUTF8Characters('R is GNU copyright but not restricted')
 
 }
-\author{
-Cameron Bracken \email{cameron.bracken@gmail.com}
-}
 \seealso{
 \code{\link{tikz}}
 }
+\author{
+Cameron Bracken \email{cameron.bracken@gmail.com}
+}
 \keyword{character}
-
