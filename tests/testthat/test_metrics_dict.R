@@ -1,6 +1,3 @@
-# Switch to the detailed reporter implemented in helper_reporters.R
-with_reporter(MultiReporter$new(reporters = list(get_reporter(), DetailedReporter$new())), {
-
 context('Metrics dictionary')
 
 test_that('Temporary metrics dictionary is created, but only once', {
@@ -82,6 +79,3 @@ test_that('Turning custom metrics dictionary on and off', {
     }
   )
 })
-
-}) # End reporter swap
-

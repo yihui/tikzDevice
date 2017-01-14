@@ -1,6 +1,3 @@
-# Switch to the detailed reporter implemented in helper_reporters.R
-with_reporter(MultiReporter$new(reporters = list(get_reporter(), DetailedReporter$new())), {
-
 context('Test tikzDevice error and warning messages')
 
 test_that('Null device is not a tikzDevice',{
@@ -126,5 +123,3 @@ test_that('check that maxSymbolicColors is nonnegative',{
       throws_error("maxSymbolicColors needs to be nonnegative")
   )
 })
-
-}) # End reporter swap

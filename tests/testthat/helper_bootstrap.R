@@ -1,11 +1,3 @@
-library(methods)
-library(tikzDevice)
-library(testthat)
-library(stringr)
-
-library(tools)
-library(evaluate)
-
 # Process command arguments
 test_args <- commandArgs(TRUE)
 torture_mem <- any(stringr::str_detect(test_args, '^--use-gctorture'))
