@@ -231,10 +231,6 @@ anyMultibyteUTF8Characters <- function(string, encoding = "UTF-8"){
 
   mb <- FALSE
 
-  # Set the encoding of the string if it is not explicitly set
-  if(Encoding(string) == "unknown")
-    Encoding(string) <- encoding
-
   # convert the string to UTF-8
   string <- enc2utf8(string)
 
