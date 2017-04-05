@@ -54,7 +54,9 @@ function(texString, cex = 1, face = 1, engine = getOption('tikzDefaultEngine'),
   documentDeclaration = getOption("tikzDocumentDeclaration"), packages,
   verbose = interactive())
 {
-
+  
+  texString <- enc2utf8(texString) #convert the encoding of input string to UTF8
+  
   switch(engine,
     pdftex = {
       if ( anyMultibyteUTF8Characters(texString) && getOption('tikzPdftexWarnUTF') ) {
@@ -270,7 +272,7 @@ function( TeXMetrics, verbose = verbose ){
   texFile <- normalizePath(texFile, '/')
 
   # Open the TeX file for writing.
-  texIn <- file(texFile, 'w')
+  texIn <- file(texFile, 'w', encoding = "UTF-8") #enforce the encoding of temp TeX file to UTF-8 encoding for XeTeX, and LuaTeX 
 
   writeLines(getOption("tikzDocumentDeclaration"), texIn)
 
