@@ -26,8 +26,8 @@ applied to device output.}
 use. See \link{par} for details.}
 
 \item{engine}{a string specifying which TeX engine to use. Possible values
-are 'pdftex', 'xetex' and 'luatex'. See the Unicode section of \link{tikzDevice} for
-details.}
+are 'pdftex', 'xetex' and 'luatex'. See the Unicode section of
+\link{tikzDevice-package} for details.}
 
 \item{documentDeclaration}{See the sections ``Options That Affect Package
 Behavior'' and ``Font Size Calculations'' of \link{tikzDevice-package}

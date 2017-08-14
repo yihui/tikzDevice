@@ -20,17 +20,7 @@
 #'   applied to device output.
 #' @param face an integer in the range [1-5] that specifies the font face to
 #'   use. See \link{par} for details.
-#' @param engine a string specifying which TeX engine to use. Possible values
-#'   are 'pdftex', 'xetex' and 'luatex'. See the Unicode section of \link{tikzDevice} for
-#'   details.
-#' @param documentDeclaration See the sections ``Options That Affect Package
-#'   Behavior'' and ``Font Size Calculations'' of \link{tikzDevice-package}
-#'   for more details.
-#' @param packages See the section ``Options That Affect Package Behavior'' of
-#'   \link{tikzDevice-package}.
-#' @param verbose A logical value indicating whether diagnostic messages are
-#'  printed when measuring dimensions of strings. Defaults to \code{TRUE} in
-#'  interactive mode only, to \code{FALSE} otherwise.
+#' @inheritParams tikz
 #'
 #'
 #' @return
