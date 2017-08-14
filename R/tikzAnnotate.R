@@ -213,7 +213,7 @@ tikzNode <- function(x = NULL, y = NULL,
   opts = NULL,
   name = NULL, content = NULL,
   units = "user"
-  ) {
+) {
   # If there is no node content, we create a coordinate.
   node_string <- ifelse(is.null(content), "\\coordinate", "\\node")
 
@@ -297,10 +297,10 @@ tikzNodeGrob <- function(x = NULL, y = NULL,
   opts = NULL, name = NULL,
   content = NULL,
   units = "native"
-  ) {
+) {
 
   grob(x = x, y = y, opts = opts, coord_name = name, content = content,
-      units = units, cl = "tikz_node")
+    units = units, cl = "tikz_node")
 
 }
 
@@ -343,12 +343,12 @@ grid.tikzNode <- function(
   content = NULL,
   units = "native",
   draw = TRUE
-  ) {
+) {
 
   node_grob <- tikzNodeGrob(
     x = x, y = y,
-      opts = opts, name = name, content = content,
-      units = units
+    opts = opts, name = name, content = content,
+    units = units
   )
   if (draw) { grid.draw(node_grob) }
 
