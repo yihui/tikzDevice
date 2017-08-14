@@ -257,14 +257,14 @@ getMetricsFromLatex <- function(TeXMetrics, verbose = verbose, diagnose = FALSE)
 
   # Create the TeX file in a temporary directory so
   # it doesn't clutter anything.
-  texDir <- tempdir()
+  texDir <- tempfile("tikzDevice")
+  dir.create(texDir)
   texLog <- file.path(texDir, "tikzStringWidthCalc.log")
   texFile <- file.path(texDir, "tikzStringWidthCalc.tex")
-  if (!file.exists(texFile)) file.create(texFile)
-  texFile <- normalizePath(texFile, "/")
+  texFile <- normalizePath(texFile, "/", mustWork = FALSE)
 
   # Open the TeX file for writing.
-  texIn <- file(texFile, "w", encoding = "UTF-8") #enforce the encoding of temp TeX file to UTF-8 encoding for XeTeX, and LuaTeX 
+  texIn <- file(texFile, "w", encoding = "UTF-8") #enforce the encoding of temp TeX file to UTF-8 encoding for XeTeX, and LuaTeX
 
   writeLines(getOption("tikzDocumentDeclaration"), texIn)
 
