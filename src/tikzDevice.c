@@ -905,9 +905,10 @@ static void TikZ_MetricInfo(int c, const pGEcontext plotParams,
   *descent = REAL(RMetrics)[1];
   *width = REAL(RMetrics)[2];
 
-  if( tikzInfo->debug == TRUE )
-  printOutput( tikzInfo, "%% Calculated character metrics. ascent: %f, descent: %f, width: %f\n",
-    *ascent, *descent, *width);
+  if( tikzInfo->debug == TRUE ) {
+    printOutput( tikzInfo, "%% Calculated character metrics. ascent: %f, descent: %f, width: %f\n",
+      *ascent, *descent, *width);
+  }
 
   UNPROTECT(4);
 
