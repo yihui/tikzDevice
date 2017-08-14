@@ -359,13 +359,13 @@ getMetricsFromLatex <- function(TeXMetrics, verbose = verbose) {
 
     string = {
 
-      nodeContent <- paste(nodeContent, TeXMetrics$value)
+      nodeContent <- paste0(nodeContent, TeXMetrics$value)
 
     },
 
     char = {
 
-      nodeContent <- paste(nodeContent, "\\char", TeXMetrics$value, sep = "")
+      nodeContent <- paste0(nodeContent, "\\char", TeXMetrics$value, sep = "")
 
     }
 
