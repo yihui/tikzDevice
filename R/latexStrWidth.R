@@ -371,7 +371,7 @@ getMetricsFromLatex <- function(TeXMetrics, verbose = verbose) {
 
   ) # End switch for  metric type.
 
-  message("Measuring dimensions of: ", nodeContent);
+  message("Measuring dimensions of: ", nodeContent)
 
   writeLines(paste(nodeOpts, " (TeX) {", nodeContent, "};", sep = ""), texIn)
 

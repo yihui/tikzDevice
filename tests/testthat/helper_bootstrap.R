@@ -29,7 +29,7 @@ if (!file.exists(test_work_dir)) dir.create(test_work_dir)
 
 test_standard_dir <- normalizePath("standard_graphs")
 
-oldwarn = options(warn = 1)
+oldwarn <- options(warn = 1)
 
 # Locate required external programs
 gs_cmd <- Sys.which(ifelse(using_windows, "gswin32c", "gs"))

@@ -348,7 +348,7 @@ test_graphs <- list(
         plot.window(0:1, 0:1)
         tikzCoord(0, 0, name = "ll")
         tikzCoord(1, 1, name = "ur")
-        tikzAnnotate("\\draw (ll) rectangle (ur);");
+        tikzAnnotate("\\draw (ll) rectangle (ur);")
     })
   ),
 

@@ -84,7 +84,8 @@ compile_graph <- function(graph_file, engine) {
   # Have to compile in the same directory as the .tex file so that things like
   # raster images can be found.
   oldwd <- getwd()
-  setwd(test_work_dir); on.exit(setwd(oldwd))
+  setwd(test_work_dir)
+  on.exit(setwd(oldwd))
 
   tex_cmd <- switch(engine,
     pdftex = getOption("tikzLatex"),
@@ -96,7 +97,7 @@ compile_graph <- function(graph_file, engine) {
     "-output-directory", test_work_dir,
     graph_file), intern = TRUE)
 
-  output_pdf = sub("tex$", "pdf", graph_file)
+  output_pdf <- sub("tex$", "pdf", graph_file)
   if (file.exists(output_pdf)) {
     file.rename(output_pdf, file.path(test_output_dir, basename(output_pdf)))
     graph_created <- TRUE

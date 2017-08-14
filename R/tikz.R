@@ -276,7 +276,7 @@ tikz <- function(file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
 
   # Ensure the standAlone option will trump the bareBones option.
   if (standAlone) {
-    bareBones = FALSE
+    bareBones <- FALSE
   }
   if (footer != getOption("tikzFooter") && !standAlone)
     warning("Footers are ignored when standAlone is set to FALSE")
