@@ -24,7 +24,7 @@ before_install:
   - if [ $TYPE == tests ]; then APT_EXTRA="texlive-xetex imagemagick"; export DISPLAY=:99.0; fi
 install:
   - if IsLinux; then sudo apt-get install --no-install-recommends texinfo texlive-latex-recommended texlive-latex-extra lmodern texlive-fonts-recommended texlive-fonts-extra pgf $APT_EXTRA; fi
-  - if [ $TYPE == tests ] && IsLinux; then (cd /tmp && curl -OL http://mirrors.ctan.org/install/macros/latex/contrib/oberdiek.tds.zip && cd /usr/share/texmf/tex/latex && sudo unzip /tmp/oberdiek.tds.zip && sudo texhash); fi
+  - if [ $TYPE == tests ] && IsLinux; then (cd /tmp && curl -OL http://mirrors.ctan.org/install/macros/latex/contrib/oberdiek.tds.zip && cd /usr/share/texmf/tex/latex && sudo unzip /tmp/oberdiek.tds.zip && sudo texhash); ./travis-tool.sh install_r roxygen2; fi
   - if IsLinux; then sh -e /etc/init.d/xvfb start; fi
   - if IsSourceInstall; then (
       cd ~ &&
