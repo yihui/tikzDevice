@@ -211,8 +211,7 @@
 #'
 #' @export
 #' @useDynLib tikzDevice TikZ_StartDevice
-tikz <-
-function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
+tikz <- function(file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
   width = 7, height = 7, onefile = TRUE,
   bg="transparent", fg="black", pointsize = 10, lwdUnit = getOption("tikzLwdUnit"),
   standAlone = FALSE, bareBones = FALSE, console = FALSE, sanitize = FALSE,
@@ -224,7 +223,7 @@ function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
   maxSymbolicColors = getOption("tikzMaxSymbolicColors"),
   timestamp = TRUE,
   verbose = interactive()
-){
+) {
 
   tryCatch({
     # Ok, this sucks. We copied the function signature of pdf() and got `file`
@@ -234,7 +233,7 @@ function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
     # file_path_as_absolute can give us the absolute path to the output
     # file---but it has to exist first. So, we use file() to "touch" the
     # path.
-    touch_file <- suppressWarnings(file(file, 'w'))
+    touch_file <- suppressWarnings(file(file, "w"))
     close(touch_file)
 
     file <- tools::file_path_as_absolute(file)
@@ -248,49 +247,49 @@ function (file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
 
   # remove the file if we are outputting to multiple files since the file
   # name will get changed in the C code
-  if( !onefile ) file.remove(file)
+  if (!onefile) file.remove(file)
 
   # Determine which TeX engine is being used.
   switch(engine,
     pdftex = {
       engine <- 1L # In the C routines, a integer value of 1 means pdftex
-      if (missing(packages)) {packages <- getOption('tikzLatexPackages')}
+      if (missing(packages)) {packages <- getOption("tikzLatexPackages")}
     },
     xetex = {
       engine <- 2L
-      if (missing(packages)) {packages <- getOption('tikzXelatexPackages')}
+      if (missing(packages)) {packages <- getOption("tikzXelatexPackages")}
     },
     luatex = {
       engine <- 3L
-      if (missing(packages)) {packages <- getOption('tikzLualatexPackages')}
+      if (missing(packages)) {packages <- getOption("tikzLualatexPackages")}
     },
-    {#ELSE
-      stop('Unsupported TeX engine: ', engine,
-        '\nAvailable choices are:\n',
-        '\tpdftex\n',
-        '\txetex\n',
-        '\tluatex\n')
+    { # ELSE
+      stop("Unsupported TeX engine: ", engine,
+        "\nAvailable choices are:\n",
+        "\tpdftex\n",
+        "\txetex\n",
+        "\tluatex\n")
     })
 
   # Ensure the standAlone option will trump the bareBones option.
-  if( standAlone ) { bareBones = FALSE }
-  if( footer != getOption("tikzFooter") && !standAlone)
-    warning( "Footers are ignored when standAlone is set to FALSE" )
+  if (standAlone) { bareBones = FALSE }
+  if (footer != getOption("tikzFooter") && !standAlone)
+    warning("Footers are ignored when standAlone is set to FALSE")
 
   # Extract the document pointsize from the documentDeclaration
-  baseSize <- getDocumentPointsize( documentDeclaration )
+  baseSize <- getDocumentPointsize(documentDeclaration)
 
   # If a pointsize was not found, we use the value of the pointsize
   # argument.
-  if( is.na( baseSize ) ){ baseSize <- pointsize }
+  if (is.na(baseSize)) { baseSize <- pointsize }
 
   # Collapse the character vectors into a single string
   # which is easier to work with in C
   documentDeclaration <-
-    paste( paste(documentDeclaration, collapse='\n'), collapse='\n')
-  packages <- paste( paste( packages, collapse='\n'), collapse='\n')
-  footer <- paste( paste( footer,collapse='\n'), collapse='\n')
-  if(maxSymbolicColors < 0)
+    paste(paste(documentDeclaration, collapse = "\n"), collapse = "\n")
+  packages <- paste(paste(packages, collapse = "\n"), collapse = "\n")
+  footer <- paste(paste(footer, collapse = "\n"), collapse = "\n")
+  if (maxSymbolicColors < 0)
     stop("maxSymbolicColors needs to be nonnegative")
 
   .External(TikZ_StartDevice, file, width, height, onefile, bg, fg, baseSize, lwdUnit,
