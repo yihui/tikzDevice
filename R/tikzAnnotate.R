@@ -27,26 +27,25 @@
 #'
 #' @export
 #' @importFrom grid convertX convertY current.transform unit
-gridToDevice <- function(x = 0, y = 0, units = 'native') {
+gridToDevice <- function(x = 0, y = 0, units = "native") {
   # Converts a coordinate pair from the current viewport to an "absolute
   # location" measured in device units from the lower left corner. This is done
   # by first casting to inches in the current viewport and then using the
   # current.transform() matric to obtain inches in the device canvas.
-  x <- convertX(unit(x, units), unitTo = 'inches', valueOnly = TRUE)
-  y <- convertY(unit(y, units), unitTo = 'inches', valueOnly = TRUE)
+  x <- convertX(unit(x, units), unitTo = "inches", valueOnly = TRUE)
+  y <- convertY(unit(y, units), unitTo = "inches", valueOnly = TRUE)
 
-  transCoords <- c(x,y,1) %*% current.transform()
+  transCoords <- c(x, y, 1) %*% current.transform()
   transCoords <- (transCoords / transCoords[3])
 
   return(
     # Finally, cast from inches to device coordinates (which are TeX points for
     # the tikzDevice)
     c(
-      grconvertX(transCoords[1], from = 'inches', to = 'device'),
-      grconvertY(transCoords[2], from = 'inches', to = 'device')
+      grconvertX(transCoords[1], from = "inches", to = "device"),
+      grconvertY(transCoords[2], from = "inches", to = "device")
     )
   )
-
 }
 
 
@@ -177,11 +176,8 @@ gridToDevice <- function(x = 0, y = 0, units = 'native') {
 #'
 #' @useDynLib tikzDevice TikZ_Annotate
 #' @export
-tikzAnnotate <-
-function (annotation, checkstate = TRUE)
-{
-
-  if (!isTikzDevice()){
+tikzAnnotate <- function(annotation, checkstate = TRUE) {
+  if (!isTikzDevice()) {
     stop("The active device is not a tikz device, please start a tikz device to use this function. See ?tikz.")
   }
 
@@ -210,65 +206,60 @@ function (annotation, checkstate = TRUE)
 #'   units in grid graphics.
 #'
 #' @export
-tikzNode <- function(
-  x = NULL, y = NULL,
+tikzNode <- function(x = NULL, y = NULL,
   opts = NULL,
   name = NULL, content = NULL,
-  units = 'user'
-) {
+  units = "user") {
   # If there is no node content, we create a coordinate.
-  node_string <- ifelse(is.null(content), '\\coordinate', '\\node')
+  node_string <- ifelse(is.null(content), "\\coordinate", "\\node")
 
   # Process the other components.
-  if ( !is.null(opts) ) {
-    node_string <- paste(node_string, '[', opts, ']', sep = '')
+  if (!is.null(opts)) {
+    node_string <- paste(node_string, "[", opts, "]", sep = "")
   }
-  if ( !is.null(name) ) {
+  if (!is.null(name)) {
     # Ensure we got a character.
-    if ( !is.character(name) ) {
-      stop( "The coordinate name must be a character!" )
+    if (!is.character(name)) {
+      stop("The coordinate name must be a character!")
     }
 
-    node_string <- paste(node_string, ' (', name, ')', sep = '')
+    node_string <- paste(node_string, " (", name, ")", sep = "")
   }
-  if ( !is.null(x) && !is.null(y) ) {
+  if (!is.null(x) && !is.null(y)) {
     # For now, we demand that x and y be scalar values.
     # TODO: Vectorize this function
-    if ( length(x) > 1 ) {
+    if (length(x) > 1) {
       warning("More than one X coordinate specified. Only the first will be used!")
       x <- x[1]
     }
 
-    if ( length(y) > 1 ) {
+    if (length(y) > 1) {
       warning("More than one Y coordinate specified. Only the first will be used!")
       y <- y[1]
     }
 
     # Convert coordinates to device coordinates.
-    if ( units != 'device' ) {
-      x <- grconvertX(x, from = units, to = 'device')
-      y <- grconvertY(y, from = units, to = 'device')
+    if (units != "device") {
+      x <- grconvertX(x, from = units, to = "device")
+      y <- grconvertY(y, from = units, to = "device")
     }
 
     node_string <- paste(node_string,
-      ' at (', round(x,2), ',', round(y,2), ')', sep = '')
+      " at (", round(x, 2), ",", round(y, 2), ")", sep = "")
   }
-  if ( !is.null(content) ) {
-    node_string <- paste(node_string, ' {', content, '}', sep = '')
+  if (!is.null(content)) {
+    node_string <- paste(node_string, " {", content, "}", sep = "")
   }
 
   # Use tikzAnnotate() to add a coordinate.
-  tikzAnnotate(paste(node_string, ';', sep = ''))
-
+  tikzAnnotate(paste(node_string, ";", sep = ""))
 }
 
 
 #' @rdname tikzAnnotate
 #' @export
-tikzCoord <- function( x, y, name, units = 'user') {
-
+tikzCoord <- function(x, y, name, units = "user") {
   tikzNode(x = x, y = y, name = name, units = units)
-
 }
 
 
@@ -286,39 +277,31 @@ tikzCoord <- function( x, y, name, units = 'user') {
 #' @importFrom grid grob
 #' @export
 tikzAnnotateGrob <- function(annotation) {
-
-  grob(annotation = annotation, cl = 'tikz_annotation')
-
+  grob(annotation = annotation, cl = "tikz_annotation")
 }
 
 
 #' @rdname tikzAnnotate
 #' @importFrom grid grob
 #' @export
-tikzNodeGrob <- function(
-  x = NULL, y = NULL,
+tikzNodeGrob <- function(x = NULL, y = NULL,
   opts = NULL, name = NULL,
   content = NULL,
-  units = 'native'
-) {
-
+  units = "native") {
   grob(x = x, y = y, opts = opts, coord_name = name, content = content,
-    units = units, cl = 'tikz_node')
-
+    units = units, cl = "tikz_node")
 }
 
 
 #' @rdname tikzAnnotate
 #' @importFrom grid grob
 #' @export
-tikzCoordGrob <- function(x, y, name, units = 'native') {
-
-  grob(x = x, y = y, coord_name = name, units = units, cl = 'tikz_coord')
-
+tikzCoordGrob <- function(x, y, name, units = "native") {
+  grob(x = x, y = y, coord_name = name, units = units, cl = "tikz_coord")
 }
 
 # Grid wrapper functions
-#-----------------------
+# -----------------------
 
 #' @rdname tikzAnnotate
 #'
@@ -328,12 +311,12 @@ tikzCoordGrob <- function(x, y, name, units = 'native') {
 #' @importFrom grid grid.draw
 #' @export
 grid.tikzAnnotate <- function(annotation, draw = TRUE) {
-
   annotate_grob <- tikzAnnotateGrob(annotation)
-  if ( draw ) { grid.draw(annotate_grob) }
+  if (draw) {
+    grid.draw(annotate_grob)
+  }
 
-  invisible( annotate_grob )
-
+  invisible(annotate_grob)
 }
 
 
@@ -344,72 +327,65 @@ grid.tikzNode <- function(
   x = NULL, y = NULL,
   opts = NULL, name = NULL,
   content = NULL,
-  units = 'native',
-  draw = TRUE
-) {
-
+  units = "native",
+  draw = TRUE) {
   node_grob <- tikzNodeGrob(
     x = x, y = y,
     opts = opts, name = name, content = content,
     units = units
   )
-  if (draw) { grid.draw(node_grob) }
+  if (draw) {
+    grid.draw(node_grob)
+  }
 
   invisible(node_grob)
-
 }
 
 
 #' @rdname tikzAnnotate
 #' @importFrom grid grid.draw
 #' @export
-grid.tikzCoord <- function(x, y, name, units = 'native', draw = TRUE) {
-
+grid.tikzCoord <- function(x, y, name, units = "native", draw = TRUE) {
   coord_grob <- tikzCoordGrob(x = x, y = y, name = name, units = units)
-  if (draw) { grid.draw(coord_grob) }
+  if (draw) {
+    grid.draw(coord_grob)
+  }
 
   invisible(coord_grob)
-
 }
 
 # Grid execution
-#---------------
+# ---------------
 # These S3 methods get executed when TikZ annotation grobs get drawn to a
 # device. They handle the actual "drawing" of the annotations by calling to the
 # base graphics functions.
 
-if ('roxygen2' %in% loadedNamespaces()) do.call(library, list('grid'))
+if ("roxygen2" %in% loadedNamespaces()) do.call(library, list("grid"))
 
 #' @importFrom grid drawDetails
 #' @export
 drawDetails.tikz_annotation <- function(x, recording) {
-
   tikzAnnotate(x$annotation)
-
 }
 
 
 #' @importFrom grid drawDetails
 #' @export
 drawDetails.tikz_node <- function(x, recording) {
-
-  if ( is.null(x$x) && is.null(x$y) ) {
+  if (is.null(x$x) && is.null(x$y)) {
     coords <- c(NULL, NULL)
   } else {
     coords <- gridToDevice(x$x, x$y, x$units)
   }
 
   tikzNode(coords[1], coords[2], x$opts,
-    x$coord_name, x$content, units = 'device')
-
+    x$coord_name, x$content, units = "device")
 }
 
 
 #' @importFrom grid drawDetails
 #' @export
 drawDetails.tikz_coord <- function(x, recording) {
-
   coords <- gridToDevice(x$x, x$y, x$units)
-  tikzCoord(coords[1], coords[2], x$coord_name, units = 'device')
-
+  tikzCoord(coords[1], coords[2], x$coord_name, units = "device")
 }

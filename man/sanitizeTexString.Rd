@@ -72,11 +72,10 @@ These defaults may be adjusted using the \code{\link{options}} function.
 }
 
 }
-\author{
-Cameron Bracken \email{cameron.bracken@gmail.com}
-}
 \seealso{
 \code{\link{tikz}}
 }
+\author{
+Cameron Bracken \email{cameron.bracken@gmail.com}
+}
 \keyword{character}
-

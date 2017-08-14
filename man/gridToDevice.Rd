@@ -25,9 +25,6 @@ grid \code{\link{viewport}} in grid units to a coordinate pair specifying a
 location in device units relative to the lower left corner of the plotting
 canvas.
 }
-\author{
-Charlie Sharpsteen \email{source@sharpsteen.net}
-}
 \seealso{
 \code{\link{unit}}
   \code{\link{viewport}}
@@ -35,8 +32,10 @@ Charlie Sharpsteen \email{source@sharpsteen.net}
   \code{\link{convertY}}
   \code{\link{current.transform}}
 }
+\author{
+Charlie Sharpsteen \email{source@sharpsteen.net}
+}
 \keyword{conversion}
 \keyword{graphics}
 \keyword{grid}
 \keyword{units}
-
