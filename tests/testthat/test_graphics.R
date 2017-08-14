@@ -538,10 +538,12 @@ test_graphs <- list(
     engine = "xetex",
     graph_code = quote({
       n <- 8
-      chars <- intToUtf8(seq(187,, 1, n * n), multiple = T)
+      data <- expand.grid(x = 1:n, y = 1:n)
+      data$chars <- intToUtf8(seq.int(187, by = 1, length.out = n * n), multiple = T)
 
-      plot(1:n, type = "n", xlab = "", ylab = "", axes = FALSE, main = "UTF-8 Characters")
-      text(rep(1:n, n), rep(1:n, rep(n, n)), chars)
+      p <- ggplot2::ggplot(data, ggplot2::aes(x = x, y = y)) +
+        ggplot2::geom_text(ggplot2::aes(label = chars))
+      print(p)
     })
   ),
 
@@ -625,10 +627,12 @@ test_graphs <- list(
     },
     graph_code = quote({
       n <- 8
-      chars <- intToUtf8(seq(187,, 1, n * n), multiple = T)
+      data <- expand.grid(x = 1:n, y = 1:n)
+      data$chars <- intToUtf8(seq.int(187, by = 1, length.out = n * n), multiple = T)
 
-      plot(1:n, type = "n", xlab = "", ylab = "", axes = FALSE, main = "UTF-8 Characters")
-      text(rep(1:n, n), rep(1:n, rep(n, n)), chars)
+      p <- ggplot2::ggplot(data, ggplot2::aes(x = x, y = y)) +
+        ggplot2::geom_text(ggplot2::aes(label = chars))
+      print(p)
     })
   ),
 
