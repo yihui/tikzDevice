@@ -350,21 +350,26 @@ tikzCompilerInfo <- function(verbose = TRUE) {
 #' This function simulates the measurement of dimensions and prints detailed
 #' information in case of errors.
 #'
+#' @inheritParams getLatexStrWidth
 #' @inheritParams tikz
-#' @param verbose
-#'   If set to \code{FALSE}, calling this function will not cause any output to
-#'   be printed to the screen. Defaults to \code{TRUE}.
 #'
 #' @seealso
 #'   \code{\link{tikz}}
 #'
 #' @export
-tikzTest <- function(engine = getOption("tikzDefaultEngine"),
+tikzTest <- function(texString = "A",
+                     engine = getOption("tikzDefaultEngine"),
                      documentDeclaration = getOption("tikzDocumentDeclaration"),
-                     packages,
-                     verbose = TRUE)
+                     packages)
 {
-  NULL
+  print_compiler_info(engine, "Active")
+  getLatexStrWidth(
+    texString,
+    engine = engine,
+    documentDeclaration = documentDeclaration,
+    packages = packages,
+    diagnose = TRUE
+  )
 }
 
 print_compiler_info <- function(engine, name) {

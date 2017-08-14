@@ -4,11 +4,13 @@
 \alias{tikzTest}
 \title{Test invocation of a LaTeX engine.}
 \usage{
-tikzTest(engine = getOption("tikzDefaultEngine"),
-  documentDeclaration = getOption("tikzDocumentDeclaration"), packages,
-  verbose = TRUE)
+tikzTest(texString = "A", engine = getOption("tikzDefaultEngine"),
+  documentDeclaration = getOption("tikzDocumentDeclaration"), packages)
 }
 \arguments{
+\item{texString}{An arbitrary string for which the width is to be
+calculated.  May contain LaTeX markup.}
+
 \item{engine}{a string specifying which TeX engine to use. Possible values
 are 'pdftex', 'xetex' and 'luatex'. See the Unicode section of
 \link{tikzDevice-package} for details.}
@@ -19,9 +21,6 @@ for more details.}
 
 \item{packages}{See the section ``Options That Affect Package Behavior'' of
 \link{tikzDevice-package}.}
-
-\item{verbose}{If set to \code{FALSE}, calling this function will not cause any output to
-be printed to the screen. Defaults to \code{TRUE}.}
 }
 \description{
 This function simulates the measurement of dimensions and prints detailed

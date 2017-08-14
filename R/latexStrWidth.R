@@ -450,6 +450,9 @@ getMetricsFromLatex <- function(TeXMetrics, verbose = verbose, diagnose = FALSE)
     } else {
       stop("\nTeX was unable to calculate metrics for:\n\n\t",
         TeXMetrics$value, "\n\n",
+        "Run the following commands for diagnosis:\n\n\t",
+        "tikzTest()\n\t",
+        "tikzTest(", deparse(TeXMetrics$value), ")\n\n",
         "Common reasons for failure include:\n",
         "  * The string contains a character which is special to LaTeX unless\n",
         "    escaped properly, such as % or $.\n",
