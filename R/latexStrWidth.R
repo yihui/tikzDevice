@@ -46,8 +46,8 @@ getLatexStrWidth <- function(texString, cex = 1, face = 1, engine = getOption("t
     pdftex = {
       if (anyMultibyteUTF8Characters(texString) && getOption("tikzPdftexWarnUTF")) {
         warning("Attempting to calculate the width of a Unicode string",
-            "using the pdftex engine. This may fail! See the Unicode",
-            "section of ?tikzDevice for more information.")
+          "using the pdftex engine. This may fail! See the Unicode",
+          "section of ?tikzDevice for more information.")
       }
       if (missing(packages)) {
         packages <- getOption("tikzLatexPackages")
