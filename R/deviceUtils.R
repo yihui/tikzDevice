@@ -345,6 +345,28 @@ tikzCompilerInfo <- function(verbose = TRUE) {
   ))
 }
 
+#' Test invocation of a LaTeX engine.
+#'
+#' This function simulates the measurement of dimensions and prints detailed
+#' information in case of errors.
+#'
+#' @inheritParams tikz
+#' @param verbose
+#'   If set to \code{FALSE}, calling this function will not cause any output to
+#'   be printed to the screen. Defaults to \code{TRUE}.
+#'
+#' @seealso
+#'   \code{\link{tikz}}
+#'
+#' @export
+tikzTest <- function(engine = getOption("tikzDefaultEngine"),
+                     documentDeclaration = getOption("tikzDocumentDeclaration"),
+                     packages,
+                     verbose = TRUE)
+{
+  NULL
+}
+
 print_compiler_info <- function(engine, name) {
   cat("\n", name, " compiler:\n\t", sep = "")
   if (is.null(engine)) {
