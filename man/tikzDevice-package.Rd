@@ -2,8 +2,8 @@
 % Please edit documentation in R/tikzDevice-package.R
 \docType{package}
 \name{tikzDevice-package}
-\alias{tikzDevice}
 \alias{tikzDevice-package}
+\alias{tikzDevice}
 \title{Support for native LaTeX output of R graphics}
 \description{
 The tikzDevice package implements the \code{\link{tikz}} ouput device which
@@ -121,11 +121,7 @@ annotations}.
   Default values for all options may be viewed or restored using the
   \code{\link{setTikzDefaults}} function.
 }
-\author{
-See \code{packageDescription("tikzDevice")}.
 
-  Submit bug reports to: \url{https://github.com/yihui/tikzDevice/issues}
-}
 \references{
 The TikZ and PGF Packages: Manual for version 2.00\cr
   \url{http://sourceforge.net/projects/pgf}\cr Till Tanatu, February 20, 2008
@@ -133,5 +129,9 @@ The TikZ and PGF Packages: Manual for version 2.00\cr
 \seealso{
 \code{\link{tikz}}
 }
-\keyword{package}
+\author{
+See \code{packageDescription("tikzDevice")}.
 
+  Submit bug reports to: \url{https://github.com/yihui/tikzDevice/issues}
+}
+\keyword{package}
