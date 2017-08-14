@@ -271,7 +271,8 @@ tikz <- function(file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
         "\tpdftex\n",
         "\txetex\n",
         "\tluatex\n")
-    })
+    }
+  )
 
   # Ensure the standAlone option will trump the bareBones option.
   if (standAlone) {
