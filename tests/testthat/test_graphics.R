@@ -1,6 +1,3 @@
-# Switch to the detailed reporter implemented in helper_reporters.R
-with_reporter(MultiReporter$new(reporters = list(get_reporter(), GraphicsReporter$new())), {
-
 test_graphs <- list(
   list(
     short_name = 'hello_TeX',
@@ -358,11 +355,7 @@ test_graphs <- list(
     description = 'Test of ggplot2 graphics',
     tags = c('ggplot2'),
     graph_code = quote({
-      sink(tempfile())
-      suppressPackageStartupMessages(library(mgcv))
-      suppressPackageStartupMessages(library(ggplot2))
-      sink()
-      print(qplot(carat, price, data = diamonds, geom = "smooth",
+      print(ggplot2::qplot(carat, price, data = ggplot2::diamonds, geom = "smooth",
       colour = color))
     })
   ),
@@ -372,10 +365,6 @@ test_graphs <- list(
     description = 'Test of grid text alignment with ggplot2',
     tags = c('ggplot2', 'text'),
     graph_code =  quote({
-      sink(tempfile())
-      suppressPackageStartupMessages(library(ggplot2))
-      sink()
-
       soilSample <- structure(list(`Grain Diameter` = c(8, 5.6, 4, 2.8, 2, 1, 0.5, 0.355, 0.25),
         `Percent Finer` = c(0.951603145795523, 0.945553539019964,
            0.907239362774753, 0.86771526517443, 0.812865497076023, 0.642064932446058,
@@ -389,16 +378,13 @@ test_graphs <- list(
       # FIXME: Remove this once we drop support for 2.13.x
       if( exists('scale_y_probit') ){
         # We are using a ggplot2 version that is earlier than 0.9.0
-        testPlot <- qplot( `Grain Diameter`, `Percent Finer`, data = soilSample) +
-          scale_x_log10() + scale_y_probit() + theme_bw()
+        testPlot <- ggplot2::qplot( `Grain Diameter`, `Percent Finer`, data = soilSample) +
+          ggplot2::scale_x_log10() + ggplot2::scale_y_probit() + ggplot2::theme_bw()
       } else {
-        sink(tempfile())
-        suppressPackageStartupMessages(library(scales))
-        sink()
-        testPlot <- qplot(log10(`Grain Diameter`), `Percent Finer`, data = soilSample) +
-          scale_x_continuous(labels = math_format(10^.x)) +
-          scale_y_continuous(trans = 'probit', breaks = seq(0.2, 0.8, 0.2)) +
-          theme_bw()
+        testPlot <- ggplot2::qplot(log10(`Grain Diameter`), `Percent Finer`, data = soilSample) +
+          ggplot2::scale_x_continuous(labels = scales::math_format(10^.x)) +
+          ggplot2::scale_y_continuous(trans = 'probit', breaks = seq(0.2, 0.8, 0.2)) +
+          ggplot2::theme_bw()
       }
 
       print( testPlot )
@@ -677,8 +663,6 @@ test_that('All graphics devices closed',{
 
 })
 
-}) # End reporter swap
-
 
 message('\nFinished generating TikZ test graphs.')
 message('PDF files are in:\n\t', test_output_dir)
@@ -687,12 +671,12 @@ message('\nTeX sources and log files are in:\n\t', test_work_dir)
 if ( !is.null(gs_cmd) ) {
   # Combine all test PDFs into one big file for easy viewing
   graph_files <- Map(function(graph) {
-    file.path(test_output_dir, str_c(graph$short_name, '.pdf'))
+    file.path(test_output_dir, paste0(graph$short_name, '.pdf'))
     }, graphs_produced)
   test_output <- file.path(test_output_dir, 'test_results.pdf')
 
   silence <- system(paste(shQuote(gs_cmd), '-dNOPAUSE', '-sDEVICE=pdfwrite',
-    str_c('-sOUTPUTFILE=', test_output),
+    paste0('-sOUTPUTFILE=', test_output),
     '-dBATCH', paste(shQuote(graph_files), collapse = ' ')),
     intern = TRUE, ignore.stderr = TRUE)
 
@@ -703,7 +687,7 @@ if ( !is.null(gs_cmd) ) {
 if ( !is.null(compare_cmd) && !is.null(convert_cmd) ) {
   # Combine all visual diffs into one big PDF file for easy viewing
   graph_files <- Map(function(graph) {
-    file.path(test_work_dir, str_c(graph$short_name, '_diff.png'))
+    file.path(test_work_dir, paste0(graph$short_name, '_diff.png'))
     }, graphs_produced)
   diff_output <- file.path(test_output_dir, 'test_diffs.pdf')
 

@@ -10,16 +10,14 @@ do_graphics_test <- function(short_name, description, graph_code, fuzz = 0,
 
   context(description)
 
-  if (str_length(Sys.getenv('R_TESTS')) != 0){
+  if (Sys.getenv('R_TESTS') != "") {
     # `R CMD check` is running. Skip test and return so our graphics testsuite
     # does not slow down the CRAN daily checks.
-    cat("SKIP")
     return(FALSE)
   }
 
   if (!is.null(skip_if)) {
     if (skip_if()) {
-      cat("SKIP")
       return(FALSE)
     }
   }
@@ -34,23 +32,29 @@ do_graphics_test <- function(short_name, description, graph_code, fuzz = 0,
     on.exit(options(orig_opts))
   }
 
-  graph_file <- file.path(test_work_dir, str_c(short_name,'.tex'))
+  graph_file <- file.path(test_work_dir, paste0(short_name,'.tex'))
 
   test_that('Graph is created cleanly',{
     # Set random number generator to a known state so results will be
     # reproducible
     set.seed(4) # As specified by RFC 1149.5 ;)
 
-    expect_that(
-      create_graph(graph_code, graph_file, engine),
-      runs_cleanly()
+    # Keep dictionaries for one day only
+    dict_path <- file.path(".tikzMetrics", short_name)
+    if (file.exists(dict_path) && (Sys.time() - file.info(dict_path)$mtime) > 86400) {
+      unlink(dict_path)
+    }
+
+    withr::with_options(
+      list(tikzMetricsDictionary = dict_path),
+      expect_warning(create_graph(graph_code, graph_file, engine), NA)
     )
 
   })
 
   test_that('Graph compiles cleanly',{
 
-    expect_that(graph_created <<- compile_graph(graph_file, engine), runs_cleanly())
+    expect_warning(graph_created <<- compile_graph(graph_file, engine), NA)
 
   })
 
@@ -62,10 +66,9 @@ do_graphics_test <- function(short_name, description, graph_code, fuzz = 0,
     # This test always "passes" as the real result is the number of pixels that
     # were found to be different between the test graph and the standard graph.
     # Such a result must be interpreted by a human.
-    expect_less_than(compare_graph(short_name, tags), fuzz + 0.1, is_true(),
-                info = short_name,
-                label = "Pixel representation of graph unchanged")
-
+    eval(bquote(
+      expect_lt(compare_graph(.(short_name), tags), .(fuzz) + 0.1)
+    ))
   })
 
 
@@ -114,41 +117,36 @@ compile_graph <- function(graph_file, engine){
 
 compare_graph <- function(graph_name, tags){
   if ( is.null(compare_cmd) ) {
-    get_graphics_reporter()$vis_result('SKIP')
     return(TRUE)
   }
 
-  test_output <- file.path(test_output_dir, str_c(graph_name, '.pdf'))
+  test_output <- file.path(test_output_dir, paste0(graph_name, '.pdf'))
   if( 'ggplot2' %in% tags && exists('scale_y_probit') ) {
     # We are using a version of ggplot2 that predates 0.9.
     #
     # FIXME: Remove this once we drop support for 2.13.x.
-    standard_graph <- file.path(test_standard_dir, 'ggplot_old', str_c(graph_name, '.pdf'))
+    standard_graph <- file.path(test_standard_dir, 'ggplot_old', paste0(graph_name, '.pdf'))
   } else {
-    standard_graph <- file.path(test_standard_dir, str_c(graph_name, '.pdf'))
+    standard_graph <- file.path(test_standard_dir, paste0(graph_name, '.pdf'))
   }
 
   if ( !file.exists(test_output) || !file.exists(standard_graph) ) {
-    get_graphics_reporter()$vis_result('SKIP')
     return(TRUE)
   }
 
 
   # Normalize and quote some paths in case we are running on Windows
-  compare_output <- file.path(test_work_dir, str_c(graph_name, '_diff.png'))
+  compare_output <- file.path(test_work_dir, paste0(graph_name, '_diff.png'))
   command_line <- paste(
     shQuote(compare_cmd), '-density 300', '-metric AE',
     shQuote(test_output), shQuote(standard_graph), shQuote(compare_output),
     "2>&1 | awk '{metric=$NF};END{print metric}'"
   )
 
-  get_graphics_reporter()$set_cmp_command(command_line)
   result <- as.double(system(paste(
     # Force the command to be executed through bash
     'bash -c ', shQuote(command_line)),
     intern = TRUE, ignore.stderr = TRUE))
-
-  get_graphics_reporter()$vis_result(result)
 
   return(as.numeric(result))
 

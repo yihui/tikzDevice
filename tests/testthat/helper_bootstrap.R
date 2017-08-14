@@ -1,16 +1,8 @@
-library(methods)
-library(tikzDevice)
-library(testthat)
-library(stringr)
-
-library(tools)
-library(evaluate)
-
 # Process command arguments
 test_args <- commandArgs(TRUE)
-torture_mem <- any(str_detect(test_args, '^--use-gctorture'))
+torture_mem <- any(stringr::str_detect(test_args, '^--use-gctorture'))
 
-if ( length(tags_to_run <- test_args[str_detect(test_args, '^--run-tests')]) ) {
+if ( length(tags_to_run <- test_args[stringr::str_detect(test_args, '^--run-tests')]) ) {
   tags_to_run <- unlist(str_split(
     str_split(tags_to_run, '=')[[1]][2],
     ',' ))
