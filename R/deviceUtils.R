@@ -87,8 +87,9 @@ setTikzDefaults <- function(overwrite = TRUE) {
 
     tikzLualatexPackages = c(
       "\\usepackage{tikz}\n",
+      "\\IfFileExists{luatex85.sty}{\\usepackage{luatex85}}{}\n",
       "\\usepackage[active,tightpage,psfixbb]{preview}\n",
-      "\\usepackage{fontspec,xunicode}\n",
+      "\\usepackage{fontspec}\n",
       "\\PreviewEnvironment{pgfpicture}\n",
       "\\setlength\\PreviewBorder{0pt}\n"
     ),
@@ -111,7 +112,7 @@ setTikzDefaults <- function(overwrite = TRUE) {
       # symbol codes consistant for both systems.
       "\\usepackage[T1]{fontenc}\n",
       "\\usetikzlibrary{calc}\n",
-      "\\usepackage{fontspec,xunicode}\n"
+      "\\usepackage{fontspec}\n"
     ),
 
 
