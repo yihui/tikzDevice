@@ -8,7 +8,7 @@
 getLatexStrWidth(texString, cex = 1, face = 1,
   engine = getOption("tikzDefaultEngine"),
   documentDeclaration = getOption("tikzDocumentDeclaration"), packages,
-  verbose = interactive())
+  verbose = interactive(), diagnose = FALSE)
 
 getLatexCharMetrics(charCode, cex = 1, face = 1,
   engine = getOption("tikzDefaultEngine"),
@@ -39,6 +39,8 @@ for more details.}
 \item{verbose}{A logical value indicating whether diagnostic messages are
 printed when measuring dimensions of strings. Defaults to \code{TRUE} in
 interactive mode only, to \code{FALSE} otherwise.}
+
+\item{diagnose}{pass \code{TRUE} to print detailed error information.}
 
 \item{charCode}{an integer that corresponds to a symbol in the ASCII
 character table under the Type 1 font encoding. All numeric values are
