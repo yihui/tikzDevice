@@ -223,7 +223,7 @@ tikz <- function(file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
   maxSymbolicColors = getOption("tikzMaxSymbolicColors"),
   timestamp = TRUE,
   verbose = interactive()
-) {
+  ) {
 
   tryCatch({
     # Ok, this sucks. We copied the function signature of pdf() and got `file`
@@ -239,11 +239,11 @@ tikz <- function(file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
     file <- tools::file_path_as_absolute(file)
   },
   error = function(e) {
-    stop(simpleError(paste(
-      "Cannot create:\n\t", file,
-      "\nBecause the directory does not exist or is not writable."
-    )))
-  })
+      stop(simpleError(paste(
+        "Cannot create:\n\t", file,
+        "\nBecause the directory does not exist or is not writable."
+      )))
+    })
 
   # remove the file if we are outputting to multiple files since the file
   # name will get changed in the C code
@@ -252,23 +252,23 @@ tikz <- function(file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
   # Determine which TeX engine is being used.
   switch(engine,
     pdftex = {
-      engine <- 1L # In the C routines, a integer value of 1 means pdftex
-      if (missing(packages)) {packages <- getOption("tikzLatexPackages")}
-    },
-    xetex = {
-      engine <- 2L
-      if (missing(packages)) {packages <- getOption("tikzXelatexPackages")}
-    },
-    luatex = {
-      engine <- 3L
-      if (missing(packages)) {packages <- getOption("tikzLualatexPackages")}
-    },
-    { # ELSE
-      stop("Unsupported TeX engine: ", engine,
-        "\nAvailable choices are:\n",
-        "\tpdftex\n",
-        "\txetex\n",
-        "\tluatex\n")
+        engine <- 1L # In the C routines, a integer value of 1 means pdftex
+        if (missing(packages)) {packages <- getOption("tikzLatexPackages")}
+      },
+      xetex = {
+        engine <- 2L
+        if (missing(packages)) {packages <- getOption("tikzXelatexPackages")}
+      },
+      luatex = {
+        engine <- 3L
+        if (missing(packages)) {packages <- getOption("tikzLualatexPackages")}
+      },
+      { # ELSE
+        stop("Unsupported TeX engine: ", engine,
+          "\nAvailable choices are:\n",
+          "\tpdftex\n",
+          "\txetex\n",
+          "\tluatex\n")
     })
 
   # Ensure the standAlone option will trump the bareBones option.

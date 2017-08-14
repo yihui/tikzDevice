@@ -78,12 +78,12 @@ do_graphics_test <- function(short_name, description, graph_code, fuzz = 0,
 
 create_graph <- function(graph_code, graph_file, engine) {
 
-    tikz(file = graph_file, standAlone = TRUE, engine = engine)
-    on.exit(dev.off())
+  tikz(file = graph_file, standAlone = TRUE, engine = engine)
+  on.exit(dev.off())
 
-    eval(graph_code)
+  eval(graph_code)
 
-    invisible()
+  invisible()
 
 }
 
@@ -95,8 +95,8 @@ compile_graph <- function(graph_file, engine) {
 
   tex_cmd <- switch(engine,
     pdftex = getOption("tikzLatex"),
-    xetex = getOption("tikzXelatex"),
-    luatex = getOption("tikzLualatex")
+      xetex = getOption("tikzXelatex"),
+      luatex = getOption("tikzLualatex")
   )
 
   silence <- system(paste(shQuote(tex_cmd), "-interaction=batchmode",
@@ -146,7 +146,7 @@ compare_graph <- function(graph_name, tags) {
   result <- as.double(system(paste(
     # Force the command to be executed through bash
     "bash -c ", shQuote(command_line)),
-    intern = TRUE, ignore.stderr = TRUE))
+  intern = TRUE, ignore.stderr = TRUE))
 
   return(as.numeric(result))
 

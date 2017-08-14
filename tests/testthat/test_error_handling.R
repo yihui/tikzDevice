@@ -2,10 +2,10 @@ context("Test tikzDevice error and warning messages")
 
 test_that("Null device is not a tikzDevice", {
 
-    expect_that(
-      suppressMessages(isTikzDevice()),
-      is_false()
-    )
+  expect_that(
+    suppressMessages(isTikzDevice()),
+    is_false()
+  )
 
 })
 
@@ -101,8 +101,8 @@ test_that("symbolicColors warns about wrong filename", {
   plot(1, 2, axes = F, xlab = "", ylab = "")
 
   expect_that(
-      dev.off(),
-      gives_warning("Color definition file could not be opened and is missing")
+    dev.off(),
+    gives_warning("Color definition file could not be opened and is missing")
   )
 })
 
@@ -112,14 +112,14 @@ test_that("symbolicColors warns about too many colors", {
   points(0, 0)
   on.exit(dev.off())
   expect_that(
-      points(0, 1, col = "red"),
-      gives_warning("Too many colors used, reverting to non-symbolic storage")
+    points(0, 1, col = "red"),
+    gives_warning("Too many colors used, reverting to non-symbolic storage")
   )
 })
 
 test_that("check that maxSymbolicColors is nonnegative", {
   expect_that(
-      tikz(symbolicColors = T, maxSymbolicColors = -1),
-      throws_error("maxSymbolicColors needs to be nonnegative")
+    tikz(symbolicColors = T, maxSymbolicColors = -1),
+    throws_error("maxSymbolicColors needs to be nonnegative")
   )
 })

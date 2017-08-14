@@ -17,8 +17,8 @@ getDocumentPointsize <- function(docString) {
   # Search the document declaration for the pointsize, and extract it if it is
   # there.  (Split the input by newlines before.)
   pointsize <- gsub("^(?:.*[[, \t](\\d+)pt[], \t])?.*$", "\\1",
-                     strsplit(docString, "\n", fixed = TRUE),
-                     ignore.case = F, perl = T)
+    strsplit(docString, "\n", fixed = TRUE),
+    ignore.case = F, perl = T)
 
   # Return first matching line (if any), or NA otherwise
   as.numeric(pointsize[pointsize != ""][1])
@@ -67,66 +67,66 @@ setTikzDefaults <- function(overwrite = TRUE) {
 
     tikzDefaultEngine = "pdftex",
 
-    tikzLatex = getOption("tikzLatexDefault"),
+      tikzLatex = getOption("tikzLatexDefault"),
 
-    tikzDocumentDeclaration = "\\documentclass[10pt]{article}\n",
+      tikzDocumentDeclaration = "\\documentclass[10pt]{article}\n",
 
-    tikzLatexPackages = c(
-      "\\usepackage{tikz}\n",
-      "\\usepackage[active,tightpage,psfixbb]{preview}\n",
-      "\\PreviewEnvironment{pgfpicture}\n",
-      "\\setlength\\PreviewBorder{0pt}\n"
-    ),
+      tikzLatexPackages = c(
+        "\\usepackage{tikz}\n",
+        "\\usepackage[active,tightpage,psfixbb]{preview}\n",
+        "\\PreviewEnvironment{pgfpicture}\n",
+        "\\setlength\\PreviewBorder{0pt}\n"
+      ),
 
-    tikzXelatexPackages = c(
-      "\\usepackage{tikz}\n",
-      "\\usepackage[active,tightpage,xetex]{preview}\n",
-      "\\usepackage{fontspec,xunicode}\n",
-      "\\PreviewEnvironment{pgfpicture}\n",
-      "\\setlength\\PreviewBorder{0pt}\n"
-    ),
+      tikzXelatexPackages = c(
+        "\\usepackage{tikz}\n",
+        "\\usepackage[active,tightpage,xetex]{preview}\n",
+        "\\usepackage{fontspec,xunicode}\n",
+        "\\PreviewEnvironment{pgfpicture}\n",
+        "\\setlength\\PreviewBorder{0pt}\n"
+      ),
 
-    tikzLualatexPackages = c(
-      "\\usepackage{tikz}\n",
-      "\\usepackage[active,tightpage,psfixbb]{preview}\n",
-      "\\usepackage{fontspec,xunicode}\n",
-      "\\PreviewEnvironment{pgfpicture}\n",
-      "\\setlength\\PreviewBorder{0pt}\n"
-    ),
+      tikzLualatexPackages = c(
+        "\\usepackage{tikz}\n",
+        "\\usepackage[active,tightpage,psfixbb]{preview}\n",
+        "\\usepackage{fontspec,xunicode}\n",
+        "\\PreviewEnvironment{pgfpicture}\n",
+        "\\setlength\\PreviewBorder{0pt}\n"
+      ),
 
-    tikzFooter = "",
+      tikzFooter = "",
 
-    tikzMetricPackages = c(
-      # The fontenc package is very important here!
-      # R assumes the output device is uing T1 encoding.
-      # LaTeX defaults to OT1. This package makes the
-      # symbol codes consistant for both systems.
-      "\\usepackage[T1]{fontenc}\n",
-      "\\usetikzlibrary{calc}\n"
-    ),
+      tikzMetricPackages = c(
+        # The fontenc package is very important here!
+        # R assumes the output device is uing T1 encoding.
+        # LaTeX defaults to OT1. This package makes the
+        # symbol codes consistant for both systems.
+        "\\usepackage[T1]{fontenc}\n",
+        "\\usetikzlibrary{calc}\n"
+      ),
 
-    tikzUnicodeMetricPackages = c(
-      # The fontenc package is very important here!
-      # R assumes the output device is uing T1 encoding.
-      # LaTeX defaults to OT1. This package makes the
-      # symbol codes consistant for both systems.
-      "\\usepackage[T1]{fontenc}\n",
-      "\\usetikzlibrary{calc}\n",
-      "\\usepackage{fontspec,xunicode}\n"
-    ),
+      tikzUnicodeMetricPackages = c(
+        # The fontenc package is very important here!
+        # R assumes the output device is uing T1 encoding.
+        # LaTeX defaults to OT1. This package makes the
+        # symbol codes consistant for both systems.
+        "\\usepackage[T1]{fontenc}\n",
+        "\\usetikzlibrary{calc}\n",
+        "\\usepackage{fontspec,xunicode}\n"
+      ),
 
 
-    tikzSanitizeCharacters = c("%", "$", "}", "{", "^", "_", "#", "&", "~"),
+      tikzSanitizeCharacters = c("%", "$", "}", "{", "^", "_", "#", "&", "~"),
 
-    tikzReplacementCharacters = c("\\%", "\\$", "\\}", "\\{", "\\^{}", "\\_{}",
-      "\\#", "\\&", "\\char`\\~"),
+      tikzReplacementCharacters = c("\\%", "\\$", "\\}", "\\{", "\\^{}", "\\_{}",
+        "\\#", "\\&", "\\char`\\~"),
 
-    tikzLwdUnit = 0.4,
+      tikzLwdUnit = 0.4,
 
-    tikzPdftexWarnUTF = TRUE,
+      tikzPdftexWarnUTF = TRUE,
 
-    tikzSymbolicColors = FALSE,
-    tikzMaxSymbolicColors = 100
+      tikzSymbolicColors = FALSE,
+      tikzMaxSymbolicColors = 100
   )
 
   if (!overwrite) {

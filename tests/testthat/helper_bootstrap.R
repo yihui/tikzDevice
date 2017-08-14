@@ -48,9 +48,9 @@ if (nchar(compare_cmd) == 0 || is.null(gs_cmd)) {
 
 convert_cmd <- normalizePath(
   ifelse(using_windows,
-         system("bash -c 'which convert'", intern = TRUE, ignore.stderr = TRUE),
-         Sys.which("convert")
-  ))
+    system("bash -c 'which convert'", intern = TRUE, ignore.stderr = TRUE),
+    Sys.which("convert")
+))
 
 if (nchar(convert_cmd) == 0) {
   convert_cmd <- NULL

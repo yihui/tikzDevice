@@ -56,46 +56,46 @@ getLatexStrWidth <- function(texString, cex = 1, face = 1, engine = getOption("t
 
   switch(engine,
     pdftex = {
-      if (anyMultibyteUTF8Characters(texString) && getOption("tikzPdftexWarnUTF")) {
-        warning("Attempting to calculate the width of a Unicode string",
+        if (anyMultibyteUTF8Characters(texString) && getOption("tikzPdftexWarnUTF")) {
+          warning("Attempting to calculate the width of a Unicode string",
             "using the pdftex engine. This may fail! See the Unicode",
             "section of ?tikzDevice for more information.")
-      }
-      if (missing(packages)) {packages <- getOption("tikzLatexPackages")}
-    },
+        }
+        if (missing(packages)) {packages <- getOption("tikzLatexPackages")}
+      },
 
-    xetex = {
-      if (is.null(getOption("tikzXelatex"))) {
-        stop("Cannot find XeLaTeX! Please check your system ",
+      xetex = {
+        if (is.null(getOption("tikzXelatex"))) {
+          stop("Cannot find XeLaTeX! Please check your system ",
             "configuration or manually provide a value for ",
             "options(tikzXelatex)")
-      }
-      if (missing(packages)) {packages <- getOption("tikzXelatexPackages")}
-    },
+        }
+        if (missing(packages)) {packages <- getOption("tikzXelatexPackages")}
+      },
 
-    luatex = {
-      if (is.null(getOption("tikzLualatex"))) {
-        stop("Cannot find LuaLaTeX! Please check your system ",
+      luatex = {
+        if (is.null(getOption("tikzLualatex"))) {
+          stop("Cannot find LuaLaTeX! Please check your system ",
             "configuration or manually provide a value for ",
             "options(tikzLualatex)")
-      }
-      if (missing(packages)) {packages <- getOption("tikzLualatexPackages")}
-    },
+        }
+        if (missing(packages)) {packages <- getOption("tikzLualatexPackages")}
+      },
 
-    { # ELSE
-      stop("Unsupported TeX engine: ", engine,
-        "\nAvailable choices are:\n",
-        "\tpdftex\n",
-        "\txetex\n",
-        "\tluatex\n")
-    }
+      { # ELSE
+        stop("Unsupported TeX engine: ", engine,
+          "\nAvailable choices are:\n",
+          "\tpdftex\n",
+          "\txetex\n",
+          "\tluatex\n")
+      }
   )
 
   # Create an object that contains the string and it's
   # properties.
   TeXMetrics <- list(type = "string", scale = cex, face = face, value = texString,
-    documentDeclaration = documentDeclaration,
-    packages = packages, engine = engine)
+      documentDeclaration = documentDeclaration,
+      packages = packages, engine = engine)
 
 
   # Check to see if we have a width stored in
@@ -151,34 +151,34 @@ getLatexCharMetrics <- function(charCode, cex = 1, face = 1, engine = getOption(
   # two functions should be generalized and combined.
   switch(engine,
     pdftex = {
-      if (missing(packages)) {packages <- getOption("tikzLatexPackages")}
-    },
+        if (missing(packages)) {packages <- getOption("tikzLatexPackages")}
+      },
 
-    xetex = {
-      if (is.null(getOption("tikzXelatex"))) {
-        stop("Cannot find XeLaTeX! Please check your system ",
+      xetex = {
+        if (is.null(getOption("tikzXelatex"))) {
+          stop("Cannot find XeLaTeX! Please check your system ",
             "configuration or manually provide a value for ",
             "options(tikzXelatex)")
-      }
-      if (missing(packages)) {packages <- getOption("tikzXelatexPackages")}
-    },
+        }
+        if (missing(packages)) {packages <- getOption("tikzXelatexPackages")}
+      },
 
-    luatex = {
-      if (is.null(getOption("tikzLualatex"))) {
-        stop("Cannot find LuaLaTeX! Please check your system ",
+      luatex = {
+        if (is.null(getOption("tikzLualatex"))) {
+          stop("Cannot find LuaLaTeX! Please check your system ",
             "configuration or manually provide a value for ",
             "options(tikzLualatex)")
-      }
-      if (missing(packages)) {packages <- getOption("tikzLualatexPackages")}
-    },
+        }
+        if (missing(packages)) {packages <- getOption("tikzLualatexPackages")}
+      },
 
-    { # ELSE
-      stop("Unsupported TeX engine: ", engine,
-        "\nAvailable choices are:\n",
-        "\tpdftex\n",
-        "\txetex\n",
-        "\tluatex\n")
-    }
+      { # ELSE
+        stop("Unsupported TeX engine: ", engine,
+          "\nAvailable choices are:\n",
+          "\tpdftex\n",
+          "\txetex\n",
+          "\tluatex\n")
+      }
   )
 
   # We must be given an integer character code.
@@ -190,8 +190,8 @@ getLatexCharMetrics <- function(charCode, cex = 1, face = 1, engine = getOption(
   if (engine == "pdftex" && !(charCode > 31 && charCode < 127)) {
     if (getOption("tikzPdftexWarnUTF")) {
       warning("pdftex can only generate metrics for character codes ",
-          "between 32 and 126! See the Unicode section of ?tikzDevice ",
-          "for more information.")
+        "between 32 and 126! See the Unicode section of ?tikzDevice ",
+        "for more information.")
     }
     return(NULL)
   }
@@ -206,8 +206,8 @@ getLatexCharMetrics <- function(charCode, cex = 1, face = 1, engine = getOption(
   # Create an object that contains the character and it's
   # properties.
   TeXMetrics <- list(type = "char", scale = cex, face = face, value = charCode,
-    documentDeclaration = documentDeclaration,
-    packages = packages, engine = engine)
+      documentDeclaration = documentDeclaration,
+      packages = packages, engine = engine)
 
   # Check to see if we have metrics stored in
   # our dictionary for this character.
@@ -288,14 +288,14 @@ getMetricsFromLatex <- function(TeXMetrics, verbose = verbose) {
   writeLines(TeXMetrics$packages, texIn)
   switch(TeXMetrics$engine,
     pdftex = {
-      writeLines(getOption("tikzMetricPackages"), texIn)
-    },
-    xetex = {
-      writeLines(getOption("tikzUnicodeMetricPackages"), texIn)
-    },
-    luatex = {
-      writeLines(getOption("tikzUnicodeMetricPackages"), texIn)
-    }
+        writeLines(getOption("tikzMetricPackages"), texIn)
+      },
+      xetex = {
+        writeLines(getOption("tikzUnicodeMetricPackages"), texIn)
+      },
+      luatex = {
+        writeLines(getOption("tikzUnicodeMetricPackages"), texIn)
+      }
   )
 
   writeLines("\\batchmode", texIn)
@@ -326,27 +326,27 @@ getMetricsFromLatex <- function(TeXMetrics, verbose = verbose) {
   switch(TeXMetrics$face,
 
     normal = {
-      # We do nothing for font face 1, normal font.
-    },
+        # We do nothing for font face 1, normal font.
+      },
 
-    bold = {
-      # Using bold, we set in bold *series*
-      nodeContent <- "\\bfseries"
-    },
+      bold = {
+        # Using bold, we set in bold *series*
+        nodeContent <- "\\bfseries"
+      },
 
-    italic = {
-      # Using italic, we set in the italic *shape*
-      nodeContent <- "\\itshape"
-    },
+      italic = {
+        # Using italic, we set in the italic *shape*
+        nodeContent <- "\\itshape"
+      },
 
-    bolditalic = {
-      # With bold italic we set in bold *series* with italic *shape*
-      nodeContent <- "\\bfseries\\itshape"
-    },
+      bolditalic = {
+        # With bold italic we set in bold *series* with italic *shape*
+        nodeContent <- "\\bfseries\\itshape"
+      },
 
-    symbol = {
-      # We are currently ignoring R's symbol fonts.
-    }
+      symbol = {
+        # We are currently ignoring R's symbol fonts.
+      }
 
   ) # End output font face switch.
 
@@ -359,15 +359,15 @@ getMetricsFromLatex <- function(TeXMetrics, verbose = verbose) {
 
     string = {
 
-      nodeContent <- paste(nodeContent, TeXMetrics$value)
+        nodeContent <- paste(nodeContent, TeXMetrics$value)
 
-    },
+      },
 
-    char = {
+      char = {
 
-      nodeContent <- paste(nodeContent, "\\char", TeXMetrics$value, sep = "")
+        nodeContent <- paste(nodeContent, "\\char", TeXMetrics$value, sep = "")
 
-    }
+      }
 
   ) # End switch for  metric type.
 
@@ -405,8 +405,8 @@ getMetricsFromLatex <- function(TeXMetrics, verbose = verbose) {
   # Recover the latex command. Use XeLaTeX if the character is not ASCII
   latexCmd <- switch(TeXMetrics$engine,
     pdftex = getOption("tikzLatex"),
-    xetex = getOption("tikzXelatex"),
-    luatex = getOption("tikzLualatex"),
+      xetex = getOption("tikzXelatex"),
+      luatex = getOption("tikzLualatex"),
   )
 
   # Append the batchmode flag to increase LaTeX
@@ -424,7 +424,7 @@ getMetricsFromLatex <- function(TeXMetrics, verbose = verbose) {
   if (TeXMetrics$engine == "xetex") {
     # Check to see if XeLaTeX was unable to typeset any Unicode characters.
     missing_glyphs <- logContents[grep("^\\s*Missing character: There is no",
-        logContents)]
+      logContents)]
 
     if (length(missing_glyphs)) {
       warning("XeLaTeX was unable to calculate metrics for some characters:\n",
