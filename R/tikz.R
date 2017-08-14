@@ -266,12 +266,12 @@ tikz <- function(file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
       if (missing(packages)) {
         packages <- getOption("tikzLualatexPackages")
       }
-      stop("Unsupported TeX engine: ", engine,
-        "\nAvailable choices are:\n",
-        "\tpdftex\n",
-        "\txetex\n",
-        "\tluatex\n")
-    }
+    },
+    stop("Unsupported TeX engine: ", engine,
+      "\nAvailable choices are:\n",
+      "\tpdftex\n",
+      "\txetex\n",
+      "\tluatex\n")
   )
 
   # Ensure the standAlone option will trump the bareBones option.
