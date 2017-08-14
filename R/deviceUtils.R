@@ -200,9 +200,7 @@ evalWithoutInterrupts <- function(expr, envir = parent.frame()) {
 #' to UTF-8 before doing any checks
 #'
 #' @param string A character vector of length 1 (a string).
-#' @param encoding The input encoding of \code{string}, if not specified
-#'   previously via \code{\link{Encoding}} or by this argument then a value of
-#'   "UTF-8" is assumed
+#' @param encoding Unused.
 #' @return A boolean value
 #' @author Cameron Bracken \email{cameron.bracken@@gmail.com}
 #' @seealso \code{\link{tikz}}
@@ -226,10 +224,6 @@ anyMultibyteUTF8Characters <- function(string, encoding = "UTF-8") {
   # encoding to UTF-8 before doing any checks
 
   mb <- FALSE
-
-  # Set the encoding of the string if it is not explicitly set
-  if (Encoding(string) == "unknown")
-    Encoding(string) <- encoding
 
   # convert the string to UTF-8
   string <- enc2utf8(string)
