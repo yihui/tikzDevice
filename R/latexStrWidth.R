@@ -391,9 +391,14 @@ getMetricsFromLatex <- function(TeXMetrics, verbose = verbose, diagnose = FALSE)
       node{ \\typeout{tikzTeXDescent=\\n1} };", texIn)
   }
 
-  # Stop before creating output
-  writeLines("\\makeatletter", texIn)
-  writeLines("\\@@end", texIn)
+  if (diagnose) {
+    # Stop before creating output
+    writeLines("\\makeatletter", texIn)
+    writeLines("\\@@end", texIn)
+  } else {
+    writeLines("\\end{tikzpicture}", texIn)
+    writeLines("\\end{document}", texIn)
+  }
 
   # Close the LaTeX file, ready to compile
   close(texIn)
