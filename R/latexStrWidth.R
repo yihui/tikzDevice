@@ -20,17 +20,8 @@
 #'   applied to device output.
 #' @param face an integer in the range [1-5] that specifies the font face to
 #'   use. See \link{par} for details.
-#' @param engine a string specifying which TeX engine to use. Possible values
-#'   are 'pdftex', 'xetex' and 'luatex'. See the Unicode section of \link{tikzDevice} for
-#'   details.
-#' @param documentDeclaration See the sections ``Options That Affect Package
-#'   Behavior'' and ``Font Size Calculations'' of \link{tikzDevice-package}
-#'   for more details.
-#' @param packages See the section ``Options That Affect Package Behavior'' of
-#'   \link{tikzDevice-package}.
-#' @param verbose A logical value indicating whether diagnostic messages are
-#'  printed when measuring dimensions of strings. Defaults to \code{TRUE} in
-#'  interactive mode only, to \code{FALSE} otherwise.
+#' @param diagnose pass \code{TRUE} to print detailed error information.
+#' @inheritParams tikz
 #'
 #'
 #' @return
@@ -51,13 +42,13 @@
 #' @export
 getLatexStrWidth <- function(texString, cex = 1, face = 1, engine = getOption("tikzDefaultEngine"),
   documentDeclaration = getOption("tikzDocumentDeclaration"), packages,
-  verbose = interactive()) {
+  verbose = interactive(), diagnose = FALSE) {
   switch(engine,
     pdftex = {
       if (anyMultibyteUTF8Characters(texString) && getOption("tikzPdftexWarnUTF")) {
         warning("Attempting to calculate the width of a Unicode string",
-            "using the pdftex engine. This may fail! See the Unicode",
-            "section of ?tikzDevice for more information.")
+          "using the pdftex engine. This may fail! See the Unicode",
+          "section of ?tikzDevice for more information.")
       }
       if (missing(packages)) {
         packages <- getOption("tikzLatexPackages")
@@ -99,6 +90,9 @@ getLatexStrWidth <- function(texString, cex = 1, face = 1, engine = getOption("t
     documentDeclaration = documentDeclaration,
     packages = packages, engine = engine)
 
+  if (diagnose) {
+    return(getMetricsFromLatex(TeXMetrics, verbose = TRUE, diagnose = diagnose))
+  }
 
   # Check to see if we have a width stored in
   # our dictionary for this string.
@@ -240,7 +234,7 @@ getLatexCharMetrics <- function(charCode, cex = 1, face = 1, engine = getOption(
   }
 }
 
-getMetricsFromLatex <- function(TeXMetrics, verbose = verbose) {
+getMetricsFromLatex <- function(TeXMetrics, verbose = verbose, diagnose = FALSE) {
   if (!verbose) {
     message <- function(...) invisible()
   }
@@ -444,19 +438,33 @@ getMetricsFromLatex <- function(TeXMetrics, verbose = verbose) {
 
   # complete.cases() checks for NULLs, NAs and NaNs
   if (length(width) == 0 | any(!complete.cases(width))) {
-    stop("\nTeX was unable to calculate metrics for:\n\n\t",
-      TeXMetrics$value, "\n\n",
-      "Common reasons for failure include:\n",
-      "  * The string contains a character which is special to LaTeX unless\n",
-      "    escaped properly, such as % or $.\n",
-      "  * The string makes use of LaTeX commands provided by a package and\n",
-      "    the tikzDevice was not told to load the package.\n\n",
-      "The TeX and log files used for the calculation can help diagnose the\n",
-      "problem. If these files are missing, rerun the plot and make sure to\n",
-      "keep the R session open.\n",
-      "TeX file: ", texFile, "\n",
-      "Log file: ", texLog, "\n"
-    )
+    if (diagnose) {
+      message("\nTeX was unable to calculate metrics for:\n\n\t",
+        TeXMetrics$value, "\n"
+      )
+      message("Contents of TeX file ", texFile, ":\n")
+      cat(readLines(texFile), sep = "\n")
+      message("Contents of log file ", texLog, ":\n")
+      cat(readLines(texLog), sep = "\n")
+      return(invisible())
+    } else {
+      stop("\nTeX was unable to calculate metrics for:\n\n\t",
+        TeXMetrics$value, "\n\n",
+        "Run the following commands for diagnosis:\n\n\t",
+        "tikzTest()\n\t",
+        "tikzTest(", deparse(TeXMetrics$value), ")\n\n",
+        "Common reasons for failure include:\n",
+        "  * The string contains a character which is special to LaTeX unless\n",
+        "    escaped properly, such as % or $.\n",
+        "  * The string makes use of LaTeX commands provided by a package and\n",
+        "    the tikzDevice was not told to load the package.\n\n",
+        "The TeX and log files used for the calculation can help diagnose the\n",
+        "problem. If these files are missing, rerun the plot and make sure to\n",
+        "keep the R session open.\n",
+        "TeX file: ", texFile, "\n",
+        "Log file: ", texLog, "\n"
+      )
+    }
   }
 
   # If we're dealing with a string, we're done.

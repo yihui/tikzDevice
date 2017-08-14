@@ -329,40 +329,53 @@ tikzCompilerInfo <- function(verbose = TRUE) {
   lualatexCompiler <- getOption("tikzLualatex")
 
   if (verbose) {
-    cat("\nLaTeX Compiler:\n\t")
-    cat(latexCompiler)
-    cat("\n\t")
-    p <- pipe(paste(latexCompiler, "--version"))
-    cat(utils::head(readLines(p), 2), sep = "\n\t")
-    close(p)
-    cat("\n")
-
-    cat("\nXeLaTeX Compiler:\n\t")
-    if (is.null(xelatexCompiler)) {
-      cat("Not available.\n")
-    } else {
-      cat(xelatexCompiler)
-      cat("\n\t")
-      p <- pipe(paste(xelatexCompiler, "--version"))
-      cat(utils::head(readLines(p), 2), sep = "\n\t")
-      close(p)
-      cat("\n")
-    }
-
-    cat("\nLuaLaTeX Compiler:\n\t")
-    if (is.null(lualatexCompiler)) {
-      cat("Not available.\n")
-    } else {
-      cat(lualatexCompiler)
-      cat("\n\t")
-      p <- pipe(paste(lualatexCompiler, "--version"))
-      cat(utils::head(readLines(p), 2), sep = "\n\t")
-      close(p)
-      cat("\n")
-    }
-  } # End if(verbose)
+    print_compiler_info(latexCompiler, "LaTeX")
+    print_compiler_info(xelatexCompiler, "XeLaTeX")
+    print_compiler_info(lualatexCompiler, "LuaLaTeX")
+  }
 
   invisible(list(
     latex = latexCompiler, xelatex = xelatexCompiler, lualatex = lualatexCompiler
   ))
+}
+
+#' Test invocation of a LaTeX engine.
+#'
+#' This function simulates the measurement of dimensions and prints detailed
+#' information in case of errors.
+#'
+#' @inheritParams getLatexStrWidth
+#' @inheritParams tikz
+#'
+#' @seealso
+#'   \code{\link{tikz}}
+#'
+#' @export
+tikzTest <- function(texString = "A",
+                     engine = getOption("tikzDefaultEngine"),
+                     documentDeclaration = getOption("tikzDocumentDeclaration"),
+                     packages)
+{
+  print_compiler_info(engine, "Active")
+  getLatexStrWidth(
+    texString,
+    engine = engine,
+    documentDeclaration = documentDeclaration,
+    packages = packages,
+    diagnose = TRUE
+  )
+}
+
+print_compiler_info <- function(engine, name) {
+  cat("\n", name, " compiler:\n\t", sep = "")
+  if (is.null(engine)) {
+    cat("Not available.\n")
+  } else {
+    cat(engine)
+    cat("\n\t")
+    p <- pipe(paste(engine, "--version"))
+    cat(utils::head(readLines(p), 2), sep = "\n\t")
+    close(p)
+    cat("\n")
+  }
 }
