@@ -26,7 +26,7 @@ Imports:
     png
 Suggests:
     evaluate,
-    formatR
+    formatR,
     ggplot2,
     knitr,
     maps,
