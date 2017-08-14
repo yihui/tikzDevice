@@ -1,3 +1,22 @@
+## tikzDevice 0.10-2 (2017-08-14)
+
+- Temporary .tex and .log files are created in a separate directory for each run.
+- Support LuaLaTeX > 0.85 by loading the luatex85 package if it exists and avoiding loading xunicode (#150).
+- The `tikzTest()` function (via `getLatexStrWidth(diagnose = TRUE)`) now writes a complete LaTeX document, which allows e.g. MikTeX to install missing LaTeX packages (#149).
+- Enforce the encoding of temporary TeX file to UTF-8 (#159, @jszhao).
+- New `tikzTest()` to troubleshoot installation problems (#142).
+- Don't call `library(grid)` from package code anymore.
+- Remove probably harmless extra space from text being measured.
+- Don't overwrite string's encoding in `anyMultibyteUTF8Characters()` (#158, @jszhao).
+- Consistent code style.
+- `load_all()` works now.
+- Fix potential protection issues (#161).
+- If measurement fails, the `.tex` and `.log` files are not printed anymore,
+  instead the location of these files is shown.
+- Code from manual now contains simple apostrophes to allow copy-paste (#139).
+- Zero-length strings are not treated as multibyte character strings anymore.
+
+
 Version 0.10-1 (2016-02-09)
 ===
 
