@@ -87,7 +87,6 @@
       "\n\n\tEnsure the folder containing your compiler is included in PATH.\n"
     )
   }
-
 }
 
 # Any variables defined in here will be hidden

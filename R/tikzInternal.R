@@ -9,7 +9,6 @@ getDateStampForTikz <- function() {
   # date stamps to output files.
 
   return(strftime(Sys.time()))
-
 }
 
 getTikzDeviceVersion <- function() {

@@ -46,7 +46,6 @@ gridToDevice <- function(x = 0, y = 0, units = "native") {
       grconvertY(transCoords[2], from = "inches", to = "device")
     )
   )
-
 }
 
 
@@ -177,9 +176,7 @@ gridToDevice <- function(x = 0, y = 0, units = "native") {
 #'
 #' @useDynLib tikzDevice TikZ_Annotate
 #' @export
-tikzAnnotate <- function(annotation, checkstate = TRUE)
-{
-
+tikzAnnotate <- function(annotation, checkstate = TRUE) {
   if (!isTikzDevice()) {
     stop("The active device is not a tikz device, please start a tikz device to use this function. See ?tikz.")
   }
@@ -212,8 +209,7 @@ tikzAnnotate <- function(annotation, checkstate = TRUE)
 tikzNode <- function(x = NULL, y = NULL,
   opts = NULL,
   name = NULL, content = NULL,
-  units = "user"
-) {
+  units = "user") {
   # If there is no node content, we create a coordinate.
   node_string <- ifelse(is.null(content), "\\coordinate", "\\node")
 
@@ -257,16 +253,13 @@ tikzNode <- function(x = NULL, y = NULL,
 
   # Use tikzAnnotate() to add a coordinate.
   tikzAnnotate(paste(node_string, ";", sep = ""))
-
 }
 
 
 #' @rdname tikzAnnotate
 #' @export
 tikzCoord <- function(x, y, name, units = "user") {
-
   tikzNode(x = x, y = y, name = name, units = units)
-
 }
 
 
@@ -284,9 +277,7 @@ tikzCoord <- function(x, y, name, units = "user") {
 #' @importFrom grid grob
 #' @export
 tikzAnnotateGrob <- function(annotation) {
-
   grob(annotation = annotation, cl = "tikz_annotation")
-
 }
 
 
@@ -296,12 +287,9 @@ tikzAnnotateGrob <- function(annotation) {
 tikzNodeGrob <- function(x = NULL, y = NULL,
   opts = NULL, name = NULL,
   content = NULL,
-  units = "native"
-) {
-
+  units = "native") {
   grob(x = x, y = y, opts = opts, coord_name = name, content = content,
     units = units, cl = "tikz_node")
-
 }
 
 
@@ -309,9 +297,7 @@ tikzNodeGrob <- function(x = NULL, y = NULL,
 #' @importFrom grid grob
 #' @export
 tikzCoordGrob <- function(x, y, name, units = "native") {
-
   grob(x = x, y = y, coord_name = name, units = units, cl = "tikz_coord")
-
 }
 
 # Grid wrapper functions
@@ -325,12 +311,12 @@ tikzCoordGrob <- function(x, y, name, units = "native") {
 #' @importFrom grid grid.draw
 #' @export
 grid.tikzAnnotate <- function(annotation, draw = TRUE) {
-
   annotate_grob <- tikzAnnotateGrob(annotation)
-  if (draw) { grid.draw(annotate_grob) }
+  if (draw) {
+    grid.draw(annotate_grob)
+  }
 
   invisible(annotate_grob)
-
 }
 
 
@@ -342,18 +328,17 @@ grid.tikzNode <- function(
   opts = NULL, name = NULL,
   content = NULL,
   units = "native",
-  draw = TRUE
-) {
-
+  draw = TRUE) {
   node_grob <- tikzNodeGrob(
     x = x, y = y,
     opts = opts, name = name, content = content,
     units = units
   )
-  if (draw) { grid.draw(node_grob) }
+  if (draw) {
+    grid.draw(node_grob)
+  }
 
   invisible(node_grob)
-
 }
 
 
@@ -361,12 +346,12 @@ grid.tikzNode <- function(
 #' @importFrom grid grid.draw
 #' @export
 grid.tikzCoord <- function(x, y, name, units = "native", draw = TRUE) {
-
   coord_grob <- tikzCoordGrob(x = x, y = y, name = name, units = units)
-  if (draw) { grid.draw(coord_grob) }
+  if (draw) {
+    grid.draw(coord_grob)
+  }
 
   invisible(coord_grob)
-
 }
 
 # Grid execution
@@ -380,16 +365,13 @@ if ("roxygen2" %in% loadedNamespaces()) do.call(library, list("grid"))
 #' @importFrom grid drawDetails
 #' @export
 drawDetails.tikz_annotation <- function(x, recording) {
-
   tikzAnnotate(x$annotation)
-
 }
 
 
 #' @importFrom grid drawDetails
 #' @export
 drawDetails.tikz_node <- function(x, recording) {
-
   if (is.null(x$x) && is.null(x$y)) {
     coords <- c(NULL, NULL)
   } else {
@@ -398,15 +380,12 @@ drawDetails.tikz_node <- function(x, recording) {
 
   tikzNode(coords[1], coords[2], x$opts,
     x$coord_name, x$content, units = "device")
-
 }
 
 
 #' @importFrom grid drawDetails
 #' @export
 drawDetails.tikz_coord <- function(x, recording) {
-
   coords <- gridToDevice(x$x, x$y, x$units)
   tikzCoord(coords[1], coords[2], x$coord_name, units = "device")
-
 }

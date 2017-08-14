@@ -11,8 +11,7 @@ sha1 <- filehash:::sha1
 # cached value.
 #
 #' @importFrom filehash dbExists dbFetch
-queryMetricsDictionary <- function(key, verbose)
-{
+queryMetricsDictionary <- function(key, verbose) {
   # Ensure the dictionary is available.
   checkDictionaryStatus(verbose = verbose)
 
@@ -22,13 +21,11 @@ queryMetricsDictionary <- function(key, verbose)
 
     # Yay! The width exists! Recover and return it.
     metrics <- evalWithoutInterrupts(dbFetch(.tikzInternal[["dictionary"]], sha1(key)))
-
   } else {
 
     # No dice. Return -1 to indicate that metrics for this string
     # are not present in the dictionary.
     return(-1)
-
   }
 }
 
@@ -38,8 +35,7 @@ queryMetricsDictionary <- function(key, verbose)
 # associated with.
 #
 #' @importFrom filehash dbInsert
-storeMetricsInDictionary <- function(key, metrics)
-{
+storeMetricsInDictionary <- function(key, metrics) {
   evalWithoutInterrupts(dbInsert(.tikzInternal[["dictionary"]], sha1(key), metrics))
 
   # Return nothing.
@@ -52,8 +48,7 @@ storeMetricsInDictionary <- function(key, metrics)
 # specified dictionary or creates a new one in tempdir().
 #
 #' @importFrom filehash dbCreate dbInit
-checkDictionaryStatus <- function(verbose)
-{
+checkDictionaryStatus <- function(verbose) {
   if (!verbose) {
     message <- function(...) invisible()
   }
@@ -105,5 +100,4 @@ checkDictionaryStatus <- function(verbose)
 
   # Return nothing.
   invisible()
-
 }

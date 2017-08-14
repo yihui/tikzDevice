@@ -7,7 +7,6 @@ get_graphics_reporter <- function() {
 
 do_graphics_test <- function(short_name, description, graph_code, fuzz = 0,
   engine = "pdftex", graph_options = NULL, skip_if = NULL, tags = NULL, ...) {
-
   context(description)
 
   if (Sys.getenv("R_TESTS") != "") {
@@ -49,13 +48,10 @@ do_graphics_test <- function(short_name, description, graph_code, fuzz = 0,
       list(tikzMetricsDictionary = dict_path),
       expect_warning(create_graph(graph_code, graph_file, engine), NA)
     )
-
   })
 
   test_that("Graph compiles cleanly", {
-
     expect_warning(graph_created <<- compile_graph(graph_file, engine), NA)
-
   })
 
   test_that("Output regression check", {
@@ -73,18 +69,15 @@ do_graphics_test <- function(short_name, description, graph_code, fuzz = 0,
 
 
   return(graph_created)
-
 }
 
 create_graph <- function(graph_code, graph_file, engine) {
-
   tikz(file = graph_file, standAlone = TRUE, engine = engine)
   on.exit(dev.off())
 
   eval(graph_code)
 
   invisible()
-
 }
 
 compile_graph <- function(graph_file, engine) {
@@ -112,7 +105,6 @@ compile_graph <- function(graph_file, engine) {
   }
 
   return(graph_created)
-
 }
 
 compare_graph <- function(graph_name, tags) {
@@ -149,5 +141,4 @@ compare_graph <- function(graph_name, tags) {
     intern = TRUE, ignore.stderr = TRUE))
 
   return(as.numeric(result))
-
 }

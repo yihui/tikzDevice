@@ -112,7 +112,7 @@ test_graphs <- list(
     ),
     graph_code = quote({
       plot(c(0, 1), c(0, 1), type = "l", axes = F,
-           xlab = "", ylab = "", col = "red3")
+        xlab = "", ylab = "", col = "red3")
     })
   ),
 
@@ -154,9 +154,9 @@ test_graphs <- list(
     tags = c("base"),
     graph_code = quote({
       plot(0, type = "n", xlim = c(0, 1), ylim = c(0, 6),
-              axes = F, xlab = "", ylab = "")
+        axes = F, xlab = "", ylab = "")
       for (i in 0:6)
- lines(c(0, 1), c(i, i), lwd = i)
+        lines(c(0, 1), c(i, i), lwd = i)
     })
   ),
 
@@ -246,7 +246,9 @@ test_graphs <- list(
       x <- seq(-1.95, 1.95, length = 30)
       y <- seq(-1.95, 1.95, length = 35)
 
-      z <- outer(x, y, function(a, b) { a * b ^ 2 })
+      z <- outer(x, y, function(a, b) {
+        a * b ^ 2
+      })
 
       nrz <- nrow(z)
       ncz <- ncol(z)
@@ -356,7 +358,7 @@ test_graphs <- list(
     tags = c("ggplot2"),
     graph_code = quote({
       print(ggplot2::qplot(carat, price, data = ggplot2::diamonds, geom = "smooth",
-      colour = color))
+        colour = color))
     })
   ),
 
@@ -397,41 +399,40 @@ test_graphs <- list(
     tags = c("base", "polypath"),
     graph_code = quote({
       # From example(polypath)
-       plotPath <- function(x, y, col="grey", rule="winding") {
-         plot.new()
-         plot.window(range(x, na.rm = TRUE), range(y, na.rm = TRUE))
-         polypath(x, y, col = col, rule = rule)
-         if (!is.na(col))
-           mtext(paste("Rule:", rule), side = 1, line = 0)
-       }
+      plotPath <- function(x, y, col="grey", rule="winding") {
+        plot.new()
+        plot.window(range(x, na.rm = TRUE), range(y, na.rm = TRUE))
+        polypath(x, y, col = col, rule = rule)
+        if (!is.na(col))
+          mtext(paste("Rule:", rule), side = 1, line = 0)
+      }
 
-       plotRules <- function(x, y, title) {
-         plotPath(x, y)
-         plotPath(x, y, rule = "evenodd")
-         mtext(title, side = 3, line = 0)
-         plotPath(x, y, col = NA)
-       }
+      plotRules <- function(x, y, title) {
+        plotPath(x, y)
+        plotPath(x, y, rule = "evenodd")
+        mtext(title, side = 3, line = 0)
+        plotPath(x, y, col = NA)
+      }
 
-       op <- par(mfrow = c(5, 3), mar = c(2, 1, 1, 1))
+      op <- par(mfrow = c(5, 3), mar = c(2, 1, 1, 1))
 
-       plotRules(c(.1, .1, .9, .9, NA, .2, .2, .8, .8),
-         c(.1, .9, .9, .1, NA, .2, .8, .8, .2),
-         title = "Nested rectangles, both clockwise")
-       plotRules(x = c(.1, .1, .9, .9, NA, .2, .8, .8, .2),
-         y = c(.1, .9, .9, .1, NA, .2, .2, .8, .8),
-         title = "Nested rectangles, outer clockwise, inner anti-clockwise")
-       plotRules(x = c(.1, .1, .4, .4, NA, .6, .9, .9, .6),
-         y = c(.1, .4, .4, .1, NA, .6, .6, .9, .9),
-         title = "Disjoint rectangles")
-       plotRules(x = c(.1, .1, .6, .6, NA, .4, .4, .9, .9),
-         y = c(.1, .6, .6, .1, NA, .4, .9, .9, .4),
-         title = "Overlapping rectangles, both clockwise")
-       plotRules(x = c(.1, .1, .6, .6, NA, .4, .9, .9, .4),
-         y = c(.1, .6, .6, .1, NA, .4, .4, .9, .9),
-         title = "Overlapping rectangles, one clockwise, other anti-clockwise")
+      plotRules(c(.1, .1, .9, .9, NA, .2, .2, .8, .8),
+        c(.1, .9, .9, .1, NA, .2, .8, .8, .2),
+        title = "Nested rectangles, both clockwise")
+      plotRules(x = c(.1, .1, .9, .9, NA, .2, .8, .8, .2),
+        y = c(.1, .9, .9, .1, NA, .2, .2, .8, .8),
+        title = "Nested rectangles, outer clockwise, inner anti-clockwise")
+      plotRules(x = c(.1, .1, .4, .4, NA, .6, .9, .9, .6),
+        y = c(.1, .4, .4, .1, NA, .6, .6, .9, .9),
+        title = "Disjoint rectangles")
+      plotRules(x = c(.1, .1, .6, .6, NA, .4, .4, .9, .9),
+        y = c(.1, .6, .6, .1, NA, .4, .9, .9, .4),
+        title = "Overlapping rectangles, both clockwise")
+      plotRules(x = c(.1, .1, .6, .6, NA, .4, .9, .9, .4),
+        y = c(.1, .6, .6, .1, NA, .4, .4, .9, .9),
+        title = "Overlapping rectangles, one clockwise, other anti-clockwise")
 
-       par(op)
-
+      par(op)
     })
   ),
 
@@ -485,7 +486,7 @@ test_graphs <- list(
       suppressPackageStartupMessages(library(lattice))
 
       plt <- levelplot(volcano, panel = panel.levelplot.raster,
-           col.regions = topo.colors, cuts = 30, interpolate = TRUE)
+        col.regions = topo.colors, cuts = 30, interpolate = TRUE)
 
       print(plt)
 
@@ -551,7 +552,9 @@ test_graphs <- list(
     tags = c("xetex", "utf8"),
     engine = "xetex",
     # Only OS X is likely to have the required fonts installed
-    skip_if = function() {Sys.info()["sysname"] != "Darwin"},
+    skip_if = function() {
+      Sys.info()["sysname"] != "Darwin"
+    },
     graph_options = list(
       tikzXelatexPackages = c(
         "\\usepackage{fontspec}",
@@ -605,7 +608,7 @@ test_graphs <- list(
       lim <- 0:(length(label) + 1)
       plot(lim, lim, cex = 0, pch = ".", xlab = title[2], ylab = "", main = title[1])
       for (i in 1:length(label))
- text(i, i, label[i])
+        text(i, i, label[i])
     })
   ),
 
@@ -617,7 +620,9 @@ test_graphs <- list(
     engine = "luatex",
     # Travis CI runs Ubuntu Precise with a fontspec package that doesn't accept
     # LuaLaTeX yet
-    skip_if = function() { Sys.getenv("TRAVIS") != "" },
+    skip_if = function() {
+      Sys.getenv("TRAVIS") != ""
+    },
     graph_code = quote({
       n <- 8
       chars <- intToUtf8(seq(187,, 1, n * n), multiple = T)
@@ -647,20 +652,22 @@ test_graphs <- test_graphs[!vapply(test_graphs, is.null, logical(1L))]
 
 if (length(tags_to_run)) {
   test_graphs <- Filter(
-    function(graph) { any(graph$tags %in% tags_to_run) },
+    function(graph) {
+      any(graph$tags %in% tags_to_run)
+    },
     test_graphs)
 }
 
 
-run_test <- function(graph) { do.call(do_graphics_test, graph) }
+run_test <- function(graph) {
+  do.call(do_graphics_test, graph)
+}
 graphs_produced <- Filter(run_test, test_graphs)
 
 context("Graph test cleanup")
 
 test_that("All graphics devices closed", {
-
   expect_that(length(dev.list()), equals(0))
-
 })
 
 
@@ -697,5 +704,4 @@ if (!is.null(compare_cmd) && !is.null(convert_cmd)) {
     intern = TRUE, ignore.stderr = TRUE)
 
   message("\nResults of all visual diffs combined into:\n\t", diff_output)
-
 }

@@ -222,9 +222,7 @@ tikz <- function(file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
   symbolicColors = getOption("tikzSymbolicColors"), colorFileName = "%s_colors.tex",
   maxSymbolicColors = getOption("tikzMaxSymbolicColors"),
   timestamp = TRUE,
-  verbose = interactive()
-) {
-
+  verbose = interactive()) {
   tryCatch({
     # Ok, this sucks. We copied the function signature of pdf() and got `file`
     # as an argument to our function. We should have copied png() and used
@@ -253,17 +251,21 @@ tikz <- function(file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
   switch(engine,
     pdftex = {
       engine <- 1L # In the C routines, a integer value of 1 means pdftex
-      if (missing(packages)) {packages <- getOption("tikzLatexPackages")}
+      if (missing(packages)) {
+        packages <- getOption("tikzLatexPackages")
+      }
     },
     xetex = {
       engine <- 2L
-      if (missing(packages)) {packages <- getOption("tikzXelatexPackages")}
+      if (missing(packages)) {
+        packages <- getOption("tikzXelatexPackages")
+      }
     },
     luatex = {
       engine <- 3L
-      if (missing(packages)) {packages <- getOption("tikzLualatexPackages")}
-    },
-    { # ELSE
+      if (missing(packages)) {
+        packages <- getOption("tikzLualatexPackages")
+      }
       stop("Unsupported TeX engine: ", engine,
         "\nAvailable choices are:\n",
         "\tpdftex\n",
@@ -272,7 +274,9 @@ tikz <- function(file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
     })
 
   # Ensure the standAlone option will trump the bareBones option.
-  if (standAlone) { bareBones = FALSE }
+  if (standAlone) {
+    bareBones = FALSE
+  }
   if (footer != getOption("tikzFooter") && !standAlone)
     warning("Footers are ignored when standAlone is set to FALSE")
 
@@ -281,7 +285,9 @@ tikz <- function(file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
 
   # If a pointsize was not found, we use the value of the pointsize
   # argument.
-  if (is.na(baseSize)) { baseSize <- pointsize }
+  if (is.na(baseSize)) {
+    baseSize <- pointsize
+  }
 
   # Collapse the character vectors into a single string
   # which is easier to work with in C
@@ -298,5 +304,4 @@ tikz <- function(file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
     timestamp, verbose)
 
   invisible()
-
 }

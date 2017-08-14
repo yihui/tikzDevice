@@ -62,7 +62,6 @@ getDocumentPointsize <- function(docString) {
 #'
 #' @export
 setTikzDefaults <- function(overwrite = TRUE) {
-
   tikzDefaults <- list(
 
     tikzDefaultEngine = "pdftex",
@@ -137,11 +136,8 @@ setTikzDefaults <- function(overwrite = TRUE) {
       is.null)
 
     tikzSetOptions <- names(tikzDefaults)[ tikzSetOptions ]
-
   } else {
-
     tikzSetOptions <- names(tikzDefaults)
-
   }
 
   # Set defaults
@@ -149,11 +145,12 @@ setTikzDefaults <- function(overwrite = TRUE) {
 
   # Return a list of the options that were modified.
   invisible(tikzSetOptions)
-
 }
 
 isTikzDevice <- function(which = dev.cur()) {
-  if (which == 1) { return(FALSE) }
+  if (which == 1) {
+    return(FALSE)
+  }
 
   dev_name <- names(dev.list()[which - 1])
   return(dev_name == "tikz output")
@@ -181,8 +178,7 @@ getDeviceInfo <- function(dev_num = dev.cur()) {
 # will be protected from user interrupts (use of CTRL-C for example).
 #
 #' @useDynLib tikzDevice TikZ_EvalWithoutInterrupts
-evalWithoutInterrupts <- function(expr, envir = parent.frame())
-{
+evalWithoutInterrupts <- function(expr, envir = parent.frame()) {
   # Wrap the expression in a call to `substitute` so that it gets passed
   # directly to the C code instead of being evaluated before being passed to
   # the C code.
@@ -241,7 +237,6 @@ anyMultibyteUTF8Characters <- function(string, encoding = "UTF-8") {
   # Check if any of the characters are Multibyte
   explode <- strsplit(string, "")[[1]]
   for (i in seq_along(explode)) {
-
     if (length(charToRaw(explode[i])) > 1) {
       mb <- TRUE
       break
@@ -249,7 +244,6 @@ anyMultibyteUTF8Characters <- function(string, encoding = "UTF-8") {
   }
 
   return(mb)
-
 }
 
 
@@ -258,30 +252,28 @@ anyMultibyteUTF8Characters <- function(string, encoding = "UTF-8") {
 # -----------------------------------------------------------------------------
 
 # S3 classes to represent the various sources for the path to an exectuable.
-PATH <- function(origin)
-{
+PATH <- function(origin) {
   structure(Sys.which(origin), origin = origin, class = "PATH")
 }
 
-OPTION <- function(origin)
-{
+OPTION <- function(origin) {
   structure(ifelse(is.null(getOption(origin)), "", Sys.which(getOption(origin))),
     origin = origin, class = "OPTION")
 }
 
-ENV_VAR <- function(origin)
-{
+ENV_VAR <- function(origin) {
   structure(ifelse(is.null(Sys.getenv(origin)), "", Sys.which(Sys.getenv(origin))),
     origin = origin, class = "ENV_VAR")
 }
 
 
-isExecutable <- function(executable)
-{
+isExecutable <- function(executable) {
   path <- as.character(executable)
 
   # file.access doesn't like non-zero lengths.
-  if (nchar(path) == 0) { return(FALSE) }
+  if (nchar(path) == 0) {
+    return(FALSE)
+  }
 
   if (file.access(path, 1) == 0) {
     return(TRUE)
@@ -290,8 +282,7 @@ isExecutable <- function(executable)
   }
 }
 
-formatExecutable <- function(executable)
-{
+formatExecutable <- function(executable) {
   desc <- "path:\n\t"
   desc <- paste(desc, as.character(executable), sep = "")
   desc <- paste(desc, "\nObtained from ", sep = "")
@@ -304,11 +295,17 @@ formatExecutable <- function(executable)
 # during .onLoad...
 
 #' @export
-format.PATH <- function(x, ...) { sprintf("the PATH using the command: %s", attr(x, "origin")) }
+format.PATH <- function(x, ...) {
+  sprintf("the PATH using the command: %s", attr(x, "origin"))
+}
 #' @export
-format.OPTION <- function(x, ...) { sprintf("the global option: %s", attr(x, "origin")) }
+format.OPTION <- function(x, ...) {
+  sprintf("the global option: %s", attr(x, "origin"))
+}
 #' @export
-format.ENV_VAR <- function(x, ...) { sprintf("the environment variable: %s", attr(x, "origin")) }
+format.ENV_VAR <- function(x, ...) {
+  sprintf("the environment variable: %s", attr(x, "origin"))
+}
 
 
 #' Print paths to TeX compilers.
@@ -332,8 +329,7 @@ format.ENV_VAR <- function(x, ...) { sprintf("the environment variable: %s", att
 #'   \code{\link{tikz}}
 #'
 #' @export
-tikzCompilerInfo <- function(verbose = TRUE)
-{
+tikzCompilerInfo <- function(verbose = TRUE) {
   latexCompiler <- getOption("tikzLatex")
   xelatexCompiler <- getOption("tikzXelatex")
   lualatexCompiler <- getOption("tikzLualatex")

@@ -8,7 +8,9 @@ if (length(tags_to_run <- test_args[stringr::str_detect(test_args, "^--run-tests
     ","))
 }
 
-if (torture_mem) { gctorture(TRUE) }
+if (torture_mem) {
+  gctorture(TRUE)
+}
 using_windows <- Sys.info()["sysname"] == "Windows"
 
 # Ensure tikzDevice options have been set to their default values.
