@@ -35,7 +35,7 @@ install:
       make -j2 &&
       sudo make install
     ); fi
-  - ./travis-tool.sh install_r_binary filehash testthat evaluate stringr ggplot2 maps knitr png
+  - ./travis-tool.sh install_r filehash testthat evaluate stringr ggplot2 maps knitr png
   - ./travis-tool.sh install_github jimhester/covr
   - ./travis-tool.sh dump_sysinfo
 after_failure:
