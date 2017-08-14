@@ -43,9 +43,9 @@
 getLatexStrWidth <- function(texString, cex = 1, face = 1, engine = getOption("tikzDefaultEngine"),
   documentDeclaration = getOption("tikzDocumentDeclaration"), packages,
   verbose = interactive(), diagnose = FALSE) {
- 
+
   texString <- enc2utf8(texString) #convert the encoding of input string to UTF8
-  
+
   switch(engine,
     pdftex = {
       if (anyMultibyteUTF8Characters(texString) && getOption("tikzPdftexWarnUTF")) {
@@ -460,7 +460,7 @@ getMetricsFromLatex <- function(TeXMetrics, verbose = verbose, diagnose = FALSE)
         TeXMetrics$value, "\n\n",
         "Run the following commands for diagnosis:\n\n\t",
         "tikzTest()\n\t",
-        "tikzTest(", deparse(TeXMetrics$value), ")\n\n",
+        "tikzTest(", deparse(nodeContent), ")\n\n",
         "Common reasons for failure include:\n",
         "  * The string contains a character which is special to LaTeX unless\n",
         "    escaped properly, such as % or $.\n",
