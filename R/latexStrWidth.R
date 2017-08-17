@@ -77,13 +77,14 @@ getLatexStrWidth <- function(texString, cex = 1, face = 1, engine = getOption("t
       if (missing(packages)) {
         packages <- getOption("tikzLualatexPackages")
       }
-  }, { # ELSE
+    }, { # ELSE
       stop("Unsupported TeX engine: ", engine,
         "\nAvailable choices are:\n",
         "\tpdftex\n",
         "\txetex\n",
         "\tluatex\n")
-  })
+    }
+  )
 
   # Create an object that contains the string and it's
   # properties.
@@ -170,13 +171,14 @@ getLatexCharMetrics <- function(charCode, cex = 1, face = 1, engine = getOption(
       if (missing(packages)) {
         packages <- getOption("tikzLualatexPackages")
       }
-  }, { # ELSE
+    }, { # ELSE
       stop("Unsupported TeX engine: ", engine,
         "\nAvailable choices are:\n",
         "\tpdftex\n",
         "\txetex\n",
         "\tluatex\n")
-  })
+    }
+  )
 
   # We must be given an integer character code.
   if (!is.numeric(charCode)) {
@@ -289,7 +291,8 @@ getMetricsFromLatex <- function(TeXMetrics, verbose = verbose, diagnose = FALSE)
     },
     luatex = {
       writeLines(getOption("tikzUnicodeMetricPackages"), texIn)
-  })
+    }
+  )
 
   writeLines("\\batchmode", texIn)
 
@@ -339,7 +342,9 @@ getMetricsFromLatex <- function(TeXMetrics, verbose = verbose, diagnose = FALSE)
 
     symbol = {
       # We are currently ignoring R's symbol fonts.
-  }) # End output font face switch.
+    }
+
+  ) # End output font face switch.
 
 
   # Now for the content. For string width we set the whole string in
@@ -354,7 +359,9 @@ getMetricsFromLatex <- function(TeXMetrics, verbose = verbose, diagnose = FALSE)
 
     char = {
       nodeContent <- paste0(nodeContent, "\\char", TeXMetrics$value, sep = "")
-  }) # End switch for  metric type.
+    }
+
+  ) # End switch for  metric type.
 
   message("Measuring dimensions of: ", nodeContent)
 

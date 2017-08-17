@@ -24,31 +24,33 @@ test_that("Switching metrics dictionary", {
   tempA <- file.path(getwd(), ".tikzTempA")
   tempB <- file.path(getwd(), ".tikzTempB")
 
-  tryCatch({
-    options(tikzMetricsDictionary = tempA)
-    expect_that(checkDictionaryStatus(verbose = TRUE), shows_message("Creating"))
-    expect_that(checkDictionaryStatus(verbose = TRUE), not(shows_message()))
-    options(tikzMetricsDictionary = tempB)
-    expect_that(checkDictionaryStatus(verbose = TRUE), shows_message("Creating"))
-    expect_that(checkDictionaryStatus(verbose = TRUE), not(shows_message()))
-    options(tikzMetricsDictionary = tempA)
-    expect_that(checkDictionaryStatus(verbose = TRUE), shows_message("Using"))
-    expect_that(checkDictionaryStatus(verbose = TRUE), not(shows_message()))
-    options(tikzMetricsDictionary = tempB)
-    expect_that(checkDictionaryStatus(verbose = TRUE), shows_message("Using"))
-    expect_that(checkDictionaryStatus(verbose = TRUE), not(shows_message()))
-    options(tikzMetricsDictionary = tempA)
-    expect_that(checkDictionaryStatus(verbose = FALSE), not(shows_message()))
-    expect_that(checkDictionaryStatus(verbose = FALSE), not(shows_message()))
-    options(tikzMetricsDictionary = tempB)
-    expect_that(checkDictionaryStatus(verbose = FALSE), not(shows_message()))
-    expect_that(checkDictionaryStatus(verbose = FALSE), not(shows_message()))
-  },
-  finally = {
-    options(tikzMetricsDictionary = NULL)
-    unlink(tempA, recursive = TRUE)
-    unlink(tempB, recursive = TRUE)
-  })
+  tryCatch(
+    {
+      options(tikzMetricsDictionary = tempA)
+      expect_that(checkDictionaryStatus(verbose = TRUE), shows_message("Creating"))
+      expect_that(checkDictionaryStatus(verbose = TRUE), not(shows_message()))
+      options(tikzMetricsDictionary = tempB)
+      expect_that(checkDictionaryStatus(verbose = TRUE), shows_message("Creating"))
+      expect_that(checkDictionaryStatus(verbose = TRUE), not(shows_message()))
+      options(tikzMetricsDictionary = tempA)
+      expect_that(checkDictionaryStatus(verbose = TRUE), shows_message("Using"))
+      expect_that(checkDictionaryStatus(verbose = TRUE), not(shows_message()))
+      options(tikzMetricsDictionary = tempB)
+      expect_that(checkDictionaryStatus(verbose = TRUE), shows_message("Using"))
+      expect_that(checkDictionaryStatus(verbose = TRUE), not(shows_message()))
+      options(tikzMetricsDictionary = tempA)
+      expect_that(checkDictionaryStatus(verbose = FALSE), not(shows_message()))
+      expect_that(checkDictionaryStatus(verbose = FALSE), not(shows_message()))
+      options(tikzMetricsDictionary = tempB)
+      expect_that(checkDictionaryStatus(verbose = FALSE), not(shows_message()))
+      expect_that(checkDictionaryStatus(verbose = FALSE), not(shows_message()))
+    },
+    finally = {
+      options(tikzMetricsDictionary = NULL)
+      unlink(tempA, recursive = TRUE)
+      unlink(tempB, recursive = TRUE)
+    }
+  )
 })
 
 test_that("Turning custom metrics dictionary on and off", {
@@ -56,22 +58,24 @@ test_that("Turning custom metrics dictionary on and off", {
 
   temp <- file.path(getwd(), ".tikzTemp")
 
-  tryCatch({
-    options(tikzMetricsDictionary = temp)
-    expect_that(checkDictionaryStatus(verbose = TRUE), shows_message("Creating"))
-    expect_that(checkDictionaryStatus(verbose = TRUE), not(shows_message()))
-    options(tikzMetricsDictionary = NULL)
-    expect_that(checkDictionaryStatus(verbose = TRUE), shows_message("Creating"))
-    expect_that(checkDictionaryStatus(verbose = TRUE), not(shows_message()))
-    options(tikzMetricsDictionary = temp)
-    expect_that(checkDictionaryStatus(verbose = TRUE), shows_message("Using"))
-    expect_that(checkDictionaryStatus(verbose = TRUE), not(shows_message()))
-    options(tikzMetricsDictionary = NULL)
-    expect_that(checkDictionaryStatus(verbose = TRUE), shows_message("Creating"))
-    expect_that(checkDictionaryStatus(verbose = TRUE), not(shows_message()))
-  },
-  finally = {
-    options(tikzMetricsDictionary = NULL)
-    unlink(temp, recursive = TRUE)
-  })
+  tryCatch(
+    {
+      options(tikzMetricsDictionary = temp)
+      expect_that(checkDictionaryStatus(verbose = TRUE), shows_message("Creating"))
+      expect_that(checkDictionaryStatus(verbose = TRUE), not(shows_message()))
+      options(tikzMetricsDictionary = NULL)
+      expect_that(checkDictionaryStatus(verbose = TRUE), shows_message("Creating"))
+      expect_that(checkDictionaryStatus(verbose = TRUE), not(shows_message()))
+      options(tikzMetricsDictionary = temp)
+      expect_that(checkDictionaryStatus(verbose = TRUE), shows_message("Using"))
+      expect_that(checkDictionaryStatus(verbose = TRUE), not(shows_message()))
+      options(tikzMetricsDictionary = NULL)
+      expect_that(checkDictionaryStatus(verbose = TRUE), shows_message("Creating"))
+      expect_that(checkDictionaryStatus(verbose = TRUE), not(shows_message()))
+    },
+    finally = {
+      options(tikzMetricsDictionary = NULL)
+      unlink(temp, recursive = TRUE)
+    }
+  )
 })

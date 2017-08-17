@@ -676,7 +676,7 @@ if (!is.null(gs_cmd)) {
   silence <- system(paste(shQuote(gs_cmd), "-dNOPAUSE", "-sDEVICE=pdfwrite",
     paste0("-sOUTPUTFILE=", test_output),
     "-dBATCH", paste(shQuote(graph_files), collapse = " ")),
-  intern = TRUE, ignore.stderr = TRUE)
+    intern = TRUE, ignore.stderr = TRUE)
 
   message("\nAll test outputs combined into:\n\t", test_output)
 }
@@ -692,7 +692,7 @@ if (!is.null(compare_cmd) && !is.null(convert_cmd)) {
   silence <- system(paste(shQuote(convert_cmd),
     paste(shQuote(graph_files), collapse = " "),
     diff_output),
-  intern = TRUE, ignore.stderr = TRUE)
+    intern = TRUE, ignore.stderr = TRUE)
 
   message("\nResults of all visual diffs combined into:\n\t", diff_output)
 }

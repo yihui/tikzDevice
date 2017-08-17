@@ -139,7 +139,7 @@ compare_graph <- function(graph_name, tags) {
   result <- as.double(system(paste(
     # Force the command to be executed through bash
     "bash -c ", shQuote(command_line)),
-  intern = TRUE, ignore.stderr = TRUE))
+    intern = TRUE, ignore.stderr = TRUE))
 
   return(as.numeric(result))
 }
