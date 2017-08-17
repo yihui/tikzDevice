@@ -207,9 +207,9 @@ tikzAnnotate <- function(annotation, checkstate = TRUE) {
 #'
 #' @export
 tikzNode <- function(x = NULL, y = NULL,
-  opts = NULL,
-  name = NULL, content = NULL,
-  units = "user") {
+                     opts = NULL,
+                     name = NULL, content = NULL,
+                     units = "user") {
   # If there is no node content, we create a coordinate.
   node_string <- ifelse(is.null(content), "\\coordinate", "\\node")
 
@@ -285,9 +285,9 @@ tikzAnnotateGrob <- function(annotation) {
 #' @importFrom grid grob
 #' @export
 tikzNodeGrob <- function(x = NULL, y = NULL,
-  opts = NULL, name = NULL,
-  content = NULL,
-  units = "native") {
+                         opts = NULL, name = NULL,
+                         content = NULL,
+                         units = "native") {
   grob(x = x, y = y, opts = opts, coord_name = name, content = content,
     units = units, cl = "tikz_node")
 }
@@ -323,12 +323,11 @@ grid.tikzAnnotate <- function(annotation, draw = TRUE) {
 #' @rdname tikzAnnotate
 #' @importFrom grid grid.draw
 #' @export
-grid.tikzNode <- function(
-  x = NULL, y = NULL,
-  opts = NULL, name = NULL,
-  content = NULL,
-  units = "native",
-  draw = TRUE) {
+grid.tikzNode <- function(x = NULL, y = NULL,
+                          opts = NULL, name = NULL,
+                          content = NULL,
+                          units = "native",
+                          draw = TRUE) {
   node_grob <- tikzNodeGrob(
     x = x, y = y,
     opts = opts, name = name, content = content,

@@ -41,10 +41,9 @@
 #' @references PGF Manual
 #' @export
 getLatexStrWidth <- function(texString, cex = 1, face = 1, engine = getOption("tikzDefaultEngine"),
-  documentDeclaration = getOption("tikzDocumentDeclaration"), packages,
-  verbose = interactive(), diagnose = FALSE) {
-
-  texString <- enc2utf8(texString) #convert the encoding of input string to UTF8
+                             documentDeclaration = getOption("tikzDocumentDeclaration"), packages,
+                             verbose = interactive(), diagnose = FALSE) {
+  texString <- enc2utf8(texString) # convert the encoding of input string to UTF8
 
   switch(engine,
     pdftex = {
@@ -61,8 +60,8 @@ getLatexStrWidth <- function(texString, cex = 1, face = 1, engine = getOption("t
     xetex = {
       if (is.null(getOption("tikzXelatex"))) {
         stop("Cannot find XeLaTeX! Please check your system ",
-            "configuration or manually provide a value for ",
-            "options(tikzXelatex)")
+          "configuration or manually provide a value for ",
+          "options(tikzXelatex)")
       }
       if (missing(packages)) {
         packages <- getOption("tikzXelatexPackages")
@@ -72,20 +71,19 @@ getLatexStrWidth <- function(texString, cex = 1, face = 1, engine = getOption("t
     luatex = {
       if (is.null(getOption("tikzLualatex"))) {
         stop("Cannot find LuaLaTeX! Please check your system ",
-            "configuration or manually provide a value for ",
-            "options(tikzLualatex)")
+          "configuration or manually provide a value for ",
+          "options(tikzLualatex)")
       }
       if (missing(packages)) {
         packages <- getOption("tikzLualatexPackages")
       }
-    }, { # ELSE
+  }, { # ELSE
       stop("Unsupported TeX engine: ", engine,
         "\nAvailable choices are:\n",
         "\tpdftex\n",
         "\txetex\n",
         "\tluatex\n")
-    }
-  )
+  })
 
   # Create an object that contains the string and it's
   # properties.
@@ -140,8 +138,8 @@ getLatexStrWidth <- function(texString, cex = 1, face = 1, engine = getOption("t
 #'
 #' @export
 getLatexCharMetrics <- function(charCode, cex = 1, face = 1, engine = getOption("tikzDefaultEngine"),
-  documentDeclaration = getOption("tikzDocumentDeclaration"), packages,
-  verbose = interactive()) {
+                                documentDeclaration = getOption("tikzDocumentDeclaration"), packages,
+                                verbose = interactive()) {
 
   # This function is pretty much an exact duplicate of getLatexStrWidth, these
   # two functions should be generalized and combined.
@@ -155,8 +153,8 @@ getLatexCharMetrics <- function(charCode, cex = 1, face = 1, engine = getOption(
     xetex = {
       if (is.null(getOption("tikzXelatex"))) {
         stop("Cannot find XeLaTeX! Please check your system ",
-            "configuration or manually provide a value for ",
-            "options(tikzXelatex)")
+          "configuration or manually provide a value for ",
+          "options(tikzXelatex)")
       }
       if (missing(packages)) {
         packages <- getOption("tikzXelatexPackages")
@@ -166,20 +164,19 @@ getLatexCharMetrics <- function(charCode, cex = 1, face = 1, engine = getOption(
     luatex = {
       if (is.null(getOption("tikzLualatex"))) {
         stop("Cannot find LuaLaTeX! Please check your system ",
-            "configuration or manually provide a value for ",
-            "options(tikzLualatex)")
+          "configuration or manually provide a value for ",
+          "options(tikzLualatex)")
       }
       if (missing(packages)) {
         packages <- getOption("tikzLualatexPackages")
       }
-    }, { # ELSE
+  }, { # ELSE
       stop("Unsupported TeX engine: ", engine,
         "\nAvailable choices are:\n",
         "\tpdftex\n",
         "\txetex\n",
         "\tluatex\n")
-    }
-  )
+  })
 
   # We must be given an integer character code.
   if (!is.numeric(charCode)) {
@@ -264,7 +261,7 @@ getMetricsFromLatex <- function(TeXMetrics, verbose = verbose, diagnose = FALSE)
   texFile <- normalizePath(texFile, "/", mustWork = FALSE)
 
   # Open the TeX file for writing.
-  texIn <- file(texFile, "w", encoding = "UTF-8") #enforce the encoding of temp TeX file to UTF-8 encoding for XeTeX, and LuaTeX
+  texIn <- file(texFile, "w", encoding = "UTF-8") # enforce the encoding of temp TeX file to UTF-8 encoding for XeTeX, and LuaTeX
 
   writeLines(getOption("tikzDocumentDeclaration"), texIn)
 
@@ -292,8 +289,7 @@ getMetricsFromLatex <- function(TeXMetrics, verbose = verbose, diagnose = FALSE)
     },
     luatex = {
       writeLines(getOption("tikzUnicodeMetricPackages"), texIn)
-    }
-  )
+  })
 
   writeLines("\\batchmode", texIn)
 
@@ -343,9 +339,7 @@ getMetricsFromLatex <- function(TeXMetrics, verbose = verbose, diagnose = FALSE)
 
     symbol = {
       # We are currently ignoring R's symbol fonts.
-    }
-
-  ) # End output font face switch.
+  }) # End output font face switch.
 
 
   # Now for the content. For string width we set the whole string in
@@ -355,18 +349,12 @@ getMetricsFromLatex <- function(TeXMetrics, verbose = verbose, diagnose = FALSE)
   switch(TeXMetrics$type,
 
     string = {
-
       nodeContent <- paste0(nodeContent, TeXMetrics$value)
-
     },
 
     char = {
-
       nodeContent <- paste0(nodeContent, "\\char", TeXMetrics$value, sep = "")
-
-    }
-
-  ) # End switch for  metric type.
+  }) # End switch for  metric type.
 
   message("Measuring dimensions of: ", nodeContent)
 

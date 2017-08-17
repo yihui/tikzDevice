@@ -212,17 +212,17 @@
 #' @export
 #' @useDynLib tikzDevice TikZ_StartDevice
 tikz <- function(file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
-  width = 7, height = 7, onefile = TRUE,
-  bg="transparent", fg="black", pointsize = 10, lwdUnit = getOption("tikzLwdUnit"),
-  standAlone = FALSE, bareBones = FALSE, console = FALSE, sanitize = FALSE,
-  engine = getOption("tikzDefaultEngine"),
-  documentDeclaration = getOption("tikzDocumentDeclaration"),
-  packages,
-  footer = getOption("tikzFooter"),
-  symbolicColors = getOption("tikzSymbolicColors"), colorFileName = "%s_colors.tex",
-  maxSymbolicColors = getOption("tikzMaxSymbolicColors"),
-  timestamp = TRUE,
-  verbose = interactive()) {
+                 width = 7, height = 7, onefile = TRUE,
+                 bg="transparent", fg="black", pointsize = 10, lwdUnit = getOption("tikzLwdUnit"),
+                 standAlone = FALSE, bareBones = FALSE, console = FALSE, sanitize = FALSE,
+                 engine = getOption("tikzDefaultEngine"),
+                 documentDeclaration = getOption("tikzDocumentDeclaration"),
+                 packages,
+                 footer = getOption("tikzFooter"),
+                 symbolicColors = getOption("tikzSymbolicColors"), colorFileName = "%s_colors.tex",
+                 maxSymbolicColors = getOption("tikzMaxSymbolicColors"),
+                 timestamp = TRUE,
+                 verbose = interactive()) {
   tryCatch({
     # Ok, this sucks. We copied the function signature of pdf() and got `file`
     # as an argument to our function. We should have copied png() and used

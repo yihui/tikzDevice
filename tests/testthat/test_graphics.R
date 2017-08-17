@@ -63,11 +63,9 @@ test_graphs <- list(
 
       # Plot characters.
       for (i in 1:26) {
-
         points(ix[i], iy[i], pch = i - 1)
         # Place text label so we know which character is being plotted.
         text(ix[i] - 0.3, iy[i], i - 1)
-
       }
     })
   ),
@@ -279,7 +277,6 @@ test_graphs <- list(
     ),
     fuzz = 130,
     graph_code = quote({
-
       p <- rgamma(300, 1)
       outliers <- which(p > quantile(p, .75) + 1.5 * IQR(p))
       boxplot(p)
@@ -306,7 +303,6 @@ test_graphs <- list(
         opts = "starburst,fill=green,draw=blue,very thick,right=of max outlier",
         content = "Wow!"
       )
-
     })
   ),
 
@@ -321,7 +317,6 @@ test_graphs <- list(
     ),
     fuzz = 745,
     graph_code = quote({
-
       library(grid)
 
       pushViewport(plotViewport())
@@ -335,7 +330,6 @@ test_graphs <- list(
       for (i in seq(2, 8, 2)) {
         grid.tikzNode(i, i, opts = "ellipse callout,draw,anchor=pointer", content = i)
       }
-
     })
   ),
 
@@ -344,11 +338,11 @@ test_graphs <- list(
     description = "Annotation prior to any graphics output",
     tags = c("base", "annotation"),
     graph_code = quote({
-        plot.new()
-        plot.window(0:1, 0:1)
-        tikzCoord(0, 0, name = "ll")
-        tikzCoord(1, 1, name = "ur")
-        tikzAnnotate("\\draw (ll) rectangle (ur);")
+      plot.new()
+      plot.window(0:1, 0:1)
+      tikzCoord(0, 0, name = "ll")
+      tikzCoord(1, 1, name = "ur")
+      tikzAnnotate("\\draw (ll) rectangle (ur);")
     })
   ),
 
@@ -369,10 +363,10 @@ test_graphs <- list(
     graph_code = quote({
       soilSample <- structure(list(`Grain Diameter` = c(8, 5.6, 4, 2.8, 2, 1, 0.5, 0.355, 0.25),
         `Percent Finer` = c(0.951603145795523, 0.945553539019964,
-           0.907239362774753, 0.86771526517443, 0.812865497076023, 0.642064932446058,
-           0.460375075620085, 0.227465214761041, 0.0389191369227667)),
-        .Names = c("Grain Diameter", "Percent Finer"), row.names = c(NA, 9L),
-        class = "data.frame")
+          0.907239362774753, 0.86771526517443, 0.812865497076023, 0.642064932446058,
+          0.460375075620085, 0.227465214761041, 0.0389191369227667)),
+      .Names = c("Grain Diameter", "Percent Finer"), row.names = c(NA, 9L),
+      class = "data.frame")
 
       # R 2.12.x and 2.13.x have to test with ggplot2 v0.8.9 which is very
       # different from 0.9.0.
@@ -442,7 +436,6 @@ test_graphs <- list(
     tags = c("base", "raster", "reflection"),
     fuzz = 642,
     graph_code = quote({
-
       plot(c(100, 250), c(300, 450), type = "n", xlab = "", ylab = "")
       image <- as.raster(matrix(rep(c(rep(0:1, 4), rep(1:0, 4)), each = 3), ncol = 6, nrow = 4))
       rasterImage(image, 100, 300, 150, 350, interpolate = FALSE)
@@ -457,7 +450,6 @@ test_graphs <- list(
         interpolate = FALSE)
       rasterImage(image, 225, 350 + yinch(.3), 225 + xinch(.5), 350, angle = -60,
         interpolate = FALSE)
-
     })
   ),
 
@@ -466,13 +458,11 @@ test_graphs <- list(
     description = "Test raster handling in graphics with reflected axes",
     tags = c("base", "raster", "reflection"),
     graph_code = quote({
-
       par(mfrow = c(2, 2))
       image(volcano, useRaster = TRUE)
       image(volcano, xlim = c(1, 0), useRaster = TRUE)
       image(volcano, ylim = c(1, 0), useRaster = TRUE)
       image(volcano, xlim = c(1, 0), ylim = c(1, 0), useRaster = TRUE)
-
     })
   ),
 
@@ -481,7 +471,6 @@ test_graphs <- list(
     description = "Test raster support in grid graphics",
     tags = c("grid", "raster"),
     graph_code = quote({
-
       suppressPackageStartupMessages(library(grid))
       suppressPackageStartupMessages(library(lattice))
 
@@ -489,7 +478,6 @@ test_graphs <- list(
         col.regions = topo.colors, cuts = 30, interpolate = TRUE)
 
       print(plt)
-
     })
   ),
 
@@ -591,7 +579,6 @@ test_graphs <- list(
         "\\setlength\\PreviewBorder{0pt}"
     )),
     graph_code = quote({
-
       label <- c(
         "\\noindent{\\red d}roo{\\lbl g}",
         "\\noindent{\\reda d}roo{\\lbla g}",
@@ -689,7 +676,7 @@ if (!is.null(gs_cmd)) {
   silence <- system(paste(shQuote(gs_cmd), "-dNOPAUSE", "-sDEVICE=pdfwrite",
     paste0("-sOUTPUTFILE=", test_output),
     "-dBATCH", paste(shQuote(graph_files), collapse = " ")),
-    intern = TRUE, ignore.stderr = TRUE)
+  intern = TRUE, ignore.stderr = TRUE)
 
   message("\nAll test outputs combined into:\n\t", test_output)
 }
@@ -705,7 +692,7 @@ if (!is.null(compare_cmd) && !is.null(convert_cmd)) {
   silence <- system(paste(shQuote(convert_cmd),
     paste(shQuote(graph_files), collapse = " "),
     diff_output),
-    intern = TRUE, ignore.stderr = TRUE)
+  intern = TRUE, ignore.stderr = TRUE)
 
   message("\nResults of all visual diffs combined into:\n\t", diff_output)
 }

@@ -355,8 +355,7 @@ tikzCompilerInfo <- function(verbose = TRUE) {
 tikzTest <- function(texString = "A",
                      engine = getOption("tikzDefaultEngine"),
                      documentDeclaration = getOption("tikzDocumentDeclaration"),
-                     packages)
-{
+                     packages) {
   print_compiler_info(engine, "Active")
   getLatexStrWidth(
     texString,

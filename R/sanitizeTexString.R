@@ -65,8 +65,8 @@
 #'
 #' @export
 sanitizeTexString <- function(string,
-  strip = getOption("tikzSanitizeCharacters"),
-  replacement = getOption("tikzReplacementCharacters")) {
+                              strip = getOption("tikzSanitizeCharacters"),
+                              replacement = getOption("tikzReplacementCharacters")) {
 
   # separate the string into a vector of charaters
   explode <- strsplit(string, "")[[1]]
