@@ -1,3 +1,8 @@
+## tikzDevice 0.10-3 (2017-08-21)
+
+- Fix syntax of generated LaTeX for bold/italic characters, regression in 0.10-2.
+
+
 ## tikzDevice 0.10-2 (2017-08-14)
 
 - Temporary .tex and .log files are created in a separate directory for each run.

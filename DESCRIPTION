@@ -2,8 +2,8 @@ Encoding: UTF-8
 Package: tikzDevice
 Type: Package
 Title: R Graphics Output in LaTeX Format
-Version: 0.10-2
-Date: 2017-08-14
+Version: 0.10-3
+Date: 2017-08-21
 Authors@R: c( person("Charlie", "Sharpsteen", role = "aut"),
         person("Cameron", "Bracken", role = "aut"), person("Kirill",
         "Müller", role = c("ctb", "cre"), email =
@@ -21,9 +21,18 @@ Description: Provides a graphics output device for R that records plots
         the output stream.
 License: GPL (>= 2)
 Depends: R (>= 2.14.0)
-Imports: filehash (>= 2.3), png
-Suggests: testthat (>= 0.8.1), evaluate, stringr, ggplot2, maps, knitr,
-        withr
+Imports:
+    filehash (>= 2.3),
+    png
+Suggests:
+    evaluate,
+    formatR,
+    ggplot2,
+    knitr,
+    maps,
+    stringr,
+    testthat (>= 0.8.1),
+    withr
 SystemRequirements: pgf (>= 2.00)
 LazyLoad: yes
 VignetteBuilder: knitr

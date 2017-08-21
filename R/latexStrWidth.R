@@ -328,17 +328,17 @@ getMetricsFromLatex <- function(TeXMetrics, verbose = verbose, diagnose = FALSE)
 
     bold = {
       # Using bold, we set in bold *series*
-      nodeContent <- "\\bfseries"
+      nodeContent <- "\\bfseries{}"
     },
 
     italic = {
       # Using italic, we set in the italic *shape*
-      nodeContent <- "\\itshape"
+      nodeContent <- "\\itshape{}"
     },
 
     bolditalic = {
       # With bold italic we set in bold *series* with italic *shape*
-      nodeContent <- "\\bfseries\\itshape"
+      nodeContent <- "\\bfseries\\itshape{}"
     },
 
     symbol = {
