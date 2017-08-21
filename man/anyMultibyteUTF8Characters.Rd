@@ -10,9 +10,7 @@ anyMultibyteUTF8Characters(string, encoding = "UTF-8")
 \arguments{
 \item{string}{A character vector of length 1 (a string).}
 
-\item{encoding}{The input encoding of \code{string}, if not specified
-previously via \code{\link{Encoding}} or by this argument then a value of
-"UTF-8" is assumed}
+\item{encoding}{Unused.}
 }
 \value{
 A boolean value
@@ -38,11 +36,10 @@ anyMultibyteUTF8Characters('R is GNU ©, but not ®')
 anyMultibyteUTF8Characters('R is GNU copyright but not restricted')
 
 }
-\author{
-Cameron Bracken \email{cameron.bracken@gmail.com}
-}
 \seealso{
 \code{\link{tikz}}
 }
+\author{
+Cameron Bracken \email{cameron.bracken@gmail.com}
+}
 \keyword{character}
-

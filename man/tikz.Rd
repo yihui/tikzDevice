@@ -240,10 +240,6 @@ setwd(oldwd)
 }
 
 }
-\author{
-Charlie Sharpsteen \email{source@sharpsteen.net} and Cameron
-  Bracken \email{cameron.bracken@gmail.com}
-}
 \references{
 The TikZ and PGF Packages: Manual for version 2.00\cr
   \url{http://sourceforge.net/projects/pgf}\cr Till Tantau, February 20,
@@ -254,5 +250,8 @@ The TikZ and PGF Packages: Manual for version 2.00\cr
   \code{\link{getLatexStrWidth}}, \code{\link{setTikzDefaults}},
   \code{\link{tikzAnnotate}}, \code{\link{sanitizeTexString}}
 }
+\author{
+Charlie Sharpsteen \email{source@sharpsteen.net} and Cameron
+  Bracken \email{cameron.bracken@gmail.com}
+}
 \keyword{device}
-

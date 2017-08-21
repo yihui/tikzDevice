@@ -1,7 +1,7 @@
 # Utility functions that have nowhere else to live at the moment.
 # These functions are used by the device subroutines.
 
-getDocumentPointsize <- function( docString ){
+getDocumentPointsize <- function(docString) {
 
   # This function scans a LaTeX document declaration
   # for base pointsize used in the document. For example,
@@ -16,9 +16,9 @@ getDocumentPointsize <- function( docString ){
 
   # Search the document declaration for the pointsize, and extract it if it is
   # there.  (Split the input by newlines before.)
-  pointsize <- gsub( '^(?:.*[[, \t](\\d+)pt[], \t])?.*$', '\\1',
-                     strsplit(docString, "\n", fixed = TRUE),
-                     ignore.case = F, perl = T )
+  pointsize <- gsub("^(?:.*[[, \t](\\d+)pt[], \t])?.*$", "\\1",
+    strsplit(docString, "\n", fixed = TRUE),
+    ignore.case = F, perl = T)
 
   # Return first matching line (if any), or NA otherwise
   as.numeric(pointsize[pointsize != ""][1])
@@ -61,13 +61,12 @@ getDocumentPointsize <- function( docString ){
 #'   print( options( 'tikzDocumentDeclaration' ) )
 #'
 #' @export
-setTikzDefaults <- function( overwrite = TRUE ){
-
+setTikzDefaults <- function(overwrite = TRUE) {
   tikzDefaults <- list(
 
-    tikzDefaultEngine = 'pdftex',
+    tikzDefaultEngine = "pdftex",
 
-    tikzLatex = getOption( 'tikzLatexDefault' ),
+    tikzLatex = getOption("tikzLatexDefault"),
 
     tikzDocumentDeclaration = "\\documentclass[10pt]{article}\n",
 
@@ -88,8 +87,9 @@ setTikzDefaults <- function( overwrite = TRUE ){
 
     tikzLualatexPackages = c(
       "\\usepackage{tikz}\n",
+      "\\IfFileExists{luatex85.sty}{\\usepackage{luatex85}}{}\n",
       "\\usepackage[active,tightpage,psfixbb]{preview}\n",
-      "\\usepackage{fontspec,xunicode}\n",
+      "\\usepackage{fontspec}\n",
       "\\PreviewEnvironment{pgfpicture}\n",
       "\\setlength\\PreviewBorder{0pt}\n"
     ),
@@ -112,14 +112,14 @@ setTikzDefaults <- function( overwrite = TRUE ){
       # symbol codes consistant for both systems.
       "\\usepackage[T1]{fontenc}\n",
       "\\usetikzlibrary{calc}\n",
-      "\\usepackage{fontspec,xunicode}\n"
+      "\\usepackage{fontspec}\n"
     ),
 
 
-    tikzSanitizeCharacters = c('%','$','}','{','^','_','#','&','~'),
+    tikzSanitizeCharacters = c("%", "$", "}", "{", "^", "_", "#", "&", "~"),
 
-    tikzReplacementCharacters = c('\\%','\\$','\\}','\\{','\\^{}','\\_{}',
-      '\\#','\\&','\\char`\\~'),
+    tikzReplacementCharacters = c("\\%", "\\$", "\\}", "\\{", "\\^{}", "\\_{}",
+      "\\#", "\\&", "\\char`\\~"),
 
     tikzLwdUnit = 0.4,
 
@@ -129,34 +129,32 @@ setTikzDefaults <- function( overwrite = TRUE ){
     tikzMaxSymbolicColors = 100
   )
 
-  if( !overwrite ){
+  if (!overwrite) {
 
     # We don't want to overwrite options that have allready been set.
     # Figure out which those are.
-    tikzSetOptions <- sapply( do.call( options, as.list(names(tikzDefaults)) ),
-      is.null )
+    tikzSetOptions <- sapply(do.call(options, as.list(names(tikzDefaults))),
+      is.null)
 
-    tikzSetOptions <- names( tikzDefaults )[ tikzSetOptions ]
-
-  }else{
-
-    tikzSetOptions <- names( tikzDefaults )
-
+    tikzSetOptions <- names(tikzDefaults)[ tikzSetOptions ]
+  } else {
+    tikzSetOptions <- names(tikzDefaults)
   }
 
   # Set defaults
-  do.call( options, tikzDefaults[ tikzSetOptions ] )
+  do.call(options, tikzDefaults[ tikzSetOptions ])
 
   # Return a list of the options that were modified.
-  invisible( tikzSetOptions )
-
+  invisible(tikzSetOptions)
 }
 
-isTikzDevice <- function(which = dev.cur()){
-  if (which == 1){ return(FALSE) }
+isTikzDevice <- function(which = dev.cur()) {
+  if (which == 1) {
+    return(FALSE)
+  }
 
   dev_name <- names(dev.list()[which - 1])
-  return(dev_name == 'tikz output')
+  return(dev_name == "tikz output")
 }
 
 
@@ -168,7 +166,7 @@ getDeviceInfo <- function(dev_num = dev.cur()) {
   # Currently returns:
   #
   #  * The path to the TeX file that is being created.
-  if (!isTikzDevice(dev_num)){
+  if (!isTikzDevice(dev_num)) {
     stop("The specified device is not a tikz device!")
   }
 
@@ -181,8 +179,7 @@ getDeviceInfo <- function(dev_num = dev.cur()) {
 # will be protected from user interrupts (use of CTRL-C for example).
 #
 #' @useDynLib tikzDevice TikZ_EvalWithoutInterrupts
-evalWithoutInterrupts <- function(expr, envir = parent.frame())
-{
+evalWithoutInterrupts <- function(expr, envir = parent.frame()) {
   # Wrap the expression in a call to `substitute` so that it gets passed
   # directly to the C code instead of being evaluated before being passed to
   # the C code.
@@ -204,9 +201,7 @@ evalWithoutInterrupts <- function(expr, envir = parent.frame())
 #' to UTF-8 before doing any checks
 #'
 #' @param string A character vector of length 1 (a string).
-#' @param encoding The input encoding of \code{string}, if not specified
-#'   previously via \code{\link{Encoding}} or by this argument then a value of
-#'   "UTF-8" is assumed
+#' @param encoding Unused.
 #' @return A boolean value
 #' @author Cameron Bracken \email{cameron.bracken@@gmail.com}
 #' @seealso \code{\link{tikz}}
@@ -220,7 +215,7 @@ evalWithoutInterrupts <- function(expr, envir = parent.frame())
 #' anyMultibyteUTF8Characters('R is GNU copyright but not restricted')
 #'
 #' @export
-anyMultibyteUTF8Characters <- function(string, encoding = "UTF-8"){
+anyMultibyteUTF8Characters <- function(string, encoding = "UTF-8") {
 
   # This function checks if any of the characters in the given string
   # are multibyte unicode charcters (not ASCII)
@@ -231,25 +226,19 @@ anyMultibyteUTF8Characters <- function(string, encoding = "UTF-8"){
 
   mb <- FALSE
 
-  # Set the encoding of the string if it is not explicitly set
-  if(Encoding(string) == "unknown")
-    Encoding(string) <- encoding
-
   # convert the string to UTF-8
   string <- enc2utf8(string)
 
   # Check if any of the characters are Multibyte
-  explode <- strsplit(string,'')[[1]]
-  for(i in 1:length(explode)){
-
-    if(length(charToRaw(explode[i])) > 1){
+  explode <- strsplit(string, "")[[1]]
+  for (i in seq_along(explode)) {
+    if (length(charToRaw(explode[i])) > 1) {
       mb <- TRUE
       break
     }
   }
 
   return(mb)
-
 }
 
 
@@ -258,49 +247,41 @@ anyMultibyteUTF8Characters <- function(string, encoding = "UTF-8"){
 # -----------------------------------------------------------------------------
 
 # S3 classes to represent the various sources for the path to an exectuable.
-PATH <-
-function(origin)
-{
-  structure(Sys.which(origin), origin = origin, class = 'PATH')
+PATH <- function(origin) {
+  structure(Sys.which(origin), origin = origin, class = "PATH")
 }
 
-OPTION <-
-function(origin)
-{
-  structure(ifelse(is.null(getOption(origin)), '', Sys.which(getOption(origin))),
-    origin = origin, class = 'OPTION')
+OPTION <- function(origin) {
+  structure(ifelse(is.null(getOption(origin)), "", Sys.which(getOption(origin))),
+    origin = origin, class = "OPTION")
 }
 
-ENV_VAR <-
-function(origin)
-{
-  structure(ifelse(is.null(Sys.getenv(origin)), '', Sys.which(Sys.getenv(origin))),
-    origin = origin, class = 'ENV_VAR')
+ENV_VAR <- function(origin) {
+  structure(ifelse(is.null(Sys.getenv(origin)), "", Sys.which(Sys.getenv(origin))),
+    origin = origin, class = "ENV_VAR")
 }
 
 
-isExecutable <-
-function(executable)
-{
+isExecutable <- function(executable) {
   path <- as.character(executable)
 
   # file.access doesn't like non-zero lengths.
-  if ( nchar(path) == 0 ) { return(FALSE) }
+  if (nchar(path) == 0) {
+    return(FALSE)
+  }
 
-  if ( file.access(path, 1) == 0 ) {
+  if (file.access(path, 1) == 0) {
     return(TRUE)
   } else {
     return(FALSE)
   }
 }
 
-formatExecutable <-
-function(executable)
-{
-  desc <- 'path:\n\t'
-  desc <- paste(desc, as.character(executable), sep = '')
-  desc <- paste(desc, "\nObtained from ", sep = '')
-  desc <- paste(desc, format(executable), '\n', sep = '')
+formatExecutable <- function(executable) {
+  desc <- "path:\n\t"
+  desc <- paste(desc, as.character(executable), sep = "")
+  desc <- paste(desc, "\nObtained from ", sep = "")
+  desc <- paste(desc, format(executable), "\n", sep = "")
 
   return(desc)
 }
@@ -309,11 +290,17 @@ function(executable)
 # during .onLoad...
 
 #' @export
-format.PATH <- function(x, ...) { sprintf('the PATH using the command: %s', attr(x, 'origin')) }
+format.PATH <- function(x, ...) {
+  sprintf("the PATH using the command: %s", attr(x, "origin"))
+}
 #' @export
-format.OPTION <- function(x, ...) { sprintf('the global option: %s', attr(x, 'origin')) }
+format.OPTION <- function(x, ...) {
+  sprintf("the global option: %s", attr(x, "origin"))
+}
 #' @export
-format.ENV_VAR <- function(x, ...) { sprintf('the environment variable: %s', attr(x, 'origin')) }
+format.ENV_VAR <- function(x, ...) {
+  sprintf("the environment variable: %s", attr(x, "origin"))
+}
 
 
 #' Print paths to TeX compilers.
@@ -337,48 +324,59 @@ format.ENV_VAR <- function(x, ...) { sprintf('the environment variable: %s', att
 #'   \code{\link{tikz}}
 #'
 #' @export
-tikzCompilerInfo <-
-function(verbose = TRUE)
-{
-  latexCompiler <- getOption('tikzLatex')
-  xelatexCompiler <- getOption('tikzXelatex')
-  lualatexCompiler <- getOption('tikzLualatex')
+tikzCompilerInfo <- function(verbose = TRUE) {
+  latexCompiler <- getOption("tikzLatex")
+  xelatexCompiler <- getOption("tikzXelatex")
+  lualatexCompiler <- getOption("tikzLualatex")
 
-  if ( verbose ) {
-    cat('\nLaTeX Compiler:\n\t')
-    cat(latexCompiler)
-    cat('\n\t')
-    p <- pipe(paste(latexCompiler, '--version'))
-    cat(utils::head(readLines(p), 2), sep = '\n\t')
-    close(p)
-    cat('\n')
-
-    cat('\nXeLaTeX Compiler:\n\t')
-    if ( is.null(xelatexCompiler) ) {
-      cat('Not available.\n')
-    } else {
-      cat(xelatexCompiler)
-      cat('\n\t')
-      p <- pipe(paste(xelatexCompiler, '--version'))
-      cat(utils::head(readLines(p), 2), sep = '\n\t')
-      close(p)
-      cat('\n')
-    }
-
-    cat('\nLuaLaTeX Compiler:\n\t')
-    if ( is.null(lualatexCompiler) ) {
-      cat('Not available.\n')
-    } else {
-      cat(lualatexCompiler)
-      cat('\n\t')
-      p <- pipe(paste(lualatexCompiler, '--version'))
-      cat(utils::head(readLines(p), 2), sep = '\n\t')
-      close(p)
-      cat('\n')
-    }
-  } # End if(verbose)
+  if (verbose) {
+    print_compiler_info(latexCompiler, "LaTeX")
+    print_compiler_info(xelatexCompiler, "XeLaTeX")
+    print_compiler_info(lualatexCompiler, "LuaLaTeX")
+  }
 
   invisible(list(
     latex = latexCompiler, xelatex = xelatexCompiler, lualatex = lualatexCompiler
   ))
+}
+
+#' Test invocation of a LaTeX engine.
+#'
+#' This function simulates the measurement of dimensions and prints detailed
+#' information in case of errors.
+#'
+#' @inheritParams getLatexStrWidth
+#' @inheritParams tikz
+#'
+#' @seealso
+#'   \code{\link{tikz}}
+#'
+#' @export
+tikzTest <- function(texString = "A",
+                     engine = getOption("tikzDefaultEngine"),
+                     documentDeclaration = getOption("tikzDocumentDeclaration"),
+                     packages)
+{
+  print_compiler_info(engine, "Active")
+  getLatexStrWidth(
+    texString,
+    engine = engine,
+    documentDeclaration = documentDeclaration,
+    packages = packages,
+    diagnose = TRUE
+  )
+}
+
+print_compiler_info <- function(engine, name) {
+  cat("\n", name, " compiler:\n\t", sep = "")
+  if (is.null(engine)) {
+    cat("Not available.\n")
+  } else {
+    cat(engine)
+    cat("\n\t")
+    p <- pipe(paste(engine, "--version"))
+    cat(utils::head(readLines(p), 2), sep = "\n\t")
+    close(p)
+    cat("\n")
+  }
 }

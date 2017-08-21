@@ -20,17 +20,8 @@
 #'   applied to device output.
 #' @param face an integer in the range [1-5] that specifies the font face to
 #'   use. See \link{par} for details.
-#' @param engine a string specifying which TeX engine to use. Possible values
-#'   are 'pdftex', 'xetex' and 'luatex'. See the Unicode section of \link{tikzDevice} for
-#'   details.
-#' @param documentDeclaration See the sections ``Options That Affect Package
-#'   Behavior'' and ``Font Size Calculations'' of \link{tikzDevice-package}
-#'   for more details.
-#' @param packages See the section ``Options That Affect Package Behavior'' of
-#'   \link{tikzDevice-package}.
-#' @param verbose A logical value indicating whether diagnostic messages are
-#'  printed when measuring dimensions of strings. Defaults to \code{TRUE} in
-#'  interactive mode only, to \code{FALSE} otherwise.
+#' @param diagnose pass \code{TRUE} to print detailed error information.
+#' @inheritParams tikz
 #'
 #'
 #' @return
@@ -49,71 +40,77 @@
 #'
 #' @references PGF Manual
 #' @export
-getLatexStrWidth <-
-function(texString, cex = 1, face = 1, engine = getOption('tikzDefaultEngine'),
+getLatexStrWidth <- function(texString, cex = 1, face = 1, engine = getOption("tikzDefaultEngine"),
   documentDeclaration = getOption("tikzDocumentDeclaration"), packages,
-  verbose = interactive())
-{
+  verbose = interactive(), diagnose = FALSE) {
+
+  texString <- enc2utf8(texString) #convert the encoding of input string to UTF8
 
   switch(engine,
     pdftex = {
-      if ( anyMultibyteUTF8Characters(texString) && getOption('tikzPdftexWarnUTF') ) {
+      if (anyMultibyteUTF8Characters(texString) && getOption("tikzPdftexWarnUTF")) {
         warning("Attempting to calculate the width of a Unicode string",
-            "using the pdftex engine. This may fail! See the Unicode",
-            "section of ?tikzDevice for more information.")
+          "using the pdftex engine. This may fail! See the Unicode",
+          "section of ?tikzDevice for more information.")
       }
-      if (missing(packages)) {packages <- getOption('tikzLatexPackages')}
+      if (missing(packages)) {
+        packages <- getOption("tikzLatexPackages")
+      }
     },
 
     xetex = {
-      if (is.null(getOption('tikzXelatex'))) {
+      if (is.null(getOption("tikzXelatex"))) {
         stop("Cannot find XeLaTeX! Please check your system ",
             "configuration or manually provide a value for ",
             "options(tikzXelatex)")
       }
-      if (missing(packages)) {packages <- getOption('tikzXelatexPackages')}
+      if (missing(packages)) {
+        packages <- getOption("tikzXelatexPackages")
+      }
     },
 
     luatex = {
-      if (is.null(getOption('tikzLualatex'))) {
+      if (is.null(getOption("tikzLualatex"))) {
         stop("Cannot find LuaLaTeX! Please check your system ",
             "configuration or manually provide a value for ",
             "options(tikzLualatex)")
       }
-      if (missing(packages)) {packages <- getOption('tikzLualatexPackages')}
-    },
-
-    {#ELSE
-      stop('Unsupported TeX engine: ', engine,
-        '\nAvailable choices are:\n',
-        '\tpdftex\n',
-        '\txetex\n',
-        '\tluatex\n')
+      if (missing(packages)) {
+        packages <- getOption("tikzLualatexPackages")
+      }
+    }, { # ELSE
+      stop("Unsupported TeX engine: ", engine,
+        "\nAvailable choices are:\n",
+        "\tpdftex\n",
+        "\txetex\n",
+        "\tluatex\n")
     }
   )
 
   # Create an object that contains the string and it's
   # properties.
-  TeXMetrics <- list( type='string', scale=cex, face=face, value=texString,
+  TeXMetrics <- list(type = "string", scale = cex, face = face, value = texString,
     documentDeclaration = documentDeclaration,
     packages = packages, engine = engine)
 
+  if (diagnose) {
+    return(getMetricsFromLatex(TeXMetrics, verbose = TRUE, diagnose = diagnose))
+  }
 
   # Check to see if we have a width stored in
   # our dictionary for this string.
-  width <- queryMetricsDictionary( TeXMetrics, verbose = verbose )
+  width <- queryMetricsDictionary(TeXMetrics, verbose = verbose)
 
-  if( width >= 0 ){
+  if (width >= 0) {
 
     # Positive (and zero) string width means there was a
     # cached value available. Yay! We're done.
-    return( width )
-
-  }else{
+    return(width)
+  } else {
 
     # Bummer. No width on record for this string.
     # Call LaTeX and get one.
-    width <- getMetricsFromLatex( TeXMetrics, verbose = verbose )
+    width <- getMetricsFromLatex(TeXMetrics, verbose = verbose)
 
     if (is.null(width)) {
       # Something went wrong. Return 0
@@ -121,12 +118,11 @@ function(texString, cex = 1, face = 1, engine = getOption('tikzDefaultEngine'),
     } else {
       # Store the width in the dictionary so we don't
       # have to do this again.
-      storeMetricsInDictionary( TeXMetrics, width )
+      storeMetricsInDictionary(TeXMetrics, width)
 
       # Return the width.
-      return( width )
+      return(width)
     }
-
   }
 }
 
@@ -143,57 +139,59 @@ function(texString, cex = 1, face = 1, engine = getOption('tikzDefaultEngine'),
 #'   getLatexCharMetrics(65)
 #'
 #' @export
-getLatexCharMetrics <-
-function(charCode, cex = 1, face = 1, engine = getOption('tikzDefaultEngine'),
+getLatexCharMetrics <- function(charCode, cex = 1, face = 1, engine = getOption("tikzDefaultEngine"),
   documentDeclaration = getOption("tikzDocumentDeclaration"), packages,
-  verbose = interactive())
-{
+  verbose = interactive()) {
 
   # This function is pretty much an exact duplicate of getLatexStrWidth, these
   # two functions should be generalized and combined.
   switch(engine,
     pdftex = {
-      if (missing(packages)) {packages <- getOption('tikzLatexPackages')}
+      if (missing(packages)) {
+        packages <- getOption("tikzLatexPackages")
+      }
     },
 
     xetex = {
-      if (is.null(getOption('tikzXelatex'))) {
+      if (is.null(getOption("tikzXelatex"))) {
         stop("Cannot find XeLaTeX! Please check your system ",
             "configuration or manually provide a value for ",
             "options(tikzXelatex)")
       }
-      if (missing(packages)) {packages <- getOption('tikzXelatexPackages')}
+      if (missing(packages)) {
+        packages <- getOption("tikzXelatexPackages")
+      }
     },
 
     luatex = {
-      if (is.null(getOption('tikzLualatex'))) {
+      if (is.null(getOption("tikzLualatex"))) {
         stop("Cannot find LuaLaTeX! Please check your system ",
             "configuration or manually provide a value for ",
             "options(tikzLualatex)")
       }
-      if (missing(packages)) {packages <- getOption('tikzLualatexPackages')}
-    },
-
-    {#ELSE
-      stop('Unsupported TeX engine: ', engine,
-        '\nAvailable choices are:\n',
-        '\tpdftex\n',
-        '\txetex\n',
-        '\tluatex\n')
+      if (missing(packages)) {
+        packages <- getOption("tikzLualatexPackages")
+      }
+    }, { # ELSE
+      stop("Unsupported TeX engine: ", engine,
+        "\nAvailable choices are:\n",
+        "\tpdftex\n",
+        "\txetex\n",
+        "\tluatex\n")
     }
   )
 
   # We must be given an integer character code.
-  if ( !is.numeric(charCode) ) {
+  if (!is.numeric(charCode)) {
     warning("getLatexCharMetrics only accepts integers!")
     return(NULL)
   }
 
-  if ( engine == 'pdftex' && !(charCode > 31 && charCode < 127 ) ) {
-    if (getOption('tikzPdftexWarnUTF')) {
+  if (engine == "pdftex" && !(charCode > 31 && charCode < 127)) {
+    if (getOption("tikzPdftexWarnUTF")) {
       warning("pdftex can only generate metrics for character codes ",
-          "between 32 and 126! See the Unicode section of ?tikzDevice ",
-          "for more information.")
+        "between 32 and 126! See the Unicode section of ?tikzDevice ",
+        "for more information.")
     }
     return(NULL)
   }
@@ -203,29 +201,28 @@ function(charCode, cex = 1, face = 1, engine = getOption('tikzDefaultEngine'),
   #
   # IMPORTANT: The charCode must be in UTF-8 encoding or else funny business
   #            will likely occur.
-  charCode <- as.integer( charCode )
+  charCode <- as.integer(charCode)
 
   # Create an object that contains the character and it's
   # properties.
-  TeXMetrics <- list( type='char', scale=cex, face=face, value=charCode,
+  TeXMetrics <- list(type = "char", scale = cex, face = face, value = charCode,
     documentDeclaration = documentDeclaration,
     packages = packages, engine = engine)
 
   # Check to see if we have metrics stored in
   # our dictionary for this character.
-  metrics <- queryMetricsDictionary( TeXMetrics, verbose = verbose )
+  metrics <- queryMetricsDictionary(TeXMetrics, verbose = verbose)
 
-  if( all(metrics >= 0) ){
+  if (all(metrics >= 0)) {
 
     # The metrics should be a vector of three non negative
     # numbers.
-    return( metrics )
-
-  }else{
+    return(metrics)
+  } else {
 
     # Bummer. No metrics on record for this character.
     # Call LaTeX to obtain them.
-    metrics <- getMetricsFromLatex( TeXMetrics, verbose = verbose )
+    metrics <- getMetricsFromLatex(TeXMetrics, verbose = verbose)
 
     if (is.null(metrics)) {
       # Couldn't get metrics for some reason, return 0
@@ -233,17 +230,14 @@ function(charCode, cex = 1, face = 1, engine = getOption('tikzDefaultEngine'),
     } else {
       # Store the metrics in the dictionary so we don't
       # have to do this again.
-      storeMetricsInDictionary( TeXMetrics, metrics )
+      storeMetricsInDictionary(TeXMetrics, metrics)
 
-      return( metrics )
+      return(metrics)
     }
-
   }
 }
 
-getMetricsFromLatex <-
-function( TeXMetrics, verbose = verbose ){
-
+getMetricsFromLatex <- function(TeXMetrics, verbose = verbose, diagnose = FALSE) {
   if (!verbose) {
     message <- function(...) invisible()
   }
@@ -263,14 +257,14 @@ function( TeXMetrics, verbose = verbose ){
 
   # Create the TeX file in a temporary directory so
   # it doesn't clutter anything.
-  texDir <- tempdir()
-  texLog <- file.path(texDir, 'tikzStringWidthCalc.log')
-  texFile <- file.path(texDir, 'tikzStringWidthCalc.tex')
-  if (!file.exists(texFile)) file.create(texFile)
-  texFile <- normalizePath(texFile, '/')
+  texDir <- tempfile("tikzDevice")
+  dir.create(texDir)
+  texLog <- file.path(texDir, "tikzStringWidthCalc.log")
+  texFile <- file.path(texDir, "tikzStringWidthCalc.tex")
+  texFile <- normalizePath(texFile, "/", mustWork = FALSE)
 
   # Open the TeX file for writing.
-  texIn <- file(texFile, 'w')
+  texIn <- file(texFile, "w", encoding = "UTF-8") #enforce the encoding of temp TeX file to UTF-8 encoding for XeTeX, and LuaTeX
 
   writeLines(getOption("tikzDocumentDeclaration"), texIn)
 
@@ -291,13 +285,13 @@ function( TeXMetrics, verbose = verbose ){
   writeLines(TeXMetrics$packages, texIn)
   switch(TeXMetrics$engine,
     pdftex = {
-      writeLines(getOption('tikzMetricPackages'), texIn)
+      writeLines(getOption("tikzMetricPackages"), texIn)
     },
     xetex = {
-      writeLines(getOption('tikzUnicodeMetricPackages'), texIn)
+      writeLines(getOption("tikzUnicodeMetricPackages"), texIn)
     },
     luatex = {
-      writeLines(getOption('tikzUnicodeMetricPackages'), texIn)
+      writeLines(getOption("tikzUnicodeMetricPackages"), texIn)
     }
   )
 
@@ -307,8 +301,8 @@ function( TeXMetrics, verbose = verbose ){
   writeLines("\\begin{document}\n\\begin{tikzpicture}", texIn)
 
   # Insert the value of cex into the node options.
-  nodeOpts <- paste('\\node[inner sep=0pt, outer sep=0pt, scale=',
-    formatC(TeXMetrics$scale, decimal.mark = '.'), ']', sep = '')
+  nodeOpts <- paste("\\node[inner sep=0pt, outer sep=0pt, scale=",
+    formatC(TeXMetrics$scale, decimal.mark = "."), "]", sep = "")
 
   # Create the node contents depending on the type of metrics
   # we are after.
@@ -325,8 +319,8 @@ function( TeXMetrics, verbose = verbose ){
   #    to be the symbol font, in Adobe symbol encoding. On some devices font families
   #    can be selected by family to choose different sets of 5 fonts.
 
-  nodeContent <- ''
-  switch( TeXMetrics$face,
+  nodeContent <- ""
+  switch(TeXMetrics$face,
 
     normal = {
       # We do nothing for font face 1, normal font.
@@ -334,17 +328,17 @@ function( TeXMetrics, verbose = verbose ){
 
     bold = {
       # Using bold, we set in bold *series*
-      nodeContent <- '\\bfseries'
+      nodeContent <- "\\bfseries"
     },
 
     italic = {
       # Using italic, we set in the italic *shape*
-      nodeContent <- '\\itshape'
+      nodeContent <- "\\itshape"
     },
 
     bolditalic = {
       # With bold italic we set in bold *series* with italic *shape*
-      nodeContent <- '\\bfseries\\itshape'
+      nodeContent <- "\\bfseries\\itshape"
     },
 
     symbol = {
@@ -358,25 +352,25 @@ function( TeXMetrics, verbose = verbose ){
   # the node. For character metrics we have an integer corresponding
   # to a posistion in the ASCII character table- so we use the LaTeX
   # \char command to translate it to an actual character.
-  switch( TeXMetrics$type,
+  switch(TeXMetrics$type,
 
     string = {
 
-      nodeContent <- paste( nodeContent,TeXMetrics$value )
+      nodeContent <- paste0(nodeContent, TeXMetrics$value)
 
     },
 
     char = {
 
-      nodeContent <- paste( nodeContent,'\\char',TeXMetrics$value, sep='' )
+      nodeContent <- paste0(nodeContent, "\\char", TeXMetrics$value, sep = "")
 
     }
 
-  )# End switch for  metric type.
+  ) # End switch for  metric type.
 
-  message("Measuring dimensions of: ", nodeContent);
+  message("Measuring dimensions of: ", nodeContent)
 
-  writeLines( paste( nodeOpts, ' (TeX) {', nodeContent, "};", sep=''), texIn)
+  writeLines(paste(nodeOpts, " (TeX) {", nodeContent, "};", sep = ""), texIn)
 
   # We calculate width for both characters and strings.
   writeLines("\\path let \\p1 = ($(TeX.east) - (TeX.west)$),
@@ -384,7 +378,7 @@ function( TeXMetrics, verbose = verbose ){
     node{ \\typeout{tikzTeXWidth=\\n1} };", texIn)
 
   # We only want ascent and descent for characters.
-  if( TeXMetrics$type == 'char' ){
+  if (TeXMetrics$type == "char") {
 
     # Calculate the ascent and print it to the log.
     writeLines("\\path let \\p1 = ($(TeX.north) - (TeX.base)$),
@@ -395,43 +389,47 @@ function( TeXMetrics, verbose = verbose ){
     writeLines("\\path let \\p1 = ($(TeX.base) - (TeX.south)$),
       \\n1 = {veclen(\\x1,\\y1)} in (TeX.base) -- (TeX.south)
       node{ \\typeout{tikzTeXDescent=\\n1} };", texIn)
-
   }
 
-  # Stop before creating output
-  writeLines("\\makeatletter", texIn)
-  writeLines("\\@@end", texIn)
+  if (diagnose) {
+    # Stop before creating output
+    writeLines("\\makeatletter", texIn)
+    writeLines("\\@@end", texIn)
+  } else {
+    writeLines("\\end{tikzpicture}", texIn)
+    writeLines("\\end{document}", texIn)
+  }
 
   # Close the LaTeX file, ready to compile
-  close( texIn )
+  close(texIn)
 
   # Recover the latex command. Use XeLaTeX if the character is not ASCII
   latexCmd <- switch(TeXMetrics$engine,
-    pdftex = getOption('tikzLatex'),
-    xetex  = getOption('tikzXelatex'),
-    luatex  = getOption('tikzLualatex'),
+    pdftex = getOption("tikzLatex"),
+    xetex = getOption("tikzXelatex"),
+    luatex = getOption("tikzLualatex"),
   )
 
   # Append the batchmode flag to increase LaTeX
   # efficiency.
-  latexCmd <- paste(shQuote(latexCmd), '-interaction=batchmode', '-halt-on-error',
-    '-output-directory', shQuote(texDir), shQuote(texFile))
+  latexCmd <- paste(shQuote(latexCmd), "-interaction=batchmode", "-halt-on-error",
+    "-output-directory", shQuote(texDir), shQuote(texFile))
 
   # avoid warnings about non-zero exit status, we know tex exited abnormally
   # it was designed that way for speed
-  suppressWarnings(silence <- system( latexCmd, intern=T, ignore.stderr=T))
+  suppressWarnings(silence <- system(latexCmd, intern = T, ignore.stderr = T))
 
   # Read the contents of the log file.
-  logContents <- readLines( texLog )
+  logContents <- readLines(texLog)
 
-  if (TeXMetrics$engine == 'xetex') {
+  if (TeXMetrics$engine == "xetex") {
     # Check to see if XeLaTeX was unable to typeset any Unicode characters.
-    missing_glyphs <- logContents[grep('^\\s*Missing character: There is no',
-        logContents )]
+    missing_glyphs <- logContents[grep("^\\s*Missing character: There is no",
+      logContents)]
 
     if (length(missing_glyphs)) {
-      warning('XeLaTeX was unable to calculate metrics for some characters:\n',
-        paste('\t', missing_glyphs, collapse = '\n') )
+      warning("XeLaTeX was unable to calculate metrics for some characters:\n",
+        paste("\t", missing_glyphs, collapse = "\n"))
 
       # Bail out of the calculation
       return(NULL)
@@ -440,47 +438,55 @@ function( TeXMetrics, verbose = verbose ){
 
   # Recover width by finding the line containing
   # tikzTeXWidth in the logfile.
-  match <- logContents[ grep('tikzTeXWidth=', logContents) ]
+  match <- logContents[ grep("tikzTeXWidth=", logContents) ]
 
   # Remove all parts of the string besides the
   # number.
-  width <- gsub('[=A-Za-z]','',match)
+  width <- gsub("[=A-Za-z]", "", match)
 
   # complete.cases() checks for NULLs, NAs and NaNs
-  if( length(width) == 0 | any(!complete.cases(width)) ){
-
-    message(paste(readLines(texFile),collapse='\n'))
-    message(paste(readLines(texLog),collapse='\n'))
-    stop('\nTeX was unable to calculate metrics for the following string\n',
-      'or character:\n\n\t',
-      TeXMetrics$value, '\n\n',
-      'Common reasons for failure include:\n',
-      '  * The string contains a character which is special to LaTeX unless\n',
-      '    escaped properly, such as % or $.\n',
-      '  * The string makes use of LaTeX commands provided by a package and\n',
-      '    the tikzDevice was not told to load the package.\n\n',
-      'The contents of the LaTeX log of the aborted run have been printed above,\n',
-      'it may contain additional details as to why the metric calculation failed.\n'
-    )
-
+  if (length(width) == 0 | any(!complete.cases(width))) {
+    if (diagnose) {
+      message("\nTeX was unable to calculate metrics for:\n\n\t",
+        TeXMetrics$value, "\n"
+      )
+      message("Contents of TeX file ", texFile, ":\n")
+      cat(readLines(texFile), sep = "\n")
+      message("Contents of log file ", texLog, ":\n")
+      cat(readLines(texLog), sep = "\n")
+      return(invisible())
+    } else {
+      stop("\nTeX was unable to calculate metrics for:\n\n\t",
+        nodeContent, "\n\n",
+        "Run the following commands for diagnosis:\n\n\t",
+        "tikzTest()\n\t",
+        "tikzTest(", deparse(nodeContent, 500L), ")\n\n",
+        "Common reasons for failure include:\n",
+        "  * The string contains a character which is special to LaTeX unless\n",
+        "    escaped properly, such as % or $.\n",
+        "  * The string makes use of LaTeX commands provided by a package and\n",
+        "    the tikzDevice was not told to load the package.\n\n",
+        "The TeX and log files used for the calculation can help diagnose the\n",
+        "problem. If these files are missing, rerun the plot and make sure to\n",
+        "keep the R session open.\n",
+        "TeX file: ", texFile, "\n",
+        "Log file: ", texLog, "\n"
+      )
+    }
   }
 
   # If we're dealing with a string, we're done.
-  if( TeXMetrics$type == 'string' ){
-
-    return( as.double( width ) )
-
-  }else{
+  if (TeXMetrics$type == "string") {
+    return(as.double(width))
+  } else {
 
     # For a character, we want ascent and descent too.
-    match <- logContents[ grep('tikzTeXAscent=', logContents) ]
-    ascent <- gsub('[=A-Za-z]','',match)
+    match <- logContents[ grep("tikzTeXAscent=", logContents) ]
+    ascent <- gsub("[=A-Za-z]", "", match)
 
-    match <- logContents[ grep('tikzTeXDescent=', logContents) ]
-    descent <- gsub('[=A-Za-z]','',match)
+    match <- logContents[ grep("tikzTeXDescent=", logContents) ]
+    descent <- gsub("[=A-Za-z]", "", match)
 
-    return( as.double( c(ascent,descent,width) ) )
-
+    return(as.double(c(ascent, descent, width)))
   }
-
 }

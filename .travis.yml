@@ -4,6 +4,7 @@ language: c
 env:
   global:
     - BOOTSTRAP_LATEX=1
+    - FORCE_SOURCE_INSTALL=1
     - secure: "dtEonLWmLX2G/E4laUw+LM5HP2OUfg5JcUX3G1F58myfu2vuCrul3d2K8V5YTL84ItKN04ckzV6eO9j/9Dk1cjclFk5ph2vhZgmwL0QyWlY30NhizDbgrD0vVHs3D7welIiUX2qgxNI6ACzuGs0g5Md0GTdV6qO5/FVsltkC3dw="
   matrix:
     - TYPE=cran R_BUILD_ARGS="--no-manual --compact-vignettes=gs+qpdf" R_CHECK_ARGS="--no-manual --as-cran" WARNINGS_ARE_ERRORS=1
@@ -21,7 +22,6 @@ before_install:
   - ./travis-tool.sh bootstrap
   - IsSourceInstall() { [[ -n "${RELEASE}" ]]; }
   - if [ $TYPE == tests ]; then APT_EXTRA="texlive-xetex imagemagick"; export DISPLAY=:99.0; fi
-  - if IsSourceInstall; then export FORCE_SOURCE_INSTALL=1; fi
 install:
   - if IsLinux; then sudo apt-get install --no-install-recommends texinfo texlive-latex-recommended texlive-latex-extra lmodern texlive-fonts-recommended texlive-fonts-extra pgf $APT_EXTRA; fi
   - if [ $TYPE == tests ] && IsLinux; then (cd /tmp && curl -OL http://mirrors.ctan.org/install/macros/latex/contrib/oberdiek.tds.zip && cd /usr/share/texmf/tex/latex && sudo unzip /tmp/oberdiek.tds.zip && sudo texhash); fi
@@ -35,7 +35,7 @@ install:
       make -j2 &&
       sudo make install
     ); fi
-  - ./travis-tool.sh install_r_binary filehash testthat evaluate stringr ggplot2 maps knitr png
+  - ./travis-tool.sh install_r filehash testthat evaluate stringr ggplot2 maps knitr png
   - ./travis-tool.sh install_github jimhester/covr
   - ./travis-tool.sh dump_sysinfo
 after_failure:
