@@ -1,3 +1,8 @@
+## tikzDevice 0.10-5 (2018-01-23)
+
+- Fix `R CMD check`.
+
+
 ## tikzDevice 0.10-4 (2018-01-23)
 
 - Registering native methods to fix `R CMD check` warnings.
