@@ -6,7 +6,7 @@ get_graphics_reporter <- function() {
 }
 
 do_graphics_test <- function(short_name, description, graph_code, fuzz = 0,
-  engine = "pdftex", graph_options = NULL, skip_if = NULL, tags = NULL, ...) {
+                             engine = "pdftex", graph_options = NULL, skip_if = NULL, tags = NULL, ...) {
   context(description)
 
   if (Sys.getenv("R_TESTS") != "") {
@@ -93,9 +93,13 @@ compile_graph <- function(graph_file, engine) {
     luatex = getOption("tikzLualatex")
   )
 
-  silence <- system(paste(shQuote(tex_cmd), "-interaction=batchmode",
-    "-output-directory", test_work_dir,
-    graph_file), intern = TRUE)
+  silence <- system(
+    paste(
+      shQuote(tex_cmd), "-interaction=batchmode",
+      "-output-directory", test_work_dir,
+      graph_file
+    ), intern = TRUE
+  )
 
   output_pdf <- sub("tex$", "pdf", graph_file)
   if (file.exists(output_pdf)) {
@@ -136,10 +140,13 @@ compare_graph <- function(graph_name, tags) {
     "2>&1 | awk '{metric=$NF};END{print metric}'"
   )
 
-  result <- as.double(system(paste(
-    # Force the command to be executed through bash
-    "bash -c ", shQuote(command_line)),
-    intern = TRUE, ignore.stderr = TRUE))
+  result <- as.double(system(
+    paste(
+      # Force the command to be executed through bash
+      "bash -c ", shQuote(command_line)
+    ),
+    intern = TRUE, ignore.stderr = TRUE
+  ))
 
   return(as.numeric(result))
 }

@@ -41,17 +41,18 @@
 #' @references PGF Manual
 #' @export
 getLatexStrWidth <- function(texString, cex = 1, face = 1, engine = getOption("tikzDefaultEngine"),
-  documentDeclaration = getOption("tikzDocumentDeclaration"), packages,
-  verbose = interactive(), diagnose = FALSE) {
-
-  texString <- enc2utf8(texString) #convert the encoding of input string to UTF8
+                             documentDeclaration = getOption("tikzDocumentDeclaration"), packages,
+                             verbose = interactive(), diagnose = FALSE) {
+  texString <- enc2utf8(texString) # convert the encoding of input string to UTF8
 
   switch(engine,
     pdftex = {
       if (anyMultibyteUTF8Characters(texString) && getOption("tikzPdftexWarnUTF")) {
-        warning("Attempting to calculate the width of a Unicode string",
+        warning(
+          "Attempting to calculate the width of a Unicode string",
           "using the pdftex engine. This may fail! See the Unicode",
-          "section of ?tikzDevice for more information.")
+          "section of ?tikzDevice for more information."
+        )
       }
       if (missing(packages)) {
         packages <- getOption("tikzLatexPackages")
@@ -60,9 +61,11 @@ getLatexStrWidth <- function(texString, cex = 1, face = 1, engine = getOption("t
 
     xetex = {
       if (is.null(getOption("tikzXelatex"))) {
-        stop("Cannot find XeLaTeX! Please check your system ",
-            "configuration or manually provide a value for ",
-            "options(tikzXelatex)")
+        stop(
+          "Cannot find XeLaTeX! Please check your system ",
+          "configuration or manually provide a value for ",
+          "options(tikzXelatex)"
+        )
       }
       if (missing(packages)) {
         packages <- getOption("tikzXelatexPackages")
@@ -71,27 +74,33 @@ getLatexStrWidth <- function(texString, cex = 1, face = 1, engine = getOption("t
 
     luatex = {
       if (is.null(getOption("tikzLualatex"))) {
-        stop("Cannot find LuaLaTeX! Please check your system ",
-            "configuration or manually provide a value for ",
-            "options(tikzLualatex)")
+        stop(
+          "Cannot find LuaLaTeX! Please check your system ",
+          "configuration or manually provide a value for ",
+          "options(tikzLualatex)"
+        )
       }
       if (missing(packages)) {
         packages <- getOption("tikzLualatexPackages")
       }
     }, { # ELSE
-      stop("Unsupported TeX engine: ", engine,
+      stop(
+        "Unsupported TeX engine: ", engine,
         "\nAvailable choices are:\n",
         "\tpdftex\n",
         "\txetex\n",
-        "\tluatex\n")
+        "\tluatex\n"
+      )
     }
   )
 
   # Create an object that contains the string and it's
   # properties.
-  TeXMetrics <- list(type = "string", scale = cex, face = face, value = texString,
+  TeXMetrics <- list(
+    type = "string", scale = cex, face = face, value = texString,
     documentDeclaration = documentDeclaration,
-    packages = packages, engine = engine)
+    packages = packages, engine = engine
+  )
 
   if (diagnose) {
     return(getMetricsFromLatex(TeXMetrics, verbose = TRUE, diagnose = diagnose))
@@ -140,8 +149,8 @@ getLatexStrWidth <- function(texString, cex = 1, face = 1, engine = getOption("t
 #'
 #' @export
 getLatexCharMetrics <- function(charCode, cex = 1, face = 1, engine = getOption("tikzDefaultEngine"),
-  documentDeclaration = getOption("tikzDocumentDeclaration"), packages,
-  verbose = interactive()) {
+                                documentDeclaration = getOption("tikzDocumentDeclaration"), packages,
+                                verbose = interactive()) {
 
   # This function is pretty much an exact duplicate of getLatexStrWidth, these
   # two functions should be generalized and combined.
@@ -154,9 +163,11 @@ getLatexCharMetrics <- function(charCode, cex = 1, face = 1, engine = getOption(
 
     xetex = {
       if (is.null(getOption("tikzXelatex"))) {
-        stop("Cannot find XeLaTeX! Please check your system ",
-            "configuration or manually provide a value for ",
-            "options(tikzXelatex)")
+        stop(
+          "Cannot find XeLaTeX! Please check your system ",
+          "configuration or manually provide a value for ",
+          "options(tikzXelatex)"
+        )
       }
       if (missing(packages)) {
         packages <- getOption("tikzXelatexPackages")
@@ -165,19 +176,23 @@ getLatexCharMetrics <- function(charCode, cex = 1, face = 1, engine = getOption(
 
     luatex = {
       if (is.null(getOption("tikzLualatex"))) {
-        stop("Cannot find LuaLaTeX! Please check your system ",
-            "configuration or manually provide a value for ",
-            "options(tikzLualatex)")
+        stop(
+          "Cannot find LuaLaTeX! Please check your system ",
+          "configuration or manually provide a value for ",
+          "options(tikzLualatex)"
+        )
       }
       if (missing(packages)) {
         packages <- getOption("tikzLualatexPackages")
       }
     }, { # ELSE
-      stop("Unsupported TeX engine: ", engine,
+      stop(
+        "Unsupported TeX engine: ", engine,
         "\nAvailable choices are:\n",
         "\tpdftex\n",
         "\txetex\n",
-        "\tluatex\n")
+        "\tluatex\n"
+      )
     }
   )
 
@@ -189,9 +204,11 @@ getLatexCharMetrics <- function(charCode, cex = 1, face = 1, engine = getOption(
 
   if (engine == "pdftex" && !(charCode > 31 && charCode < 127)) {
     if (getOption("tikzPdftexWarnUTF")) {
-      warning("pdftex can only generate metrics for character codes ",
+      warning(
+        "pdftex can only generate metrics for character codes ",
         "between 32 and 126! See the Unicode section of ?tikzDevice ",
-        "for more information.")
+        "for more information."
+      )
     }
     return(NULL)
   }
@@ -205,9 +222,11 @@ getLatexCharMetrics <- function(charCode, cex = 1, face = 1, engine = getOption(
 
   # Create an object that contains the character and it's
   # properties.
-  TeXMetrics <- list(type = "char", scale = cex, face = face, value = charCode,
+  TeXMetrics <- list(
+    type = "char", scale = cex, face = face, value = charCode,
     documentDeclaration = documentDeclaration,
-    packages = packages, engine = engine)
+    packages = packages, engine = engine
+  )
 
   # Check to see if we have metrics stored in
   # our dictionary for this character.
@@ -264,7 +283,7 @@ getMetricsFromLatex <- function(TeXMetrics, verbose = verbose, diagnose = FALSE)
   texFile <- normalizePath(texFile, "/", mustWork = FALSE)
 
   # Open the TeX file for writing.
-  texIn <- file(texFile, "w", encoding = "UTF-8") #enforce the encoding of temp TeX file to UTF-8 encoding for XeTeX, and LuaTeX
+  texIn <- file(texFile, "w", encoding = "UTF-8") # enforce the encoding of temp TeX file to UTF-8 encoding for XeTeX, and LuaTeX
 
   writeLines(getOption("tikzDocumentDeclaration"), texIn)
 
@@ -301,8 +320,10 @@ getMetricsFromLatex <- function(TeXMetrics, verbose = verbose, diagnose = FALSE)
   writeLines("\\begin{document}\n\\begin{tikzpicture}", texIn)
 
   # Insert the value of cex into the node options.
-  nodeOpts <- paste("\\node[inner sep=0pt, outer sep=0pt, scale=",
-    formatC(TeXMetrics$scale, decimal.mark = "."), "]", sep = "")
+  nodeOpts <- paste(
+    "\\node[inner sep=0pt, outer sep=0pt, scale=",
+    formatC(TeXMetrics$scale, decimal.mark = "."), "]", sep = ""
+  )
 
   # Create the node contents depending on the type of metrics
   # we are after.
@@ -344,7 +365,6 @@ getMetricsFromLatex <- function(TeXMetrics, verbose = verbose, diagnose = FALSE)
     symbol = {
       # We are currently ignoring R's symbol fonts.
     }
-
   ) # End output font face switch.
 
 
@@ -355,17 +375,12 @@ getMetricsFromLatex <- function(TeXMetrics, verbose = verbose, diagnose = FALSE)
   switch(TeXMetrics$type,
 
     string = {
-
       nodeContent <- paste0(nodeContent, TeXMetrics$value)
-
     },
 
     char = {
-
       nodeContent <- paste0(nodeContent, "\\char", TeXMetrics$value, sep = "")
-
     }
-
   ) # End switch for  metric type.
 
   message("Measuring dimensions of: ", nodeContent)
@@ -412,8 +427,10 @@ getMetricsFromLatex <- function(TeXMetrics, verbose = verbose, diagnose = FALSE)
 
   # Append the batchmode flag to increase LaTeX
   # efficiency.
-  latexCmd <- paste(shQuote(latexCmd), "-interaction=batchmode", "-halt-on-error",
-    "-output-directory", shQuote(texDir), shQuote(texFile))
+  latexCmd <- paste(
+    shQuote(latexCmd), "-interaction=batchmode", "-halt-on-error",
+    "-output-directory", shQuote(texDir), shQuote(texFile)
+  )
 
   # avoid warnings about non-zero exit status, we know tex exited abnormally
   # it was designed that way for speed
@@ -424,12 +441,16 @@ getMetricsFromLatex <- function(TeXMetrics, verbose = verbose, diagnose = FALSE)
 
   if (TeXMetrics$engine == "xetex") {
     # Check to see if XeLaTeX was unable to typeset any Unicode characters.
-    missing_glyphs <- logContents[grep("^\\s*Missing character: There is no",
-      logContents)]
+    missing_glyphs <- logContents[grep(
+      "^\\s*Missing character: There is no",
+      logContents
+    )]
 
     if (length(missing_glyphs)) {
-      warning("XeLaTeX was unable to calculate metrics for some characters:\n",
-        paste("\t", missing_glyphs, collapse = "\n"))
+      warning(
+        "XeLaTeX was unable to calculate metrics for some characters:\n",
+        paste("\t", missing_glyphs, collapse = "\n")
+      )
 
       # Bail out of the calculation
       return(NULL)
@@ -447,7 +468,8 @@ getMetricsFromLatex <- function(TeXMetrics, verbose = verbose, diagnose = FALSE)
   # complete.cases() checks for NULLs, NAs and NaNs
   if (length(width) == 0 | any(!complete.cases(width))) {
     if (diagnose) {
-      message("\nTeX was unable to calculate metrics for:\n\n\t",
+      message(
+        "\nTeX was unable to calculate metrics for:\n\n\t",
         TeXMetrics$value, "\n"
       )
       message("Contents of TeX file ", texFile, ":\n")
@@ -456,7 +478,8 @@ getMetricsFromLatex <- function(TeXMetrics, verbose = verbose, diagnose = FALSE)
       cat(readLines(texLog), sep = "\n")
       return(invisible())
     } else {
-      stop("\nTeX was unable to calculate metrics for:\n\n\t",
+      stop(
+        "\nTeX was unable to calculate metrics for:\n\n\t",
         nodeContent, "\n\n",
         "Run the following commands for diagnosis:\n\n\t",
         "tikzTest()\n\t",

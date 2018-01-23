@@ -16,9 +16,11 @@ getDocumentPointsize <- function(docString) {
 
   # Search the document declaration for the pointsize, and extract it if it is
   # there.  (Split the input by newlines before.)
-  pointsize <- gsub("^(?:.*[[, \t](\\d+)pt[], \t])?.*$", "\\1",
+  pointsize <- gsub(
+    "^(?:.*[[, \t](\\d+)pt[], \t])?.*$", "\\1",
     strsplit(docString, "\n", fixed = TRUE),
-    ignore.case = F, perl = T)
+    ignore.case = F, perl = T
+  )
 
   # Return first matching line (if any), or NA otherwise
   as.numeric(pointsize[pointsize != ""][1])
@@ -63,7 +65,6 @@ getDocumentPointsize <- function(docString) {
 #' @export
 setTikzDefaults <- function(overwrite = TRUE) {
   tikzDefaults <- list(
-
     tikzDefaultEngine = "pdftex",
 
     tikzLatex = getOption("tikzLatexDefault"),
@@ -118,8 +119,10 @@ setTikzDefaults <- function(overwrite = TRUE) {
 
     tikzSanitizeCharacters = c("%", "$", "}", "{", "^", "_", "#", "&", "~"),
 
-    tikzReplacementCharacters = c("\\%", "\\$", "\\}", "\\{", "\\^{}", "\\_{}",
-      "\\#", "\\&", "\\char`\\~"),
+    tikzReplacementCharacters = c(
+      "\\%", "\\$", "\\}", "\\{", "\\^{}", "\\_{}",
+      "\\#", "\\&", "\\char`\\~"
+    ),
 
     tikzLwdUnit = 0.4,
 
@@ -133,8 +136,10 @@ setTikzDefaults <- function(overwrite = TRUE) {
 
     # We don't want to overwrite options that have allready been set.
     # Figure out which those are.
-    tikzSetOptions <- sapply(do.call(options, as.list(names(tikzDefaults))),
-      is.null)
+    tikzSetOptions <- sapply(
+      do.call(options, as.list(names(tikzDefaults))),
+      is.null
+    )
 
     tikzSetOptions <- names(tikzDefaults)[ tikzSetOptions ]
   } else {
@@ -249,13 +254,17 @@ PATH <- function(origin) {
 }
 
 OPTION <- function(origin) {
-  structure(ifelse(is.null(getOption(origin)), "", Sys.which(getOption(origin))),
-    origin = origin, class = "OPTION")
+  structure(
+    ifelse(is.null(getOption(origin)), "", Sys.which(getOption(origin))),
+    origin = origin, class = "OPTION"
+  )
 }
 
 ENV_VAR <- function(origin) {
-  structure(ifelse(is.null(Sys.getenv(origin)), "", Sys.which(Sys.getenv(origin))),
-    origin = origin, class = "ENV_VAR")
+  structure(
+    ifelse(is.null(Sys.getenv(origin)), "", Sys.which(Sys.getenv(origin))),
+    origin = origin, class = "ENV_VAR"
+  )
 }
 
 
@@ -352,8 +361,7 @@ tikzCompilerInfo <- function(verbose = TRUE) {
 tikzTest <- function(texString = "A",
                      engine = getOption("tikzDefaultEngine"),
                      documentDeclaration = getOption("tikzDocumentDeclaration"),
-                     packages)
-{
+                     packages) {
   print_compiler_info(engine, "Active")
   getLatexStrWidth(
     texString,

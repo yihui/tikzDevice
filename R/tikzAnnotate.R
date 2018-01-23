@@ -180,8 +180,10 @@ tikzAnnotate <- function(annotation, checkstate = TRUE) {
     stop("The active device is not a tikz device, please start a tikz device to use this function. See ?tikz.")
   }
 
-  .C(TikZ_Annotate, as.character(annotation),
-    as.integer(length(annotation)), as.logical(checkstate))
+  .C(
+    TikZ_Annotate, as.character(annotation),
+    as.integer(length(annotation)), as.logical(checkstate)
+  )
 
   invisible()
 }
@@ -206,9 +208,9 @@ tikzAnnotate <- function(annotation, checkstate = TRUE) {
 #'
 #' @export
 tikzNode <- function(x = NULL, y = NULL,
-  opts = NULL,
-  name = NULL, content = NULL,
-  units = "user") {
+                     opts = NULL,
+                     name = NULL, content = NULL,
+                     units = "user") {
   # If there is no node content, we create a coordinate.
   node_string <- ifelse(is.null(content), "\\coordinate", "\\node")
 
@@ -243,8 +245,10 @@ tikzNode <- function(x = NULL, y = NULL,
       y <- grconvertY(y, from = units, to = "device")
     }
 
-    node_string <- paste(node_string,
-      " at (", round(x, 2), ",", round(y, 2), ")", sep = "")
+    node_string <- paste(
+      node_string,
+      " at (", round(x, 2), ",", round(y, 2), ")", sep = ""
+    )
   }
   if (!is.null(content)) {
     node_string <- paste(node_string, " {", content, "}", sep = "")
@@ -284,11 +288,13 @@ tikzAnnotateGrob <- function(annotation) {
 #' @importFrom grid grob
 #' @export
 tikzNodeGrob <- function(x = NULL, y = NULL,
-  opts = NULL, name = NULL,
-  content = NULL,
-  units = "native") {
-  grob(x = x, y = y, opts = opts, coord_name = name, content = content,
-    units = units, cl = "tikz_node")
+                         opts = NULL, name = NULL,
+                         content = NULL,
+                         units = "native") {
+  grob(
+    x = x, y = y, opts = opts, coord_name = name, content = content,
+    units = units, cl = "tikz_node"
+  )
 }
 
 
@@ -323,11 +329,11 @@ grid.tikzAnnotate <- function(annotation, draw = TRUE) {
 #' @importFrom grid grid.draw
 #' @export
 grid.tikzNode <- function(
-  x = NULL, y = NULL,
-  opts = NULL, name = NULL,
-  content = NULL,
-  units = "native",
-  draw = TRUE) {
+                          x = NULL, y = NULL,
+                          opts = NULL, name = NULL,
+                          content = NULL,
+                          units = "native",
+                          draw = TRUE) {
   node_grob <- tikzNodeGrob(
     x = x, y = y,
     opts = opts, name = name, content = content,
@@ -375,8 +381,10 @@ drawDetails.tikz_node <- function(x, recording) {
     coords <- gridToDevice(x$x, x$y, x$units)
   }
 
-  tikzNode(coords[1], coords[2], x$opts,
-    x$coord_name, x$content, units = "device")
+  tikzNode(
+    coords[1], coords[2], x$opts,
+    x$coord_name, x$content, units = "device"
+  )
 }
 
 

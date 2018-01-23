@@ -211,36 +211,38 @@
 #'
 #' @export
 tikz <- function(file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
-  width = 7, height = 7, onefile = TRUE,
-  bg="transparent", fg="black", pointsize = 10, lwdUnit = getOption("tikzLwdUnit"),
-  standAlone = FALSE, bareBones = FALSE, console = FALSE, sanitize = FALSE,
-  engine = getOption("tikzDefaultEngine"),
-  documentDeclaration = getOption("tikzDocumentDeclaration"),
-  packages,
-  footer = getOption("tikzFooter"),
-  symbolicColors = getOption("tikzSymbolicColors"), colorFileName = "%s_colors.tex",
-  maxSymbolicColors = getOption("tikzMaxSymbolicColors"),
-  timestamp = TRUE,
-  verbose = interactive()) {
-  tryCatch({
-    # Ok, this sucks. We copied the function signature of pdf() and got `file`
-    # as an argument to our function. We should have copied png() and used
-    # `filename`.
+                 width = 7, height = 7, onefile = TRUE,
+                 bg="transparent", fg="black", pointsize = 10, lwdUnit = getOption("tikzLwdUnit"),
+                 standAlone = FALSE, bareBones = FALSE, console = FALSE, sanitize = FALSE,
+                 engine = getOption("tikzDefaultEngine"),
+                 documentDeclaration = getOption("tikzDocumentDeclaration"),
+                 packages,
+                 footer = getOption("tikzFooter"),
+                 symbolicColors = getOption("tikzSymbolicColors"), colorFileName = "%s_colors.tex",
+                 maxSymbolicColors = getOption("tikzMaxSymbolicColors"),
+                 timestamp = TRUE,
+                 verbose = interactive()) {
+  tryCatch(
+    {
+      # Ok, this sucks. We copied the function signature of pdf() and got `file`
+      # as an argument to our function. We should have copied png() and used
+      # `filename`.
 
-    # file_path_as_absolute can give us the absolute path to the output
-    # file---but it has to exist first. So, we use file() to "touch" the
-    # path.
-    touch_file <- suppressWarnings(file(file, "w"))
-    close(touch_file)
+      # file_path_as_absolute can give us the absolute path to the output
+      # file---but it has to exist first. So, we use file() to "touch" the
+      # path.
+      touch_file <- suppressWarnings(file(file, "w"))
+      close(touch_file)
 
-    file <- tools::file_path_as_absolute(file)
-  },
-  error = function(e) {
-    stop(simpleError(paste(
-      "Cannot create:\n\t", file,
-      "\nBecause the directory does not exist or is not writable."
-    )))
-  })
+      file <- tools::file_path_as_absolute(file)
+    },
+    error = function(e) {
+      stop(simpleError(paste(
+        "Cannot create:\n\t", file,
+        "\nBecause the directory does not exist or is not writable."
+      )))
+    }
+  )
 
   # remove the file if we are outputting to multiple files since the file
   # name will get changed in the C code
@@ -266,11 +268,13 @@ tikz <- function(file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
         packages <- getOption("tikzLualatexPackages")
       }
     },
-    stop("Unsupported TeX engine: ", engine,
+    stop(
+      "Unsupported TeX engine: ", engine,
       "\nAvailable choices are:\n",
       "\tpdftex\n",
       "\txetex\n",
-      "\tluatex\n")
+      "\tluatex\n"
+    )
   )
 
   # Ensure the standAlone option will trump the bareBones option.
@@ -298,10 +302,12 @@ tikz <- function(file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
   if (maxSymbolicColors < 0)
     stop("maxSymbolicColors needs to be nonnegative")
 
-  .External(TikZ_StartDevice, file, width, height, onefile, bg, fg, baseSize, lwdUnit,
+  .External(
+    TikZ_StartDevice, file, width, height, onefile, bg, fg, baseSize, lwdUnit,
     standAlone, bareBones, documentDeclaration, packages, footer, console,
     sanitize, engine, symbolicColors, colorFileName, maxSymbolicColors,
-    timestamp, verbose)
+    timestamp, verbose
+  )
 
   invisible()
 }
