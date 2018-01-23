@@ -84,7 +84,7 @@ the LaTeX document. These definitions can be generated with the following
 Package Behavior" of \link{tikzDevice-package}.}
 
 \item{colorFileName}{a character string indicating where the color map for
-symbolic colors is to be stored. It can contain a placeholder \code{\\%s}
+symbolic colors is to be stored. It can contain a placeholder \code{\%s}
 where the tikz filename is inserted. If the string is empty, no file is
 written.}
 

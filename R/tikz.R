@@ -100,7 +100,7 @@
 #'  `colorFileName` parameter. See also the section "Options That Affect
 #'  Package Behavior" of \link{tikzDevice-package}.
 #' @param colorFileName a character string indicating where the color map for
-#'  symbolic colors is to be stored. It can contain a placeholder `\%s`
+#'  symbolic colors is to be stored. It can contain a placeholder \code{\%s}
 #'  where the tikz filename is inserted. If the string is empty, no file is
 #'  written.
 #' @param maxSymbolicColors an integer number indicating the maximal number
