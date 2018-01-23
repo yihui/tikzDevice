@@ -5,7 +5,8 @@ torture_mem <- any(stringr::str_detect(test_args, "^--use-gctorture"))
 if (length(tags_to_run <- test_args[stringr::str_detect(test_args, "^--run-tests")])) {
   tags_to_run <- unlist(str_split(
     str_split(tags_to_run, "=")[[1]][2],
-    ","))
+    ","
+  ))
 }
 
 if (torture_mem) {
@@ -52,7 +53,8 @@ convert_cmd <- normalizePath(
   ifelse(using_windows,
     system("bash -c 'which convert'", intern = TRUE, ignore.stderr = TRUE),
     Sys.which("convert")
-))
+  )
+)
 
 if (nchar(convert_cmd) == 0) {
   convert_cmd <- NULL

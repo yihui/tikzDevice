@@ -20,13 +20,13 @@ tikz(file = ifelse(onefile, "./Rplots.tex", "./Rplot\%03d.tex"), width = 7,
 \item{file}{A character string indicating the desired path to the output
 file.}
 
-\item{width}{The width of the output figure, in \bold{inches}.}
+\item{width}{The width of the output figure, in \strong{inches}.}
 
-\item{height}{The height of the output figure, in \bold{inches}.}
+\item{height}{The height of the output figure, in \strong{inches}.}
 
 \item{onefile}{Should output be directed to separate environments in a
 single file (default \code{TRUE}). If \code{FALSE} this option works
-exactly like the argument of the same name to \code{\link{pdf}}
+exactly like the argument of the same name to \code{\link[=pdf]{pdf()}}
 (see there for more details).}
 
 \item{bg}{The starting background color for the plot.}
@@ -35,10 +35,10 @@ exactly like the argument of the same name to \code{\link{pdf}}
 
 \item{pointsize}{Base pointsize used in the LaTeX document.  This option is
 only used if a valid pointsize cannot be extracted from the value of
-\code{getOption("tikzDocumentDeclaration")}.  See the section ``Font Size
-Calculations'' in \link{tikzDevice-package} for more details.}
+\code{getOption("tikzDocumentDeclaration")}.  See the section "Font Size
+Calculations" in \link{tikzDevice-package} for more details.}
 
-\item{lwdUnit}{The number of \code{pt}s in LaTeX that \code{lwd=1} in R is
+\item{lwdUnit}{The number of \code{pt}s in LaTeX that \code{lwd = 1} in R is
 translated to.  Defaults to 0.4 (LaTeX and TikZ default); for compatibility
 with R default, please use 72.27/96 (96 pixels in R is 1 inch, which is 72.27
 points in TeX).}
@@ -55,43 +55,43 @@ output will be drawn on a single page.}
 
 \item{console}{Should the output of tikzDevice be directed to the R console
 (default \code{FALSE}). This is useful for dumping tikz output directly into a
-LaTeX document via \code{\link{sink}}.  If TRUE, the \code{file} argument
-is ignored. Setting \code{file=''} is equivalent to setting
+LaTeX document via \code{\link[=sink]{sink()}}.  If TRUE, the \code{file} argument
+is ignored. Setting \code{file = ''} is equivalent to setting
 \code{console=TRUE}.}
 
 \item{sanitize}{Should special latex characters be replaced (Default FALSE).
-See the section ``Options That Affect Package Behavior'' for which
+See the section "Options That Affect Package Behavior" for which
 characters are replaced.}
 
 \item{engine}{a string specifying which TeX engine to use. Possible values
 are 'pdftex', 'xetex' and 'luatex'. See the Unicode section of
 \link{tikzDevice-package} for details.}
 
-\item{documentDeclaration}{See the sections ``Options That Affect Package
-Behavior'' and ``Font Size Calculations'' of \link{tikzDevice-package}
+\item{documentDeclaration}{See the sections "Options That Affect Package
+Behavior" and "Font Size Calculations" of \link{tikzDevice-package}
 for more details.}
 
-\item{packages}{See the section ``Options That Affect Package Behavior'' of
+\item{packages}{See the section "Options That Affect Package Behavior" of
 \link{tikzDevice-package}.}
 
-\item{footer}{See the section ``Options That Affect Package Behavior'' of
+\item{footer}{See the section "Options That Affect Package Behavior" of
 \link{tikzDevice-package}.}
 
 \item{symbolicColors}{A logical value indicating whether colors are written
 as RGB values or as symbolic names in which case the need to be defined in
 the LaTeX document. These definitions can be generated with the following
-\code{colorFileName} parameter. See also the section ``Options That Affect
-Package Behavior'' of \link{tikzDevice-package}.}
+\code{colorFileName} parameter. See also the section "Options That Affect
+Package Behavior" of \link{tikzDevice-package}.}
 
 \item{colorFileName}{a character string indicating where the color map for
-symbolic colors is to be stored. It can contain a placeholder \code{\%s}
+symbolic colors is to be stored. It can contain a placeholder \code{\\%s}
 where the tikz filename is inserted. If the string is empty, no file is
 written.}
 
 \item{maxSymbolicColors}{an integer number indicating the maximal number
 of distinct colors to write symbolically. Any excess color will be defined
 as if \code{symbolicColors} was set to \code{FALSE}. See also the section
-``Options That Affect'  Package Behavior'' of \link{tikzDevice-package}.}
+"Options That Affect Package Behavior" of \link{tikzDevice-package}.}
 
 \item{timestamp}{A logical value indicating whether a timestamp is written
 to the TeX file.}
@@ -104,7 +104,7 @@ interactive mode only, to \code{FALSE} otherwise.}
 \code{tikz()} returns no values.
 }
 \description{
-\code{tikz} is used to open a R graphics device which supports output in the
+\code{tikz()} is used to open a R graphics device which supports output in the
 TikZ graphics language. TikZ code may be included inside a LaTeX document by
 specifying \code{\\usepackage{tikz}} in the document header.
 }
@@ -117,7 +117,7 @@ whatever fonts are currently used in the document. This also means that
 annotations}.
 
 The TikZ device currently supports three modes of output depending on the
-value of the parameter \code{standAlone} and \code{bareBones}.  If
+value of the \code{standAlone} and \code{bareBones} arguments.  If
 \code{standAlone} and \code{bareBones} are set to the default value of
 \code{FALSE}, the resulting file will only contain graphics output wrapped
 in a LaTeX \code{tikzpicture} environment.  Since this file is not a
@@ -157,14 +157,14 @@ set.
 }
 \note{
 To compile the output of \code{tikz} a working installation of LaTeX
-  and PGF is needed.  Current releases of the TikZ package are available
-  from \url{http://www.ctan.org}. The package may also be installed through
-  the MikTeX package manager on Windows or using the TeX Live package
-  manager, \code{tlmgr}, on Unix/Linux/OS X. The TeX Live package manager
-  will only be installed by default for TeX Live distributions dated 2008
-  and later. Both bleeding-edge and release versions of TikZ may be obtained
-  from the project website hosted at
-  \url{http://sourceforge.net/projects/pgf/}.
+and PGF is needed.  Current releases of the TikZ package are available
+from \url{http://www.ctan.org}. The package may also be installed through
+the MikTeX package manager on Windows or using the TeX Live package
+manager, \code{tlmgr}, on Unix/Linux/OS X. The TeX Live package manager
+will only be installed by default for TeX Live distributions dated 2008
+and later. Both bleeding-edge and release versions of TikZ may be obtained
+from the project website hosted at
+\url{http://sourceforge.net/projects/pgf/}.
 
 Multiple plots will be placed as separate environments in the output file.
 }
@@ -242,16 +242,16 @@ setwd(oldwd)
 }
 \references{
 The TikZ and PGF Packages: Manual for version 2.00\cr
-  \url{http://sourceforge.net/projects/pgf}\cr Till Tantau, February 20,
-  2008
+\url{http://sourceforge.net/projects/pgf}\cr Till Tantau, February 20,
+2008
 }
 \seealso{
-\code{\link{pictex}}, \code{\link{getLatexCharMetrics}},
-  \code{\link{getLatexStrWidth}}, \code{\link{setTikzDefaults}},
-  \code{\link{tikzAnnotate}}, \code{\link{sanitizeTexString}}
+\code{\link[=pictex]{pictex()}}, \code{\link[=getLatexCharMetrics]{getLatexCharMetrics()}},
+\code{\link[=getLatexStrWidth]{getLatexStrWidth()}}, \code{\link[=setTikzDefaults]{setTikzDefaults()}},
+\code{\link[=tikzAnnotate]{tikzAnnotate()}}, \code{\link[=sanitizeTexString]{sanitizeTexString()}}
 }
 \author{
 Charlie Sharpsteen \email{source@sharpsteen.net} and Cameron
-  Bracken \email{cameron.bracken@gmail.com}
+Bracken \email{cameron.bracken@gmail.com}
 }
 \keyword{device}

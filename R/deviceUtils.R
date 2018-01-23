@@ -16,9 +16,11 @@ getDocumentPointsize <- function(docString) {
 
   # Search the document declaration for the pointsize, and extract it if it is
   # there.  (Split the input by newlines before.)
-  pointsize <- gsub("^(?:.*[[, \t](\\d+)pt[], \t])?.*$", "\\1",
+  pointsize <- gsub(
+    "^(?:.*[[, \t](\\d+)pt[], \t])?.*$", "\\1",
     strsplit(docString, "\n", fixed = TRUE),
-    ignore.case = F, perl = T)
+    ignore.case = F, perl = T
+  )
 
   # Return first matching line (if any), or NA otherwise
   as.numeric(pointsize[pointsize != ""][1])
@@ -30,28 +32,28 @@ getDocumentPointsize <- function(docString) {
 #' This function resets the following options:
 #'
 #' \itemize{
-#'   \item \code{tikzDefaultEngine}
-#'   \item \code{tikzLatex}
-#'   \item \code{tikzDocumentDeclaration}
-#'   \item \code{tikzFooter}
-#'   \item \code{tikzLatexPackages}
-#'   \item \code{tikzXelatexPackages}
-#'   \item \code{tikzLualatexPackages}
-#'   \item \code{tikzMetricPackages}
-#'   \item \code{tikzUnicodeMetricPackages}
-#'   \item \code{tikzSanitizeCharacters}
-#'   \item \code{tikzReplacementCharacters}
-#'   \item \code{tikzPdftexWarnUTF}
+#'   \item `tikzDefaultEngine`
+#'   \item `tikzLatex`
+#'   \item `tikzDocumentDeclaration`
+#'   \item `tikzFooter`
+#'   \item `tikzLatexPackages`
+#'   \item `tikzXelatexPackages`
+#'   \item `tikzLualatexPackages`
+#'   \item `tikzMetricPackages`
+#'   \item `tikzUnicodeMetricPackages`
+#'   \item `tikzSanitizeCharacters`
+#'   \item `tikzReplacementCharacters`
+#'   \item `tikzPdftexWarnUTF`
 #' }
 #'
-#' @param overwrite Should values that are allready set in \code{options()} be
+#' @param overwrite Should values that are allready set in `options()` be
 #'   overwritten?
 #' @return Nothing returned.
 #'
 #' @author Cameron Bracken \email{cameron.bracken@@gmail.com} and Charlie
 #'   Sharpsteen \email{source@@sharpsteen.net}
 #'
-#' @seealso \code{\link{tikz}}
+#' @seealso [tikz()]
 #'
 #' @examples
 #'
@@ -63,7 +65,6 @@ getDocumentPointsize <- function(docString) {
 #' @export
 setTikzDefaults <- function(overwrite = TRUE) {
   tikzDefaults <- list(
-
     tikzDefaultEngine = "pdftex",
 
     tikzLatex = getOption("tikzLatexDefault"),
@@ -118,8 +119,10 @@ setTikzDefaults <- function(overwrite = TRUE) {
 
     tikzSanitizeCharacters = c("%", "$", "}", "{", "^", "_", "#", "&", "~"),
 
-    tikzReplacementCharacters = c("\\%", "\\$", "\\}", "\\{", "\\^{}", "\\_{}",
-      "\\#", "\\&", "\\char`\\~"),
+    tikzReplacementCharacters = c(
+      "\\%", "\\$", "\\}", "\\{", "\\^{}", "\\_{}",
+      "\\#", "\\&", "\\char`\\~"
+    ),
 
     tikzLwdUnit = 0.4,
 
@@ -133,8 +136,10 @@ setTikzDefaults <- function(overwrite = TRUE) {
 
     # We don't want to overwrite options that have allready been set.
     # Figure out which those are.
-    tikzSetOptions <- sapply(do.call(options, as.list(names(tikzDefaults))),
-      is.null)
+    tikzSetOptions <- sapply(
+      do.call(options, as.list(names(tikzDefaults))),
+      is.null
+    )
 
     tikzSetOptions <- names(tikzDefaults)[ tikzSetOptions ]
   } else {
@@ -158,7 +163,6 @@ isTikzDevice <- function(which = dev.cur()) {
 }
 
 
-#' @useDynLib tikzDevice TikZ_DeviceInfo
 getDeviceInfo <- function(dev_num = dev.cur()) {
   # This function recovers some information about a tikz() graphics device that
   # is stored at the C level in the tikzDevDesc struct.
@@ -177,8 +181,6 @@ getDeviceInfo <- function(dev_num = dev.cur()) {
 
 # This function allows an R expression to be evaluated in a context where it
 # will be protected from user interrupts (use of CTRL-C for example).
-#
-#' @useDynLib tikzDevice TikZ_EvalWithoutInterrupts
 evalWithoutInterrupts <- function(expr, envir = parent.frame()) {
   # Wrap the expression in a call to `substitute` so that it gets passed
   # directly to the C code instead of being evaluated before being passed to
@@ -194,7 +196,7 @@ evalWithoutInterrupts <- function(expr, envir = parent.frame()) {
 #'
 #' This function searches through the characters in the given string, if any of
 #' the characters in the string are more than one byte then the function
-#' returns \code{TRUE} otherwise it returns \code{FALSE}.
+#' returns `TRUE` otherwise it returns `FALSE`.
 #'
 #' The function will assume an input encoding of UTF-8 but will take any
 #' specified encoding into account and will convert from the specified encoding
@@ -204,7 +206,7 @@ evalWithoutInterrupts <- function(expr, envir = parent.frame()) {
 #' @param encoding Unused.
 #' @return A boolean value
 #' @author Cameron Bracken \email{cameron.bracken@@gmail.com}
-#' @seealso \code{\link{tikz}}
+#' @seealso [tikz()]
 #' @keywords character
 #' @encoding UTF8
 #' @examples
@@ -252,13 +254,17 @@ PATH <- function(origin) {
 }
 
 OPTION <- function(origin) {
-  structure(ifelse(is.null(getOption(origin)), "", Sys.which(getOption(origin))),
-    origin = origin, class = "OPTION")
+  structure(
+    ifelse(is.null(getOption(origin)), "", Sys.which(getOption(origin))),
+    origin = origin, class = "OPTION"
+  )
 }
 
 ENV_VAR <- function(origin) {
-  structure(ifelse(is.null(Sys.getenv(origin)), "", Sys.which(Sys.getenv(origin))),
-    origin = origin, class = "ENV_VAR")
+  structure(
+    ifelse(is.null(Sys.getenv(origin)), "", Sys.which(Sys.getenv(origin))),
+    origin = origin, class = "ENV_VAR"
+  )
 }
 
 
@@ -305,14 +311,14 @@ format.ENV_VAR <- function(x, ...) {
 
 #' Print paths to TeX compilers.
 #'
-#' This function reports information concerning compilers that the \code{tikz}
+#' This function reports information concerning compilers that the `tikz`
 #' device will use to calculate character metrics. Information on LaTeX will
 #' always be available but information on XeLaTeX and LuaLaTeX will only be
 #' reported if the compilers were found.
 #'
 #' @param verbose
-#'   If set to \code{FALSE}, calling this function will not cause any output to
-#'   be printed to the screen. Defaults to \code{TRUE}.
+#'   If set to `FALSE`, calling this function will not cause any output to
+#'   be printed to the screen. Defaults to `TRUE`.
 #'
 #' @return
 #'   Invisibly returns a list containing paths to TeX compilers.
@@ -321,7 +327,7 @@ format.ENV_VAR <- function(x, ...) {
 #'   Charlie Sharpsteen \email{source@@sharpsteen.net}
 #'
 #' @seealso
-#'   \code{\link{tikz}}
+#'   [tikz()]
 #'
 #' @export
 tikzCompilerInfo <- function(verbose = TRUE) {
@@ -349,14 +355,13 @@ tikzCompilerInfo <- function(verbose = TRUE) {
 #' @inheritParams tikz
 #'
 #' @seealso
-#'   \code{\link{tikz}}
+#'   [tikz()]
 #'
 #' @export
 tikzTest <- function(texString = "A",
                      engine = getOption("tikzDefaultEngine"),
                      documentDeclaration = getOption("tikzDocumentDeclaration"),
-                     packages)
-{
+                     packages) {
   print_compiler_info(engine, "Active")
   getLatexStrWidth(
     texString,

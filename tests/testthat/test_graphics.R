@@ -63,11 +63,9 @@ test_graphs <- list(
 
       # Plot characters.
       for (i in 1:26) {
-
         points(ix[i], iy[i], pch = i - 1)
         # Place text label so we know which character is being plotted.
         text(ix[i] - 0.3, iy[i], i - 1)
-
       }
     })
   ),
@@ -98,8 +96,10 @@ test_graphs <- list(
     description = "Draw colored lines",
     tags = c("base"),
     graph_code = quote({
-      plot(c(0, 1), c(0, 1), type = "l", axes = F,
-        xlab = "", ylab = "", col = "red3")
+      plot(
+        c(0, 1), c(0, 1), type = "l", axes = F,
+        xlab = "", ylab = "", col = "red3"
+      )
     })
   ),
 
@@ -111,8 +111,10 @@ test_graphs <- list(
       tikzLwdUnit = 72.27 / 96
     ),
     graph_code = quote({
-      plot(c(0, 1), c(0, 1), type = "l", axes = F,
-        xlab = "", ylab = "", col = "red3")
+      plot(
+        c(0, 1), c(0, 1), type = "l", axes = F,
+        xlab = "", ylab = "", col = "red3"
+      )
     })
   ),
 
@@ -141,8 +143,10 @@ test_graphs <- list(
     description = "Test line types",
     tags = c("base"),
     graph_code = quote({
-      plot(0, type = "n", xlim = c(0, 1), ylim = c(0, 6),
-        axes = F, xlab = "", ylab = "")
+      plot(
+        0, type = "n", xlim = c(0, 1), ylim = c(0, 6),
+        axes = F, xlab = "", ylab = ""
+      )
       for (i in 0:6)
         lines(c(0, 1), c(i, i), lty = i)
     })
@@ -153,8 +157,10 @@ test_graphs <- list(
     description = "Test line weights",
     tags = c("base"),
     graph_code = quote({
-      plot(0, type = "n", xlim = c(0, 1), ylim = c(0, 6),
-        axes = F, xlab = "", ylab = "")
+      plot(
+        0, type = "n", xlim = c(0, 1), ylim = c(0, 6),
+        axes = F, xlab = "", ylab = ""
+      )
       for (i in 0:6)
         lines(c(0, 1), c(i, i), lwd = i)
     })
@@ -202,12 +208,14 @@ test_graphs <- list(
     description = "Test string placement and TeX symbol generation",
     tags = c("base", "text"),
     graph_code = quote({
-      syms <- c("alpha", "theta", "tau", "beta", "vartheta", "pi", "upsilon",
+      syms <- c(
+        "alpha", "theta", "tau", "beta", "vartheta", "pi", "upsilon",
         "gamma", "gamma", "varpi", "phi", "delta", "kappa", "rho", "varphi",
         "epsilon", "lambda", "varrho", "chi", "varepsilon", "mu", "sigma",
         "psi", "zeta", "nu", "varsigma", "omega", "eta", "xi", "Gamma",
         "Lambda", "Sigma", "Psi", "Delta", "Xi", "Upsilon", "Omega",
-        "Theta", "Pi", "Phi")
+        "Theta", "Pi", "Phi"
+      )
       x <- rnorm(length(syms))
       y <- rnorm(length(syms))
       plot(-2:2, -2:2, type = "n", axes = F, xlab = "", ylab = "")
@@ -271,7 +279,8 @@ test_graphs <- list(
     description = "Annotation of base graphics",
     tags = c("base", "annotation"),
     graph_options = list(
-      tikzLatexPackages = c(getOption("tikzLatexPackages"),
+      tikzLatexPackages = c(
+        getOption("tikzLatexPackages"),
         "\\usetikzlibrary{decorations.pathreplacing}",
         "\\usetikzlibrary{positioning}",
         "\\usetikzlibrary{shapes.arrows,shapes.symbols}"
@@ -279,7 +288,6 @@ test_graphs <- list(
     ),
     fuzz = 130,
     graph_code = quote({
-
       p <- rgamma(300, 1)
       outliers <- which(p > quantile(p, .75) + 1.5 * IQR(p))
       boxplot(p)
@@ -290,7 +298,8 @@ test_graphs <- list(
 
       # Use tikzAnnotate to insert arbitrary code, such as drawing a fancy path
       # between min outlier and max outlier.
-      tikzAnnotate(c("\\draw[very thick,red,",
+      tikzAnnotate(c(
+        "\\draw[very thick,red,",
         # Turn the path into a brace.
         "decorate,decoration={brace,amplitude=12pt},",
         # Shift it 1em to the left of the coordinates
@@ -299,14 +308,14 @@ test_graphs <- list(
         # Add a node with some text in the middle of the path
         "node[single arrow,anchor=tip,fill=white,draw=green,",
         "left=14pt,text width=0.70in,align=center]",
-        "{Holy Outliers Batman!}", "(max outlier);"))
+        "{Holy Outliers Batman!}", "(max outlier);"
+      ))
 
       # tikzNode can be used to place nodes with customized options and content
       tikzNode(
         opts = "starburst,fill=green,draw=blue,very thick,right=of max outlier",
         content = "Wow!"
       )
-
     })
   ),
 
@@ -315,13 +324,13 @@ test_graphs <- list(
     description = "Annotation of grid graphics",
     tags = c("grid", "annotation"),
     graph_options = list(
-      tikzLatexPackages = c(getOption("tikzLatexPackages"),
+      tikzLatexPackages = c(
+        getOption("tikzLatexPackages"),
         "\\usetikzlibrary{shapes.callouts}"
       )
     ),
     fuzz = 745,
     graph_code = quote({
-
       library(grid)
 
       pushViewport(plotViewport())
@@ -335,7 +344,6 @@ test_graphs <- list(
       for (i in seq(2, 8, 2)) {
         grid.tikzNode(i, i, opts = "ellipse callout,draw,anchor=pointer", content = i)
       }
-
     })
   ),
 
@@ -344,11 +352,11 @@ test_graphs <- list(
     description = "Annotation prior to any graphics output",
     tags = c("base", "annotation"),
     graph_code = quote({
-        plot.new()
-        plot.window(0:1, 0:1)
-        tikzCoord(0, 0, name = "ll")
-        tikzCoord(1, 1, name = "ur")
-        tikzAnnotate("\\draw (ll) rectangle (ur);")
+      plot.new()
+      plot.window(0:1, 0:1)
+      tikzCoord(0, 0, name = "ll")
+      tikzCoord(1, 1, name = "ur")
+      tikzAnnotate("\\draw (ll) rectangle (ur);")
     })
   ),
 
@@ -357,8 +365,10 @@ test_graphs <- list(
     description = "Test of ggplot2 graphics",
     tags = c("ggplot2"),
     graph_code = quote({
-      print(ggplot2::qplot(carat, price, data = ggplot2::diamonds, geom = "smooth",
-        colour = color))
+      print(ggplot2::qplot(
+        carat, price, data = ggplot2::diamonds, geom = "smooth",
+        colour = color
+      ))
     })
   ),
 
@@ -367,12 +377,18 @@ test_graphs <- list(
     description = "Test of grid text alignment with ggplot2",
     tags = c("ggplot2", "text"),
     graph_code = quote({
-      soilSample <- structure(list(`Grain Diameter` = c(8, 5.6, 4, 2.8, 2, 1, 0.5, 0.355, 0.25),
-        `Percent Finer` = c(0.951603145795523, 0.945553539019964,
-           0.907239362774753, 0.86771526517443, 0.812865497076023, 0.642064932446058,
-           0.460375075620085, 0.227465214761041, 0.0389191369227667)),
+      soilSample <- structure(
+        list(
+          `Grain Diameter` = c(8, 5.6, 4, 2.8, 2, 1, 0.5, 0.355, 0.25),
+          `Percent Finer` = c(
+            0.951603145795523, 0.945553539019964,
+            0.907239362774753, 0.86771526517443, 0.812865497076023, 0.642064932446058,
+            0.460375075620085, 0.227465214761041, 0.0389191369227667
+          )
+        ),
         .Names = c("Grain Diameter", "Percent Finer"), row.names = c(NA, 9L),
-        class = "data.frame")
+        class = "data.frame"
+      )
 
       # R 2.12.x and 2.13.x have to test with ggplot2 v0.8.9 which is very
       # different from 0.9.0.
@@ -403,8 +419,9 @@ test_graphs <- list(
         plot.new()
         plot.window(range(x, na.rm = TRUE), range(y, na.rm = TRUE))
         polypath(x, y, col = col, rule = rule)
-        if (!is.na(col))
+        if (!is.na(col)) {
           mtext(paste("Rule:", rule), side = 1, line = 0)
+        }
       }
 
       plotRules <- function(x, y, title) {
@@ -416,21 +433,31 @@ test_graphs <- list(
 
       op <- par(mfrow = c(5, 3), mar = c(2, 1, 1, 1))
 
-      plotRules(c(.1, .1, .9, .9, NA, .2, .2, .8, .8),
+      plotRules(
+        c(.1, .1, .9, .9, NA, .2, .2, .8, .8),
         c(.1, .9, .9, .1, NA, .2, .8, .8, .2),
-        title = "Nested rectangles, both clockwise")
-      plotRules(x = c(.1, .1, .9, .9, NA, .2, .8, .8, .2),
+        title = "Nested rectangles, both clockwise"
+      )
+      plotRules(
+        x = c(.1, .1, .9, .9, NA, .2, .8, .8, .2),
         y = c(.1, .9, .9, .1, NA, .2, .2, .8, .8),
-        title = "Nested rectangles, outer clockwise, inner anti-clockwise")
-      plotRules(x = c(.1, .1, .4, .4, NA, .6, .9, .9, .6),
+        title = "Nested rectangles, outer clockwise, inner anti-clockwise"
+      )
+      plotRules(
+        x = c(.1, .1, .4, .4, NA, .6, .9, .9, .6),
         y = c(.1, .4, .4, .1, NA, .6, .6, .9, .9),
-        title = "Disjoint rectangles")
-      plotRules(x = c(.1, .1, .6, .6, NA, .4, .4, .9, .9),
+        title = "Disjoint rectangles"
+      )
+      plotRules(
+        x = c(.1, .1, .6, .6, NA, .4, .4, .9, .9),
         y = c(.1, .6, .6, .1, NA, .4, .9, .9, .4),
-        title = "Overlapping rectangles, both clockwise")
-      plotRules(x = c(.1, .1, .6, .6, NA, .4, .9, .9, .4),
+        title = "Overlapping rectangles, both clockwise"
+      )
+      plotRules(
+        x = c(.1, .1, .6, .6, NA, .4, .9, .9, .4),
         y = c(.1, .6, .6, .1, NA, .4, .4, .9, .9),
-        title = "Overlapping rectangles, one clockwise, other anti-clockwise")
+        title = "Overlapping rectangles, one clockwise, other anti-clockwise"
+      )
 
       par(op)
     })
@@ -442,22 +469,30 @@ test_graphs <- list(
     tags = c("base", "raster", "reflection"),
     fuzz = 642,
     graph_code = quote({
-
       plot(c(100, 250), c(300, 450), type = "n", xlab = "", ylab = "")
       image <- as.raster(matrix(rep(c(rep(0:1, 4), rep(1:0, 4)), each = 3), ncol = 6, nrow = 4))
       rasterImage(image, 100, 300, 150, 350, interpolate = FALSE)
       rasterImage(image, 100, 400, 150, 450)
-      rasterImage(image, 200, 300, 200 + xinch(.5), 300 + yinch(.3),
-        interpolate = FALSE)
-      rasterImage(image, 200, 400, 250, 450, angle = 15,
-        interpolate = FALSE)
-      rasterImage(image, 175 + xinch(.5), 350, 175, 350 + yinch(.3), angle = -30,
-        interpolate = FALSE)
-      rasterImage(image, 200 + xinch(.5), 350 + yinch(.3), 200, 350, angle = -45,
-        interpolate = FALSE)
-      rasterImage(image, 225, 350 + yinch(.3), 225 + xinch(.5), 350, angle = -60,
-        interpolate = FALSE)
-
+      rasterImage(
+        image, 200, 300, 200 + xinch(.5), 300 + yinch(.3),
+        interpolate = FALSE
+      )
+      rasterImage(
+        image, 200, 400, 250, 450, angle = 15,
+        interpolate = FALSE
+      )
+      rasterImage(
+        image, 175 + xinch(.5), 350, 175, 350 + yinch(.3), angle = -30,
+        interpolate = FALSE
+      )
+      rasterImage(
+        image, 200 + xinch(.5), 350 + yinch(.3), 200, 350, angle = -45,
+        interpolate = FALSE
+      )
+      rasterImage(
+        image, 225, 350 + yinch(.3), 225 + xinch(.5), 350, angle = -60,
+        interpolate = FALSE
+      )
     })
   ),
 
@@ -466,13 +501,11 @@ test_graphs <- list(
     description = "Test raster handling in graphics with reflected axes",
     tags = c("base", "raster", "reflection"),
     graph_code = quote({
-
       par(mfrow = c(2, 2))
       image(volcano, useRaster = TRUE)
       image(volcano, xlim = c(1, 0), useRaster = TRUE)
       image(volcano, ylim = c(1, 0), useRaster = TRUE)
       image(volcano, xlim = c(1, 0), ylim = c(1, 0), useRaster = TRUE)
-
     })
   ),
 
@@ -481,15 +514,15 @@ test_graphs <- list(
     description = "Test raster support in grid graphics",
     tags = c("grid", "raster"),
     graph_code = quote({
-
       suppressPackageStartupMessages(library(grid))
       suppressPackageStartupMessages(library(lattice))
 
-      plt <- levelplot(volcano, panel = panel.levelplot.raster,
-        col.regions = topo.colors, cuts = 30, interpolate = TRUE)
+      plt <- levelplot(
+        volcano, panel = panel.levelplot.raster,
+        col.regions = topo.colors, cuts = 30, interpolate = TRUE
+      )
 
       print(plt)
-
     })
   ),
 
@@ -509,7 +542,8 @@ test_graphs <- list(
     description = "Test symbolic colors for a simple image",
     tags = c("base", "symbolic"),
     graph_options = list(
-      tikzSymbolicColors = TRUE, tikzMaxSymbolicColors = 3),
+      tikzSymbolicColors = TRUE, tikzMaxSymbolicColors = 3
+    ),
     graph_code = quote({
       plot.new()
       points(0, 0)
@@ -589,9 +623,9 @@ test_graphs <- list(
         "\\usepackage[active,tightpage,xetex]{preview}",
         "\\PreviewEnvironment{pgfpicture}",
         "\\setlength\\PreviewBorder{0pt}"
-    )),
+      )
+    ),
     graph_code = quote({
-
       label <- c(
         "\\noindent{\\red d}roo{\\lbl g}",
         "\\noindent{\\reda d}roo{\\lbla g}",
@@ -649,7 +683,6 @@ test_graphs <- list(
   # )
 
   NULL
-
 )
 
 test_graphs <- test_graphs[!vapply(test_graphs, is.null, logical(1L))]
@@ -659,7 +692,8 @@ if (length(tags_to_run)) {
     function(graph) {
       any(graph$tags %in% tags_to_run)
     },
-    test_graphs)
+    test_graphs
+  )
 }
 
 
@@ -686,10 +720,14 @@ if (!is.null(gs_cmd)) {
   }, graphs_produced)
   test_output <- file.path(test_output_dir, "test_results.pdf")
 
-  silence <- system(paste(shQuote(gs_cmd), "-dNOPAUSE", "-sDEVICE=pdfwrite",
-    paste0("-sOUTPUTFILE=", test_output),
-    "-dBATCH", paste(shQuote(graph_files), collapse = " ")),
-    intern = TRUE, ignore.stderr = TRUE)
+  silence <- system(
+    paste(
+      shQuote(gs_cmd), "-dNOPAUSE", "-sDEVICE=pdfwrite",
+      paste0("-sOUTPUTFILE=", test_output),
+      "-dBATCH", paste(shQuote(graph_files), collapse = " ")
+    ),
+    intern = TRUE, ignore.stderr = TRUE
+  )
 
   message("\nAll test outputs combined into:\n\t", test_output)
 }
@@ -702,10 +740,14 @@ if (!is.null(compare_cmd) && !is.null(convert_cmd)) {
   }, graphs_produced)
   diff_output <- file.path(test_output_dir, "test_diffs.pdf")
 
-  silence <- system(paste(shQuote(convert_cmd),
-    paste(shQuote(graph_files), collapse = " "),
-    diff_output),
-    intern = TRUE, ignore.stderr = TRUE)
+  silence <- system(
+    paste(
+      shQuote(convert_cmd),
+      paste(shQuote(graph_files), collapse = " "),
+      diff_output
+    ),
+    intern = TRUE, ignore.stderr = TRUE
+  )
 
   message("\nResults of all visual diffs combined into:\n\t", diff_output)
 }

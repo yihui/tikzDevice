@@ -196,6 +196,8 @@ static void TikZ_WriteLineStyle(pGEcontext plotParams, tikzDevDesc *tikzInfo);
 
 static double ScaleFont( const pGEcontext plotParams, pDevDesc deviceInfo );
 
+SEXP TikZ_EvalWithoutInterrupts(SEXP expr, SEXP envir);
+
 /* Utility Routines*/
 static void printOutput(tikzDevDesc *tikzInfo, const char *format, ...);
 static void printColorOutput(tikzDevDesc *tikzInfo, const char *format, ...);

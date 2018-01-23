@@ -16,50 +16,50 @@ sanitizeTexString(string, strip = getOption("tikzSanitizeCharacters"),
 }
 \value{
 \item{sanitizedString}{A character vector of length 1 with all
-  special characters replaced.}
+special characters replaced.}
 }
 \description{
-This function is used by tikzDevice when \code{sanitize=TRUE} to replace
+This function is used by tikzDevice when \code{sanitize = TRUE} to replace
 special LaTeX characters (such as the comment character %) in plotting text
 where the user does not have direct control over the generated text.
 }
 \details{
-\code{sanitizeTexString} searches character by character through a string
+\code{sanitizeTexString()} searches character by character through a string
 replacing each occurrence of a special character contained in
 \code{strip[i]} with the corresponding replacement value in
 \code{replacement[i]}.  tikzDevice calls back this function for every piece
-of text when the sanitize option is TRUE. See \code{\link{tikz}} for more
+of text when the sanitize option is TRUE. See \code{\link[=tikz]{tikz()}} for more
 information on the default special characters and replacement values.
 
-By default, `tikzSanitizeCharacters` replaces the following characters:
+By default, \code{tikzSanitizeCharacters} replaces the following characters:
 
 \itemize{
-  \item \verb{\%}
-  \item \verb{$}
-  \item \verb{\}}
-  \item \verb{\{}
-  \item \verb{^}
-  \item \verb{_}
-  \item \verb{#}
-  \item \verb{&}
-  \item \verb{~}
+\item \verb{\%}
+\item \verb{$}
+\item \verb{\}}
+\item \verb{\{}
+\item \verb{^}
+\item \verb{_}
+\item \verb{#}
+\item \verb{&}
+\item \verb{~}
 }
 
-With the contents of `tikzReplacementCharacters`:
+With the contents of \code{tikzReplacementCharacters}:
 
 \itemize{
-  \item \verb{\\\%}
-  \item \verb{\\$}
-  \item \verb{\\\}}
-  \item \verb{\\\{}
-  \item \verb{\\^{}}
-  \item \verb{\\_{}}
-  \item \verb{\\#}
-  \item \verb{\\&}
-  \item \verb{\char`\~}
- }
+\item \verb{\\\%}
+\item \verb{\\$}
+\item \verb{\\\}}
+\item \verb{\\\{}
+\item \verb{\\^{}}
+\item \verb{\\_{}}
+\item \verb{\\#}
+\item \verb{\\&}
+\item \verb{\char`\~}
+}
 
-These defaults may be adjusted using the \code{\link{options}} function.
+These defaults may be adjusted using the \code{\link[=options]{options()}} function.
 }
 \examples{
 
@@ -73,7 +73,7 @@ These defaults may be adjusted using the \code{\link{options}} function.
 
 }
 \seealso{
-\code{\link{tikz}}
+\code{\link[=tikz]{tikz()}}
 }
 \author{
 Cameron Bracken \email{cameron.bracken@gmail.com}

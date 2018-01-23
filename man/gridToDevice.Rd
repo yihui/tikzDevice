@@ -14,23 +14,23 @@ location of the lower-left corner of the current viewport will be
 calculated.}
 
 \item{units}{Character string indicating the units of \code{x} and \code{y}.
-See the \code{\link{unit}} function for acceptable unit types.}
+See the \code{\link[=unit]{unit()}} function for acceptable unit types.}
 }
 \value{
 A tuple of coordinates in device units.
 }
 \description{
 This function converts a coordinate pair specifying a location in a
-grid \code{\link{viewport}} in grid units to a coordinate pair specifying a
+grid \code{\link[=viewport]{viewport()}} in grid units to a coordinate pair specifying a
 location in device units relative to the lower left corner of the plotting
 canvas.
 }
 \seealso{
-\code{\link{unit}}
-  \code{\link{viewport}}
-  \code{\link{convertX}}
-  \code{\link{convertY}}
-  \code{\link{current.transform}}
+\code{\link[=unit]{unit()}}
+\code{\link[=viewport]{viewport()}}
+\code{\link[=convertX]{convertX()}}
+\code{\link[=convertY]{convertY()}}
+\code{\link[=current.transform]{current.transform()}}
 }
 \author{
 Charlie Sharpsteen \email{source@sharpsteen.net}

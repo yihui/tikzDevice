@@ -13,3 +13,8 @@
 /test_work
 .Rproj.user
 /inst/web
+/vignettes/*.synctex.gz
+/.idea/
+/CMakeLists.txt
+/clion-test.R
+/cmake-build-debug/

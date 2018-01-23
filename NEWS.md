@@ -1,3 +1,9 @@
+## tikzDevice 0.10-4 (2018-01-23)
+
+- Registering native methods to fix `R CMD check` warnings.
+- Updating the filehash package no longer causes the tikzDevice package to fail (#168).
+
+
 ## tikzDevice 0.10-3 (2017-08-21)
 
 - Fix syntax of generated LaTeX for bold/italic characters, regression in 0.10-2.

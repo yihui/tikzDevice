@@ -18,3 +18,8 @@ GNUmakefile
 ^revdep$
 inst/staticdocs
 ^tests/testthat/\.tikzMetrics$
+vignettes/.*\.synctex\.gz$
+.idea$
+CMakeLists\.txt$
+clion-test\.R$
+cmake-build-debug$
