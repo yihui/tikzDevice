@@ -1,14 +1,14 @@
 #' Replace LaTeX Special Characters in a String
 #'
-#' This function is used by tikzDevice when \code{sanitize=TRUE} to replace
+#' This function is used by tikzDevice when `sanitize = TRUE` to replace
 #' special LaTeX characters (such as the comment character %) in plotting text
 #' where the user does not have direct control over the generated text.
 #'
-#' \code{sanitizeTexString} searches character by character through a string
+#' `sanitizeTexString()` searches character by character through a string
 #' replacing each occurrence of a special character contained in
-#' \code{strip[i]} with the corresponding replacement value in
-#' \code{replacement[i]}.  tikzDevice calls back this function for every piece
-#' of text when the sanitize option is TRUE. See \code{\link{tikz}} for more
+#' `strip[i]` with the corresponding replacement value in
+#' `replacement[i]`.  tikzDevice calls back this function for every piece
+#' of text when the sanitize option is TRUE. See [tikz()] for more
 #' information on the default special characters and replacement values.
 #'
 #' By default, `tikzSanitizeCharacters` replaces the following characters:
@@ -39,7 +39,7 @@
 #'   \item \verb{\char`\~}
 #'  }
 #'
-#' These defaults may be adjusted using the \code{\link{options}} function.
+#' These defaults may be adjusted using the [options()] function.
 #'
 #' @param string A character vector of length 1 (a string).
 #' @param strip A character vector of single characters to search for.
@@ -50,7 +50,7 @@
 #'
 #' @author Cameron Bracken \email{cameron.bracken@@gmail.com}
 #'
-#' @seealso \code{\link{tikz}}
+#' @seealso [tikz()]
 #' @keywords character
 #'
 #' @examples

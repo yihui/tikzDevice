@@ -3,29 +3,29 @@
 #' These functions calculate the width of a character or string as it would
 #' appear after being compiled by LaTeX.
 #'
-#' These functions are used internally by the \code{tikz} device for proper
+#' These functions are used internally by the `tikz` device for proper
 #' string placement in graphics.  Both functions check to see if metrics exist
 #' in a global or temporary dictionary (as defined in
-#' \code{options('tikzMetricsDictionary')}) and if so will pull the metrics
+#' `options('tikzMetricsDictionary')`) and if so will pull the metrics
 #' from there. If the dictionary does not exist, then a temporary one is
-#' created for the current R session. Metrics are calculated via \code{system}
+#' created for the current R session. Metrics are calculated via `system`
 #' calls to LaTeX compilers. Querying compilers to calculate metrics is
 #' expensive and so we strongly recommend setting
-#' \code{options('tikzMetricsDictionary') <- '/path/to/dictionary'} to create a
+#' `options('tikzMetricsDictionary') <- '/path/to/dictionary'` to create a
 #' global dictionary.
 #'
 #' @param texString An arbitrary string for which the width is to be
 #'   calculated.  May contain LaTeX markup.
 #' @param cex a real number that specifies a scaling factor that is to be
 #'   applied to device output.
-#' @param face an integer in the range [1-5] that specifies the font face to
+#' @param face an integer in the range `1:5` that specifies the font face to
 #'   use. See \link{par} for details.
-#' @param diagnose pass \code{TRUE} to print detailed error information.
+#' @param diagnose pass `TRUE` to print detailed error information.
 #' @inheritParams tikz
 #'
 #'
 #' @return
-#'   \item{getLatexStrWidth}{The width of \code{texString} in points.}
+#'   \item{getLatexStrWidth}{The width of `texString` in points.}
 #'   \item{getLatexCharMetrics}{A numeric vector holding ascent, descent
 #'     and width. Values should all be nonnegative.}
 #'
@@ -131,7 +131,7 @@ getLatexStrWidth <- function(texString, cex = 1, face = 1, engine = getOption("t
 #'
 #' @param charCode an integer that corresponds to a symbol in the ASCII
 #'   character table under the Type 1 font encoding. All numeric values are
-#'   coerced using \code{as.integer}. Non-numeric values will not be accepted.
+#'   coerced using `as.integer()`. Non-numeric values will not be accepted.
 #'
 #' @examples
 #'

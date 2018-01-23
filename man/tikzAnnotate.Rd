@@ -57,8 +57,8 @@ created instead of a \code{node}. If a \code{node} with empty content is truely
 desired, pass an empty string \code{""}.}
 
 \item{units}{Character string specifying the unit system associated with
-\code{x} and \code{y}. See \code{\link{grconvertX}} for acceptable
-units in base graphics and \code{\link{unit}} for acceptable
+\code{x} and \code{y}. See \code{\link[=grconvertX]{grconvertX()}} for acceptable
+units in base graphics and \code{\link[=unit]{unit()}} for acceptable
 units in grid graphics.}
 
 \item{draw}{A logical value indicating whether graphics output should be
@@ -77,7 +77,7 @@ commands into the output stream of a graphic. For LaTeX commands that
 reference specific locations in an R plot, coordinates must be specified in
 "device units" which for \code{tikz} output are TeX points relative to the
 lower left corner of the device canvas. Functions such as
-\code{\link{grconvertX}} and \code{\link{gridToDevice}} can help make the
+\code{\link[=grconvertX]{grconvertX()}} and \code{\link[=gridToDevice]{gridToDevice()}} can help make the
 necessary conversions for base and grid graphics. The \code{tikzNode} and
 \code{tikzCoord} functions automatically perform unit conversions acording
 the the value of their \code{units} parameters.
@@ -92,7 +92,7 @@ that simplifies the task of inserting named coordinates.
 
 Additionally, the \code{tikzAnnotateGrob}, \code{tikzNodeGrob} and
 \code{tikzCoordGrob} functions are supplied for creating grid objects
-or "\code{\link{grob}}s" that can be used in Grid graphics. High level
+or "\code{\link[=grob]{grob()}}s" that can be used in Grid graphics. High level
 wrapper functions \code{grid.tikzAnnotate}, \code{grid.tikzNode} and
 \code{grid.tikzCoord} are also supplied which creat and render a \code{grob}
 in one step.
@@ -170,15 +170,15 @@ dev.off()
 
 }
 \seealso{
-\code{\link{grconvertX}}
-  \code{\link{grconvertY}}
-  \code{\link{gridToDevice}}
-  \code{\link{unit}}
-  \code{\link{tikz}}
+\code{\link[=grconvertX]{grconvertX()}}
+\code{\link[=grconvertY]{grconvertY()}}
+\code{\link[=gridToDevice]{gridToDevice()}}
+\code{\link[=unit]{unit()}}
+\code{\link[=tikz]{tikz()}}
 }
 \author{
-Cameron Bracken <cameron.bracken@gmail.com> and Charlie Sharpsteen
-  \email{source@sharpsteen.net}
+Cameron Bracken \href{mailto:cameron.bracken@gmail.com}{cameron.bracken@gmail.com} and Charlie Sharpsteen
+\email{source@sharpsteen.net}
 }
 \keyword{annotation}
 \keyword{device}

@@ -37,7 +37,7 @@ anyMultibyteUTF8Characters('R is GNU copyright but not restricted')
 
 }
 \seealso{
-\code{\link{tikz}}
+\code{\link[=tikz]{tikz()}}
 }
 \author{
 Cameron Bracken \email{cameron.bracken@gmail.com}

@@ -15,11 +15,11 @@ calculated.  May contain LaTeX markup.}
 are 'pdftex', 'xetex' and 'luatex'. See the Unicode section of
 \link{tikzDevice-package} for details.}
 
-\item{documentDeclaration}{See the sections ``Options That Affect Package
-Behavior'' and ``Font Size Calculations'' of \link{tikzDevice-package}
+\item{documentDeclaration}{See the sections "Options That Affect Package
+Behavior" and "Font Size Calculations" of \link{tikzDevice-package}
 for more details.}
 
-\item{packages}{See the section ``Options That Affect Package Behavior'' of
+\item{packages}{See the section "Options That Affect Package Behavior" of
 \link{tikzDevice-package}.}
 }
 \description{
@@ -27,5 +27,5 @@ This function simulates the measurement of dimensions and prints detailed
 information in case of errors.
 }
 \seealso{
-\code{\link{tikz}}
+\code{\link[=tikz]{tikz()}}
 }

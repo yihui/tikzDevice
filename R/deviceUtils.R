@@ -30,28 +30,28 @@ getDocumentPointsize <- function(docString) {
 #' This function resets the following options:
 #'
 #' \itemize{
-#'   \item \code{tikzDefaultEngine}
-#'   \item \code{tikzLatex}
-#'   \item \code{tikzDocumentDeclaration}
-#'   \item \code{tikzFooter}
-#'   \item \code{tikzLatexPackages}
-#'   \item \code{tikzXelatexPackages}
-#'   \item \code{tikzLualatexPackages}
-#'   \item \code{tikzMetricPackages}
-#'   \item \code{tikzUnicodeMetricPackages}
-#'   \item \code{tikzSanitizeCharacters}
-#'   \item \code{tikzReplacementCharacters}
-#'   \item \code{tikzPdftexWarnUTF}
+#'   \item `tikzDefaultEngine`
+#'   \item `tikzLatex`
+#'   \item `tikzDocumentDeclaration`
+#'   \item `tikzFooter`
+#'   \item `tikzLatexPackages`
+#'   \item `tikzXelatexPackages`
+#'   \item `tikzLualatexPackages`
+#'   \item `tikzMetricPackages`
+#'   \item `tikzUnicodeMetricPackages`
+#'   \item `tikzSanitizeCharacters`
+#'   \item `tikzReplacementCharacters`
+#'   \item `tikzPdftexWarnUTF`
 #' }
 #'
-#' @param overwrite Should values that are allready set in \code{options()} be
+#' @param overwrite Should values that are allready set in `options()` be
 #'   overwritten?
 #' @return Nothing returned.
 #'
 #' @author Cameron Bracken \email{cameron.bracken@@gmail.com} and Charlie
 #'   Sharpsteen \email{source@@sharpsteen.net}
 #'
-#' @seealso \code{\link{tikz}}
+#' @seealso [tikz()]
 #'
 #' @examples
 #'
@@ -191,7 +191,7 @@ evalWithoutInterrupts <- function(expr, envir = parent.frame()) {
 #'
 #' This function searches through the characters in the given string, if any of
 #' the characters in the string are more than one byte then the function
-#' returns \code{TRUE} otherwise it returns \code{FALSE}.
+#' returns `TRUE` otherwise it returns `FALSE`.
 #'
 #' The function will assume an input encoding of UTF-8 but will take any
 #' specified encoding into account and will convert from the specified encoding
@@ -201,7 +201,7 @@ evalWithoutInterrupts <- function(expr, envir = parent.frame()) {
 #' @param encoding Unused.
 #' @return A boolean value
 #' @author Cameron Bracken \email{cameron.bracken@@gmail.com}
-#' @seealso \code{\link{tikz}}
+#' @seealso [tikz()]
 #' @keywords character
 #' @encoding UTF8
 #' @examples
@@ -302,14 +302,14 @@ format.ENV_VAR <- function(x, ...) {
 
 #' Print paths to TeX compilers.
 #'
-#' This function reports information concerning compilers that the \code{tikz}
+#' This function reports information concerning compilers that the `tikz`
 #' device will use to calculate character metrics. Information on LaTeX will
 #' always be available but information on XeLaTeX and LuaLaTeX will only be
 #' reported if the compilers were found.
 #'
 #' @param verbose
-#'   If set to \code{FALSE}, calling this function will not cause any output to
-#'   be printed to the screen. Defaults to \code{TRUE}.
+#'   If set to `FALSE`, calling this function will not cause any output to
+#'   be printed to the screen. Defaults to `TRUE`.
 #'
 #' @return
 #'   Invisibly returns a list containing paths to TeX compilers.
@@ -318,7 +318,7 @@ format.ENV_VAR <- function(x, ...) {
 #'   Charlie Sharpsteen \email{source@@sharpsteen.net}
 #'
 #' @seealso
-#'   \code{\link{tikz}}
+#'   [tikz()]
 #'
 #' @export
 tikzCompilerInfo <- function(verbose = TRUE) {
@@ -346,7 +346,7 @@ tikzCompilerInfo <- function(verbose = TRUE) {
 #' @inheritParams tikz
 #'
 #' @seealso
-#'   \code{\link{tikz}}
+#'   [tikz()]
 #'
 #' @export
 tikzTest <- function(texString = "A",
