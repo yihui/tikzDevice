@@ -419,8 +419,9 @@ test_graphs <- list(
         plot.new()
         plot.window(range(x, na.rm = TRUE), range(y, na.rm = TRUE))
         polypath(x, y, col = col, rule = rule)
-        if (!is.na(col))
+        if (!is.na(col)) {
           mtext(paste("Rule:", rule), side = 1, line = 0)
+        }
       }
 
       plotRules <- function(x, y, title) {

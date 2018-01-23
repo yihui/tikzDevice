@@ -92,8 +92,9 @@ checkDictionaryStatus <- function(verbose) {
     old_dictionary <- NULL
   }
 
-  if (!is.null(old_dictionary) && identical(dict_path, old_dict_path))
+  if (!is.null(old_dictionary) && identical(dict_path, old_dict_path)) {
     return(invisible())
+  }
 
   # Add the dictionary as an object in the .tikzOptions
   # environment.

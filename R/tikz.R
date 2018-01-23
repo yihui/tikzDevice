@@ -281,8 +281,9 @@ tikz <- function(file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
   if (standAlone) {
     bareBones <- FALSE
   }
-  if (footer != getOption("tikzFooter") && !standAlone)
+  if (footer != getOption("tikzFooter") && !standAlone) {
     warning("Footers are ignored when standAlone is set to FALSE")
+  }
 
   # Extract the document pointsize from the documentDeclaration
   baseSize <- getDocumentPointsize(documentDeclaration)
@@ -299,8 +300,9 @@ tikz <- function(file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
     paste(paste(documentDeclaration, collapse = "\n"), collapse = "\n")
   packages <- paste(paste(packages, collapse = "\n"), collapse = "\n")
   footer <- paste(paste(footer, collapse = "\n"), collapse = "\n")
-  if (maxSymbolicColors < 0)
+  if (maxSymbolicColors < 0) {
     stop("maxSymbolicColors needs to be nonnegative")
+  }
 
   .External(
     TikZ_StartDevice, file, width, height, onefile, bg, fg, baseSize, lwdUnit,
