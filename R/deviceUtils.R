@@ -158,7 +158,6 @@ isTikzDevice <- function(which = dev.cur()) {
 }
 
 
-#' @useDynLib tikzDevice TikZ_DeviceInfo
 getDeviceInfo <- function(dev_num = dev.cur()) {
   # This function recovers some information about a tikz() graphics device that
   # is stored at the C level in the tikzDevDesc struct.
@@ -177,8 +176,6 @@ getDeviceInfo <- function(dev_num = dev.cur()) {
 
 # This function allows an R expression to be evaluated in a context where it
 # will be protected from user interrupts (use of CTRL-C for example).
-#
-#' @useDynLib tikzDevice TikZ_EvalWithoutInterrupts
 evalWithoutInterrupts <- function(expr, envir = parent.frame()) {
   # Wrap the expression in a call to `substitute` so that it gets passed
   # directly to the C code instead of being evaluated before being passed to

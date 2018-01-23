@@ -210,7 +210,6 @@
 #' }
 #'
 #' @export
-#' @useDynLib tikzDevice TikZ_StartDevice
 tikz <- function(file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
   width = 7, height = 7, onefile = TRUE,
   bg="transparent", fg="black", pointsize = 10, lwdUnit = getOption("tikzLwdUnit"),

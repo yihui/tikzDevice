@@ -129,4 +129,5 @@ NULL
 #' @importFrom graphics grconvertX grconvertY par plot.new rasterImage
 #' @importFrom stats complete.cases
 #' @importFrom utils packageVersion
+#' @useDynLib tikzDevice, .registration = TRUE
 NULL

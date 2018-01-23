@@ -174,7 +174,6 @@ gridToDevice <- function(x = 0, y = 0, units = "native") {
 #'   \code{\link{unit}}
 #'   \code{\link{tikz}}
 #'
-#' @useDynLib tikzDevice TikZ_Annotate
 #' @export
 tikzAnnotate <- function(annotation, checkstate = TRUE) {
   if (!isTikzDevice()) {
