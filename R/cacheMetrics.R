@@ -2,8 +2,12 @@
 # doesn't export it. The digest package also contains the exact same code made
 # publicly available but it seems redundant to add it to the dependency list.
 # This function simplifies access to filehash's unexported SHA1 function.
-sha1 <- filehash:::sha1
-
+sha1 <- function(object) {
+  # The get() for every call has very low impact on performance, but simplifies
+  # matters here
+  internal_sha1 <- get("sha1", asNamespace("filehash"))
+  internal_sha1(object)
+}
 
 # Since calling LaTeX to obtain string metrics is inefficient and expensive,
 # this function will search a string metrics dictionary to see if we have
