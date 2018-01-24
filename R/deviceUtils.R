@@ -262,7 +262,7 @@ OPTION <- function(origin) {
 
 ENV_VAR <- function(origin) {
   structure(
-    ifelse(is.null(Sys.getenv(origin)), "", Sys.which(Sys.getenv(origin))),
+    ifelse(is.na(Sys.getenv(origin, unset=NA)), "", Sys.which(Sys.getenv(origin))),
     origin = origin, class = "ENV_VAR"
   )
 }
