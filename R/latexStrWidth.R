@@ -60,37 +60,15 @@ getLatexStrWidth <- function(texString, cex = 1, face = 1, engine = getOption("t
     },
 
     xetex = {
-      if (is.null(getOption("tikzXelatex"))) {
-        stop(
-          "Cannot find XeLaTeX! Please check your system ",
-          "configuration or manually provide a value for ",
-          "options(tikzXelatex)"
-        )
-      }
       if (missing(packages)) {
         packages <- getOption("tikzXelatexPackages")
       }
     },
 
     luatex = {
-      if (is.null(getOption("tikzLualatex"))) {
-        stop(
-          "Cannot find LuaLaTeX! Please check your system ",
-          "configuration or manually provide a value for ",
-          "options(tikzLualatex)"
-        )
-      }
       if (missing(packages)) {
         packages <- getOption("tikzLualatexPackages")
       }
-    }, { # ELSE
-      stop(
-        "Unsupported TeX engine: ", engine,
-        "\nAvailable choices are:\n",
-        "\tpdftex\n",
-        "\txetex\n",
-        "\tluatex\n"
-      )
     }
   )
 
@@ -420,11 +398,7 @@ getMetricsFromLatex <- function(TeXMetrics, verbose = verbose, diagnose = FALSE)
   close(texIn)
 
   # Recover the latex command. Use XeLaTeX if the character is not ASCII
-  latexCmd <- switch(TeXMetrics$engine,
-    pdftex = getOption("tikzLatex"),
-    xetex = getOption("tikzXelatex"),
-    luatex = getOption("tikzLualatex"),
-  )
+  latexCmd <- get_latex_cmd(TeXMetrics$engine)
 
   # Append the batchmode flag to increase LaTeX
   # efficiency.
@@ -519,4 +493,42 @@ getMetricsFromLatex <- function(TeXMetrics, verbose = verbose, diagnose = FALSE)
 
     return(as.double(c(ascent, descent, width)))
   }
+}
+
+get_latex_cmd <- function(engine, verbose = FALSE) {
+  switch(engine,
+    pdftex = {
+      path <- getOption("tikzLatex")
+      if (is.null(path)) {
+        stop(
+          "Cannot find LaTeX! Please check your system ",
+          "configuration or manually provide a value for ",
+          "options(tikzLatex)"
+        )
+      }
+      path
+    },
+    xetex = {
+      path <- getOption("tikzXelatex")
+      if (is.null(path)) {
+        stop(
+          "Cannot find XeLaTeX! Please check your system ",
+          "configuration or manually provide a value for ",
+          "options(tikzXelatex)"
+        )
+      }
+      path
+    },
+    luatex = {
+      path <- getOption("tikzLualatex")
+      if (is.null(path)) {
+        stop(
+          "Cannot find LuaLaTeX! Please check your system ",
+          "configuration or manually provide a value for ",
+          "options(tikzLualatex)"
+        )
+      }
+      path
+    },
+  )
 }

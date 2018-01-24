@@ -362,7 +362,8 @@ tikzTest <- function(texString = "A",
                      engine = getOption("tikzDefaultEngine"),
                      documentDeclaration = getOption("tikzDocumentDeclaration"),
                      packages) {
-  print_compiler_info(engine, "Active")
+  latex_cmd <- get_latex_cmd(engine)
+  print_compiler_info(latex_cmd, "Active")
   getLatexStrWidth(
     texString,
     engine = engine,
@@ -372,14 +373,14 @@ tikzTest <- function(texString = "A",
   )
 }
 
-print_compiler_info <- function(engine, name) {
+print_compiler_info <- function(latex_cmd, name) {
   cat("\n", name, " compiler:\n\t", sep = "")
-  if (is.null(engine)) {
+  if (is.null(latex_cmd)) {
     cat("Not available.\n")
   } else {
-    cat(engine)
+    cat(latex_cmd)
     cat("\n\t")
-    p <- pipe(paste(engine, "--version"))
+    p <- pipe(paste(latex_cmd, "--version"))
     cat(utils::head(readLines(p), 2), sep = "\n\t")
     close(p)
     cat("\n")
