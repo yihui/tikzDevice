@@ -433,9 +433,15 @@ getMetricsFromLatex <- function(TeXMetrics, verbose = verbose, diagnose = FALSE)
     "-output-directory", shQuote(texDir), shQuote(texFile)
   )
 
-  # avoid warnings about non-zero exit status, we know tex exited abnormally
-  # it was designed that way for speed
-  suppressWarnings(silence <- system(latexCmd, intern = T, ignore.stderr = T))
+  message("Running command: ", latexCmd)
+
+  if (diagnose) {
+    system(latexCmd)
+  } else {
+    # avoid warnings about non-zero exit status, we know tex exited abnormally
+    # it was designed that way for speed
+    suppressWarnings(system(latexCmd, intern = TRUE, ignore.stderr = TRUE))
+  }
 
   # Read the contents of the log file.
   logContents <- readLines(texLog)
