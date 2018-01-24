@@ -407,12 +407,13 @@ getMetricsFromLatex <- function(TeXMetrics, verbose = verbose, diagnose = FALSE)
   }
 
   if (diagnose) {
-    # Stop before creating output
-    writeLines("\\makeatletter", texIn)
-    writeLines("\\@@end", texIn)
-  } else {
+    # Write complete document in diagnostic mode
     writeLines("\\end{tikzpicture}", texIn)
     writeLines("\\end{document}", texIn)
+  } else {
+    # Stop before creating output in "regular" mode
+    writeLines("\\makeatletter", texIn)
+    writeLines("\\@@end", texIn)
   }
 
   # Close the LaTeX file, ready to compile
