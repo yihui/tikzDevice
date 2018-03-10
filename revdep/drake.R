@@ -84,6 +84,10 @@ get_pkg_and_deps <- function(i_pkg) {
   get_deps(i_pkg)
 }
 
+get_deps <- function(i_pkg) {
+  attr(i_pkg, "deps")
+}
+
 check <- function(tarball, lib, ...) {
   pkgs <- c(...)
   check_lib <- fs::file_temp("checklib")
@@ -141,10 +145,6 @@ get_plan <- function() {
   make_install <- function(pkg, dep_list) {
     d_pkg <- sym(glue("d_{pkg}"))
     expr(install(!!pkg, path = !!d_pkg, !!! dep_list))
-  }
-
-  get_deps <- function(i_pkg) {
-    attr(i_pkg, "deps")
   }
 
   create_dep_list <- function(deps, base_pkgs) {
