@@ -854,7 +854,7 @@ static void TikZ_MetricInfo(int c, const pGEcontext plotParams,
   // Note: this code will eventually call a different function that provides
   // caching of the results. Right now we're directly calling the function
   // that activates LaTeX.
-  SEXP metricFun = PROTECT( findFun(install("getLatexCharMetrics"), namespace) );
+  SEXP metricFun = PROTECT(findFun(install("getLatexCharMetrics"), namespace));
 
   SEXP RCallBack;
   PROTECT( RCallBack = allocVector(LANGSXP, 8) );
@@ -998,7 +998,7 @@ static double TikZ_StrWidth( const char *str,
   PROTECT( namespace = TIKZ_NAMESPACE );
 
   // Call out to R to retrieve the getLatexStrWidth function.
-  SEXP widthFun = PROTECT( findFun(install("getLatexStrWidth"), namespace) );
+  SEXP widthFun = PROTECT(findFun(install("getLatexStrWidth"), namespace));
 
   /*
    * Create a SEXP that will be the R function call. The SEXP will have five
@@ -1600,7 +1600,8 @@ static void TikZ_Raster(
   INTEGER(dim)[1] = w;
   setAttrib(nativeRaster, R_DimSymbol, dim);
   setAttrib(nativeRaster, R_ClassSymbol, mkString("nativeRaster"));
-  setAttrib(nativeRaster, install("channels"), PROTECT(ScalarInteger(4)));
+  setAttrib(nativeRaster, PROTECT(install("channels")), PROTECT(ScalarInteger(4)));
+  UNPROTECT(2);
 
   SETCADDDR( RCallBack, nativeRaster );
   SET_TAG(CDR(CDDR(RCallBack)), install("nativeRaster"));
@@ -1634,7 +1635,7 @@ static void TikZ_Raster(
   */
   tikzInfo->rasterFileCount++;
 
-  UNPROTECT(5);
+  UNPROTECT(4);
   return;
 
 }
@@ -2166,7 +2167,7 @@ static char *Sanitize(const char *str){
   //Splice in escaped charaters via a callback to R
 
   //Call out to R to retrieve the sanitizeTexString function.
-  SEXP sanitizeFun = PROTECT( findFun( install("sanitizeTexString"), namespace ) );
+  SEXP sanitizeFun = PROTECT(findFun( install("sanitizeTexString"), namespace));
 
   /*
    * Create a SEXP that will be the R function call. The SEXP will

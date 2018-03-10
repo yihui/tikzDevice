@@ -87,11 +87,7 @@ compile_graph <- function(graph_file, engine) {
   setwd(test_work_dir)
   on.exit(setwd(oldwd))
 
-  tex_cmd <- switch(engine,
-    pdftex = getOption("tikzLatex"),
-    xetex = getOption("tikzXelatex"),
-    luatex = getOption("tikzLualatex")
-  )
+  tex_cmd <- get_latex_cmd(engine)
 
   silence <- system(
     paste(

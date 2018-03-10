@@ -2,8 +2,8 @@ Encoding: UTF-8
 Package: tikzDevice
 Type: Package
 Title: R Graphics Output in LaTeX Format
-Version: 0.10-5
-Date: 2018-01-23
+Version: 0.10-6
+Date: 2018-03-10
 Authors@R: c( person("Charlie", "Sharpsteen", role = "aut"),
         person("Cameron", "Bracken", role = "aut"), person("Kirill",
         "Müller", role = c("ctb", "cre"), email =
@@ -36,5 +36,5 @@ Suggests:
 SystemRequirements: pgf (>= 2.00)
 LazyLoad: yes
 VignetteBuilder: knitr
-RoxygenNote: 6.0.1
+RoxygenNote: 6.0.1.9000
 Roxygen: list(markdown = TRUE)
