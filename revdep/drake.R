@@ -248,6 +248,15 @@ get_plan <- function() {
 
 plan <- get_plan()
 
+if ("new_lib" %in% plan$target) {
+  make(
+    plan,
+    "new_lib",
+    #parallelism = "future"
+    , jobs = parallel::detectCores()
+  )
+}
+
 #trace(conditionCall.condition, recover)
 make(
   plan,
