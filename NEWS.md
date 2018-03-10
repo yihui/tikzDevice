@@ -1,44 +1,32 @@
-## tikzDevice 0.10-6 (2018-03-10)
+# tikzDevice 0.11 (2018-03-10)
 
-- Fix environment variable detection when not set (#170, @tkonolige).
-- `tikzTest()` now uses correct path to engine when reporting compiler info.
-- `tikzTest()` now shows complete output of LaTeX run.
-- Revert to writing incomplete document again, regression in 0.10-2.
+Bug fixes
+---------
 
-
-## tikzDevice 0.10-5 (2018-01-23)
-
-- Fix `R CMD check`.
-
-
-## tikzDevice 0.10-4 (2018-01-23)
-
+- Fix potential protection issues (#161).
+- Zero-length strings are not treated as multibyte character strings anymore.
 - Registering native methods to fix `R CMD check` warnings.
 - Updating the filehash package no longer causes the tikzDevice package to fail (#168).
-
-
-## tikzDevice 0.10-3 (2017-08-21)
-
-- Fix syntax of generated LaTeX for bold/italic characters, regression in 0.10-2.
-
-
-## tikzDevice 0.10-2 (2017-08-14)
-
-- Temporary .tex and .log files are created in a separate directory for each run.
-- Support LuaLaTeX > 0.85 by loading the luatex85 package if it exists and avoiding loading xunicode (#150).
-- The `tikzTest()` function (via `getLatexStrWidth(diagnose = TRUE)`) now writes a complete LaTeX document, which allows e.g. MikTeX to install missing LaTeX packages (#149).
-- Enforce the encoding of temporary TeX file to UTF-8 (#159, @jszhao).
-- New `tikzTest()` to troubleshoot installation problems (#142).
-- Don't call `library(grid)` from package code anymore.
 - Remove probably harmless extra space from text being measured.
 - Don't overwrite string's encoding in `anyMultibyteUTF8Characters()` (#158, @jszhao).
-- Consistent code style.
-- `load_all()` works now.
-- Fix potential protection issues (#161).
+- Enforce the encoding of temporary TeX file to UTF-8 (#159, @jszhao).
+- Don't call `library(grid)` from package code anymore.
+- Code from manual now contains simple apostrophes to allow copy-paste (#139).
+
+Features
+--------
+
+- The new `tikzTest()` function (via `getLatexStrWidth(diagnose = TRUE)`) now writes a complete LaTeX document, which allows e.g. MikTeX to install missing LaTeX packages (#142, #149).
 - If measurement fails, the `.tex` and `.log` files are not printed anymore,
   instead the location of these files is shown.
-- Code from manual now contains simple apostrophes to allow copy-paste (#139).
-- Zero-length strings are not treated as multibyte character strings anymore.
+- Support LuaLaTeX > 0.85 by loading the luatex85 package if it exists and avoiding loading xunicode (#150).
+- Temporary .tex and .log files are created in a separate directory for each run.
+
+Internal
+--------
+
+- Consistent code style with the help of the styler package.
+- `load_all()` works now.
 
 
 Version 0.10-1 (2016-02-09)
