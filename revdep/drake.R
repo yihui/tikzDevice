@@ -1,5 +1,15 @@
 source("revdep/drake-base.R")
 
+get_plan <- function() {
+
+plan_deps <- get_plan_deps()
+config_deps <- drake_config(plan_deps)
+if (length(outdated(config_deps, make_imports = FALSE)) > 0) {
+  warning("Making dependencies first, rerun.", call. = FALSE)
+  return(plan_deps)
+}
+
+
 # Avoid expensive and flaky check for build tools from pkgbuild
 # Leads to errors, need to check!
 #options(buildtools.check = identity)
@@ -233,11 +243,16 @@ plan <-
     plan_deps
   )
 
+plan
+
+}
+
+plan <- get_plan()
 
 #trace(conditionCall.condition, recover)
 make(
   plan,
-  "compare_all",
+  #"compare_all",
   keep_going = TRUE,
   #parallelism = "future"
   , jobs = parallel::detectCores()
