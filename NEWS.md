@@ -1,3 +1,11 @@
+## tikzDevice 0.10-6 (2018-03-10)
+
+- Fix environment variable detection when not set (#170, @tkonolige).
+- `tikzTest()` now uses correct path to engine when reporting compiler info.
+- `tikzTest()` now shows complete output of LaTeX run.
+- Revert to writing incomplete document again, regression in 0.10-2.
+
+
 ## tikzDevice 0.10-5 (2018-01-23)
 
 - Fix `R CMD check`.
