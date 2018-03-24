@@ -1,14 +1,14 @@
-## Reasons
-* Compatibility fix for R 3.1.3.
+Incorporated fixes for protection issues from the CRAN version (thanks!). I'll be looking for a new maintainer, but I'd like to see the most changes on CRAN.
 
 ## Test environments
-* Travis CI, Ubuntu 12.04, R 3.2.3
+
+* Travis CI, Ubuntu 14.04, R 3.4.3
 * win-builder (release and devel)
 
 ## R CMD check results
-There were no ERRORs or WARNINGs, just a spell checker NOTE
-about the name "Tantau" and about "LaTeX".
+
+OK
 
 ## Downstream dependencies
-I have also run R CMD check on the three downstream dependencies.
-The checks passed.
+
+I have also run R CMD check on all downstream dependencies. The check results were identical to those for the current CRAN version.
