@@ -121,7 +121,7 @@
 #'   Submit bug reports to: <https://github.com/yihui/tikzDevice/issues>
 #' @seealso [tikz()]
 #' @references The TikZ and PGF Packages: Manual for version 2.00\cr
-#'   <http://sourceforge.net/projects/pgf>\cr Till Tanatu, February 20, 2008
+#'   <http://sourceforge.net/projects/pgf>\cr Till Tantau, February 20, 2008
 #' @keywords package
 NULL
 
