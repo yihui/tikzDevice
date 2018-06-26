@@ -1,7 +1,9 @@
 tikzDevice
 ==========
 
-[![Build Status](https://travis-ci.org/yihui/tikzDevice.svg?branch=master)](https://travis-ci.org/yihui/tikzDevice) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/yihui/tikzDevice?branch=master&svg=true)](https://ci.appveyor.com/project/yihui/tikzDevice) [![Coverage Status](https://coveralls.io/repos/yihui/tikzDevice/badge.svg)](https://coveralls.io/r/yihui/tikzDevice) [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/tikzDevice)](http://cran.r-project.org/package=tikzDevice)
+[![Build Status](https://travis-ci.org/daqana/tikzDevice.svg?branch=master)](https://travis-ci.org/daqana/tikzDevice) 
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/daqana/tikzDevice?branch=master&svg=true)](https://ci.appveyor.com/project/rstub/tikzDevice)   
+[![Coverage status](https://codecov.io/gh/daqana/tikzDevice/branch/master/graph/badge.svg)](https://codecov.io/github/daqana/tikzDevice?branch=master) [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/tikzDevice)](http://cran.r-project.org/package=tikzDevice)
 
 The tikzDevice package provides a graphics output device for R that records
 plots in a LaTeX-friendly format. The device transforms plotting commands
@@ -39,11 +41,11 @@ Development builds may be installed from RForge:
 
 Alternatively, install directly from GitHub:
 
-    devtools::install_github( 'yihui/tikzDevice' )
+    devtools::install_github( 'daqana/tikzDevice' )
 
 Bleeding-edge source code is available from GitHub, too:
 
-    git clone git://github.com/yihui/tikzDevice.git
+    git clone git://github.com/daqana/tikzDevice.git
 
 After cloning, install via
 
@@ -56,7 +58,7 @@ Reporting Bugs and Getting Help
 Primary development takes place on GitHub.  The preferred way to communicate
 bugs and feature requests is to open an issue at the primary repository:
 
-  https://github.com/yihui/tikzDevice/issues
+  https://github.com/daqana/tikzDevice/issues
 
 (Unfortunately, the original repository by Charlie Sharpsteen,
 https://github.com/Sharpie/RTikZDevice, has not been updated for over a year,
@@ -82,4 +84,4 @@ Latest Changes
 
 *See the [NEWS][2] file for latest changes*
 
-  [2]:https://github.com/yihui/tikzDevice/blob/master/NEWS.md
+  [2]:https://github.com/daqana/tikzDevice/blob/master/NEWS.md

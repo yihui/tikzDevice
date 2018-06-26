@@ -1,3 +1,16 @@
+# tikzDevice 0.11.1 (unreleased)
+
+Contributors
+------------
+
+- New package maintainer: Ralf Stubner.
+
+Internal
+--------
+
+- Use `codecov` instead of `coverall` for test coverage
+
+
 # tikzDevice 0.11 (2018-03-10)
 
 Bug fixes
