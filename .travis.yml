@@ -42,7 +42,7 @@ after_failure:
   - cat tikzDevice.Rcheck/00install.out || true
   - cat tikzDevice.Rcheck/00check.log || true
 after_success:
-  - Rscript -e 'library(covr); coveralls()'
-  - export R_PKG="$(basename $TRAVIS_REPO_SLUG)"
-  - cd ..; R CMD build $R_PKG; cd $R_PKG;
-  - "[ $TYPE = cran ] && (wget -q -O - http://yihui.name/xran/r-xran | bash)"
+  - Rscript -e 'covr::codecov()'
+#  - export R_PKG="$(basename $TRAVIS_REPO_SLUG)"
+#  - cd ..; R CMD build $R_PKG; cd $R_PKG;
+#  - "[ $TYPE = cran ] && (wget -q -O - http://yihui.name/xran/r-xran | bash)"

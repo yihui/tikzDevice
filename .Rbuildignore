@@ -23,3 +23,4 @@ vignettes/.*\.synctex\.gz$
 CMakeLists\.txt$
 clion-test\.R$
 cmake-build-debug$
+^codecov\.yml$
