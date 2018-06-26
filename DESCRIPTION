@@ -30,7 +30,9 @@ Suggests:
     formatR,
     ggplot2,
     knitr,
+    lattice,
     maps,
+    scales,
     stringr,
     testthat (>= 0.8.1),
     withr
