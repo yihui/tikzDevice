@@ -25,8 +25,5 @@ addons:
 r_packages:
   - covr
 r_build_args: --compact-vignettes=gs+qpdf
-after_failure:
-  - cat tikzDevice.Rcheck/00install.out || true
-  - cat tikzDevice.Rcheck/00check.log || true
 after_success:
   - test "$TRAVIS_R_VERSION_STRING" = "release" && Rscript -e 'covr::codecov()' || true
