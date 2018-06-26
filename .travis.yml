@@ -21,8 +21,10 @@ addons:
     - texlive-fonts-recommended
     - texlive-pictures
     - ghostscript
+    - qpdf
 r_packages:
   - covr
+r_build_args: --compact-vignettes=gs+qpdf
 after_failure:
   - cat tikzDevice.Rcheck/00install.out || true
   - cat tikzDevice.Rcheck/00check.log || true
