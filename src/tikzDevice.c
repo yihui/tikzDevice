@@ -2133,15 +2133,15 @@ static void Print_TikZ_Header( tikzDevDesc *tikzInfo ){
 
   SEXP currentDate;
   PROTECT(
-    currentDate = eval(lang1( install("getDateStampForTikz") ),
-      namespace )
+    currentDate = lang1( install("getDateStampForTikz") )
   );
+  PROTECT(currentDate = eval(currentDate, namespace));
 
   SEXP currentVersion;
   PROTECT(
-    currentVersion = eval(lang1( install("getTikzDeviceVersion") ),
-      namespace )
+    currentVersion = lang1( install("getTikzDeviceVersion") )
   );
+  PROTECT(currentVersion = eval(currentVersion, namespace));
 
   if( tikzInfo->timestamp )
     printOutput( tikzInfo, "%% Created by tikzDevice version %s on %s\n",
@@ -2153,7 +2153,7 @@ static void Print_TikZ_Header( tikzDevDesc *tikzInfo ){
   if ( tikzInfo->console )
     printOutput(tikzInfo, "\\relax\n");
 
-  UNPROTECT(3);
+  UNPROTECT(5);
 
 }
 
