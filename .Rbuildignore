@@ -24,3 +24,5 @@ CMakeLists\.txt$
 clion-test\.R$
 cmake-build-debug$
 ^codecov\.yml$
+^_pkgdown\.yml$
+^docs$

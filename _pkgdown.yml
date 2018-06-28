@@ -1,0 +1,14 @@
+navbar:
+  title: tikzDevice
+  left:
+    - text: Home
+      href: index.html
+    - text: Get started
+      href: articles/tikzDevice.pdf
+    - text: Reference
+      href: reference/index.html
+    - text: Changelog
+      href: news/index.html
+  right:
+    - icon: fa-github
+      href: https://github.com/daqana/tikzDevice
