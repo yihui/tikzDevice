@@ -1,4 +1,4 @@
-# tikzDevice 0.11.1 (unreleased)
+# tikzDevice 0.12 (2018-06-28)
 
 Contributors
 ------------
@@ -8,7 +8,9 @@ Contributors
 Internal
 --------
 
-- Use `codecov` instead of `coverall` for test coverage
+- add missing `Suggests:` to fix WARNING on R-devel
+- Separate `Rf_eval` and `Rf_lang1` cals to fix "Additional issues" from rchk.
+- Use `codecov` instead of `coverall` for test coverage (not fully working yet)
 
 
 # tikzDevice 0.11 (2018-03-10)
