@@ -740,7 +740,13 @@ formatR::usage(tikz)
 
   \item[footer]
     See \autoref{sec:options}, ``Options That Affect Package Behavior.''
-\end{flexlabelled}
+
+  \item[pictureOptions]
+    A character string containing additional options which are provided
+    to the \code{'tikzpicture'} environment, e.g., 
+    \code{'font=\\\\sffamily'}. The \code{bareBones} argument needs to
+    be \code{FALSE} for this to have an effect.
+  \end{flexlabelled}
 
 The first six options should be familiar to anyone who has used the default
 graphics devices shipped with \lang{R}. The options \code{standAlone}

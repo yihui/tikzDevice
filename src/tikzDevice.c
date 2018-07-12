@@ -172,6 +172,7 @@ SEXP TikZ_StartDevice ( SEXP args ){
   int maxSymbolicColors = asInteger(CAR(args)); args = CDR(args);
   Rboolean timestamp = asLogical(CAR(args)); args = CDR(args);
   Rboolean verbose = asLogical(CAR(args)); args = CDR(args);
+  const char *pictureOptions = CHAR(asChar(CAR(args))); args = CDR(args);
 
   /* Ensure there is an empty slot avaliable for a new device. */
   R_CheckDeviceAvailable();
@@ -203,7 +204,7 @@ SEXP TikZ_StartDevice ( SEXP args ){
     if( !TikZ_Setup( deviceInfo, fileName, width, height, onefile, bg, fg, baseSize, lwdUnit,
         standAlone, bareBones, documentDeclaration, packages,
         footer, console, sanitize, engine, symbolicColors, colorFileName,
-        maxSymbolicColors, timestamp, verbose ) ){
+        maxSymbolicColors, timestamp, verbose, pictureOptions ) ){
       /*
        * If setup was unsuccessful, destroy the device and return
        * an error message.
@@ -249,7 +250,8 @@ static Rboolean TikZ_Setup(
   const char *packages, const char *footer,
   Rboolean console, Rboolean sanitize, int engine,
   Rboolean symbolicColors, const char* colorFileName,
-  int maxSymbolicColors, Rboolean timestamp, Rboolean verbose){
+  int maxSymbolicColors, Rboolean timestamp, Rboolean verbose,
+  const char *pictureOptions ){
 
   /*
    * Create tikzInfo, this variable contains information which is
@@ -315,6 +317,7 @@ static Rboolean TikZ_Setup(
   tikzInfo->onefile = onefile;
   tikzInfo->timestamp = timestamp;
   tikzInfo->verbose = verbose;
+  tikzInfo->pictureOptions = calloc_strcpy(pictureOptions);
 
   /* initialize strings, just to be on the safe side */
   strscpy(tikzInfo->drawColor, "drawColor");
@@ -2291,7 +2294,9 @@ static void TikZ_CheckState(pDevDesc deviceInfo)
 
     if ( tikzInfo->bareBones != TRUE )
     {
-      printOutput(tikzInfo, "\\begin{tikzpicture}[x=1pt,y=1pt]\n");
+      printOutput(tikzInfo, "\\begin{tikzpicture}[x=1pt,y=1pt%s%s]\n",
+        tikzInfo->pictureOptions[0] != '\0' ? "," : "",
+        tikzInfo->pictureOptions);
 
       if( tikzInfo->symbolicColors && tikzInfo->outColorFileName)
         printOutput(tikzInfo, "\\InputIfFileExists{%s}{}{}\n", tikzInfo->outColorFileName);

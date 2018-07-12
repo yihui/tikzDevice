@@ -14,7 +14,7 @@ tikz(file = ifelse(onefile, "./Rplots.tex", "./Rplot\%03d.tex"), width = 7,
   symbolicColors = getOption("tikzSymbolicColors"),
   colorFileName = "\%s_colors.tex",
   maxSymbolicColors = getOption("tikzMaxSymbolicColors"), timestamp = TRUE,
-  verbose = interactive())
+  verbose = interactive(), pictureOptions = "")
 }
 \arguments{
 \item{file}{A character string indicating the desired path to the output
@@ -99,6 +99,9 @@ to the TeX file.}
 \item{verbose}{A logical value indicating whether diagnostic messages are
 printed when measuring dimensions of strings. Defaults to \code{TRUE} in
 interactive mode only, to \code{FALSE} otherwise.}
+
+\item{pictureOptions}{A character string that contains additional options 
+provided to the tikzpicture environment. Defaults to the empty string.}
 }
 \value{
 \code{tikz()} returns no values.
