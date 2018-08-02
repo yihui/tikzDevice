@@ -210,15 +210,19 @@
 #' }
 #'
 #' @export
-tikz <- function(file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
+tikz <- function(file = filename,
+                 filename = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
                  width = 7, height = 7, onefile = TRUE,
-                 bg="transparent", fg="black", pointsize = 10, lwdUnit = getOption("tikzLwdUnit"),
-                 standAlone = FALSE, bareBones = FALSE, console = FALSE, sanitize = FALSE,
+                 bg="transparent", fg="black", pointsize = 10,
+                 lwdUnit = getOption("tikzLwdUnit"),
+                 standAlone = FALSE, bareBones = FALSE, console = FALSE,
+                 sanitize = FALSE,
                  engine = getOption("tikzDefaultEngine"),
                  documentDeclaration = getOption("tikzDocumentDeclaration"),
                  packages,
                  footer = getOption("tikzFooter"),
-                 symbolicColors = getOption("tikzSymbolicColors"), colorFileName = "%s_colors.tex",
+                 symbolicColors = getOption("tikzSymbolicColors"),
+                 colorFileName = "%s_colors.tex",
                  maxSymbolicColors = getOption("tikzMaxSymbolicColors"),
                  timestamp = TRUE,
                  verbose = interactive()) {
@@ -227,6 +231,9 @@ tikz <- function(file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
       # Ok, this sucks. We copied the function signature of pdf() and got `file`
       # as an argument to our function. We should have copied png() and used
       # `filename`.
+      # ---
+      # 18-08-02: 'file = filename' ensures that ggsave works correctly with
+      # 'device=tikzDevice::tikz'
 
       # file_path_as_absolute can give us the absolute path to the output
       # file---but it has to exist first. So, we use file() to "touch" the
