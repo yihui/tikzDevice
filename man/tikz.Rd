@@ -4,9 +4,10 @@
 \alias{tikz}
 \title{TikZ Graphics Device}
 \usage{
-tikz(file = ifelse(onefile, "./Rplots.tex", "./Rplot\%03d.tex"), width = 7,
-  height = 7, onefile = TRUE, bg = "transparent", fg = "black",
-  pointsize = 10, lwdUnit = getOption("tikzLwdUnit"), standAlone = FALSE,
+tikz(file = filename, filename = ifelse(onefile, "./Rplots.tex",
+  "./Rplot\%03d.tex"), width = 7, height = 7, onefile = TRUE,
+  bg = "transparent", fg = "black", pointsize = 10,
+  lwdUnit = getOption("tikzLwdUnit"), standAlone = FALSE,
   bareBones = FALSE, console = FALSE, sanitize = FALSE,
   engine = getOption("tikzDefaultEngine"),
   documentDeclaration = getOption("tikzDocumentDeclaration"), packages,
@@ -19,6 +20,9 @@ tikz(file = ifelse(onefile, "./Rplots.tex", "./Rplot\%03d.tex"), width = 7,
 \arguments{
 \item{file}{A character string indicating the desired path to the output
 file.}
+
+\item{filename}{Same as file; only exists to avoid errors when using
+tikzDevice with ggsave (see #181).}
 
 \item{width}{The width of the output figure, in \strong{inches}.}
 
