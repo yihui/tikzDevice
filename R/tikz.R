@@ -51,7 +51,8 @@
 #' set.
 #'
 #' @param file,filename A character string indicating the desired path to the output
-#'   file.
+#'   file. If both arguments are used in the function call, `file` will be
+#'   preferred.
 #' @param width The width of the output figure, in **inches**.
 #' @param height The height of the output figure, in **inches**.
 #' @param onefile Should output be directed to separate environments in a

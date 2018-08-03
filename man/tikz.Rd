@@ -19,7 +19,8 @@ tikz(file = filename, filename = ifelse(onefile, "./Rplots.tex",
 }
 \arguments{
 \item{file, filename}{A character string indicating the desired path to the output
-file.}
+file. If both arguments are used in the function call, \code{file} will be
+preferred.}
 
 \item{width}{The width of the output figure, in \strong{inches}.}
 
