@@ -50,10 +50,8 @@
 #' automatically written if the path of a color file `colorFileName` is
 #' set.
 #'
-#' @param file A character string indicating the desired path to the output
+#' @param file,filename A character string indicating the desired path to the output
 #'   file.
-#' @param filename Same as file; only exists to avoid errors when using
-#'   tikzDevice with ggsave (see #181).
 #' @param width The width of the output figure, in **inches**.
 #' @param height The height of the output figure, in **inches**.
 #' @param onefile Should output be directed to separate environments in a

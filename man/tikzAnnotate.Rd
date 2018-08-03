@@ -14,8 +14,8 @@
 \usage{
 tikzAnnotate(annotation, checkstate = TRUE)
 
-tikzNode(x = NULL, y = NULL, opts = NULL, name = NULL, content = NULL,
-  units = "user")
+tikzNode(x = NULL, y = NULL, opts = NULL, name = NULL,
+  content = NULL, units = "user")
 
 tikzCoord(x, y, name, units = "user")
 

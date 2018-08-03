@@ -14,15 +14,12 @@ tikz(file = filename, filename = ifelse(onefile, "./Rplots.tex",
   footer = getOption("tikzFooter"),
   symbolicColors = getOption("tikzSymbolicColors"),
   colorFileName = "\%s_colors.tex",
-  maxSymbolicColors = getOption("tikzMaxSymbolicColors"), timestamp = TRUE,
-  verbose = interactive())
+  maxSymbolicColors = getOption("tikzMaxSymbolicColors"),
+  timestamp = TRUE, verbose = interactive())
 }
 \arguments{
-\item{file}{A character string indicating the desired path to the output
+\item{file, filename}{A character string indicating the desired path to the output
 file.}
-
-\item{filename}{Same as file; only exists to avoid errors when using
-tikzDevice with ggsave (see #181).}
 
 \item{width}{The width of the output figure, in \strong{inches}.}
 

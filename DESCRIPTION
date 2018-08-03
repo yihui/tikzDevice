@@ -2,13 +2,14 @@ Encoding: UTF-8
 Package: tikzDevice
 Type: Package
 Title: R Graphics Output in LaTeX Format
-Version: 0.12
+Version: 0.12.1
 Authors@R: c( person("Charlie", "Sharpsteen", role = "aut"),
         person("Cameron", "Bracken", role = "aut"), person("Kirill",
         "Müller", role = c("ctb"), email =
         "krlmlr+r@mailbox.org"), person("Yihui", "Xie", role = "ctb"),
         person("Ralf", "Stubner", email = "ralf.stubner@daqana.com", 
-        role = "cre")) 
+        role = "cre"), person("Nico", "Bellack", 
+        email = "nico.belack@daqana.com", role = "ctb") ) 
 URL: https://github.com/daqana/tikzDevice
 BugReports: https://github.com/daqana/tikzDevice/issues
 Description: Provides a graphics output device for R that records plots
@@ -39,5 +40,5 @@ Suggests:
 SystemRequirements: pgf (>= 2.00)
 LazyLoad: yes
 VignetteBuilder: knitr
-RoxygenNote: 6.0.1.9000
+RoxygenNote: 6.1.0
 Roxygen: list(markdown = TRUE)
