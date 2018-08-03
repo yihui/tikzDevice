@@ -1,3 +1,11 @@
+# tikzDevice 0.12.1 (unreleased)
+
+Bug fixes
+---------
+
+- `tikz()` now accepts both `file` and `filename` as named arguments to fix 
+  ggsave issue that occurred with ggplot2 v3.0.0 (#181)
+
 # tikzDevice 0.12 (2018-06-28)
 
 Contributors

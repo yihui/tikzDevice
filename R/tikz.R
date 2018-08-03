@@ -50,8 +50,9 @@
 #' automatically written if the path of a color file `colorFileName` is
 #' set.
 #'
-#' @param file A character string indicating the desired path to the output
-#'   file.
+#' @param file,filename A character string indicating the desired path to the output
+#'   file. If both arguments are used in the function call, `file` will be
+#'   preferred.
 #' @param width The width of the output figure, in **inches**.
 #' @param height The height of the output figure, in **inches**.
 #' @param onefile Should output be directed to separate environments in a
@@ -210,7 +211,8 @@
 #' }
 #'
 #' @export
-tikz <- function(file = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
+tikz <- function(file = filename,
+                 filename = ifelse(onefile, "./Rplots.tex", "./Rplot%03d.tex"),
                  width = 7, height = 7, onefile = TRUE,
                  bg="transparent", fg="black", pointsize = 10, lwdUnit = getOption("tikzLwdUnit"),
                  standAlone = FALSE, bareBones = FALSE, console = FALSE, sanitize = FALSE,
