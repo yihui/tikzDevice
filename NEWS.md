@@ -1,3 +1,13 @@
+# tikzDevice 0.12.2 (unreleased)
+
+Internal
+--------
+
+- Updated standard graphs for `ggplot2` to make the comparison tests run
+  without errors when using current ggplot2 version 3.0.0
+- Replaced deprecated `now()` function with `expect_silent()` to suppress
+  warnings when running the package tests
+
 # tikzDevice 0.12.1 (unreleased)
 
 Bug fixes

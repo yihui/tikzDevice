@@ -118,6 +118,8 @@ compare_graph <- function(graph_name, tags) {
     # We are using a version of ggplot2 that predates 0.9.
     #
     # FIXME: Remove this once we drop support for 2.13.x.
+    standard_graph <- file.path(test_standard_dir, "ggplot_very_old", paste0(graph_name, ".pdf"))
+  } else if ("ggplot2" %in% tags && packageVersion("ggplot2") < "3.0.0") {
     standard_graph <- file.path(test_standard_dir, "ggplot_old", paste0(graph_name, ".pdf"))
   } else {
     standard_graph <- file.path(test_standard_dir, paste0(graph_name, ".pdf"))

@@ -5,7 +5,7 @@ test_that("Temporary metrics dictionary is created, but only once", {
 
   rm(list = ls(envir = .tikzInternal), envir = .tikzInternal)
   expect_that(checkDictionaryStatus(verbose = TRUE), shows_message("Creating"))
-  expect_that(checkDictionaryStatus(verbose = TRUE), not(shows_message()))
+  expect_silent(checkDictionaryStatus(verbose = TRUE))
   expect_true(file.exists(.tikzInternal[["db_file"]]))
 })
 
@@ -13,8 +13,8 @@ test_that("Silent creation of temporary metrics dictionary", {
   expect_equal(getOption("tikzMetricsDictionary"), NULL)
 
   rm(list = ls(envir = .tikzInternal), envir = .tikzInternal)
-  expect_that(checkDictionaryStatus(verbose = FALSE), not(shows_message()))
-  expect_that(checkDictionaryStatus(verbose = FALSE), not(shows_message()))
+  expect_silent(checkDictionaryStatus(verbose = FALSE))
+  expect_silent(checkDictionaryStatus(verbose = FALSE))
   expect_true(file.exists(.tikzInternal[["db_file"]]))
 })
 
@@ -28,22 +28,22 @@ test_that("Switching metrics dictionary", {
     {
       options(tikzMetricsDictionary = tempA)
       expect_that(checkDictionaryStatus(verbose = TRUE), shows_message("Creating"))
-      expect_that(checkDictionaryStatus(verbose = TRUE), not(shows_message()))
+      expect_silent(checkDictionaryStatus(verbose = TRUE))
       options(tikzMetricsDictionary = tempB)
       expect_that(checkDictionaryStatus(verbose = TRUE), shows_message("Creating"))
-      expect_that(checkDictionaryStatus(verbose = TRUE), not(shows_message()))
+      expect_silent(checkDictionaryStatus(verbose = TRUE))
       options(tikzMetricsDictionary = tempA)
       expect_that(checkDictionaryStatus(verbose = TRUE), shows_message("Using"))
-      expect_that(checkDictionaryStatus(verbose = TRUE), not(shows_message()))
+      expect_silent(checkDictionaryStatus(verbose = TRUE))
       options(tikzMetricsDictionary = tempB)
       expect_that(checkDictionaryStatus(verbose = TRUE), shows_message("Using"))
-      expect_that(checkDictionaryStatus(verbose = TRUE), not(shows_message()))
+      expect_silent(checkDictionaryStatus(verbose = TRUE))
       options(tikzMetricsDictionary = tempA)
-      expect_that(checkDictionaryStatus(verbose = FALSE), not(shows_message()))
-      expect_that(checkDictionaryStatus(verbose = FALSE), not(shows_message()))
+      expect_silent(checkDictionaryStatus(verbose = FALSE))
+      expect_silent(checkDictionaryStatus(verbose = FALSE))
       options(tikzMetricsDictionary = tempB)
-      expect_that(checkDictionaryStatus(verbose = FALSE), not(shows_message()))
-      expect_that(checkDictionaryStatus(verbose = FALSE), not(shows_message()))
+      expect_silent(checkDictionaryStatus(verbose = FALSE))
+      expect_silent(checkDictionaryStatus(verbose = FALSE))
     },
     finally = {
       options(tikzMetricsDictionary = NULL)
@@ -62,16 +62,16 @@ test_that("Turning custom metrics dictionary on and off", {
     {
       options(tikzMetricsDictionary = temp)
       expect_that(checkDictionaryStatus(verbose = TRUE), shows_message("Creating"))
-      expect_that(checkDictionaryStatus(verbose = TRUE), not(shows_message()))
+      expect_silent(checkDictionaryStatus(verbose = TRUE))
       options(tikzMetricsDictionary = NULL)
       expect_that(checkDictionaryStatus(verbose = TRUE), shows_message("Creating"))
-      expect_that(checkDictionaryStatus(verbose = TRUE), not(shows_message()))
+      expect_silent(checkDictionaryStatus(verbose = TRUE))
       options(tikzMetricsDictionary = temp)
       expect_that(checkDictionaryStatus(verbose = TRUE), shows_message("Using"))
-      expect_that(checkDictionaryStatus(verbose = TRUE), not(shows_message()))
+      expect_silent(checkDictionaryStatus(verbose = TRUE))
       options(tikzMetricsDictionary = NULL)
       expect_that(checkDictionaryStatus(verbose = TRUE), shows_message("Creating"))
-      expect_that(checkDictionaryStatus(verbose = TRUE), not(shows_message()))
+      expect_silent(checkDictionaryStatus(verbose = TRUE))
     },
     finally = {
       options(tikzMetricsDictionary = NULL)
