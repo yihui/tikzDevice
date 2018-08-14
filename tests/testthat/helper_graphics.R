@@ -119,10 +119,9 @@ compare_graph <- function(graph_name, tags) {
     #
     # FIXME: Remove this once we drop support for 2.13.x.
     standard_graph <- file.path(test_standard_dir, "ggplot_very_old", paste0(graph_name, ".pdf"))
-  } else if (packageVersion("ggplot2") < "3.0.0") {
+  } else if ("ggplot2" %in% tags && packageVersion("ggplot2") < "3.0.0") {
     standard_graph <- file.path(test_standard_dir, "ggplot_old", paste0(graph_name, ".pdf"))
-  }
-  else {
+  } else {
     standard_graph <- file.path(test_standard_dir, paste0(graph_name, ".pdf"))
   }
 
