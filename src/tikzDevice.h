@@ -67,6 +67,7 @@ typedef struct {
   char *outColorFileName;
   char *originalColorFileName;
   tikz_engine engine;
+  char *engine_args;
   int rasterFileCount;
   int pageNum;
   double lwdUnit;
@@ -112,7 +113,7 @@ static Rboolean TikZ_Setup(
     Rboolean standAlone, Rboolean bareBones,
     const char *documentDeclaration,
     const char *packages, const char *footer,
-    Rboolean console, Rboolean sanitize, int engine,
+    Rboolean console, Rboolean sanitize, int engine, const char *engine_args,
     Rboolean symbolicColors, const char *colorFileName,
     int maxSymbolicColors, Rboolean timestamp, Rboolean verbose );
 

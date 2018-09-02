@@ -40,9 +40,12 @@
 #'
 #' @references PGF Manual
 #' @export
-getLatexStrWidth <- function(texString, cex = 1, face = 1, engine = getOption("tikzDefaultEngine"),
-                             documentDeclaration = getOption("tikzDocumentDeclaration"), packages,
-                             verbose = interactive(), diagnose = FALSE) {
+getLatexStrWidth <- function(texString, cex = 1, face = 1,
+                             engine = getOption("tikzDefaultEngine"),
+                             engine_args=getOption("tikzEngineArgs"),
+                             documentDeclaration = getOption("tikzDocumentDeclaration"),
+                             packages, verbose = interactive(),
+                             diagnose = FALSE) {
   texString <- enc2utf8(texString) # convert the encoding of input string to UTF8
 
   switch(engine,
@@ -77,7 +80,7 @@ getLatexStrWidth <- function(texString, cex = 1, face = 1, engine = getOption("t
   TeXMetrics <- list(
     type = "string", scale = cex, face = face, value = texString,
     documentDeclaration = documentDeclaration,
-    packages = packages, engine = engine
+    packages = packages, engine = engine, engine_args = engine_args
   )
 
   if (diagnose) {
@@ -127,6 +130,7 @@ getLatexStrWidth <- function(texString, cex = 1, face = 1, engine = getOption("t
 #'
 #' @export
 getLatexCharMetrics <- function(charCode, cex = 1, face = 1, engine = getOption("tikzDefaultEngine"),
+                                engine_args = getOption("tikzEngineArgs"),
                                 documentDeclaration = getOption("tikzDocumentDeclaration"), packages,
                                 verbose = interactive()) {
 
@@ -203,7 +207,7 @@ getLatexCharMetrics <- function(charCode, cex = 1, face = 1, engine = getOption(
   TeXMetrics <- list(
     type = "char", scale = cex, face = face, value = charCode,
     documentDeclaration = documentDeclaration,
-    packages = packages, engine = engine
+    packages = packages, engine = engine, engine_args = engine_args
   )
 
   # Check to see if we have metrics stored in
@@ -401,11 +405,10 @@ getMetricsFromLatex <- function(TeXMetrics, verbose = verbose, diagnose = FALSE)
   latexCmd <- get_latex_cmd(TeXMetrics$engine)
 
   # Append the batchmode flag to increase LaTeX
-  # efficiency.
-  latexCmd <- paste(
-    shQuote(latexCmd), "-interaction=batchmode", "-halt-on-error",
-    "-output-directory", shQuote(texDir), shQuote(texFile)
-  )
+  # efficiency, and other useful flags...
+  latexCmd <- paste(shQuote(latexCmd), TeXMetrics$engine_args,
+                    "-interaction=batchmode", "-halt-on-error",
+                    "-output-directory", shQuote(texDir), shQuote(texFile))
 
   message("Running command: ", latexCmd)
 

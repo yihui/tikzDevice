@@ -2,14 +2,16 @@ Encoding: UTF-8
 Package: tikzDevice
 Type: Package
 Title: R Graphics Output in LaTeX Format
-Version: 0.12.1
+Version: 0.12.2
 Authors@R: c( person("Charlie", "Sharpsteen", role = "aut"),
         person("Cameron", "Bracken", role = "aut"), person("Kirill",
         "Müller", role = c("ctb"), email =
         "krlmlr+r@mailbox.org"), person("Yihui", "Xie", role = "ctb"),
         person("Ralf", "Stubner", email = "ralf.stubner@daqana.com", 
         role = "cre"), person("Nico", "Bellack", 
-        email = "nico.belack@daqana.com", role = "ctb") ) 
+        email = "nico.belack@daqana.com", role = "ctb"),
+	person("Emmanuel", "Charpentier",
+	email = "emm.charpentier@free.fr", role = "ctb")) 
 URL: https://github.com/daqana/tikzDevice
 BugReports: https://github.com/daqana/tikzDevice/issues
 Description: Provides a graphics output device for R that records plots

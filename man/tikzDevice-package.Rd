@@ -32,6 +32,12 @@ are \code{pdftex}, \code{xetex} or \code{luatex}. Respectively, these
 values trigger the use of the \code{pdflatex}, \code{xelatex} and
 \code{lualatex} compilers.  }
 
+\item{\code{tikzEngineArgs}}{ Specifies supplementary command line
+arguments to be passed to the engine. Use this to satisfy such
+requirements of LaTeX packages used in your documents (example :
+the \code{minted} package requires \code{-shell-escape} in order to write
+its its intermediary files). }
+
 \item{\code{tikzLatex}}{ Specifies the location of the LaTeX compiler to be
 used by \pkg{tikzDevice}. Setting this option may help the package locate a
 missing compiler. The default is searched for when the package is loaded,

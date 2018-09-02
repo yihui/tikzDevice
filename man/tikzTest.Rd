@@ -5,21 +5,28 @@
 \title{Test invocation of a LaTeX engine.}
 \usage{
 tikzTest(texString = "A", engine = getOption("tikzDefaultEngine"),
+  engine_args = getOption("tikzEngineArgs"),
   documentDeclaration = getOption("tikzDocumentDeclaration"), packages)
 }
 \arguments{
 \item{texString}{An arbitrary string for which the width is to be
 calculated.  May contain LaTeX markup.}
 
-\item{engine}{a string specifying which TeX engine to use. Possible values
-are 'pdftex', 'xetex' and 'luatex'. See the Unicode section of
-\link{tikzDevice-package} for details.}
+\item{engine}{a string specifying which TeX engine to use. Possible
+values are 'pdftex', 'xetex' and 'luatex'. See the Unicode
+section of \link{tikzDevice-package} for details.}
 
-\item{documentDeclaration}{See the sections "Options That Affect Package
-Behavior" and "Font Size Calculations" of \link{tikzDevice-package}
-for more details.}
+\item{engine_args}{Command-line arguments to be passed toengine(can
+be set in the global option tikzEngineArgs,
+e.g. \code{options(tikzEngineArgs ='-shell-escape')}}
 
-\item{packages}{See the section "Options That Affect Package Behavior" of
+\item{documentDeclaration}{See the sections
+"Options That Affect Package Behavior" and
+"Font Size Calculations" of \link{tikzDevice-package} for more
+details.}
+
+\item{packages}{See the section
+"Options That Affect Package Behavior" of
 \link{tikzDevice-package}.}
 }
 \description{

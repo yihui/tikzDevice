@@ -10,6 +10,7 @@ tikz(file = filename, filename = ifelse(onefile, "./Rplots.tex",
   lwdUnit = getOption("tikzLwdUnit"), standAlone = FALSE,
   bareBones = FALSE, console = FALSE, sanitize = FALSE,
   engine = getOption("tikzDefaultEngine"),
+  engine_args = getOption("tikzEngineArgs"),
   documentDeclaration = getOption("tikzDocumentDeclaration"), packages,
   footer = getOption("tikzFooter"),
   symbolicColors = getOption("tikzSymbolicColors"),
@@ -18,89 +19,102 @@ tikz(file = filename, filename = ifelse(onefile, "./Rplots.tex",
   timestamp = TRUE, verbose = interactive())
 }
 \arguments{
-\item{file, filename}{A character string indicating the desired path to the output
-file. If both arguments are used in the function call, \code{file} will be
-preferred.}
+\item{file, filename}{A character string indicating the desired path
+to the output file. If both arguments are used in the function
+call, \code{file} will be preferred.}
 
 \item{width}{The width of the output figure, in \strong{inches}.}
 
 \item{height}{The height of the output figure, in \strong{inches}.}
 
-\item{onefile}{Should output be directed to separate environments in a
-single file (default \code{TRUE}). If \code{FALSE} this option works
-exactly like the argument of the same name to \code{\link[=pdf]{pdf()}}
-(see there for more details).}
+\item{onefile}{Should output be directed to separate environments
+in a single file (default \code{TRUE}). If \code{FALSE} this option works
+exactly like the argument of the same name to \code{\link[=pdf]{pdf()}} (see
+there for more details).}
 
 \item{bg}{The starting background color for the plot.}
 
 \item{fg}{The starting foreground color for the plot.}
 
-\item{pointsize}{Base pointsize used in the LaTeX document.  This option is
-only used if a valid pointsize cannot be extracted from the value of
-\code{getOption("tikzDocumentDeclaration")}.  See the section "Font Size
-Calculations" in \link{tikzDevice-package} for more details.}
+\item{pointsize}{Base pointsize used in the LaTeX document.  This
+option is only used if a valid pointsize cannot be extracted
+from the value of \code{getOption("tikzDocumentDeclaration")}.  See
+the section "Font Size Calculations" in
+\link{tikzDevice-package} for more details.}
 
 \item{lwdUnit}{The number of \code{pt}s in LaTeX that \code{lwd = 1} in R is
-translated to.  Defaults to 0.4 (LaTeX and TikZ default); for compatibility
-with R default, please use 72.27/96 (96 pixels in R is 1 inch, which is 72.27
-points in TeX).}
+translated to.  Defaults to 0.4 (LaTeX and TikZ default); for
+compatibility with R default, please use 72.27/96 (96 pixels in
+R is 1 inch, which is 72.27 points in TeX).}
 
-\item{standAlone}{A logical value indicating whether the output file should
-be suitable for direct processing by LaTeX. A value of \code{FALSE}
-indicates that the file is intended for inclusion in a larger document.
-See \sQuote{Details}.}
+\item{standAlone}{A logical value indicating whether the output
+file should be suitable for direct processing by LaTeX. A value
+of \code{FALSE} indicates that the file is intended for inclusion in
+a larger document.  See \sQuote{Details}.}
 
-\item{bareBones}{A logical value.  When \code{TRUE} the figure will not be
-wrapped in a \code{tikzpicture} environment.  This option is useful for
-embedding one TikZ picture within another. When \code{TRUE} multipage
-output will be drawn on a single page.}
+\item{bareBones}{A logical value.  When \code{TRUE} the figure will not
+be wrapped in a \code{tikzpicture} environment.  This option is
+useful for embedding one TikZ picture within another. When
+\code{TRUE} multipage output will be drawn on a single page.}
 
-\item{console}{Should the output of tikzDevice be directed to the R console
-(default \code{FALSE}). This is useful for dumping tikz output directly into a
-LaTeX document via \code{\link[=sink]{sink()}}.  If TRUE, the \code{file} argument
-is ignored. Setting \code{file = ''} is equivalent to setting
-\code{console=TRUE}.}
+\item{console}{Should the output of tikzDevice be directed to the R
+console (default \code{FALSE}). This is useful for dumping tikz
+output directly into a LaTeX document via \code{\link[=sink]{sink()}}.  If TRUE,
+the \code{file} argument is ignored. Setting \code{file = ''} is
+equivalent to setting \code{console=TRUE}.}
 
-\item{sanitize}{Should special latex characters be replaced (Default FALSE).
-See the section "Options That Affect Package Behavior" for which
-characters are replaced.}
+\item{sanitize}{Should special latex characters be replaced
+(Default FALSE).  See the section
+"Options That Affect Package Behavior" for which characters are
+replaced.}
 
-\item{engine}{a string specifying which TeX engine to use. Possible values
-are 'pdftex', 'xetex' and 'luatex'. See the Unicode section of
-\link{tikzDevice-package} for details.}
+\item{engine}{a string specifying which TeX engine to use. Possible
+values are 'pdftex', 'xetex' and 'luatex'. See the Unicode
+section of \link{tikzDevice-package} for details.}
 
-\item{documentDeclaration}{See the sections "Options That Affect Package
-Behavior" and "Font Size Calculations" of \link{tikzDevice-package}
-for more details.}
+\item{engine_args}{Command-line arguments to be passed toengine(can
+be set in the global option tikzEngineArgs,
+e.g. \code{options(tikzEngineArgs ='-shell-escape')}}
 
-\item{packages}{See the section "Options That Affect Package Behavior" of
+\item{documentDeclaration}{See the sections
+"Options That Affect Package Behavior" and
+"Font Size Calculations" of \link{tikzDevice-package} for more
+details.}
+
+\item{packages}{See the section
+"Options That Affect Package Behavior" of
 \link{tikzDevice-package}.}
 
-\item{footer}{See the section "Options That Affect Package Behavior" of
+\item{footer}{See the section
+"Options That Affect Package Behavior" of
 \link{tikzDevice-package}.}
 
-\item{symbolicColors}{A logical value indicating whether colors are written
-as RGB values or as symbolic names in which case the need to be defined in
-the LaTeX document. These definitions can be generated with the following
-\code{colorFileName} parameter. See also the section "Options That Affect
-Package Behavior" of \link{tikzDevice-package}.}
+\item{symbolicColors}{A logical value indicating whether colors are
+written as RGB values or as symbolic names in which case the
+need to be defined in the LaTeX document. These definitions can
+be generated with the following \code{colorFileName} parameter. See
+also the section "Options That Affect Package Behavior" of
+\link{tikzDevice-package}.}
 
-\item{colorFileName}{a character string indicating where the color map for
-symbolic colors is to be stored. It can contain a placeholder \code{\%s}
-where the tikz filename is inserted. If the string is empty, no file is
-written.}
+\item{colorFileName}{a character string indicating where the color
+map for symbolic colors is to be stored. It can contain a
+placeholder \code{\%s} where the tikz filename is inserted. If
+the string is empty, no file is written.}
 
-\item{maxSymbolicColors}{an integer number indicating the maximal number
-of distinct colors to write symbolically. Any excess color will be defined
-as if \code{symbolicColors} was set to \code{FALSE}. See also the section
-"Options That Affect Package Behavior" of \link{tikzDevice-package}.}
+\item{maxSymbolicColors}{an integer number indicating the maximal
+number of distinct colors to write symbolically. Any excess
+color will be defined as if \code{symbolicColors} was set to
+\code{FALSE}. See also the section
+"Options That Affect Package Behavior" of
+\link{tikzDevice-package}.}
 
-\item{timestamp}{A logical value indicating whether a timestamp is written
-to the TeX file.}
+\item{timestamp}{A logical value indicating whether a timestamp is
+written to the TeX file.}
 
-\item{verbose}{A logical value indicating whether diagnostic messages are
-printed when measuring dimensions of strings. Defaults to \code{TRUE} in
-interactive mode only, to \code{FALSE} otherwise.}
+\item{verbose}{A logical value indicating whether diagnostic
+messages are printed when measuring dimensions of
+strings. Defaults to \code{TRUE} in interactive mode only, to
+\code{FALSE} otherwise.}
 }
 \value{
 \code{tikz()} returns no values.
