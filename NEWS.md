@@ -1,3 +1,11 @@
+# tikzDevice 0.12.2 (unreleased)
+
+Bug fixes
+---------
+
+- tikzDevice correctly translates the `lmitre = n` parameter of the `plot()` 
+  function now (#178)
+
 # tikzDevice 0.12.1 (unreleased)
 
 Bug fixes
