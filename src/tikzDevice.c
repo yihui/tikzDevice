@@ -1943,7 +1943,9 @@ static void TikZ_WriteLineStyle(pGEcontext plotParams, tikzDevDesc *tikzInfo)
     case GE_MITRE_JOIN:
       /* Default if nothing is specified */
       if(plotParams->lmitre != 10)
-        printOutput(tikzInfo, ",mitre limit=%4.2f",plotParams->lmitre);
+        /* Here it has to be "miter" because pgfkeys wants it to be
+         * written this way. */
+        printOutput(tikzInfo, ",miter limit=%4.2f",plotParams->lmitre);
       break;
     case GE_BEVEL_JOIN:
       printOutput(tikzInfo, ",line join=bevel");
