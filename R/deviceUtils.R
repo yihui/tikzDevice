@@ -65,7 +65,10 @@ getDocumentPointsize <- function(docString) {
 #' @export
 setTikzDefaults <- function(overwrite = TRUE) {
   tikzDefaults <- list(
+
     tikzDefaultEngine = "pdftex",
+
+    tikzEngineArgs = "",
 
     tikzLatex = getOption("tikzLatexDefault"),
 
@@ -360,6 +363,7 @@ tikzCompilerInfo <- function(verbose = TRUE) {
 #' @export
 tikzTest <- function(texString = "A",
                      engine = getOption("tikzDefaultEngine"),
+                     engine_args=getOption("tikzEngineArgs"),
                      documentDeclaration = getOption("tikzDocumentDeclaration"),
                      packages) {
   latex_cmd <- get_latex_cmd(engine)
@@ -367,6 +371,7 @@ tikzTest <- function(texString = "A",
   getLatexStrWidth(
     texString,
     engine = engine,
+    engine_args = engine_args,
     documentDeclaration = documentDeclaration,
     packages = packages,
     diagnose = TRUE

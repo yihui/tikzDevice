@@ -7,11 +7,13 @@
 \usage{
 getLatexStrWidth(texString, cex = 1, face = 1,
   engine = getOption("tikzDefaultEngine"),
+  engine_args = getOption("tikzEngineArgs"),
   documentDeclaration = getOption("tikzDocumentDeclaration"), packages,
   verbose = interactive(), diagnose = FALSE)
 
 getLatexCharMetrics(charCode, cex = 1, face = 1,
   engine = getOption("tikzDefaultEngine"),
+  engine_args = getOption("tikzEngineArgs"),
   documentDeclaration = getOption("tikzDocumentDeclaration"), packages,
   verbose = interactive())
 }
@@ -25,20 +27,27 @@ applied to device output.}
 \item{face}{an integer in the range \code{1:5} that specifies the font face to
 use. See \link{par} for details.}
 
-\item{engine}{a string specifying which TeX engine to use. Possible values
-are 'pdftex', 'xetex' and 'luatex'. See the Unicode section of
-\link{tikzDevice-package} for details.}
+\item{engine}{a string specifying which TeX engine to use. Possible
+values are 'pdftex', 'xetex' and 'luatex'. See the Unicode
+section of \link{tikzDevice-package} for details.}
 
-\item{documentDeclaration}{See the sections "Options That Affect Package
-Behavior" and "Font Size Calculations" of \link{tikzDevice-package}
-for more details.}
+\item{engine_args}{Command-line arguments to be passed toengine(can
+be set in the global option tikzEngineArgs,
+e.g. \code{options(tikzEngineArgs ='-shell-escape')}}
 
-\item{packages}{See the section "Options That Affect Package Behavior" of
+\item{documentDeclaration}{See the sections
+"Options That Affect Package Behavior" and
+"Font Size Calculations" of \link{tikzDevice-package} for more
+details.}
+
+\item{packages}{See the section
+"Options That Affect Package Behavior" of
 \link{tikzDevice-package}.}
 
-\item{verbose}{A logical value indicating whether diagnostic messages are
-printed when measuring dimensions of strings. Defaults to \code{TRUE} in
-interactive mode only, to \code{FALSE} otherwise.}
+\item{verbose}{A logical value indicating whether diagnostic
+messages are printed when measuring dimensions of
+strings. Defaults to \code{TRUE} in interactive mode only, to
+\code{FALSE} otherwise.}
 
 \item{diagnose}{pass \code{TRUE} to print detailed error information.}
 

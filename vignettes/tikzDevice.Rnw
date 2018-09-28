@@ -2128,3 +2128,7 @@ Now for a little shameless self promotion. The authors of \pkg{tikzDevice} have 
 \bibliography{refs}
 
 \end{document}\n
+
+%% Local Variables:
+%% TeX-master: "tikzDevice"
+%% End:

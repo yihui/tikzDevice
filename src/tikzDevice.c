@@ -79,7 +79,7 @@ SEXP TikZ_StartDevice ( SEXP args ){
   const char *bg, *fg;
   double width, height;
   Rboolean standAlone, bareBones;
-  const char *documentDeclaration, *packages, *footer;
+  const char *documentDeclaration, *engine_args, *packages, *footer;
   double baseSize, lwdUnit;
   Rboolean console, sanitize, onefile, symbolicColors;
 
@@ -165,6 +165,11 @@ SEXP TikZ_StartDevice ( SEXP args ){
   int engine = asInteger(CAR(args)); args = CDR(args);
 
   /*
+   * Engine args : allow to pass options to the TeX engine
+  */
+  engine_args = CHAR(asChar(CAR(args))); args=CDR(args);
+
+  /*
    * Should symbolic names be used (red instead of 1.0, 1.0, 1.0)
    */
   symbolicColors = asLogical(CAR(args)); args = CDR(args);
@@ -200,10 +205,11 @@ SEXP TikZ_StartDevice ( SEXP args ){
      * R graphics function hooks with the appropriate C routines
      * in this file.
     */
-    if( !TikZ_Setup( deviceInfo, fileName, width, height, onefile, bg, fg, baseSize, lwdUnit,
-        standAlone, bareBones, documentDeclaration, packages,
-        footer, console, sanitize, engine, symbolicColors, colorFileName,
-        maxSymbolicColors, timestamp, verbose ) ){
+    if( !TikZ_Setup( deviceInfo, fileName, width, height, onefile, bg, fg,
+		     baseSize, lwdUnit, standAlone, bareBones,
+		     documentDeclaration, packages, footer, console, sanitize,
+		     engine, engine_args, symbolicColors, colorFileName,
+		     maxSymbolicColors, timestamp, verbose ) ){
       /*
        * If setup was unsuccessful, destroy the device and return
        * an error message.
@@ -248,6 +254,7 @@ static Rboolean TikZ_Setup(
   const char *documentDeclaration,
   const char *packages, const char *footer,
   Rboolean console, Rboolean sanitize, int engine,
+  const char *engine_args,
   Rboolean symbolicColors, const char* colorFileName,
   int maxSymbolicColors, Rboolean timestamp, Rboolean verbose){
 
@@ -305,6 +312,7 @@ static Rboolean TikZ_Setup(
   tikzInfo->stringWidthCalls = 0;
 
   tikzInfo->documentDeclaration = calloc_strcpy(documentDeclaration);
+  tikzInfo->engine_args = calloc_strcpy(engine_args);
   tikzInfo->packages = calloc_strcpy(packages);
   tikzInfo->footer = calloc_strcpy(footer);
   tikzInfo->symbolicColors = symbolicColors;
