@@ -66,8 +66,8 @@
 #'   `getOption("tikzDocumentDeclaration")`.  See the section "Font Size
 #'   Calculations" in \link{tikzDevice-package} for more details.
 #' @param lwdUnit The number of `pt`s in LaTeX that `lwd = 1` in R is
-#'   translated to.  Defaults to 0.4 (LaTeX and TikZ default); for compatibility
-#'   with R default, please use 72.27/96 (96 pixels in R is 1 inch, which is 72.27
+#'   translated to.  Defaults to 0.4 (LaTeX and TikZ default). For compatibility
+#'   with R default, use 72.27/96 (96 pixels in R is 1 inch, which is 72.27
 #'   points in TeX).
 #' @param standAlone A logical value indicating whether the output file should
 #'   be suitable for direct processing by LaTeX. A value of `FALSE`

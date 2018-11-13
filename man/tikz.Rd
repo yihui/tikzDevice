@@ -41,8 +41,8 @@ only used if a valid pointsize cannot be extracted from the value of
 Calculations" in \link{tikzDevice-package} for more details.}
 
 \item{lwdUnit}{The number of \code{pt}s in LaTeX that \code{lwd = 1} in R is
-translated to.  Defaults to 0.4 (LaTeX and TikZ default); for compatibility
-with R default, please use 72.27/96 (96 pixels in R is 1 inch, which is 72.27
+translated to.  Defaults to 0.4 (LaTeX and TikZ default). For compatibility
+with R default, use 72.27/96 (96 pixels in R is 1 inch, which is 72.27
 points in TeX).}
 
 \item{standAlone}{A logical value indicating whether the output file should

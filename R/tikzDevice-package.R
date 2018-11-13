@@ -77,7 +77,8 @@
 #'   when `standAlone==TRUE`.  }
 #'
 #'   \item{`tikzMetricPackages`}{ A character vector. These are the
-#'   packages which are additionally loaded when doing font metric calculations.
+#'   packages which are additionally loaded when doing font metric calculations
+#'   with the `pdftex` engine (the default).
 #'   As you see below, the font encoding is set to Type 1. This is very
 #'   important so that character codes of LaTeX and match up. The default value
 #'   is: \code{options(tikzMetricPackages = c( "\\usepackage[utf8]{inputenc}",
@@ -85,8 +86,8 @@
 #'
 #'   \item{`tikzUnicodeMetricPackages`}{ This vector is used when font
 #'   metric calculations are performed using the `xetex` or `luatex`
-#'   engines. It should have the same contents as `tikzMetricPackages` with
-#'   the addition of the `fontspec` and `xunicode` packages.  }
+#'   engines. It should include `"\\usetikzlibrary{calc}"`, like
+#'   `tikzMetricPackages` does, as well as the `fontspec` package.  }
 #'
 #'   \item{`tikzSanitizeCharacters`}{ A character vector of special latex
 #'   characters to replace. These values should correspond to the replacement

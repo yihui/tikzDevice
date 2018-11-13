@@ -80,7 +80,8 @@ is in use.  }
 when \code{standAlone==TRUE}.  }
 
 \item{\code{tikzMetricPackages}}{ A character vector. These are the
-packages which are additionally loaded when doing font metric calculations.
+packages which are additionally loaded when doing font metric calculations
+with the \code{pdftex} engine (the default).
 As you see below, the font encoding is set to Type 1. This is very
 important so that character codes of LaTeX and match up. The default value
 is: \code{options(tikzMetricPackages = c( "\\usepackage[utf8]{inputenc}",
@@ -88,8 +89,8 @@ is: \code{options(tikzMetricPackages = c( "\\usepackage[utf8]{inputenc}",
 
 \item{\code{tikzUnicodeMetricPackages}}{ This vector is used when font
 metric calculations are performed using the \code{xetex} or \code{luatex}
-engines. It should have the same contents as \code{tikzMetricPackages} with
-the addition of the \code{fontspec} and \code{xunicode} packages.  }
+engines. It should include \code{"\\usetikzlibrary{calc}"}, like
+\code{tikzMetricPackages} does, as well as the \code{fontspec} package.  }
 
 \item{\code{tikzSanitizeCharacters}}{ A character vector of special latex
 characters to replace. These values should correspond to the replacement
