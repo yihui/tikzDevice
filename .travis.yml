@@ -1,29 +1,25 @@
-# R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
+os: linux
+services: docker
 
-language: R
-sudo: false
-cache: packages
-os:
-  - linux
-r:
-  - oldrel
-  - release
-  - devel
+before_install:
+  - make docker-pull
+  - make info
+
 notifications:
   email:
     on_success: change
     on_failure: change
+
 addons:
   apt:
     packages:
-    - texlive-xetex
-    - texlive-latex-extra
-    - texlive-fonts-recommended
-    - texlive-pictures
-    - ghostscript
-    - qpdf
-r_packages:
-  - covr
-r_build_args: --compact-vignettes=gs+qpdf
+    - make
+
+install:
+  - make build
+
+script:
+  - make check
+
 after_success:
-  - test "$TRAVIS_R_VERSION_STRING" = "release" && Rscript -e 'covr::codecov()' || true
+  - make covr
