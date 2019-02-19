@@ -1,4 +1,6 @@
-library(testthat)
-library(tikzDevice)
-skip_on_appveyor()
-test_check("tikzDevice")
+if (nchar(Sys.getenv("R_TESTS")) == 0) {
+  library(testthat)
+  library(tikzDevice)
+
+  test_check("tikzDevice")
+}
