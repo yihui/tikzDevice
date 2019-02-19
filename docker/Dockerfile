@@ -22,6 +22,7 @@ RUN apt-get update \
  && tlmgr install pgf preview xcolor memoir ifetex microtype float \
                   babel-english listings xstring luatex85 \
  && install2.r filehash png evaluate formatR ggplot2 knitr lattice maps \
-               testthat tinytex covr devtools \
+               testthat tinytex covr \
  && rm -rf /var/lib/apt/lists/* \
- && rm -rf /tmp/*
+ && rm -rf /tmp/* \
+ && chmod 777 /usr/local/lib/R/site-library

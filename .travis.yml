@@ -19,7 +19,7 @@ install:
   - make build
 
 script:
-  - make check
+  - make check test
 
 after_success:
   - make covr
