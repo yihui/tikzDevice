@@ -9,12 +9,6 @@ do_graphics_test <- function(short_name, description, graph_code, fuzz = 0,
                              engine = "pdftex", graph_options = NULL, skip_if = NULL, tags = NULL, ...) {
   context(description)
 
-  if (Sys.getenv("R_TESTS") != "") {
-    # `R CMD check` is running. Skip test and return so our graphics testsuite
-    # does not slow down the CRAN daily checks.
-    return(FALSE)
-  }
-
   if (!is.null(skip_if)) {
     if (skip_if()) {
       return(FALSE)
