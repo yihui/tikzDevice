@@ -34,7 +34,7 @@ test:
 	   'install.packages("$(PKG_TAR)", repos = NULL); testthat::test_dir("tests", stop_on_failure = TRUE)'
 
 covr:
-	$(SUDO) docker run $(DOCKER_OPTS) $(IMAGE) Rscript -e "covr::codecov()"
+	$(SUDO) docker run $(DOCKER_OPTS) -e CODECOV_TOKEN $(IMAGE) Rscript -e "covr::codecov()"
 
 clean:
 	rm -rf $(PKG_TAR) $(PKG_NAME).Rcheck/
