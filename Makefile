@@ -3,7 +3,7 @@ IMAGE := "tikzdevice/ci"
 PWD := $(shell pwd)
 UID := $(shell id -u):$(shell id -g)
 
-DOCKER_OPTS := --rm -u $(UID) -v $(PWD):/mnt -w /mnt
+DOCKER_OPTS := --rm -u $(UID) -e HOME=/tmp -v $(PWD):/mnt -w /mnt
 
 PKG_VERSION = $(shell grep -i ^version DESCRIPTION | cut -d : -d \  -f 2)
 PKG_NAME = $(shell grep -i ^package DESCRIPTION | cut -d : -d \  -f 2)
