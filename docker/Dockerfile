@@ -7,6 +7,7 @@ LABEL org.label-schema.license="GPL-2.0" \
 RUN apt-get update \
  && apt-get install --yes --no-install-recommends \
             ghostscript \
+            git \
             imagemagick \
             libcurl4-openssl-dev \
             libpng-dev \
