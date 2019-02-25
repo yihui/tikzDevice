@@ -253,12 +253,16 @@ getMetricsFromLatex <- function(TeXMetrics, verbose = verbose, diagnose = FALSE)
 
 
   # Create the TeX file in a temporary directory so
-  # it doesn't clutter anything.
+  # it doesn't clutter anything. Use that temporary directory
+  # as temporary workdir due to problems with long usernames on
+  # Windows.
   texDir <- tempfile("tikzDevice")
   dir.create(texDir)
-  texLog <- file.path(texDir, "tikzStringWidthCalc.log")
-  texFile <- file.path(texDir, "tikzStringWidthCalc.tex")
-  texFile <- normalizePath(texFile, "/", mustWork = FALSE)
+  oldwd <- getwd()
+  on.exit(setwd(oldwd))
+  setwd(texDir)
+  texLog <- "tikzStringWidthCalc.log"
+  texFile <- "tikzStringWidthCalc.tex"
 
   # Open the TeX file for writing.
   texIn <- file(texFile, "w", encoding = "UTF-8") # enforce the encoding of temp TeX file to UTF-8 encoding for XeTeX, and LuaTeX
