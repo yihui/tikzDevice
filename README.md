@@ -33,24 +33,33 @@ Obtaining the Package
 
 Stable versions of the tikzDevice may be installed from CRAN:
 
-    install.packages( 'tikzDevice' )
+```r
+install.packages( 'tikzDevice' )
+```
 
 Development builds may be installed from RForge:
 
-    install.packages( 'tikzDevice', repos = 'http://rforge.net', type = 'source' )
+```r
+install.packages( 'tikzDevice', repos = 'http://rforge.net', type = 'source' )
+```
 
 Alternatively, install directly from GitHub:
 
-    devtools::install_github( 'daqana/tikzDevice' )
+```r
+devtools::install_github( 'daqana/tikzDevice' )
+```
 
 Bleeding-edge source code is available from GitHub, too:
 
-    git clone git://github.com/daqana/tikzDevice.git
+```sh
+git clone git://github.com/daqana/tikzDevice.git
+```
 
 After cloning, install via
 
-    devtools::install()
-
+```r
+devtools::install()
+```
 
 Reporting Bugs and Getting Help
 -------------------------------
