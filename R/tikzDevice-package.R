@@ -58,7 +58,7 @@
 #'   declaration used in output files when `standAlone == TRUE`.
 #'   `tikzDocumentDeclaration` also influences the calculation of font
 #'   metrics. The default value is: \code{options(tikzDocumentDeclaration =
-#'   "\\documentclass[10pt]{article}")} }
+#'   "\\\\documentclass[10pt]{article}")} }
 #'
 #'   \item{`tikzLatexPackages`}{ A character vector. These are the packages
 #'   which are included when using the `pdftex` engine and
@@ -80,8 +80,8 @@
 #'   packages which are additionally loaded when doing font metric calculations.
 #'   As you see below, the font encoding is set to Type 1. This is very
 #'   important so that character codes of LaTeX and match up. The default value
-#'   is: \code{options(tikzMetricPackages = c( "\\usepackage[utf8]{inputenc}",
-#'   "\\usepackage[T1]{fontenc}", "\\usetikzlibrary{calc}" ))} }
+#'   is: \code{options(tikzMetricPackages = c( "\\\\usepackage[utf8]{inputenc}",
+#'   "\\\\usepackage[T1]{fontenc}", "\\\\usetikzlibrary{calc}" ))} }
 #'
 #'   \item{`tikzUnicodeMetricPackages`}{ This vector is used when font
 #'   metric calculations are performed using the `xetex` or `luatex`
