@@ -3,7 +3,7 @@ tikzDevice
 
 [![Build Status](https://travis-ci.org/daqana/tikzDevice.svg?branch=master)](https://travis-ci.org/daqana/tikzDevice) 
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/daqana/tikzDevice?branch=master&svg=true)](https://ci.appveyor.com/project/rstub/tikzDevice)   
-[![Coverage status](https://codecov.io/gh/daqana/tikzDevice/branch/master/graph/badge.svg)](https://codecov.io/github/daqana/tikzDevice?branch=master) [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/tikzDevice)](http://cran.r-project.org/package=tikzDevice)
+[![Coverage status](https://codecov.io/gh/daqana/tikzDevice/branch/master/graph/badge.svg)](https://codecov.io/github/daqana/tikzDevice?branch=master) [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/tikzDevice)](https://cran.r-project.org/package=tikzDevice)
 
 The tikzDevice package provides a graphics output device for R that records
 plots in a LaTeX-friendly format. The device transforms plotting commands
@@ -40,7 +40,7 @@ install.packages( 'tikzDevice' )
 Development builds may be installed from RForge:
 
 ```r
-install.packages( 'tikzDevice', repos = 'http://rforge.net', type = 'source' )
+install.packages( 'tikzDevice', repos = 'https://rforge.net', type = 'source' )
 ```
 
 Alternatively, install directly from GitHub:
