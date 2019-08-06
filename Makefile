@@ -9,6 +9,7 @@ PKG_VERSION = $(shell grep -i ^version DESCRIPTION | cut -d : -d \  -f 2)
 PKG_NAME = $(shell grep -i ^package DESCRIPTION | cut -d : -d \  -f 2)
 PKG_TAR = $(PKG_NAME)_$(PKG_VERSION).tar.gz
 
+all: build check test clean
 
 docker-build:
 	$(SUDO) docker build -t $(IMAGE) docker
