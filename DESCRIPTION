@@ -7,7 +7,7 @@ Authors@R: c( person("Charlie", "Sharpsteen", role = "aut"),
         person("Cameron", "Bracken", role = "aut"), person("Kirill",
         "Müller", role = c("ctb"), email =
         "krlmlr+r@mailbox.org"), person("Yihui", "Xie", role = "ctb"),
-        person("Ralf", "Stubner", email = "ralf.stubner@daqana.com", 
+        person("Ralf", "Stubner", email = "ralf.stubner@gmail.com", 
         role = "cre"), person("Nico", "Bellack", 
         email = "nico.belack@daqana.com", role = "ctb") ) 
 URL: https://github.com/daqana/tikzDevice
@@ -40,5 +40,5 @@ Suggests:
 SystemRequirements: pgf (>= 2.00)
 LazyLoad: yes
 VignetteBuilder: knitr
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
 Roxygen: list(markdown = TRUE)

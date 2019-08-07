@@ -1,4 +1,4 @@
-# tikzDevice 0.12.2 (unreleased)
+# tikzDevice 0.12.3 (2019-08-07)
 
 Bug fixes
 ---------
@@ -6,13 +6,23 @@ Bug fixes
 - tikzDevice correctly translates the `lmitre = n` parameter of the `plot()` 
   function now (#178)
 
-# tikzDevice 0.12.1 (unreleased)
-
-Bug fixes
----------
-
 - `tikz()` now accepts both `file` and `filename` as named arguments to fix 
   ggsave issue that occurred with ggplot2 v3.0.0 (#181)
+  
+- Use temporary workdir due to problems with longer user names on Windows (#192)
+
+Documentation
+-------------
+
+- Need double escapes in help page (#193)
+- Add syntax highlighting to README (#194)
+
+Internal
+--------
+
+- Switch to `revdepcheck` for checking revdeps
+- Update maitainer email address
+- Use three digit version numbering
 
 # tikzDevice 0.12 (2018-06-28)
 
