@@ -1,3 +1,4 @@
+^CRAN-RELEASE$
 \.git.*$
 NEWS.pdf
 README.md
