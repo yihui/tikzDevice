@@ -27,3 +27,4 @@ cmake-build-debug$
 ^codecov\.yml$
 ^_pkgdown\.yml$
 ^docs$
+^docker$
