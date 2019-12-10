@@ -286,6 +286,7 @@ static Rboolean TikZ_Setup(
     tikzInfo->outFileName = calloc_strcpy(fileName);
   }
   tikzInfo->outputFile= NULL;
+  tikzInfo->outColorFileName = NULL;
 
   tikzInfo->originalColorFileName = calloc_strcpy(colorFileName);
   tikzInfo->ncolors = 0;
