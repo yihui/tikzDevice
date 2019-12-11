@@ -9,3 +9,8 @@ test_that("ggsave should save a *.tex file when used with 'device=tikzDevice::ti
   expect_error(ggplot2::ggsave(ggsave_path, g, device=tikzDevice::tikz), NA)
   expect_true(file.exists(ggsave_path))
 })
+
+test_that("closing tikz device with no output", {
+  tikzDevice::tikz(onefile = FALSE)
+  dev.off()
+})
