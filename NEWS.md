@@ -1,3 +1,12 @@
+# tikzDevice 0.12.3.1 (unreleased)
+
+Bug fixes
+---------
+
+- current working directory is added to TEXINPUTS (#198)
+
+
+
 # tikzDevice 0.12.3 (2019-08-07)
 
 Bug fixes
