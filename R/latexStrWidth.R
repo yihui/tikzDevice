@@ -259,7 +259,10 @@ getMetricsFromLatex <- function(TeXMetrics, verbose = verbose, diagnose = FALSE)
   texDir <- tempfile("tikzDevice")
   dir.create(texDir)
   oldwd <- getwd()
-  on.exit(setwd(oldwd))
+  tex_inputs <- Sys.getenv("TEXINPUTS")
+  on.exit(Sys.setenv(TEXINPUTS = tex_inputs))
+  Sys.setenv(TEXINPUTS = paste(oldwd, tex_inputs, sep = .Platform$path.sep))
+  on.exit(setwd(oldwd), add = TRUE)
   setwd(texDir)
   texLog <- "tikzStringWidthCalc.log"
   texFile <- "tikzStringWidthCalc.tex"
