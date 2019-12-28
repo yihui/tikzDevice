@@ -1,9 +1,8 @@
 context("Test tikzDevice error and warning messages")
 
 test_that("Null device is not a tikzDevice", {
-  expect_that(
-    suppressMessages(isTikzDevice()),
-    is_false()
+  expect_false(
+    suppressMessages(isTikzDevice())
   )
 })
 
