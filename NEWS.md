@@ -1,10 +1,12 @@
-# tikzDevice 0.12.3.1 (unreleased)
+# tikzDevice 0.12.3.2 (unreleased)
 
 Bug fixes
 ---------
 
-- current working directory is added to TEXINPUTS (#198)
+- current working directory is added to TEXINPUTS (#203 fixing #197 and #198)
 
+- make sure that tikzInfo->outColorFileName is always initialized (Dean Scarff
+  in #200 fixinf #199)
 
 
 # tikzDevice 0.12.3 (2019-08-07)
