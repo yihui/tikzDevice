@@ -684,7 +684,7 @@ static void TikZ_Close( pDevDesc deviceInfo)
       tikzInfo->stringWidthCalls);
 
   /* Close the file and destroy the tikzInfo structure. */
-  if(tikzInfo->console == FALSE)
+  if(tikzInfo->console == FALSE && tikzInfo->outputFile)
   {
     fclose(tikzInfo->outputFile);
     tikzInfo->outputFile = NULL;
