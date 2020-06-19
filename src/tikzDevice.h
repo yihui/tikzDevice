@@ -163,6 +163,13 @@ static void TikZ_Raster(
   const pGEcontext plotParams, pDevDesc deviceInfo
 );
 
+static SEXP     TikZ_setPattern(SEXP pattern, pDevDesc dd);
+static void     TikZ_releasePattern(SEXP ref, pDevDesc dd);
+static SEXP     TikZ_setClipPath(SEXP path, SEXP ref, pDevDesc dd);
+static void     TikZ_releaseClipPath(SEXP ref, pDevDesc dd);
+static SEXP     TikZ_setMask(SEXP path, SEXP ref, pDevDesc dd);
+static void     TikZ_releaseMask(SEXP ref, pDevDesc dd);
+
 /* Dummy/Unimplemented routines. */
 static SEXP TikZ_Cap( pDevDesc deviceInfo );
 static void TikZ_Activate( pDevDesc deviceInfo );
