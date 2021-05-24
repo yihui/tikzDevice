@@ -22,10 +22,10 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: windows-latest, r: 'release'}
-          - {os: macOS-latest, r: 'release'}
+          #- {os: windows-latest, r: 'release'}
+          #- {os: macOS-latest, r: 'release'}
           - {os: ubuntu-20.04, r: 'release', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
-          - {os: ubuntu-20.04, r: 'devel', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
+          #- {os: ubuntu-20.04, r: 'devel', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
@@ -40,6 +40,13 @@ jobs:
           r-version: ${{ matrix.config.r }}
 
       - uses: r-lib/actions/setup-pandoc@v1
+
+      - uses: r-lib/actions/setup-tinytex@v1
+      - run: tlmgr --version
+
+      - name: Install GhostScript
+        if: runner.os == 'Linux'
+        run: sudo apt-get install -y ghostscript qpdf
 
       - name: Query dependencies
         run: |
