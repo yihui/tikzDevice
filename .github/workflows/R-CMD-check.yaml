@@ -44,7 +44,7 @@ jobs:
       - uses: r-lib/actions/setup-tinytex@v1
       - run: |
           tlmgr --version
-          tlmgr install pgf preview grfext
+          tlmgr install pgf preview grfext memoir microtype pdflscape babel-english listings xstring upquote
 
       - name: Install GhostScript
         if: runner.os == 'Linux'
@@ -84,7 +84,7 @@ jobs:
           _R_CHECK_CRAN_INCOMING_REMOTE_: false
         run: |
           options(crayon.enabled = TRUE)
-          rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran", "--ignore-vignettes"), build_args = c("--no-build-vignettes"), error_on = "warning", check_dir = "check")
+          rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), build_args = c("--compact-vignettes=gs+qpdf"), error_on = "warning", check_dir = "check")
         shell: Rscript {0}
 
       - name: Upload check results
