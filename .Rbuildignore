@@ -27,3 +27,5 @@ cmake-build-debug$
 ^codecov\.yml$
 ^_pkgdown\.yml$
 ^docs$
+^debug$
+^\.github$

@@ -1,6 +1,7 @@
 tikzDevice
 ==========
 
+[![R build status](https://github.com/daqana/tikzDevice/workflows/R-CMD-check/badge.svg)](https://github.com/daqana/tikzDevice/actions)
 [![Build Status](https://travis-ci.org/daqana/tikzDevice.svg?branch=master)](https://travis-ci.org/daqana/tikzDevice) 
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/daqana/tikzDevice?branch=master&svg=true)](https://ci.appveyor.com/project/rstub/tikzDevice)   
 [![Coverage status](https://codecov.io/gh/daqana/tikzDevice/branch/master/graph/badge.svg)](https://codecov.io/github/daqana/tikzDevice?branch=master) [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/tikzDevice)](https://cran.r-project.org/package=tikzDevice)
