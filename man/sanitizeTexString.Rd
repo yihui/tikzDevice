@@ -4,8 +4,11 @@
 \alias{sanitizeTexString}
 \title{Replace LaTeX Special Characters in a String}
 \usage{
-sanitizeTexString(string, strip = getOption("tikzSanitizeCharacters"),
-  replacement = getOption("tikzReplacementCharacters"))
+sanitizeTexString(
+  string,
+  strip = getOption("tikzSanitizeCharacters"),
+  replacement = getOption("tikzReplacementCharacters")
+)
 }
 \arguments{
 \item{string}{A character vector of length 1 (a string).}
@@ -20,7 +23,7 @@ special characters replaced.}
 }
 \description{
 This function is used by tikzDevice when \code{sanitize = TRUE} to replace
-special LaTeX characters (such as the comment character %) in plotting text
+special LaTeX characters (such as the comment character \%) in plotting text
 where the user does not have direct control over the generated text.
 }
 \details{
@@ -68,7 +71,7 @@ These defaults may be adjusted using the \code{\link[=options]{options()}} funct
 # sanitized away with the other default special characters.
 # The string appears in LaTeX exactly as shown.
 \dontrun{
-  sanitizeTexString('10\\\% of 10$ is 10^\\{-1\\}$')
+  sanitizeTexString('10\\% of 10$ is 10^\{-1\}$')
 }
 
 }

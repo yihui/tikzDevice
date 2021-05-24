@@ -18,7 +18,7 @@ annotations}.
  The \pkg{tikzDevice} package
 is currently influenced by a number of global options that may be set in
 scripts, from the console or in a \code{.Rprofile} file. All of the options
-can be set by using \code{options(<option> = <value>)}.  These options
+can be set by using \verb{options(<option> = <value>)}.  These options
 allow for the use of custom \code{documentclass} declarations, LaTeX
 packages, and typesetting engines (e.g. XeLaTeX or LuaLaTeX). The defaults,
 if are any for a given option, are shown below the description. The global

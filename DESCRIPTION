@@ -36,9 +36,10 @@ Suggests:
     scales,
     stringr,
     testthat (>= 0.8.1),
-    withr
+    withr,
+    covr
 SystemRequirements: pgf (>= 2.00)
 LazyLoad: yes
 VignetteBuilder: knitr
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)

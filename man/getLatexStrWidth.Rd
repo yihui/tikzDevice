@@ -5,15 +5,26 @@
 \alias{getLatexCharMetrics}
 \title{Obtain Font Metrics from LaTeX}
 \usage{
-getLatexStrWidth(texString, cex = 1, face = 1,
+getLatexStrWidth(
+  texString,
+  cex = 1,
+  face = 1,
   engine = getOption("tikzDefaultEngine"),
-  documentDeclaration = getOption("tikzDocumentDeclaration"), packages,
-  verbose = interactive(), diagnose = FALSE)
+  documentDeclaration = getOption("tikzDocumentDeclaration"),
+  packages,
+  verbose = interactive(),
+  diagnose = FALSE
+)
 
-getLatexCharMetrics(charCode, cex = 1, face = 1,
+getLatexCharMetrics(
+  charCode,
+  cex = 1,
+  face = 1,
   engine = getOption("tikzDefaultEngine"),
-  documentDeclaration = getOption("tikzDocumentDeclaration"), packages,
-  verbose = interactive())
+  documentDeclaration = getOption("tikzDocumentDeclaration"),
+  packages,
+  verbose = interactive()
+)
 }
 \arguments{
 \item{texString}{An arbitrary string for which the width is to be

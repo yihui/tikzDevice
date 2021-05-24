@@ -14,22 +14,41 @@
 \usage{
 tikzAnnotate(annotation, checkstate = TRUE)
 
-tikzNode(x = NULL, y = NULL, opts = NULL, name = NULL,
-  content = NULL, units = "user")
+tikzNode(
+  x = NULL,
+  y = NULL,
+  opts = NULL,
+  name = NULL,
+  content = NULL,
+  units = "user"
+)
 
 tikzCoord(x, y, name, units = "user")
 
 tikzAnnotateGrob(annotation)
 
-tikzNodeGrob(x = NULL, y = NULL, opts = NULL, name = NULL,
-  content = NULL, units = "native")
+tikzNodeGrob(
+  x = NULL,
+  y = NULL,
+  opts = NULL,
+  name = NULL,
+  content = NULL,
+  units = "native"
+)
 
 tikzCoordGrob(x, y, name, units = "native")
 
 grid.tikzAnnotate(annotation, draw = TRUE)
 
-grid.tikzNode(x = NULL, y = NULL, opts = NULL, name = NULL,
-  content = NULL, units = "native", draw = TRUE)
+grid.tikzNode(
+  x = NULL,
+  y = NULL,
+  opts = NULL,
+  name = NULL,
+  content = NULL,
+  units = "native",
+  draw = TRUE
+)
 
 grid.tikzCoord(x, y, name, units = "native", draw = TRUE)
 }
@@ -83,7 +102,7 @@ necessary conversions for base and grid graphics. The \code{tikzNode} and
 the the value of their \code{units} parameters.
 
 \code{tikzNode} is a wrapper for \code{tikzAnnotate} that inserts TikZ
-\code{\\node} or \code{\\coordinates} commands into the output. The
+\verb{\\\\node} or \verb{\\\\coordinates} commands into the output. The
 difference between a node and a coordinate is the presence of a
 \code{content} section that can contain arbitrary LaTeX text. This is
 useful for adding textual annotations at specific locations in a TikZ

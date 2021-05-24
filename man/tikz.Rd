@@ -4,18 +4,30 @@
 \alias{tikz}
 \title{TikZ Graphics Device}
 \usage{
-tikz(file = filename, filename = ifelse(onefile, "./Rplots.tex",
-  "./Rplot\%03d.tex"), width = 7, height = 7, onefile = TRUE,
-  bg = "transparent", fg = "black", pointsize = 10,
-  lwdUnit = getOption("tikzLwdUnit"), standAlone = FALSE,
-  bareBones = FALSE, console = FALSE, sanitize = FALSE,
+tikz(
+  file = filename,
+  filename = ifelse(onefile, "./Rplots.tex", "./Rplot\%03d.tex"),
+  width = 7,
+  height = 7,
+  onefile = TRUE,
+  bg = "transparent",
+  fg = "black",
+  pointsize = 10,
+  lwdUnit = getOption("tikzLwdUnit"),
+  standAlone = FALSE,
+  bareBones = FALSE,
+  console = FALSE,
+  sanitize = FALSE,
   engine = getOption("tikzDefaultEngine"),
-  documentDeclaration = getOption("tikzDocumentDeclaration"), packages,
+  documentDeclaration = getOption("tikzDocumentDeclaration"),
+  packages,
   footer = getOption("tikzFooter"),
   symbolicColors = getOption("tikzSymbolicColors"),
   colorFileName = "\%s_colors.tex",
   maxSymbolicColors = getOption("tikzMaxSymbolicColors"),
-  timestamp = TRUE, verbose = interactive())
+  timestamp = TRUE,
+  verbose = interactive()
+)
 }
 \arguments{
 \item{file, filename}{A character string indicating the desired path to the output
@@ -124,7 +136,7 @@ value of the \code{standAlone} and \code{bareBones} arguments.  If
 \code{FALSE}, the resulting file will only contain graphics output wrapped
 in a LaTeX \code{tikzpicture} environment.  Since this file is not a
 complete LaTeX document, it will need to be included in another LaTeX
-document using the \code{\\input} command. For example:
+document using the \verb{\\\\input} command. For example:
 \preformatted{
   \\documentclass{article}
   \\usepackage{tikz}
@@ -150,9 +162,9 @@ In cases where both \code{standAlone} and \code{bareBones} have been set to
 \code{TRUE}, the \code{standAlone} option will take precedence.
 
 When the option \code{symbolicColors} is set to \code{TRUE}, the colors will
-be written as symbolic names, e.g. \code{red, gray90} and similar. If the
+be written as symbolic names, e.g. \verb{red, gray90} and similar. If the
 color is not mapped to a symbolic name in R, the color will be named
-\code{XXXXX} when \code{#XXXXXX} is its hexadecimal color. All the color
+\code{XXXXX} when \verb{#XXXXXX} is its hexadecimal color. All the color
 names will have to be defined in the enclosing document, which is
 automatically written if the path of a color file \code{colorFileName} is
 set.

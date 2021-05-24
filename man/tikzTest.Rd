@@ -4,8 +4,12 @@
 \alias{tikzTest}
 \title{Test invocation of a LaTeX engine.}
 \usage{
-tikzTest(texString = "A", engine = getOption("tikzDefaultEngine"),
-  documentDeclaration = getOption("tikzDocumentDeclaration"), packages)
+tikzTest(
+  texString = "A",
+  engine = getOption("tikzDefaultEngine"),
+  documentDeclaration = getOption("tikzDocumentDeclaration"),
+  packages
+)
 }
 \arguments{
 \item{texString}{An arbitrary string for which the width is to be
