@@ -419,6 +419,10 @@ static Rboolean TikZ_Setup(
   deviceInfo->haveLocator = 1;       /* 1 = no, 2 = yes */
 #endif
 
+#if R_GE_version >= 13
+  deviceInfo->deviceVersion = R_GE_definitions;
+#endif
+
   /*
    * Initialize device parameters. These concern properties such as the
    * plotting canvas size, the initial foreground and background colors and
@@ -501,6 +505,15 @@ static Rboolean TikZ_Setup(
   */
   deviceInfo->raster = TikZ_Raster;
   deviceInfo->cap = TikZ_Cap;
+
+#if R_GE_version >= 13
+  deviceInfo->setPattern      = TikZ_setPattern;
+  deviceInfo->releasePattern  = TikZ_releasePattern;
+  deviceInfo->setClipPath     = TikZ_setClipPath;
+  deviceInfo->releaseClipPath = TikZ_releaseClipPath;
+  deviceInfo->setMask         = TikZ_setMask;
+  deviceInfo->releaseMask     = TikZ_releaseMask;
+#endif
 
   /* Dummy routines. These are mainly used by GUI graphics devices. */
   deviceInfo->activate = TikZ_Activate;
@@ -1717,6 +1730,24 @@ static void TikZ_Mode( int mode, pDevDesc deviceInfo ){
 
   debug_print_empty();
 }
+
+static SEXP TikZ_setPattern(SEXP pattern, pDevDesc dd) {
+    return R_NilValue;
+}
+
+static void TikZ_releasePattern(SEXP ref, pDevDesc dd) {} 
+
+static SEXP TikZ_setClipPath(SEXP path, SEXP ref, pDevDesc dd) {
+    return R_NilValue;
+}
+
+static void TikZ_releaseClipPath(SEXP ref, pDevDesc dd) {}
+
+static SEXP TikZ_setMask(SEXP path, SEXP ref, pDevDesc dd) {
+    return R_NilValue;
+}
+
+static void TikZ_releaseMask(SEXP ref, pDevDesc dd) {}
 
 /*==============================================================================
 
